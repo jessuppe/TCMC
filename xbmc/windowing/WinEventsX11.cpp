@@ -29,12 +29,14 @@
 #include "ApplicationMessenger.h"
 #include <X11/Xlib.h>
 #include "X11/WinSystemX11GL.h"
+#include "X11/WinSystemX11GLES.h"
 #include "X11/keysymdef.h"
 #include "X11/XF86keysym.h"
 #include "utils/log.h"
 #include "utils/CharsetConverter.h"
 #include "guilib/GUIWindowManager.h"
 #include "input/MouseStat.h"
+#include "input/InputManager.h"
 
 #if defined(HAS_XRANDR)
 #include <X11/extensions/Xrandr.h>
@@ -460,8 +462,8 @@ bool CWinEventsX11Imp::MessagePump()
           case XLookupChars:
           case XLookupBoth:
           {
-            CStdString   data(WinEvents->m_keybuf, len);
-            CStdStringW keys;
+            std::string data(WinEvents->m_keybuf, len);
+            std::wstring keys;
             g_charsetConverter.utf8ToW(data, keys, false);
 
             if (keys.length() == 0)
@@ -540,7 +542,7 @@ bool CWinEventsX11Imp::MessagePump()
       // lose mouse coverage
       case LeaveNotify:
       {
-        g_Mouse.SetActive(false);
+        CInputManager::Get().SetMouseActive(false);
         break;
       }
 
@@ -612,7 +614,9 @@ bool CWinEventsX11Imp::MessagePump()
       case SDL_JOYAXISMOTION:
       case SDL_JOYBALLMOTION:
       case SDL_JOYHATMOTION:
-        g_Joystick.Update(event);
+      case SDL_JOYDEVICEADDED:
+      case SDL_JOYDEVICEREMOVED:
+        CInputManager::Get().UpdateJoystick(event);
         ret = true;
         break;
 

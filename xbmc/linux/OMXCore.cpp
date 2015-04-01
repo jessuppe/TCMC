@@ -33,6 +33,7 @@
 
 #include "OMXClock.h"
 #include "xbmc/linux/RBP.h"
+#include <cassert>
 
 #ifdef TARGET_LINUX
 #include "XMemUtils.h"
@@ -77,11 +78,6 @@ void COMXCoreTunel::Initialize(COMXCoreComponent *src_component, unsigned int sr
   m_src_port    = src_port;
   m_dst_component  = dst_component;
   m_dst_port    = dst_port;
-}
-
-bool COMXCoreTunel::IsInitialized()
-{
-  return m_tunnel_set;
 }
 
 OMX_ERRORTYPE COMXCoreTunel::Deestablish(bool noWait)
@@ -416,30 +412,6 @@ OMX_ERRORTYPE COMXCoreComponent::FreeOutputBuffer(OMX_BUFFERHEADERTYPE *omx_buff
   return omx_err;
 }
 
-unsigned int COMXCoreComponent::GetInputBufferSize()
-{
-  int free = m_input_buffer_count * m_input_buffer_size;
-  return free;
-}
-
-unsigned int COMXCoreComponent::GetOutputBufferSize()
-{
-  int free = m_output_buffer_count * m_output_buffer_size;
-  return free;
-}
-
-unsigned int COMXCoreComponent::GetInputBufferSpace()
-{
-  int free = m_omx_input_avaliable.size() * m_input_buffer_size;
-  return free;
-}
-
-unsigned int COMXCoreComponent::GetOutputBufferSpace()
-{
-  int free = m_omx_output_available.size() * m_output_buffer_size;
-  return free;
-}
-
 void COMXCoreComponent::FlushAll()
 {
   FlushInput();
@@ -448,12 +420,10 @@ void COMXCoreComponent::FlushAll()
 
 void COMXCoreComponent::FlushInput()
 {
-  if(!m_handle)
+  if(!m_handle || m_resource_error)
     return;
 
-  OMX_ERRORTYPE omx_err = OMX_ErrorNone;
-
-  omx_err = OMX_SendCommand(m_handle, OMX_CommandFlush, m_input_port, NULL);
+  OMX_ERRORTYPE omx_err = OMX_SendCommand(m_handle, OMX_CommandFlush, m_input_port, NULL);
 
   if(omx_err != OMX_ErrorNone)
   {
@@ -465,12 +435,10 @@ void COMXCoreComponent::FlushInput()
 
 void COMXCoreComponent::FlushOutput()
 {
-  if(!m_handle)
+  if(!m_handle || m_resource_error)
     return;
 
-  OMX_ERRORTYPE omx_err = OMX_ErrorNone;
-
-  omx_err = OMX_SendCommand(m_handle, OMX_CommandFlush, m_output_port, NULL);
+  OMX_ERRORTYPE omx_err = OMX_SendCommand(m_handle, OMX_CommandFlush, m_output_port, NULL);
 
   if(omx_err != OMX_ErrorNone)
   {
@@ -981,7 +949,7 @@ OMX_ERRORTYPE COMXCoreComponent::WaitForEvent(OMX_EVENTTYPE eventType, long time
   add_timespecs(endtime, timeout);
   while(true) 
   {
-    for (std::vector<omx_event>::iterator it = m_omx_events.begin(); it != m_omx_events.end(); it++) 
+    for (std::vector<omx_event>::iterator it = m_omx_events.begin(); it != m_omx_events.end(); ++it)
     {
       omx_event event = *it;
 
@@ -1050,7 +1018,7 @@ OMX_ERRORTYPE COMXCoreComponent::WaitForCommand(OMX_U32 command, OMX_U32 nData2,
   add_timespecs(endtime, timeout);
   while(true) 
   {
-    for (std::vector<omx_event>::iterator it = m_omx_events.begin(); it != m_omx_events.end(); it++) 
+    for (std::vector<omx_event>::iterator it = m_omx_events.begin(); it != m_omx_events.end(); ++it)
     {
       omx_event event = *it;
 
@@ -1142,7 +1110,7 @@ OMX_ERRORTYPE COMXCoreComponent::SetStateForComponent(OMX_STATETYPE state)
   return omx_err;
 }
 
-OMX_STATETYPE COMXCoreComponent::GetState()
+OMX_STATETYPE COMXCoreComponent::GetState() const
 {
   if(!m_handle)
     return (OMX_STATETYPE)0;
@@ -1169,7 +1137,7 @@ OMX_ERRORTYPE COMXCoreComponent::SetParameter(OMX_INDEXTYPE paramIndex, OMX_PTR 
   return omx_err;
 }
 
-OMX_ERRORTYPE COMXCoreComponent::GetParameter(OMX_INDEXTYPE paramIndex, OMX_PTR paramStruct)
+OMX_ERRORTYPE COMXCoreComponent::GetParameter(OMX_INDEXTYPE paramIndex, OMX_PTR paramStruct) const
 {
   if(!m_handle)
     return OMX_ErrorUndefined;
@@ -1201,7 +1169,7 @@ OMX_ERRORTYPE COMXCoreComponent::SetConfig(OMX_INDEXTYPE configIndex, OMX_PTR co
   return omx_err;
 }
 
-OMX_ERRORTYPE COMXCoreComponent::GetConfig(OMX_INDEXTYPE configIndex, OMX_PTR configStruct)
+OMX_ERRORTYPE COMXCoreComponent::GetConfig(OMX_INDEXTYPE configIndex, OMX_PTR configStruct) const
 {
   if(!m_handle)
     return OMX_ErrorUndefined;
@@ -1238,13 +1206,11 @@ OMX_ERRORTYPE COMXCoreComponent::EnablePort(unsigned int port,  bool wait)
   if(!m_handle)
     return OMX_ErrorUndefined;
 
-  OMX_ERRORTYPE omx_err = OMX_ErrorNone;
-
   OMX_PARAM_PORTDEFINITIONTYPE portFormat;
   OMX_INIT_STRUCTURE(portFormat);
   portFormat.nPortIndex = port;
 
-  omx_err = OMX_GetParameter(m_handle, OMX_IndexParamPortDefinition, &portFormat);
+  OMX_ERRORTYPE omx_err = OMX_GetParameter(m_handle, OMX_IndexParamPortDefinition, &portFormat);
   if(omx_err != OMX_ErrorNone)
   {
     CLog::Log(LOGERROR, "COMXCoreComponent::EnablePort - Error get port %d status on component %s omx_err(0x%08x)", 
@@ -1274,13 +1240,11 @@ OMX_ERRORTYPE COMXCoreComponent::DisablePort(unsigned int port, bool wait)
   if(!m_handle)
     return OMX_ErrorUndefined;
 
-  OMX_ERRORTYPE omx_err = OMX_ErrorNone;
-
   OMX_PARAM_PORTDEFINITIONTYPE portFormat;
   OMX_INIT_STRUCTURE(portFormat);
   portFormat.nPortIndex = port;
 
-  omx_err = OMX_GetParameter(m_handle, OMX_IndexParamPortDefinition, &portFormat);
+  OMX_ERRORTYPE omx_err = OMX_GetParameter(m_handle, OMX_IndexParamPortDefinition, &portFormat);
   if(omx_err != OMX_ErrorNone)
   {
     CLog::Log(LOGERROR, "COMXCoreComponent::DisablePort - Error get port %d status on component %s omx_err(0x%08x)", 
@@ -1469,11 +1433,6 @@ bool COMXCoreComponent::Initialize( const std::string &component_name, OMX_INDEX
   m_flush_output  = false;
 
   return true;
-}
-
-bool COMXCoreComponent::IsInitialized()
-{
-  return (m_handle != NULL);
 }
 
 void COMXCoreComponent::ResetEos()

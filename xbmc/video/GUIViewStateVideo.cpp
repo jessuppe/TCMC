@@ -37,12 +37,12 @@
 using namespace XFILE;
 using namespace VIDEODATABASEDIRECTORY;
 
-CStdString CGUIViewStateWindowVideo::GetLockType()
+std::string CGUIViewStateWindowVideo::GetLockType()
 {
   return "video";
 }
 
-CStdString CGUIViewStateWindowVideo::GetExtensions()
+std::string CGUIViewStateWindowVideo::GetExtensions()
 {
   return g_advancedSettings.m_videoExtensions;
 }
@@ -148,7 +148,7 @@ CGUIViewStateWindowVideoNav::CGUIViewStateWindowVideoNav(const CFileItemList& it
       break;
     case NODE_TYPE_YEAR:
       {
-        AddSortMethod(SortByLabel, 551, LABEL_MASKS("%T", "%R", "%L", ""));  // Title, Rating | Label, empty
+        AddSortMethod(SortByLabel, 562, LABEL_MASKS("%T", "%R", "%L", ""));  // Title, Rating | Label, empty
         SetSortMethod(SortByLabel);
 
         const CViewState *viewState = CViewStateSettings::Get().Get("videonavyears");
@@ -173,6 +173,7 @@ CGUIViewStateWindowVideoNav::CGUIViewStateWindowVideoNav(const CFileItemList& it
         // NOTE: This uses SortByEpisodeNumber to mean "sort shows by the number of episodes" and uses the label "Episodes"
         AddSortMethod(SortByEpisodeNumber, 20360, LABEL_MASKS("%L", "%M", "%L", "%M"));  // Label, #Episodes | Label, #Episodes
         AddSortMethod(SortByLastPlayed, 568, LABEL_MASKS("%T", "%p", "%T", "%p"));  // Title, #Last played | Title, #Last played
+        AddSortMethod(SortByDateAdded, 570, LABEL_MASKS("%T", "%a", "%T", "%a"));  // Title, DateAdded | Title, DateAdded
         AddSortMethod(SortByYear, 562, LABEL_MASKS("%L","%Y","%L","%Y")); // Label, Year | Label, Year
         SetSortMethod(SortByLabel);
 
@@ -205,7 +206,7 @@ CGUIViewStateWindowVideoNav::CGUIViewStateWindowVideoNav(const CFileItemList& it
         if (CMediaSettings::Get().GetWatchedMode(items.GetContent()) == WatchedModeAll)
           AddSortMethod(SortByPlaycount, 567, LABEL_MASKS("%T", "%V", "%T", "%V"));  // Title, Playcount | Title, Playcount
 
-        SetSortMethod(SortByLabel, SortAttributeIgnoreArticle);
+        SetSortMethod(SortByLabel);
 
         const CViewState *viewState = CViewStateSettings::Get().Get("videonavgenres");
         SetViewAsControl(viewState->m_viewMode);
@@ -215,7 +216,7 @@ CGUIViewStateWindowVideoNav::CGUIViewStateWindowVideoNav(const CFileItemList& it
     case NODE_TYPE_TAGS:
       {
         AddSortMethod(SortByLabel, sortAttributes, 551, LABEL_MASKS("%T","", "%T",""));  // Title, empty | Title, empty
-        SetSortMethod(SortByLabel, sortAttributes);
+        SetSortMethod(SortByLabel);
         
         const CViewState *viewState = CViewStateSettings::Get().Get("videonavgenres");
         SetViewAsControl(viewState->m_viewMode);
@@ -286,12 +287,17 @@ CGUIViewStateWindowVideoNav::CGUIViewStateWindowVideoNav(const CFileItemList& it
 
         const CViewState *viewState = CViewStateSettings::Get().Get("videonavtitles");
         if (params.GetSetId() > -1)
+        {
           SetSortMethod(SortByYear);
+          SetSortOrder(SortOrderAscending);
+        }
         else
+        {
           SetSortMethod(viewState->m_sortDescription);
+          SetSortOrder(viewState->m_sortDescription.sortOrder);
+        }
 
         SetViewAsControl(viewState->m_viewMode);
-        SetSortOrder(viewState->m_sortDescription.sortOrder);
       }
       break;
       case NODE_TYPE_TITLE_MUSICVIDEOS:
@@ -305,8 +311,8 @@ CGUIViewStateWindowVideoNav::CGUIViewStateWindowVideoNav(const CFileItemList& it
         if (CMediaSettings::Get().GetWatchedMode(items.GetContent()) == WatchedModeAll)
           AddSortMethod(SortByPlaycount, 567, LABEL_MASKS("%T", "%V"));  // Title, Playcount | empty, empty
 
-        CStdString strTrackLeft=CSettings::Get().GetString("musicfiles.trackformat");
-        CStdString strTrackRight=CSettings::Get().GetString("musicfiles.trackformatright");
+        std::string strTrackLeft=CSettings::Get().GetString("musicfiles.trackformat");
+        std::string strTrackRight=CSettings::Get().GetString("musicfiles.trackformatright");
         AddSortMethod(SortByTrackNumber, 554, LABEL_MASKS(strTrackLeft, strTrackRight));  // Userdefined, Userdefined | empty, empty
 
         const CViewState *viewState = CViewStateSettings::Get().Get("videonavmusicvideos");
@@ -517,8 +523,8 @@ CGUIViewStateVideoMusicVideos::CGUIViewStateVideoMusicVideos(const CFileItemList
    if (CMediaSettings::Get().GetWatchedMode(items.GetContent()) == WatchedModeAll)
     AddSortMethod(SortByPlaycount, 567, LABEL_MASKS("%T", "%V"));  // Title, Playcount | empty, empty
   
-  CStdString strTrackLeft=CSettings::Get().GetString("musicfiles.trackformat");
-  CStdString strTrackRight=CSettings::Get().GetString("musicfiles.trackformatright");
+  std::string strTrackLeft=CSettings::Get().GetString("musicfiles.trackformat");
+  std::string strTrackRight=CSettings::Get().GetString("musicfiles.trackformatright");
   AddSortMethod(SortByTrackNumber, 554, LABEL_MASKS(strTrackLeft, strTrackRight));  // Userdefined, Userdefined | empty, empty
 
   const CViewState *viewState = CViewStateSettings::Get().Get("videonavmusicvideos");

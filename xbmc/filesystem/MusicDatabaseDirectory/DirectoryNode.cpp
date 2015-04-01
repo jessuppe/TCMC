@@ -46,12 +46,13 @@
 #include "utils/StringUtils.h"
 #include "guilib/LocalizeStrings.h"
 #include "music/MusicDbUrl.h"
+#include "settings/Settings.h"
 
 using namespace std;
 using namespace XFILE::MUSICDATABASEDIRECTORY;
 
 //  Constructor is protected use ParseURL()
-CDirectoryNode::CDirectoryNode(NODE_TYPE Type, const CStdString& strName, CDirectoryNode* pParent)
+CDirectoryNode::CDirectoryNode(NODE_TYPE Type, const std::string& strName, CDirectoryNode* pParent)
 {
   m_Type=Type;
   m_strName=strName;
@@ -64,14 +65,14 @@ CDirectoryNode::~CDirectoryNode()
 }
 
 //  Parses a given path and returns the current node of the path
-CDirectoryNode* CDirectoryNode::ParseURL(const CStdString& strPath)
+CDirectoryNode* CDirectoryNode::ParseURL(const std::string& strPath)
 {
   CURL url(strPath);
 
-  CStdString strDirectory=url.GetFileName();
+  std::string strDirectory=url.GetFileName();
   URIUtils::RemoveSlashAtEnd(strDirectory);
 
-  vector<string> Path = StringUtils::Split(strDirectory, "/");
+  vector<string> Path = StringUtils::Split(strDirectory, '/');
   Path.insert(Path.begin(), "");
 
   CDirectoryNode* pNode=NULL;
@@ -93,9 +94,9 @@ CDirectoryNode* CDirectoryNode::ParseURL(const CStdString& strPath)
 }
 
 //  returns the database ids of the path,
-void CDirectoryNode::GetDatabaseInfo(const CStdString& strPath, CQueryParams& params)
+void CDirectoryNode::GetDatabaseInfo(const std::string& strPath, CQueryParams& params)
 {
-  auto_ptr<CDirectoryNode> pNode(CDirectoryNode::ParseURL(strPath));
+  unique_ptr<CDirectoryNode> pNode(CDirectoryNode::ParseURL(strPath));
 
   if (!pNode.get())
     return;
@@ -104,7 +105,7 @@ void CDirectoryNode::GetDatabaseInfo(const CStdString& strPath, CQueryParams& pa
 }
 
 //  Create a node object
-CDirectoryNode* CDirectoryNode::CreateNode(NODE_TYPE Type, const CStdString& strName, CDirectoryNode* pParent)
+CDirectoryNode* CDirectoryNode::CreateNode(NODE_TYPE Type, const std::string& strName, CDirectoryNode* pParent)
 {
   switch (Type)
   {
@@ -155,7 +156,7 @@ CDirectoryNode* CDirectoryNode::CreateNode(NODE_TYPE Type, const CStdString& str
 }
 
 //  Current node name
-const CStdString& CDirectoryNode::GetName() const
+const std::string& CDirectoryNode::GetName() const
 {
   return m_strName;
 }
@@ -165,7 +166,7 @@ int CDirectoryNode::GetID() const
   return atoi(m_strName.c_str());
 }
 
-CStdString CDirectoryNode::GetLocalizedName() const
+std::string CDirectoryNode::GetLocalizedName() const
 {
   return "";
 }
@@ -196,7 +197,7 @@ bool CDirectoryNode::GetContent(CFileItemList& items) const
 }
 
 //  Creates a musicdb url
-CStdString CDirectoryNode::BuildPath() const
+std::string CDirectoryNode::BuildPath() const
 {
   vector<string> array;
 
@@ -206,14 +207,14 @@ CStdString CDirectoryNode::BuildPath() const
   CDirectoryNode* pParent=m_pParent;
   while (pParent!=NULL)
   {
-    const CStdString& strNodeName=pParent->GetName();
+    const std::string& strNodeName=pParent->GetName();
     if (!strNodeName.empty())
       array.insert(array.begin(), strNodeName);
 
     pParent=pParent->GetParent();
   }
 
-  CStdString strPath="musicdb://";
+  std::string strPath="musicdb://";
   for (int i=0; i<(int)array.size(); ++i)
     strPath+=array[i]+"/";
 
@@ -224,7 +225,7 @@ CStdString CDirectoryNode::BuildPath() const
   return strPath;
 }
 
-void CDirectoryNode::AddOptions(const CStdString &options)
+void CDirectoryNode::AddOptions(const std::string &options)
 {
   if (options.empty())
     return;
@@ -260,7 +261,7 @@ bool CDirectoryNode::GetChilds(CFileItemList& items)
   if (CanCache() && items.Load())
     return true;
 
-  auto_ptr<CDirectoryNode> pNode(CDirectoryNode::CreateNode(GetChildType(), "", this));
+  unique_ptr<CDirectoryNode> pNode(CDirectoryNode::CreateNode(GetChildType(), "", this));
 
   bool bSuccess=false;
   if (pNode.get())
@@ -292,8 +293,8 @@ void CDirectoryNode::AddQueuingFolder(CFileItemList& items) const
   if (!musicUrl.FromString(BuildPath()))
     return;
 
-  // always hide "all" items
-  if (g_advancedSettings.m_bMusicLibraryHideAllItems)
+  // always show "all" items by default
+  if (!CSettings::Get().GetBool("musiclibrary.showallitems"))
     return;
 
   // no need for "all" item when only one item

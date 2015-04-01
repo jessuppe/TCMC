@@ -92,13 +92,14 @@ protected:
   bool m_streamFading;
   int m_streamFreeBuffers;
   bool m_streamIsBuffering;
+  bool m_streamIsFlushed;
   IAEStream *m_streamSlave;
   CCriticalSection m_streamLock;
   uint8_t *m_leftoverBuffer;
   int m_leftoverBytes;
   CSampleBuffer *m_currentBuffer;
   CSoundPacket *m_remapBuffer;
-  CActiveAEResample *m_remapper;
+  IAEResample *m_remapper;
   int m_clockId;
 
   // only accessed by engine

@@ -19,10 +19,7 @@
  */
 
 #include "DVDInputStreamTV.h"
-#include "filesystem/MythFile.h"
-#include "filesystem/VTPFile.h"
 #include "pvr/channels/PVRChannel.h"
-#include "filesystem/VTPFile.h"
 #include "filesystem/SlingboxFile.h"
 #include "URL.h"
 
@@ -50,23 +47,11 @@ bool CDVDInputStreamTV::Open(const char* strFile, const std::string& content)
 {
   if (!CDVDInputStream::Open(strFile, content)) return false;
 
-  if(strncmp(strFile, "vtp://", 6) == 0)
-  {
-    m_pFile       = new CVTPFile();
-    m_pLiveTV     = ((CVTPFile*)m_pFile)->GetLiveTV();
-    m_pRecordable = NULL;
-  }
-  else if (strncmp(strFile, "sling://", 8) == 0)
+  if (strncmp(strFile, "sling://", 8) == 0)
   {
     m_pFile       = new CSlingboxFile();
     m_pLiveTV     = ((CSlingboxFile*)m_pFile)->GetLiveTV();
     m_pRecordable = NULL;
-  }
-  else
-  {
-    m_pFile       = new CMythFile();
-    m_pLiveTV     = ((CMythFile*)m_pFile)->GetLiveTV();
-    m_pRecordable = ((CMythFile*)m_pFile)->GetRecordable();
   }
 
   CURL url(strFile);
@@ -100,12 +85,16 @@ int CDVDInputStreamTV::Read(uint8_t* buf, int buf_size)
 {
   if(!m_pFile) return -1;
 
-  unsigned int ret = m_pFile->Read(buf, buf_size);
+  ssize_t ret = m_pFile->Read(buf, buf_size);
+
+  if (ret < 0)
+    return -1; // player will retry read in case of error until playback is stopped
 
   /* we currently don't support non completing reads */
-  if( ret == 0 ) m_eof = true;
+  if (ret == 0)
+    m_eof = true;
 
-  return (int)(ret & 0xFFFFFFFF);
+  return (int)ret;
 }
 
 int64_t CDVDInputStreamTV::Seek(int64_t offset, int whence)

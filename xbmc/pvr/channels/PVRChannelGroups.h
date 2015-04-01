@@ -59,24 +59,24 @@ namespace PVR
     /*!
      * @brief Update a group or add it if it's not in here yet.
      * @param group The group to update.
-     * @param bSaveInDb True to save the changes in the db.
+     * @param bUpdateFromClient True to save the changes in the db.
      * @return True if the group was added or update successfully, false otherwise.
      */
-    bool Update(const CPVRChannelGroup &group, bool bSaveInDb = false);
+    bool Update(const CPVRChannelGroup &group, bool bUpdateFromClient = false);
 
     /*!
      * @brief Called by the add-on callback to add a new group
      * @param group The group to add
      * @return True when updated, false otherwise
      */
-    bool UpdateFromClient(const CPVRChannelGroup &group) { return Update(group, false); }
+    bool UpdateFromClient(const CPVRChannelGroup &group) { return Update(group, true); }
 
     /*!
      * @brief Get a channel given it's path
      * @param strPath The path to the channel
      * @return The channel, or an empty fileitem when not found
      */
-    CFileItemPtr GetByPath(const CStdString &strPath) const;
+    CFileItemPtr GetByPath(const std::string &strPath) const;
 
     /*!
      * @brief Get a pointer to a channel group given it's ID.
@@ -90,7 +90,7 @@ namespace PVR
      * @param strName The name.
      * @return The group or NULL if it wan't found.
      */
-    CPVRChannelGroupPtr GetByName(const CStdString &strName) const;
+    CPVRChannelGroupPtr GetByName(const std::string &strName) const;
 
     /*!
      * @brief Get the group that contains all channels.
@@ -109,10 +109,11 @@ namespace PVR
     CPVRChannelGroupPtr GetLastGroup(void) const;
     
     /*!
-     * @brief The group that was played last.
+     * @brief The group that was played last and optionally contains the given channel.
+     * @param iChannelID The channel ID
      * @return The last watched group.
      */
-    CPVRChannelGroupPtr GetLastPlayedGroup() const;
+    CPVRChannelGroupPtr GetLastPlayedGroup(int iChannelID = -1) const;
 
     /*!
      * @brief Get the list of groups.
@@ -124,9 +125,10 @@ namespace PVR
     /*!
      * @brief Get the list of groups.
      * @param results The file list to store the results in.
+     * @param bExcludeHidden Decides whether to filter hidden groups
      * @return The amount of items that were added.
      */
-    int GetGroupList(CFileItemList* results) const;
+    int GetGroupList(CFileItemList* results, bool bExcludeHidden = false) const;
 
     /*!
      * @brief Get the previous group in this container.
@@ -159,7 +161,7 @@ namespace PVR
      * @param strName The name of the group.
      * @return True if the group was added, false otherwise.
      */
-    bool AddGroup(const CStdString &strName);
+    bool AddGroup(const std::string &strName);
 
     /*!
      * @brief Delete a group in this container.
@@ -178,7 +180,7 @@ namespace PVR
      * @brief Remove a channel from all non-system groups.
      * @param channel The channel to remove.
      */
-    void RemoveFromAllGroups(const CPVRChannel &channel);
+    void RemoveFromAllGroups(const CPVRChannelPtr &channel);
 
     /*!
      * @brief Persist all changes in channel groups.
@@ -192,13 +194,6 @@ namespace PVR
     bool IsRadio(void) const { return m_bRadio; }
 
     /*!
-     * @brief Call by a guiwindow/dialog to add the groups to a control
-     * @param iWindowId The window to add the groups to.
-     * @param iControlId The control to add the groups to
-     */
-    void FillGroupsGUI(int iWindowId, int iControlId) const;
-
-    /*!
      * @brief Update the contents of the groups in this container.
      * @param bChannelsOnly Set to true to only update channels, not the groups themselves.
      * @return True if the update was successful, false otherwise.
@@ -209,6 +204,7 @@ namespace PVR
     bool UpdateGroupsEntries(const CPVRChannelGroups &groups);
     bool LoadUserDefinedChannelGroups(void);
     bool GetGroupsFromClients(void);
+    void SortGroups(void);
 
     bool                             m_bRadio;         /*!< true if this is a container for radio channels, false if it is for tv channels */
     CPVRChannelGroupPtr              m_selectedGroup;  /*!< the group that's currently selected in the UI */

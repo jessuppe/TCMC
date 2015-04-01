@@ -24,8 +24,12 @@
 #include "cores/AudioEngine/Utils/AEUtil.h"
 #include "utils/EndianSwap.h"
 #include "ActiveAE.h"
+#include "cores/AudioEngine/AEResampleFactory.h"
 
 #include "settings/Settings.h"
+
+#include <new> // for std::bad_alloc
+#include <algorithm>
 
 using namespace ActiveAE;
 
@@ -566,13 +570,13 @@ void CActiveAESink::EnumerateSinkList(bool force)
   CAESinkFactory::EnumerateEx(m_sinkInfoList);
   while(m_sinkInfoList.size() == 0 && c_retry > 0)
   {
-    CLog::Log(LOGNOTICE, "No Devices found - retry: %d", c_retry);
+    CLog::Log(LOGDEBUG, "No Devices found - retry: %d", c_retry);
     Sleep(1500);
     c_retry--;
     // retry the enumeration
     CAESinkFactory::EnumerateEx(m_sinkInfoList, true);
   }
-  CLog::Log(LOGNOTICE, "Found %lu Lists of Devices", m_sinkInfoList.size());
+  CLog::Log(LOGDEBUG, "Found %lu Lists of Devices", m_sinkInfoList.size());
   PrintSinks();
 }
 
@@ -580,16 +584,16 @@ void CActiveAESink::PrintSinks()
 {
   for (AESinkInfoList::iterator itt = m_sinkInfoList.begin(); itt != m_sinkInfoList.end(); ++itt)
   {
-    CLog::Log(LOGNOTICE, "Enumerated %s devices:", itt->m_sinkName.c_str());
+    CLog::Log(LOGDEBUG, "Enumerated %s devices:", itt->m_sinkName.c_str());
     int count = 0;
     for (AEDeviceInfoList::iterator itt2 = itt->m_deviceInfoList.begin(); itt2 != itt->m_deviceInfoList.end(); ++itt2)
     {
-      CLog::Log(LOGNOTICE, "    Device %d", ++count);
+      CLog::Log(LOGDEBUG, "    Device %d", ++count);
       CAEDeviceInfo& info = *itt2;
       std::stringstream ss((std::string)info);
       std::string line;
       while(std::getline(ss, line, '\n'))
-        CLog::Log(LOGNOTICE, "        %s", line.c_str());
+        CLog::Log(LOGDEBUG, "        %s", line.c_str());
     }
   }
 }
@@ -754,10 +758,10 @@ void CActiveAESink::OpenSink()
 
   // init sample of silence
   SampleConfig config;
-  config.fmt = CActiveAEResample::GetAVSampleFormat(m_sinkFormat.m_dataFormat);
+  config.fmt = CAEUtil::GetAVSampleFormat(m_sinkFormat.m_dataFormat);
   config.bits_per_sample = CAEUtil::DataFormatToUsedBits(m_sinkFormat.m_dataFormat);
   config.dither_bits = CAEUtil::DataFormatToDitherBits(m_sinkFormat.m_dataFormat);
-  config.channel_layout = CActiveAEResample::GetAVChannelLayout(m_sinkFormat.m_channelLayout);
+  config.channel_layout = CAEUtil::GetAVChannelLayout(m_sinkFormat.m_channelLayout);
   config.channels = m_sinkFormat.m_channelLayout.Count();
   config.sample_rate = m_sinkFormat.m_sampleRate;
 
@@ -874,6 +878,8 @@ void CActiveAESink::GenerateNoise()
   nb_floats *= m_sampleOfSilence.pkt->config.channels;
 
   float *noise = (float*)_aligned_malloc(nb_floats*sizeof(float), 16);
+  if (!noise)
+    throw std::bad_alloc();
 
   float R1, R2;
   for(int i=0; i<nb_floats;i++)
@@ -889,8 +895,8 @@ void CActiveAESink::GenerateNoise()
   }
 
   SampleConfig config = m_sampleOfSilence.pkt->config;
-  CActiveAEResample resampler;
-  resampler.Init(config.channel_layout,
+  IAEResample *resampler = CAEResampleFactory::Create(AERESAMPLEFACTORY_QUICK_RESAMPLE);
+  resampler->Init(config.channel_layout,
                  config.channels,
                  config.sample_rate,
                  config.fmt,
@@ -902,11 +908,12 @@ void CActiveAESink::GenerateNoise()
                  AV_SAMPLE_FMT_FLT,
                  CAEUtil::DataFormatToUsedBits(m_sinkFormat.m_dataFormat),
                  CAEUtil::DataFormatToDitherBits(m_sinkFormat.m_dataFormat),
-                 false, false, NULL, AE_QUALITY_UNKNOWN);
-  resampler.Resample(m_sampleOfSilence.pkt->data, m_sampleOfSilence.pkt->max_nb_samples,
+                 false, false, NULL, AE_QUALITY_UNKNOWN, false);
+  resampler->Resample(m_sampleOfSilence.pkt->data, m_sampleOfSilence.pkt->max_nb_samples,
                      (uint8_t**)&noise, m_sampleOfSilence.pkt->max_nb_samples, 1.0);
 
   _aligned_free(noise);
+  delete resampler;
 }
 
 void CActiveAESink::SetSilenceTimer()

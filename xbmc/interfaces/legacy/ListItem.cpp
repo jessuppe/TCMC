@@ -18,6 +18,7 @@
  *
  */
 
+#include <cstdlib>
 #include <sstream>
 
 #include "ListItem.h"
@@ -136,9 +137,9 @@ namespace XBMCAddon
         LOCKGUI;
         for (Properties::const_iterator it = dictionary.begin(); it != dictionary.end(); ++it)
         {
-          CStdString artName = it->first;
+          std::string artName = it->first;
           StringUtils::ToLower(artName);
-          const CStdString artFilename(it->second.c_str());
+          const std::string artFilename(it->second.c_str());
           item->SetArt(artName, artFilename);
         }
       }
@@ -203,7 +204,7 @@ namespace XBMCAddon
       LOCKGUI;
       String lowerKey = key;
       StringUtils::ToLower(lowerKey);
-      CStdString value;
+      std::string value;
       if (lowerKey == "startoffset")
       { // special case for start offset - don't actually store in a property,
         // we store it in item.m_lStartOffset instead
@@ -218,7 +219,7 @@ namespace XBMCAddon
       else
         value = item->GetProperty(lowerKey).asString();
 
-      return value.c_str();
+      return value;
     }
 
     void ListItem::setPath(const String& path)
@@ -250,7 +251,7 @@ namespace XBMCAddon
       if (item->HasVideoInfoTag())
       {
         std::ostringstream oss;
-        oss << item->GetVideoInfoTag()->GetDuration() / 60;
+        oss << item->GetVideoInfoTag()->GetDuration();
         return oss.str();
       }
       return "0";
@@ -261,7 +262,7 @@ namespace XBMCAddon
       return item->GetPath();
     }
 
-    void ListItem::setInfo(const char* type, const InfoLabelDict& infoLabels) throw (WrongTypeException)
+    void ListItem::setInfo(const char* type, const InfoLabelDict& infoLabels)
     {
       LOCKGUI;
 
@@ -354,7 +355,7 @@ namespace XBMCAddon
           else if (key == "sorttitle")
             item->GetVideoInfoTag()->m_strSortTitle = value;
           else if (key == "duration")
-            item->GetVideoInfoTag()->m_duration = CVideoInfoTag::GetDurationFromMinuteString(value);
+            item->GetVideoInfoTag()->m_duration = strtol(value.c_str(), NULL, 10);
           else if (key == "studio")
             item->GetVideoInfoTag()->m_studio = StringUtils::Split(value, g_advancedSettings.m_videoItemSeparator);            
           else if (key == "tagline")
@@ -396,6 +397,25 @@ namespace XBMCAddon
           else if (key == "dateadded")
             item->GetVideoInfoTag()->m_dateAdded.SetFromDBDateTime(value.c_str());
         }
+
+        // For backward compatibility.
+        // FIXME: Remove this behaviour. It should be possible to set only tvshowtitle without
+        // having mediatype implicitly changed.
+        if (item->GetVideoInfoTag()->m_type == MediaTypeNone)
+        {
+          if (!item->GetVideoInfoTag()->m_strShowTitle.empty() && item->GetVideoInfoTag()->m_iSeason == -1)
+          {
+            item->GetVideoInfoTag()->m_type = MediaTypeTvShow;
+          }
+          else if (item->GetVideoInfoTag()->m_iSeason > -1)
+          {
+            item->GetVideoInfoTag()->m_type = MediaTypeEpisode;
+          }
+          else if (!item->GetVideoInfoTag()->m_artist.empty())
+          {
+            item->GetVideoInfoTag()->m_type = MediaTypeMusicVideo;
+          }
+        }
       }
       else if (strcmpi(type, "music") == 0)
       {
@@ -410,6 +430,8 @@ namespace XBMCAddon
           // TODO: add the rest of the infolabels
           if (key == "tracknumber")
             item->GetMusicInfoTag()->SetTrackNumber(strtol(value.c_str(), NULL, 10));
+          else if (key == "discnumber")
+            item->GetMusicInfoTag()->SetDiscNumber(strtol(value.c_str(), NULL, 10));
           else if (key == "count")
             item->m_iprogramCount = strtol(value.c_str(), NULL, 10);
           else if (key == "size")
@@ -565,7 +587,6 @@ namespace XBMCAddon
     } // end ListItem::addStreamInfo
 
     void ListItem::addContextMenuItems(const std::vector<Tuple<String,String> >& items, bool replaceItems /* = false */)
-      throw (ListItemException)
     {
       int itemCount = 0;
       for (std::vector<Tuple<String,String> >::const_iterator iter = items.begin(); iter < items.end(); ++iter, ++itemCount)
@@ -589,5 +610,32 @@ namespace XBMCAddon
       if (replaceItems)
         item->SetProperty("pluginreplacecontextitems", replaceItems);
     } // end addContextMenuItems
+
+    void ListItem::setSubtitles(const std::vector<String>& paths)
+    {
+      LOCKGUI;
+      unsigned int i = 1;
+      for (std::vector<String>::const_iterator it = paths.begin(); it != paths.end(); ++it, i++)
+      {
+        String property = StringUtils::Format("subtitle:%u", i);
+        item->SetProperty(property, *it);
+      }
+    }
+
+    xbmc::InfoTagVideo* ListItem::getVideoInfoTag()
+    {
+      LOCKGUI;
+      if (item->HasVideoInfoTag())
+        return new xbmc::InfoTagVideo(*item->GetVideoInfoTag());
+      return new xbmc::InfoTagVideo();
+    }
+
+    xbmc::InfoTagMusic* ListItem::getMusicInfoTag()
+    {
+      LOCKGUI;
+      if (item->HasMusicInfoTag())
+        return new xbmc::InfoTagMusic(*item->GetMusicInfoTag());
+      return new xbmc::InfoTagMusic();
+    }
   }
 }

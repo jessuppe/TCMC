@@ -25,9 +25,9 @@
 // it wont cause a linker circular dependency since it's just
 // a header.
 #include "utils/StringUtils.h"
-#include "utils/StdString.h"
 //---------------------------------------------------------
 #include "ilog.h"
+#include <stdarg.h>
 
 #ifdef __GNUC__
 // The 'this' pointer counts as a parameter on member methods.
@@ -58,7 +58,7 @@ namespace XbmcCommons
   private:
 
     std::string classname;
-    CStdString message;
+    std::string message;
 
   protected:
     static ILogger* logger;

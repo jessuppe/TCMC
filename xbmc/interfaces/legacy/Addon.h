@@ -72,7 +72,7 @@ namespace XBMCAddon
        *  - self.Addon = xbmcaddon.Addon()
        *  - self.Addon = xbmcaddon.Addon('script.foo.bar')
        */
-      Addon(const char* id = NULL) throw (AddonException);
+      Addon(const char* id = NULL);
 
       virtual ~Addon();
 
@@ -122,13 +122,13 @@ namespace XBMCAddon
        * 
        * id        : string - id of the property that the module needs to access.
        * 
-       * *Note, choices are (author, changelog, description, disclaimer, fanart. icon, id, name, path
+       * *Note, choices are (author, changelog, description, disclaimer, fanart. icon, id, name, path,\n
        *                     profile, stars, summary, type, version)
        * 
        * example:
        *   - version = self.Addon.getAddonInfo('version')
        */
-      String getAddonInfo(const char* id) throw (AddonException);
+      String getAddonInfo(const char* id);
     };
   }
 }

@@ -43,6 +43,7 @@ protected:
   // specialization of CGUIDialogSettingsBase
   virtual bool AllowResettingSettings() const { return false; }
   virtual void Save();
+  virtual void SetupView();
 
   // specialization of CGUIDialogSettingsManualBase
   virtual void InitializeSettings();
@@ -53,6 +54,8 @@ protected:
   void AddAudioStreams(CSettingGroup *group, const std::string &settingId);
   void AddSubtitleStreams(CSettingGroup *group, const std::string &settingId);
 
+  static bool IsPlayingPassthrough(const std::string &condition, const std::string &value, const CSetting *setting);
+
   static void AudioStreamsOptionFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
   static void SubtitleStreamsOptionFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
   
@@ -61,7 +64,6 @@ protected:
 
   float m_volume;
   int m_audioStream;
-  bool m_audioStreamStereoMode;
   bool m_passthrough;
   int m_subtitleStream;
   bool m_subtitleVisible;

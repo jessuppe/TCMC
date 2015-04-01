@@ -68,7 +68,7 @@ else
 fi
 
 if [ $NUMBER_OF_PROCESSORS > 1 ]; then
-  MAKEFLAGS=-j$NUMBER_OF_PROCESSORS
+  MAKEFLAGS=-j`expr $NUMBER_OF_PROCESSORS + $NUMBER_OF_PROCESSORS / 2`
 fi
 
 # compile our mingw dlls
@@ -83,7 +83,7 @@ echo "##### building ffmpeg dlls #####"
 cd /xbmc/project/Win32BuildSetup
 runBackgroundProcess "./buildffmpeg.sh $MAKECLEAN"
 setfilepath /xbmc/system/players/dvdplayer
-checkfiles avcodec-55.dll avformat-55.dll avutil-52.dll postproc-52.dll swscale-2.dll avfilter-4.dll swresample-0.dll
+checkfiles avcodec-56.dll avformat-56.dll avutil-54.dll postproc-53.dll swscale-3.dll avfilter-5.dll swresample-1.dll
 echo "##### building of ffmpeg dlls done #####"
 
 echo "##### building libdvd dlls #####"
@@ -99,23 +99,6 @@ runBackgroundProcess "./make-xbmc-lib-win32.sh $MAKECLEAN"
 setfilepath /xbmc/system/players/dvdplayer
 checkfiles libmpeg2-0.dll
 echo "##### building of libmpeg2 dlls done #####"
-
-echo "##### building timidity dlls #####"
-cd /xbmc/lib/timidity/
-if  [ "$MAKECLEAN" == "clean" ]; then
-  make -f Makefile.win32 clean
-fi
-make -f Makefile.win32 $MAKEFLAGS
-setfilepath /xbmc/system/players/paplayer
-checkfiles timidity.dll
-echo "##### building of timidity dlls done #####"
-
-echo "##### building asap dlls #####"
-cd /xbmc/lib/asap/win32
-runBackgroundProcess "./build_xbmc_win32.sh $MAKECLEAN"
-setfilepath /xbmc/system/players/paplayer
-checkfiles xbmc_asap.dll
-echo "##### building of asap dlls done #####"
 
 # wait for key press
 if [ $NOPROMPT == 0 ]; then

@@ -25,6 +25,7 @@
 #include "URL.h"
 #include "PasswordManager.h"
 #include "utils/URIUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace XFILE;
 
@@ -56,7 +57,7 @@ bool IDirectory::IsAllowed(const CURL& url) const
   // We should ignore all non dvd/vcd related ifo and dat files.
   if (URIUtils::HasExtension(url, ".ifo"))
   {
-    CStdString fileName = URIUtils::GetFileName(url);
+    std::string fileName = URIUtils::GetFileName(url);
 
     // Allow filenames of the form video_ts.ifo or vts_##_0.ifo
     
@@ -68,7 +69,7 @@ bool IDirectory::IsAllowed(const CURL& url) const
   
   if (URIUtils::HasExtension(url, ".dat"))
   {
-    CStdString fileName = URIUtils::GetFileName(url);
+    std::string fileName = URIUtils::GetFileName(url);
 
     // Allow filenames of the form AVSEQ##(#).DAT, ITEM###(#).DAT
     // and MUSIC##(#).DAT
@@ -111,10 +112,10 @@ void IDirectory::SetFlags(int flags)
 
 bool IDirectory::ProcessRequirements()
 {
-  CStdString type = m_requirements["type"].asString();
+  std::string type = m_requirements["type"].asString();
   if (type == "keyboard")
   {
-    CStdString input;
+    std::string input;
     if (CGUIKeyboardFactory::ShowAndGetInput(input, m_requirements["heading"], false))
     {
       m_requirements["input"] = input;

@@ -23,6 +23,8 @@
 
 #pragma once
 
+#if defined(HAVE_LIBGL)
+
 #include "system.h"
 #include "system_gl.h"
 #include "rendering/RenderSystem.h"
@@ -84,14 +86,14 @@ protected:
   int        m_width;
   int        m_height;
 
-  CStdString m_RenderExtensions;
+  std::string m_RenderExtensions;
 
   int        m_glslMajor;
   int        m_glslMinor;
   
-  GLdouble   m_view[16];
-  GLdouble   m_projection[16];
   GLint      m_viewPort[4];
 };
+
+#endif // HAVE_LIBGL
 
 #endif // RENDER_SYSTEM_H

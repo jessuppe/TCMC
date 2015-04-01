@@ -82,7 +82,6 @@ int callback(void* res_ptr,int ncol, char** reslt,char** cols)
 static int busy_callback(void*, int busyCount)
 {
   Sleep(100);
-  OutputDebugString("SQLite collision\n");
   return 1;
 }
 
@@ -211,7 +210,7 @@ int SqliteDatabase::connect(bool create) {
 
   //CLog::Log(LOGDEBUG, "Connecting to sqlite:%s:%s", host.c_str(), db.c_str());
 
-  CStdString db_fullpath = URIUtils::AddFileToFolder(host, db);
+  std::string db_fullpath = URIUtils::AddFileToFolder(host, db);
 
   try
   {
@@ -328,7 +327,7 @@ int SqliteDatabase::drop_analytics(void) {
 
   for (size_t i=0; i < res.records.size(); i++) {
     sprintf(sqlcmd,"DROP INDEX '%s'", res.records[i]->at(0).get_asString().c_str());
-    if ((last_err = sqlite3_exec(conn, sqlcmd, NULL, NULL, NULL) != SQLITE_OK)) return DB_UNEXPECTED_RESULT;
+    if ((last_err = sqlite3_exec(conn, sqlcmd, NULL, NULL, NULL)) != SQLITE_OK) return DB_UNEXPECTED_RESULT;
   }
   res.clear();
 
@@ -338,7 +337,7 @@ int SqliteDatabase::drop_analytics(void) {
 
   for (size_t i=0; i < res.records.size(); i++) {
     sprintf(sqlcmd,"DROP VIEW '%s'", res.records[i]->at(0).get_asString().c_str());
-    if ((last_err = sqlite3_exec(conn, sqlcmd, NULL, NULL, NULL) != SQLITE_OK)) return DB_UNEXPECTED_RESULT;
+    if ((last_err = sqlite3_exec(conn, sqlcmd, NULL, NULL, NULL)) != SQLITE_OK) return DB_UNEXPECTED_RESULT;
   }
   res.clear();
 
@@ -348,7 +347,7 @@ int SqliteDatabase::drop_analytics(void) {
 
   for (size_t i=0; i < res.records.size(); i++) {
     sprintf(sqlcmd,"DROP TRIGGER '%s'", res.records[i]->at(0).get_asString().c_str());
-    if ((last_err = sqlite3_exec(conn, sqlcmd, NULL, NULL, NULL) != SQLITE_OK)) return DB_UNEXPECTED_RESULT;
+    if ((last_err = sqlite3_exec(conn, sqlcmd, NULL, NULL, NULL)) != SQLITE_OK) return DB_UNEXPECTED_RESULT;
   }
   // res would be cleared on destruct
 
@@ -383,7 +382,7 @@ long SqliteDatabase::nextid(const char* sname) {
   else {
     id = res.records[0]->at(0).get_asInt()+1;
     sprintf(sqlcmd,"update %s set nextid=%d where seq_name = '%s'",sequence_table.c_str(),id,sname);
-    if ((last_err = sqlite3_exec(conn,sqlcmd,NULL,NULL,NULL) != SQLITE_OK)) return DB_UNEXPECTED_RESULT;
+    if ((last_err = sqlite3_exec(conn,sqlcmd,NULL,NULL,NULL)) != SQLITE_OK) return DB_UNEXPECTED_RESULT;
     return id;
   }
   return DB_UNEXPECTED_RESULT;
@@ -492,7 +491,7 @@ void SqliteDataset::make_query(StringList &_sql) {
   if (autocommit) db->start_transaction();
 
 
-  for (list<string>::iterator i =_sql.begin(); i!=_sql.end(); i++) {
+  for (list<string>::iterator i =_sql.begin(); i!=_sql.end(); ++i) {
   query = *i;
   char* err=NULL; 
   Dataset::parse_sql(query);
@@ -638,7 +637,7 @@ const void* SqliteDataset::getExecRes() {
 }
 
 
-bool SqliteDataset::query(const char *query) {
+bool SqliteDataset::query(const std::string &query) {
     if(!handle()) throw DbErrors("No Database Connection");
     std::string qry = query;
     int fs = qry.find("select");
@@ -649,7 +648,7 @@ bool SqliteDataset::query(const char *query) {
   close();
 
   sqlite3_stmt *stmt = NULL;
-  if (db->setErr(sqlite3_prepare_v2(handle(),query,-1,&stmt, NULL),query) != SQLITE_OK)
+  if (db->setErr(sqlite3_prepare_v2(handle(),query.c_str(),-1,&stmt, NULL),query.c_str()) != SQLITE_OK)
     throw DbErrors(db->getErrorMsg());
 
   // column headers
@@ -689,7 +688,7 @@ bool SqliteDataset::query(const char *query) {
     }
     result.records.push_back(res);
   }
-  if (db->setErr(sqlite3_finalize(stmt),query) == SQLITE_OK)
+  if (db->setErr(sqlite3_finalize(stmt),query.c_str()) == SQLITE_OK)
   {
     active = true;
     ds_state = dsSelect;
@@ -700,10 +699,6 @@ bool SqliteDataset::query(const char *query) {
   {
     throw DbErrors(db->getErrorMsg());
   }  
-}
-
-bool SqliteDataset::query(const string &q){
-  return query(q.c_str());
 }
 
 void SqliteDataset::open(const string &sql) {

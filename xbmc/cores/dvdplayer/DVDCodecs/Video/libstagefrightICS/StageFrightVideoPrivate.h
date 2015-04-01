@@ -33,6 +33,10 @@
 #include <media/stagefright/MediaDefs.h>
 #include <media/stagefright/MediaSource.h>
 
+#if __cplusplus >= 201103L
+#define char16_t LIBRARY_char16_t
+#define char32_t LIBRARY_char32_t
+#endif
 #include <binder/ProcessState.h>
 #include <media/stagefright/OMXClient.h>
 #include <media/stagefright/OMXCodec.h>
@@ -42,6 +46,10 @@
 #include <ui/GraphicBuffer.h>
 #include <ui/PixelFormat.h>
 #include <gui/SurfaceTexture.h>
+#if __cplusplus >= 201103L
+#undef char16_t
+#undef char32_t
+#endif
 
 #include "system_gl.h"
 
@@ -59,8 +67,6 @@ class CAdvancedSettings;
 class CApplication;
 class CApplicationMessenger;
 
-using namespace android;
-
 struct stSlot
 {
   GLuint texid;
@@ -70,12 +76,12 @@ struct stSlot
 
 struct Frame
 {
-  status_t status;
+  android::status_t status;
   int32_t width, height;
   int64_t pts;
   ERenderFormat format;
   EGLImageKHR eglimg;
-  MediaBuffer* medbuf;
+  android::MediaBuffer* medbuf;
 };
 
 enum StageFrightQuirks
@@ -84,14 +90,14 @@ enum StageFrightQuirks
   QuirkSWRender = 0x01,
 };
 
-class CStageFrightVideoPrivate : public MediaBufferObserver
+class CStageFrightVideoPrivate : public android::MediaBufferObserver
 {
 public:
   CStageFrightVideoPrivate();
 
-  virtual void signalBufferReturned(MediaBuffer *buffer);
+  virtual void signalBufferReturned(android::MediaBuffer *buffer);
 
-  MediaBuffer* getBuffer(size_t size);
+  android::MediaBuffer* getBuffer(size_t size);
   bool inputBufferAvailable();
 
   stSlot* getSlot(EGLImageKHR eglimg);
@@ -106,9 +112,9 @@ public:
 public:
   CStageFrightDecodeThread* decode_thread;
 
-  sp<MediaSource> source;
+  android::sp<android::MediaSource> source;
 
-  MediaBuffer* inbuf[INBUFCOUNT];
+  android::MediaBuffer* inbuf[INBUFCOUNT];
 
   GLuint mPgm;
   GLint mPositionHandle;
@@ -128,7 +134,7 @@ public:
 
   stSlot texslots[NUMFBOTEX];
 
-  sp<MetaData> meta;
+  android::sp<android::MetaData> meta;
   int64_t framecount;
   std::list<Frame*> in_queue;
   std::map<int64_t, Frame*> out_queue;
@@ -146,8 +152,8 @@ public:
   int width, height;
   int texwidth, texheight;
 
-  OMXClient *client;
-  sp<MediaSource> decoder;
+  android::OMXClient *client;
+  android::sp<android::MediaSource> decoder;
   const char *decoder_component;
   int videoColorFormat;
   int videoStride;
@@ -162,7 +168,7 @@ public:
   unsigned int mVideoTextureId;
   CJNISurfaceTexture* mSurfTexture;
   CJNISurface* mSurface;
-  sp<ANativeWindow> mVideoNativeWindow;
+  android::sp<ANativeWindow> mVideoNativeWindow;
 
   static void  CallbackInitSurfaceTexture(void*);
   bool InitSurfaceTexture();

@@ -415,7 +415,7 @@ bool CGUIControlListSetting::GetIntegerItems(const CSetting *setting, CFileItemL
     {
       if (!itValue->isInteger())
         return false;
-      values.insert(itValue->asInteger());
+      values.insert((int)itValue->asInteger());
     }
   }
   else
@@ -531,12 +531,15 @@ bool CGUIControlButtonSetting::OnClick()
   const std::string &controlFormat = control->GetFormat();
   if (controlType == "button")
   {
+    const CSettingControlButton *buttonControl = static_cast<const CSettingControlButton*>(control);
     if (controlFormat == "addon")
     {
       // prompt for the addon
       CSettingAddon *setting = (CSettingAddon *)m_pSetting;
-      CStdString addonID = setting->GetValue();
-      if (CGUIWindowAddonBrowser::SelectAddonID(setting->GetAddonType(), addonID, setting->AllowEmpty()) != 1)
+      std::string addonID = setting->GetValue();
+      if (CGUIWindowAddonBrowser::SelectAddonID(setting->GetAddonType(), addonID, setting->AllowEmpty(),
+                                                buttonControl->ShowAddonDetails(), buttonControl->ShowInstalledAddons(),
+                                                buttonControl->ShowInstallableAddons(), buttonControl->ShowMoreAddons()) != 1)
         return false;
 
       SetValid(setting->SetValue(addonID));
@@ -610,9 +613,15 @@ void CGUIControlButtonSetting::Update(bool updateDisplayOnly /* = false */)
       }
       else if (controlFormat == "path")
       {
-        CStdString shortPath;
+        std::string shortPath;
         if (CUtil::MakeShortenPath(strValue, shortPath, 30))
           strText = shortPath;
+      }
+      else if (controlFormat == "infolabel")
+      {
+        strText = strValue;
+        if (strText.empty())
+          strText = g_localizeStrings.Get(231); // None
       }
     }
   }
@@ -649,7 +658,7 @@ bool CGUIControlButtonSetting::GetPath(CSettingPath *pathSetting)
   if (pathSetting == NULL)
     return false;
 
-  CStdString path = pathSetting->GetValue();
+  std::string path = pathSetting->GetValue();
 
   VECSOURCES shares;
   const std::vector<std::string>& sources = pathSetting->GetSources();
@@ -978,7 +987,6 @@ bool CGUIControlRangeSetting::OnClick()
 
   CSettingList *settingList = static_cast<CSettingList*>(m_pSetting);
   const SettingPtrList &settingListValues = settingList->GetValue();
-  SettingPtrList settingListValuesCopy(settingListValues.begin(), settingListValues.end());
   if (settingListValues.size() != 2)
     return false;
 

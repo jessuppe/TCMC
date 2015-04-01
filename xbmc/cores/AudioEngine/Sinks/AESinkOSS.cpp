@@ -23,7 +23,6 @@
 #include <limits.h>
 
 #include "cores/AudioEngine/Utils/AEUtil.h"
-#include "utils/StdString.h"
 #include "utils/log.h"
 #include "threads/SingleLock.h"
 #include <sstream>
@@ -73,7 +72,7 @@ CAESinkOSS::~CAESinkOSS()
   Deinitialize();
 }
 
-std::string CAESinkOSS::GetDeviceUse(const AEAudioFormat format, const std::string &device)
+std::string CAESinkOSS::GetDeviceUse(const AEAudioFormat& format, const std::string &device)
 {
 #ifdef OSS4
   if (AE_IS_RAW(format.m_dataFormat))
@@ -335,7 +334,7 @@ void CAESinkOSS::Deinitialize()
     close(m_fd);
 }
 
-inline CAEChannelInfo CAESinkOSS::GetChannelLayout(AEAudioFormat format)
+inline CAEChannelInfo CAESinkOSS::GetChannelLayout(const AEAudioFormat& format)
 {
   unsigned int count = 0;
 
@@ -372,16 +371,22 @@ void CAESinkOSS::Stop()
 #endif
 }
 
-double CAESinkOSS::GetDelay()
+void CAESinkOSS::GetDelay(AEDelayStatus& status)
 {
   if (m_fd == -1)
-    return 0.0;
+  {
+    status.SetDelay(0);
+    return;
+  }
   
   int delay;
   if (ioctl(m_fd, SNDCTL_DSP_GETODELAY, &delay) == -1)
-    return 0.0;
+  {
+    status.SetDelay(0);
+    return;
+  }
 
-  return (double)delay / (m_format.m_frameSize * m_format.m_sampleRate);
+  status.SetDelay((double)delay / (m_format.m_frameSize * m_format.m_sampleRate));
 }
 
 unsigned int CAESinkOSS::AddPackets(uint8_t **data, unsigned int frames, unsigned int offset)
@@ -454,12 +459,28 @@ void CAESinkOSS::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
     devicename << cardinfo.shortname << " " << cardinfo.longname;
     info.m_displayName = devicename.str();
 
-    if (info.m_displayName.find("HDMI") != std::string::npos)
+    info.m_dataFormats.push_back(AE_FMT_S16NE);
+    info.m_dataFormats.push_back(AE_FMT_S32NE);
+    if (info.m_displayName.find("HDMI") != std::string::npos
+    ||  info.m_displayName.find("DisplayPort") != std::string::npos)
+    {
       info.m_deviceType = AE_DEVTYPE_HDMI;
+      info.m_dataFormats.push_back(AE_FMT_AC3);
+      info.m_dataFormats.push_back(AE_FMT_DTS);
+      info.m_dataFormats.push_back(AE_FMT_EAC3);
+      info.m_dataFormats.push_back(AE_FMT_TRUEHD);
+      info.m_dataFormats.push_back(AE_FMT_DTSHD);
+    }
     else if (info.m_displayName.find("Digital") != std::string::npos)
+    {
       info.m_deviceType = AE_DEVTYPE_IEC958;
+      info.m_dataFormats.push_back(AE_FMT_AC3);
+      info.m_dataFormats.push_back(AE_FMT_DTS);
+    }
     else
+    {
       info.m_deviceType = AE_DEVTYPE_PCM;
+    }
  
     oss_audioinfo ainfo;
     memset(&ainfo, 0, sizeof(ainfo));

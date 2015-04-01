@@ -25,11 +25,14 @@
 #include "utils/SystemInfo.h"
 #include "utils/CharsetConverter.h"
 #include "URL.h"
+#include "utils/log.h"
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN 1
 #endif // WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+
+#include <cassert>
 
 using namespace XFILE;
 
@@ -40,9 +43,13 @@ inline static std::wstring prepareWin32DirectoryName(const std::string& strPath)
     return std::wstring(); // empty string
 
   std::wstring nameW(CWIN32Util::ConvertPathToWin32Form(strPath));
-  if (!nameW.empty() && nameW.back() == L'\\')
-    nameW.pop_back(); // remove slash at the end if any
-
+  if (!nameW.empty())
+  {
+    if (nameW.back() == L'\\')
+      nameW.pop_back(); // remove slash at the end if any
+    if (nameW.length() == 6 && nameW.back() == L':') // 6 is the length of "\\?\x:"
+      nameW.push_back(L'\\'); // always add backslash for root folders
+  }
   return nameW;
 }
 
@@ -76,7 +83,7 @@ bool CWin32Directory::GetDirectory(const CURL& url, CFileItemList &items)
     hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoStandard, &findData, FindExSearchNameMatch, NULL, 0);
 
   if (hSearch == INVALID_HANDLE_VALUE)
-    return Exists(url); // return true if directory exist and empty
+    return GetLastError() == ERROR_FILE_NOT_FOUND ? Exists(url) : false; // return true if directory exist and empty
 
   do
   {
@@ -85,9 +92,11 @@ bool CWin32Directory::GetDirectory(const CURL& url, CFileItemList &items)
       continue;
     
     std::string itemName;
-    g_charsetConverter.wToUTF8(itemNameW, itemName);
-    if (itemName.empty())
+    if (!g_charsetConverter.wToUTF8(itemNameW, itemName, true) || itemName.empty())
+    {
+      CLog::Log(LOGERROR, "%s: Can't convert wide string name to UTF-8 encoding", __FUNCTION__);
       continue;
+    }
 
     CFileItemPtr pItem(new CFileItem(itemName));
 

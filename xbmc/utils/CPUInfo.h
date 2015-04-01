@@ -102,7 +102,7 @@ public:
 
 private:
   bool readProcStat(unsigned long long& user, unsigned long long& nice, unsigned long long& system,
-    unsigned long long& idle, unsigned long long& io);
+                    unsigned long long& idle, unsigned long long& io);
   void ReadCPUFeatures();
   static bool HasNeon();
 
@@ -110,6 +110,7 @@ private:
   FILE* m_fProcStat;
   FILE* m_fProcTemperature;
   FILE* m_fCPUFreq;
+  bool m_cpuInfoForFreq;
 #elif defined(TARGET_WINDOWS)
   PDH_HQUERY m_cpuQueryFreq;
   PDH_HQUERY m_cpuQueryLoad;

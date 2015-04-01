@@ -22,7 +22,7 @@
 #include "GUIWindowManager.h"
 #include "GUIDialog.h"
 #include "GUIInfoManager.h"
-#include "Key.h"
+#include "input/Key.h"
 
 using namespace std;
 
@@ -147,7 +147,7 @@ void CGUIToggleButtonControl::SetAltLabel(const string &label)
     m_selectButton.SetLabel(label);
 }
 
-CStdString CGUIToggleButtonControl::GetDescription() const
+std::string CGUIToggleButtonControl::GetDescription() const
 {
   if (m_bSelected)
     return m_selectButton.GetDescription();
@@ -168,7 +168,7 @@ void CGUIToggleButtonControl::OnClick()
     CGUIButtonControl::OnClick();
 }
 
-void CGUIToggleButtonControl::SetToggleSelect(const CStdString &toggleSelect)
+void CGUIToggleButtonControl::SetToggleSelect(const std::string &toggleSelect)
 {
   m_toggleSelect = g_infoManager.Register(toggleSelect, GetParentID());
 }

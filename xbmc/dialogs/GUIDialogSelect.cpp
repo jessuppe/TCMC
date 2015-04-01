@@ -21,7 +21,7 @@
 #include "GUIDialogSelect.h"
 #include "guilib/GUIWindowManager.h"
 #include "FileItem.h"
-#include "guilib/Key.h"
+#include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/StringUtils.h"
 
@@ -35,6 +35,8 @@ CGUIDialogSelect::CGUIDialogSelect(void)
     : CGUIDialogBoxBase(WINDOW_DIALOG_SELECT, "DialogSelect.xml")
 {
   m_bButtonEnabled = false;
+  m_bButtonPressed = false;
+  m_bConfirmed = false;
   m_buttonString = -1;
   m_useDetails = false;
   m_vecList = new CFileItemList;
@@ -87,8 +89,6 @@ bool CGUIDialogSelect::OnMessage(CGUIMessage& message)
 
   case GUI_MSG_WINDOW_INIT:
     {
-      m_bButtonPressed = false;
-      m_bConfirmed = false;
       CGUIDialog::OnMessage(message);
       return true;
     }
@@ -163,6 +163,8 @@ bool CGUIDialogSelect::OnBack(int actionID)
 void CGUIDialogSelect::Reset()
 {
   m_bButtonEnabled = false;
+  m_buttonString = -1;
+  m_bButtonPressed = false;
   m_useDetails = false;
   m_multiSelection = false;
   m_iSelected = -1;
@@ -170,7 +172,7 @@ void CGUIDialogSelect::Reset()
   m_selectedItems->Clear();
 }
 
-int CGUIDialogSelect::Add(const CStdString& strLabel)
+int CGUIDialogSelect::Add(const std::string& strLabel)
 {
   CFileItemPtr pItem(new CFileItem(strLabel));
   m_vecList->Add(pItem);
@@ -206,12 +208,12 @@ int CGUIDialogSelect::GetSelectedLabel() const
   return m_iSelected;
 }
 
-const CFileItemPtr CGUIDialogSelect::GetSelectedItem()
+const CFileItemPtr CGUIDialogSelect::GetSelectedItem() const
 {
   return m_selectedItems->Size() > 0 ? m_selectedItems->Get(0) : CFileItemPtr(new CFileItem);
 }
 
-const CStdString& CGUIDialogSelect::GetSelectedLabelText()
+const std::string& CGUIDialogSelect::GetSelectedLabelText() const
 {
   return GetSelectedItem()->GetLabel();
 }
@@ -256,14 +258,14 @@ void CGUIDialogSelect::SetSelected(int iSelected)
   m_selectedItems->Add(m_vecList->Get(iSelected));
 }
 
-void CGUIDialogSelect::SetSelected(const CStdString &strSelectedLabel)
+void CGUIDialogSelect::SetSelected(const std::string &strSelectedLabel)
 {
   if (strSelectedLabel.empty())
     return;
 
   for (int index = 0; index < m_vecList->Size(); index++)
   {
-    if (strSelectedLabel.Equals(m_vecList->Get(index)->GetLabel()))
+    if (strSelectedLabel == m_vecList->Get(index)->GetLabel())
     {
       SetSelected(index);
       return;
@@ -276,7 +278,7 @@ void CGUIDialogSelect::SetSelected(std::vector<int> selectedIndexes)
   if (selectedIndexes.empty())
     return;
 
-  for (std::vector<int>::const_iterator it = selectedIndexes.begin(); it != selectedIndexes.end(); it++)
+  for (std::vector<int>::const_iterator it = selectedIndexes.begin(); it != selectedIndexes.end(); ++it)
     SetSelected(*it);
 }
 
@@ -285,7 +287,7 @@ void CGUIDialogSelect::SetSelected(const std::vector<std::string> &selectedLabel
   if (selectedLabels.empty())
     return;
 
-  for (std::vector<std::string>::const_iterator it = selectedLabels.begin(); it != selectedLabels.end(); it++)
+  for (std::vector<std::string>::const_iterator it = selectedLabels.begin(); it != selectedLabels.end(); ++it)
     SetSelected(*it);
 }
 
@@ -332,7 +334,7 @@ void CGUIDialogSelect::OnInitWindow()
   }
   m_viewControl.SetCurrentView(m_useDetails ? CONTROL_DETAILS : CONTROL_LIST);
 
-  CStdString items = StringUtils::Format("%i %s", m_vecList->Size(), g_localizeStrings.Get(127).c_str());
+  std::string items = StringUtils::Format("%i %s", m_vecList->Size(), g_localizeStrings.Get(127).c_str());
   SET_CONTROL_LABEL(CONTROL_NUMBEROFFILES, items);
   
   if (m_multiSelection)

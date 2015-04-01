@@ -20,13 +20,13 @@
  *
  */
 
-#include "guilib/GUIWindow.h"
-#include "filesystem/VirtualDirectory.h"
+#include "dialogs/GUIDialogContextMenu.h"
 #include "filesystem/DirectoryHistory.h"
+#include "filesystem/VirtualDirectory.h"
+#include "guilib/GUIWindow.h"
+#include "playlists/SmartPlayList.h"
 #include "view/GUIViewControl.h"
 #include "view/GUIViewState.h"
-#include "dialogs/GUIDialogContextMenu.h"
-#include "playlists/SmartPlayList.h"
 
 class CFileItemList;
 
@@ -36,25 +36,37 @@ class CGUIMediaWindow : public CGUIWindow
 public:
   CGUIMediaWindow(int id, const char *xmlFile);
   virtual ~CGUIMediaWindow(void);
-  virtual bool OnMessage(CGUIMessage& message);
+
+  // specializations of CGUIControl
   virtual bool OnAction(const CAction &action);
   virtual bool OnBack(int actionID);
+  virtual bool OnMessage(CGUIMessage& message);
+
+  // specializations of CGUIWindow
   virtual void OnWindowLoaded();
   virtual void OnWindowUnload();
   virtual void OnInitWindow();
-  virtual bool IsMediaWindow() const { return true; };
-  const CFileItemList &CurrentDirectory() const;
-  int GetViewContainerID() const { return m_viewControl.GetCurrentControl(); };
-  virtual bool HasListItems() const { return true; };
+  virtual bool IsMediaWindow() const { return true; }
+  int GetViewContainerID() const { return m_viewControl.GetCurrentControl(); }
+  virtual bool HasListItems() const { return true; }
   virtual CFileItemPtr GetCurrentListItem(int offset = 0);
-  const CGUIViewState *GetViewState() const;
 
+  // custom methods
   virtual bool CanFilterAdvanced() { return m_canFilterAdvanced; }
   virtual bool IsFiltered();
+  virtual bool IsSameStartFolder(const std::string &dir);
+
+  const CFileItemList &CurrentDirectory() const;
+  const CGUIViewState *GetViewState() const;
 
 protected:
+  // specializations of CGUIControlGroup
+  virtual CGUIControl *GetFirstFocusableControl(int id);
+
+  // specializations of CGUIWindow
   virtual void LoadAdditionalTags(TiXmlElement *root);
-  CGUIControl *GetFirstFocusableControl(int id);
+
+  // custom methods
   virtual void SetupShares();
   virtual void GoParentFolder();
   virtual bool OnClick(int iItem);
@@ -65,11 +77,13 @@ protected:
    */
   virtual bool OnSelect(int item);
   virtual bool OnPopupMenu(int iItem);
+
   virtual void GetContextButtons(int itemNumber, CContextButtons &buttons);
   virtual bool OnContextButton(int itemNumber, CONTEXT_BUTTON button);
   virtual void FormatItemLabels(CFileItemList &items, const LABEL_MASKS &labelMasks);
   virtual void UpdateButtons();
-  virtual bool GetDirectory(const CStdString &strDirectory, CFileItemList &items);
+
+  virtual bool GetDirectory(const std::string &strDirectory, CFileItemList &items);
   /*! \brief Retrieves the items from the given path and updates the list
    \param strDirectory The path to the directory to get the items from
    \param updateFilterPath Whether to update the filter path in m_strFilterPath or not
@@ -78,17 +92,17 @@ protected:
    \sa m_vecItems
    \sa m_strFilterPath
    */
-  virtual bool Update(const CStdString &strDirectory, bool updateFilterPath = true);
+  virtual bool Update(const std::string &strDirectory, bool updateFilterPath = true);
   /*! \brief Refreshes the current list by retrieving the lists's path
    \return true if the list was successfully refreshed otherwise false
    \sa Update
    \sa GetDirectory
    */
   virtual bool Refresh(bool clearCache = false);
+
   virtual void FormatAndSort(CFileItemList &items);
   virtual void OnPrepareFileItems(CFileItemList &items);
   virtual void OnCacheFileItems(CFileItemList &items);
-  virtual void OnFinalizeFileItems(CFileItemList &items);
   virtual void GetGroupedItems(CFileItemList &items) { }
 
   void ClearFileItems();
@@ -103,8 +117,8 @@ protected:
    \param strDirectory Path to check
    \return true if the given path can contain a "filter" parameter otherwise false
    */
-  virtual bool CanContainFilter(const CStdString &strDirectory) const { return false; }
-  virtual void UpdateFilterPath(const CStdString &strDirector, const CFileItemList &items, bool updateFilterPath);
+  virtual bool CanContainFilter(const std::string &strDirectory) const { return false; }
+  virtual void UpdateFilterPath(const std::string &strDirector, const CFileItemList &items, bool updateFilterPath);
   virtual bool Filter(bool advanced = true);
 
   /* \brief Called on response to a GUI_MSG_FILTER_ITEMS message
@@ -112,14 +126,14 @@ protected:
    \param filter the filter to use.
    \sa FilterItems
    */
-  void OnFilterItems(const CStdString &filter);
+  void OnFilterItems(const std::string &filter);
 
   /* \brief Retrieve the filtered item list
    \param filter filter to apply
    \param items CFileItemList to filter
    \sa OnFilterItems
    */
-  virtual bool GetFilteredItems(const CStdString &filter, CFileItemList &items);
+  virtual bool GetFilteredItems(const std::string &filter, CFileItemList &items);
 
   /* \brief Retrieve the advance filtered item list
   \param items CFileItemList to filter
@@ -130,32 +144,31 @@ protected:
   virtual bool GetAdvanceFilteredItems(CFileItemList &items);
 
   // check for a disc or connection
-  virtual bool HaveDiscOrConnection(const CStdString& strPath, int iDriveType);
+  virtual bool HaveDiscOrConnection(const std::string& strPath, int iDriveType);
   void ShowShareErrorMessage(CFileItem* pItem);
 
-  void GetDirectoryHistoryString(const CFileItem* pItem, CStdString& strHistoryString);
-  void SetHistoryForPath(const CStdString& strDirectory);
-  virtual void LoadPlayList(const CStdString& strFileName) {}
+  void GetDirectoryHistoryString(const CFileItem* pItem, std::string& strHistoryString);
+  void SetHistoryForPath(const std::string& strDirectory);
+  virtual void LoadPlayList(const std::string& strFileName) {}
   virtual bool OnPlayMedia(int iItem);
   virtual bool OnPlayAndQueueMedia(const CFileItemPtr &item);
   void UpdateFileList();
   virtual void OnDeleteItem(int iItem);
   void OnRenameItem(int iItem);
 
-protected:
   bool WaitForNetwork() const;
 
   /*! \brief Translate the folder to start in from the given quick path
    \param dir the folder the user wants
    \return the resulting path */
-  virtual CStdString GetStartFolder(const CStdString &url);
+  virtual std::string GetStartFolder(const std::string &url);
 
   /*! \brief Utility method to remove the given parameter from a path/URL
    \param strDirectory Path/URL from which to remove the given parameter
    \param strParameter Parameter to remove from the given path/URL
    \return Path/URL without the given parameter
    */
-  static CStdString RemoveParameterFromPath(const CStdString &strDirectory, const CStdString &strParameter);
+  static std::string RemoveParameterFromPath(const std::string &strDirectory, const std::string &strParameter);
 
   XFILE::CVirtualDirectory m_rootDir;
   CGUIViewControl m_viewControl;
@@ -164,12 +177,12 @@ protected:
   CFileItemList* m_vecItems;
   CFileItemList* m_unfilteredItems;        ///< \brief items prior to filtering using FilterItems()
   CDirectoryHistory m_history;
-  std::auto_ptr<CGUIViewState> m_guiState;
+  std::unique_ptr<CGUIViewState> m_guiState;
 
   // save control state on window exit
   int m_iLastControl;
   int m_iSelectedItem;
-  CStdString m_startDirectory;
+  std::string m_startDirectory;
 
   CSmartPlaylist m_filter;
   bool m_canFilterAdvanced;
@@ -185,5 +198,5 @@ protected:
 
    \sa Update
    */
-  CStdString m_strFilterPath;
+  std::string m_strFilterPath;
 };

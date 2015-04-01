@@ -29,7 +29,6 @@
 
 #include "cores/AudioEngine/Utils/AEAudioFormat.h"
 #include "cores/AudioEngine/Utils/AEUtil.h"
-#include "cores/IAudioCallback.h"
 #include "linux/PlatformDefs.h"
 #include "DVDStreamInfo.h"
 
@@ -49,14 +48,13 @@ extern "C" {
 #define OMX_IS_RAW(x)       \
 (                           \
   (x) == AE_FMT_AC3   ||    \
+  (x) == AE_FMT_EAC3  ||    \
   (x) == AE_FMT_DTS         \
 )
 
 class COMXAudio
 {
 public:
-  void UnRegisterAudioCallback();
-  void RegisterAudioCallback(IAudioCallback* pCallback);
   unsigned int GetChunkLen();
   float GetDelay();
   float GetCacheTime();
@@ -74,7 +72,7 @@ public:
   void SetVolume(float nVolume);
   void SetMute(bool bOnOff);
   void SetDynamicRangeCompression(long drc);
-  float GetDynamicRangeAmplification() { return 20.0f * log10f(m_amplification * m_attenuation); }
+  float GetDynamicRangeAmplification() const { return 20.0f * log10f(m_amplification * m_attenuation); }
   bool ApplyVolume();
   int SetPlaySpeed(int iSpeed);
   void SubmitEOS();
@@ -90,18 +88,13 @@ public:
 
   static void PrintChannels(OMX_AUDIO_CHANNELTYPE eChannelMapping[]);
   void PrintPCM(OMX_AUDIO_PARAM_PCMMODETYPE *pcm, std::string direction);
-  void PrintDDP(OMX_AUDIO_PARAM_DDPTYPE *ddparm);
-  void PrintDTS(OMX_AUDIO_PARAM_DTSTYPE *dtsparam);
-  unsigned int SyncDTS(BYTE* pData, unsigned int iSize);
-  unsigned int SyncAC3(BYTE* pData, unsigned int iSize);
   void UpdateAttenuation();
 
-  bool BadState() { return !m_Initialized; };
-  unsigned int GetAudioRenderingLatency();
+  bool BadState() const { return !m_Initialized; };
+  unsigned int GetAudioRenderingLatency() const;
   float GetMaxLevel(double &pts);
 
 private:
-  IAudioCallback* m_pCallback;
   bool          m_Initialized;
   float         m_CurrentVolume;
   bool          m_Mute;
@@ -123,7 +116,6 @@ private:
   OMXClock       *m_av_clock;
   bool          m_settings_changed;
   bool          m_setStartTime;
-  bool          m_LostSync;
   int           m_SampleRate;
   OMX_AUDIO_CODINGTYPE m_eEncoding;
   uint8_t       *m_extradata;
@@ -161,7 +153,6 @@ protected:
   COMXCoreTunel     m_omx_tunnel_splitter_analog;
   COMXCoreTunel     m_omx_tunnel_splitter_hdmi;
 
-  static void CheckOutputBufferSize(void **buffer, int *oldSize, int newSize);
   CCriticalSection m_critSection;
 };
 #endif

@@ -27,6 +27,7 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include <string.h>
+#include <cassert>
 
 CAEEncoderFFmpeg::CAEEncoderFFmpeg():
   m_BitRate       (0    ),
@@ -52,7 +53,7 @@ CAEEncoderFFmpeg::~CAEEncoderFFmpeg()
     swr_free(&m_SwrCtx);
 }
 
-bool CAEEncoderFFmpeg::IsCompatible(AEAudioFormat format)
+bool CAEEncoderFFmpeg::IsCompatible(const AEAudioFormat& format)
 {
   if (!m_CodecCtx)
     return false;

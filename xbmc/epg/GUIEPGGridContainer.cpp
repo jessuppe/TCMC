@@ -18,7 +18,7 @@
  *
  */
 
-#include "guilib/Key.h"
+#include "input/Key.h"
 #include "guilib/GUIControlFactory.h"
 #include "guilib/GUIListItem.h"
 #include "guilib/LocalizeStrings.h"
@@ -26,6 +26,7 @@
 #include <tinyxml.h>
 #include "utils/log.h"
 #include "utils/MathUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/Variant.h"
 #include "threads/SystemClock.h"
 #include "GUIInfoManager.h"
@@ -34,6 +35,8 @@
 #include "pvr/channels/PVRChannel.h"
 
 #include "GUIEPGGridContainer.h"
+
+#include <assert.h>
 
 using namespace PVR;
 using namespace EPG;
@@ -623,6 +626,16 @@ bool CGUIEPGGridContainer::OnAction(const CAction &action)
       // use base class implementation
       return CGUIControl::OnAction(action);
 
+    case ACTION_NEXT_ITEM:
+      // skip +12h
+      ScrollToBlockOffset(m_blockOffset + (12 * 60  / MINSPERBLOCK));
+      return true;
+
+    case ACTION_PREV_ITEM:
+      // skip -12h
+      ScrollToBlockOffset(m_blockOffset - (12 * 60 / MINSPERBLOCK));
+      return true;
+
     case ACTION_PAGE_UP:
       if (m_channelOffset == 0)
       { // already on the first page, so move to the first item
@@ -737,27 +750,29 @@ bool CGUIEPGGridContainer::OnMessage(CGUIMessage& message)
           }
 
           /* Create Channel items */
-          int iLastChannelNumber = -1;
+          int iLastChannelID = -1;
           ItemsPtr itemsPointer;
           itemsPointer.start = 0;
           for (unsigned int i = 0; i < m_programmeItems.size(); ++i)
           {
-            const CEpgInfoTag* tag = ((CFileItem*)m_programmeItems[i].get())->GetEPGInfoTag();
-            int iCurrentChannelNumber = tag->PVRChannelNumber();
-            if (iCurrentChannelNumber != iLastChannelNumber)
-            {
-              CPVRChannelPtr channel = tag->ChannelTag();
-              if (!channel)
-                continue;
+            const CEpgInfoTagPtr tag(((CFileItem*)m_programmeItems[i].get())->GetEPGInfoTag());
+            if (!tag)
+              continue;
 
+            CPVRChannelPtr channel = tag->ChannelTag();
+            if (!channel)
+              continue;
+            int iCurrentChannelID = channel->ChannelID();
+            if (iCurrentChannelID != iLastChannelID)
+            {
               if (i > 0)
               {
                 itemsPointer.stop = i-1;
                 m_epgItemsPtr.push_back(itemsPointer);
                 itemsPointer.start = i;
               }
-              iLastChannelNumber = iCurrentChannelNumber;
-              CGUIListItemPtr item(new CFileItem(*channel));
+              iLastChannelID = iCurrentChannelID;
+              CGUIListItemPtr item(new CFileItem(channel));
               m_channelItems.push_back(item);
             }
           }
@@ -845,10 +860,11 @@ void CGUIEPGGridContainer::UpdateItems()
 
   for (unsigned int row = 0; row < m_epgItemsPtr.size(); ++row)
   {
-    CDateTime gridCursor  = m_gridStart; //reset cursor for new channel
-    unsigned long progIdx = m_epgItemsPtr[row].start;
-    unsigned long lastIdx = m_epgItemsPtr[row].stop;
-    int iEpgId            = ((CFileItem *)m_programmeItems[progIdx].get())->GetEPGInfoTag()->EpgID();
+    CDateTime gridCursor      = m_gridStart; //reset cursor for new channel
+    unsigned long progIdx     = m_epgItemsPtr[row].start;
+    unsigned long lastIdx     = m_epgItemsPtr[row].stop;
+    const CEpgInfoTagPtr info = ((CFileItem *)m_programmeItems[progIdx].get())->GetEPGInfoTag();
+    int iEpgId                = info ? info->EpgID() : -1;
 
     /** FOR EACH BLOCK **********************************************************************/
 
@@ -857,8 +873,8 @@ void CGUIEPGGridContainer::UpdateItems()
       while (progIdx <= lastIdx)
       {
         CGUIListItemPtr item = m_programmeItems[progIdx];
-        const CEpgInfoTag* tag = ((CFileItem *)item.get())->GetEPGInfoTag();
-        if (tag == NULL)
+        const CEpgInfoTagPtr tag(((CFileItem *)item.get())->GetEPGInfoTag());
+        if (!tag)
         {
           progIdx++;
           continue;
@@ -891,7 +907,7 @@ void CGUIEPGGridContainer::UpdateItems()
       {
         if (!item)
         {
-          CEpgInfoTag gapTag;
+          CEpgInfoTagPtr gapTag(CEpgInfoTag::CreateDefaultTag());
           CFileItemPtr gapItem(new CFileItem(gapTag));
           for (int i = block ; i > block - itemSize; i--)
           {
@@ -900,8 +916,9 @@ void CGUIEPGGridContainer::UpdateItems()
         }
         else
         {
-          const CEpgInfoTag* tag = ((CFileItem *)item.get())->GetEPGInfoTag();
-          m_gridIndex[row][savedBlock].item->SetProperty("GenreType", tag->GenreType());
+          const CEpgInfoTagPtr tag(((CFileItem *)item.get())->GetEPGInfoTag());
+          if (tag)
+            m_gridIndex[row][savedBlock].item->SetProperty("GenreType", tag->GenreType());
         }
 
         m_gridIndex[row][savedBlock].originWidth = itemSize*m_blockSize;
@@ -1055,12 +1072,12 @@ void CGUIEPGGridContainer::OnRight()
   CGUIControl::OnRight();
 }
 
-void CGUIEPGGridContainer::SetChannel(const CStdString &channel)
+void CGUIEPGGridContainer::SetChannel(const std::string &channel)
 {
   int iChannelIndex(-1);
   for (unsigned int iIndex = 0; iIndex < m_channelItems.size(); iIndex++)
   {
-    CStdString strPath = m_channelItems[iIndex]->GetProperty("path").asString(StringUtils::EmptyString);
+    std::string strPath = m_channelItems[iIndex]->GetProperty("path").asString();
     if (strPath == channel)
     {
       iChannelIndex = iIndex;
@@ -1071,13 +1088,15 @@ void CGUIEPGGridContainer::SetChannel(const CStdString &channel)
   SetSelectedChannel(iChannelIndex);
 }
 
-void CGUIEPGGridContainer::SetChannel(const CPVRChannel &channel)
+void CGUIEPGGridContainer::SetChannel(const CPVRChannelPtr &channel)
 {
+  assert(channel.get());
+
   int iChannelIndex(-1);
   for (unsigned int iIndex = 0; iIndex < m_channelItems.size(); iIndex++)
   {
     int iChannelId = (int)m_channelItems[iIndex]->GetProperty("channelid").asInteger(-1);
-    if (iChannelId == channel.ChannelID())
+    if (iChannelId == channel->ChannelID())
     {
       iChannelIndex = iIndex;
       break;
@@ -1263,12 +1282,29 @@ bool CGUIEPGGridContainer::OnMouseWheel(char wheel, const CPoint &point)
   return true;
 }
 
+CPVRChannelPtr CGUIEPGGridContainer::GetChannel(int iIndex)
+{
+  if (iIndex >= 0 && (size_t) iIndex < m_channelItems.size())
+  {
+    CFileItemPtr fileItem = std::static_pointer_cast<CFileItem>(m_channelItems[iIndex]);
+    if (fileItem->HasPVRChannelInfoTag())
+      return fileItem->GetPVRChannelInfoTag();
+  }
+  
+  return CPVRChannelPtr();
+}
+
 void CGUIEPGGridContainer::SetSelectedChannel(int channelIndex)
 {
   if (channelIndex < 0)
     return;
-
-  if (channelIndex - m_channelOffset < m_channelsPerPage && channelIndex - m_channelOffset >= 0)
+  
+  if (channelIndex - m_channelOffset <= 0)
+  {
+    ScrollToChannelOffset(0);
+    SetChannel(channelIndex);
+  }
+  else if (channelIndex - m_channelOffset < m_channelsPerPage && channelIndex - m_channelOffset >= 0)
   {
     SetChannel(channelIndex - m_channelOffset);
   }
@@ -1327,9 +1363,9 @@ CGUIListItemPtr CGUIEPGGridContainer::GetListItem(int offset, unsigned int flag)
   return CGUIListItemPtr();
 }
 
-CStdString CGUIEPGGridContainer::GetLabel(int info) const
+std::string CGUIEPGGridContainer::GetLabel(int info) const
 {
-  CStdString label;
+  std::string label;
   switch (info)
   {
   case CONTAINER_NUM_PAGES:
@@ -1590,9 +1626,9 @@ void CGUIEPGGridContainer::LoadLayout(TiXmlElement *layout)
   }
 }
 
-CStdString CGUIEPGGridContainer::GetDescription() const
+std::string CGUIEPGGridContainer::GetDescription() const
 {
-  CStdString strLabel;
+  std::string strLabel;
   int item = GetSelectedItem();
   if (item >= 0 && item < (int)m_programmeItems.size())
   {
@@ -1806,11 +1842,11 @@ void CGUIEPGGridContainer::SetRenderOffset(const CPoint &offset)
 void CGUIEPGGridContainer::FreeItemsMemory()
 {
   // free memory of items
-  for (std::vector<CGUIListItemPtr>::iterator it = m_channelItems.begin(); it != m_channelItems.end(); it++)
+  for (std::vector<CGUIListItemPtr>::iterator it = m_channelItems.begin(); it != m_channelItems.end(); ++it)
     (*it)->FreeMemory();
-  for (std::vector<CGUIListItemPtr>::iterator it = m_rulerItems.begin(); it != m_rulerItems.end(); it++)
+  for (std::vector<CGUIListItemPtr>::iterator it = m_rulerItems.begin(); it != m_rulerItems.end(); ++it)
     (*it)->FreeMemory();
-  for (std::vector<CGUIListItemPtr>::iterator it = m_programmeItems.begin(); it != m_programmeItems.end(); it++)
+  for (std::vector<CGUIListItemPtr>::iterator it = m_programmeItems.begin(); it != m_programmeItems.end(); ++it)
     (*it)->FreeMemory();
 }
 

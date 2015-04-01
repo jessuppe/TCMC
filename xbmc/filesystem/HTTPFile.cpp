@@ -40,14 +40,14 @@ bool CHTTPFile::OpenForWrite(const CURL& url, bool bOverWrite)
   return true;
 }
 
-int CHTTPFile::Write(const void* lpBuf, int64_t uiBufSize)
+ssize_t CHTTPFile::Write(const void* lpBuf, size_t uiBufSize)
 {
   // Although we can not verify much, try to catch errors where we can
   if (!m_openedforwrite)
     return -1;
 
-  CStdString myPostData((char*) lpBuf);
-  if ((int64_t)myPostData.length() != uiBufSize)
+  std::string myPostData((char*) lpBuf);
+  if (myPostData.length() != uiBufSize)
     return -1;
 
   // If we get here, we (most likely) satisfied the pre-conditions that we used OpenForWrite and passed a string as postdata
@@ -60,6 +60,6 @@ int CHTTPFile::Write(const void* lpBuf, int64_t uiBufSize)
     return -1;
 
   // Finally (and this is a clumsy hack) return the http response code
-  return (int) m_httpresponse;
+  return m_httpresponse;
 }
 

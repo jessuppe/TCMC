@@ -1,14 +1,14 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Confluence
 # Addon id: skin.confluence
-# Addon Provider: Jezz_X, Team XBMC
+# Addon Provider: Jezz_X, Team Kodi
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Slovak (http://www.transifex.com/projects/p/xbmc-main/language/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -461,16 +461,16 @@ msgid "[B]CONFIGURE SYSTEM SETTINGS[/B][CR][CR]Setup and calibrate displays · C
 msgstr "[B]MOŽNOSTI SYSTÉMU[/B][CR][CR]Nastavenie obrazovky · Nastavenie zvukového výstupu[CR]Možnosti úsporného režimu · Ukladanie informácií · Konfigurácia rodičovského zámku"
 
 msgctxt "#31408"
-msgid "[B]CONFIGURE ADD-ONS[/B][CR][CR]Manage your installed Add-ons · Browse for and install Add-ons from xbmc.org[CR]Modify Add-on settings"
-msgstr "[B]MOŽNOSTI DOPLNKOV[/B][CR][CR]Správa nainštalovaných doplnkov · Vyhľadávanie a inštalácia doplnkov z xbmc.org[CR]Nastavenie doplnkov"
+msgid "[B]CONFIGURE ADD-ONS[/B][CR][CR]Manage your installed Add-ons · Browse for and install Add-ons from kodi.tv[CR]Modify Add-on settings"
+msgstr "[B]MOŽNOSTI DOPLNKOV[/B][CR][CR]Správa nainštalovaných doplnkov · Vyhľadávanie a inštalácia doplnkov z kodi.tv[CR]Nastavenie doplnkov"
 
 msgctxt "#31409"
 msgid "[B]CONFIGURE TV SETTINGS[/B][CR][CR]Change full screen info · Manage EPG data settings"
 msgstr "[B]NASTAVENIA TV[/B][CR][CR]Zmeniť informácie zobrazené na celej obrazovke · Spravovať nastavenia EPG dát"
 
 msgctxt "#31410"
-msgid "[B]CONFIGURE SERVICE SETTINGS[/B][CR][CR]Setup control of XBMC via UPnP and HTTP · Configure file sharing[CR]Enable Zeroconf · Configure AirPlay"
-msgstr "[B]KONFIGUROVAŤ NASTAVENIA SLUŽBY[/B][CR][CR]Nastaviť ovládanie XBMC pomocou UPnP a HTTP · Konfigurovať zdielanie[CR]Zapnúť Zeroconf · Konfigurovať AirPlay"
+msgid "[B]CONFIGURE SERVICE SETTINGS[/B][CR][CR]Setup control of Kodi via UPnP and HTTP · Configure file sharing[CR]Enable Zeroconf · Configure AirPlay"
+msgstr "[B]KONFIGUROVAŤ NASTAVENIA SLUŽBY[/B][CR][CR]Nastaviť ovládanie Kodi pomocou UPnP a HTTP · Konfigurovať zdielanie[CR]Zapnúť Zeroconf · Konfigurovať AirPlay"
 
 msgctxt "#31411"
 msgid "First run help...."
@@ -489,7 +489,7 @@ msgid "Login"
 msgstr "Prihlásiť"
 
 msgctxt "#31421"
-msgid "Select your XBMC user Profile[CR]to login and continue"
+msgid "Select your Kodi user Profile[CR]to login and continue"
 msgstr "Prihlásenie užívateľa[CR]Pokračujte výberom profilu"
 
 msgctxt "#31422"
@@ -548,10 +548,6 @@ msgctxt "#31903"
 msgid "Weekend Forecast"
 msgstr "Predpoveď na víkend"
 
-msgctxt "#31904"
-msgid "10 Day Forecast"
-msgstr "Predpoveď na 10 dní"
-
 msgctxt "#31905"
 msgid "Forecast"
 msgstr "Predpoveď"
@@ -565,8 +561,8 @@ msgid "Fetching forecast info..."
 msgstr "Zisťujem informácie o počasí..."
 
 msgctxt "#31910"
-msgid "Map & Alerts"
-msgstr "Mapa a upozornenia"
+msgid "Maps"
+msgstr "Mapy"
 
 msgctxt "#31950"
 msgid "WEATHER"
@@ -577,7 +573,7 @@ msgid "PICTURES"
 msgstr "OBRÁZKY"
 
 msgctxt "#31952"
-msgid "LIVE TV"
+msgid "TV"
 msgstr "TV"
 
 msgctxt "#31953"
@@ -607,3 +603,7 @@ msgstr "CD/DVD/Blu-ray"
 msgctxt "#31959"
 msgid "SYSTEM"
 msgstr "SYSTÉM"
+
+msgctxt "#31960"
+msgid "RADIO"
+msgstr "RÁDIO"

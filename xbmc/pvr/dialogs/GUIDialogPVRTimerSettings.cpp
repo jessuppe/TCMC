@@ -32,7 +32,6 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 
-using namespace std;
 using namespace PVR;
 
 #define SETTING_TMR_ACTIVE              "timer.active"
@@ -53,6 +52,7 @@ CGUIDialogPVRTimerSettings::CGUIDialogPVRTimerSettings(void)
     m_tmp_iFirstDay(0),
     m_tmp_day(11),
     m_bTimerActive(false),
+    m_selectedChannelEntry(0),
     m_timerItem(NULL)
 {
   m_loadType = LOAD_EVERY_TIME;
@@ -78,7 +78,7 @@ void CGUIDialogPVRTimerSettings::OnSettingChanged(const CSetting *setting)
 
   CGUIDialogSettingsManualBase::OnSettingChanged(setting);
 
-  CPVRTimerInfoTag* tag = m_timerItem->GetPVRTimerInfoTag();
+  CPVRTimerInfoTagPtr tag = m_timerItem->GetPVRTimerInfoTag();
   if (tag == NULL)
     return;
 
@@ -105,15 +105,10 @@ void CGUIDialogPVRTimerSettings::OnSettingChanged(const CSetting *setting)
         tag->m_iClientId         = channel->ClientID();
         tag->m_bIsRadio          = channel->IsRadio();
         tag->m_iChannelNumber    = channel->ChannelNumber();
+       
+        // Update channel pointer from above values
+        tag->UpdateChannel();
       }
-      else
-      {
-        tag->m_iClientChannelUid = PVR_VIRTUAL_CHANNEL_UID;
-        tag->m_iClientId         = PVR_VIRTUAL_CLIENT_ID;
-        tag->m_iChannelNumber    = 0;
-      }
-      // Update channel pointer from above values
-      tag->UpdateChannel();
     }
   }
   else if (settingId == SETTING_TMR_DAY)
@@ -181,7 +176,7 @@ void CGUIDialogPVRTimerSettings::OnSettingAction(const CSetting *setting)
 
   CGUIDialogSettingsManualBase::OnSettingAction(setting);
 
-  CPVRTimerInfoTag* tag = m_timerItem->GetPVRTimerInfoTag();
+  CPVRTimerInfoTagPtr tag = m_timerItem->GetPVRTimerInfoTag();
   if (tag == NULL)
     return;
 
@@ -233,7 +228,7 @@ void CGUIDialogPVRTimerSettings::OnSettingAction(const CSetting *setting)
 
 void CGUIDialogPVRTimerSettings::Save()
 {
-  CPVRTimerInfoTag* tag = m_timerItem->GetPVRTimerInfoTag();
+  CPVRTimerInfoTagPtr tag = m_timerItem->GetPVRTimerInfoTag();
 
   // Set the timer's title to the channel name if it's 'New Timer' or empty
   if (tag->m_strTitle == g_localizeStrings.Get(19056) || tag->m_strTitle.empty())
@@ -277,7 +272,7 @@ void CGUIDialogPVRTimerSettings::InitializeSettings()
   // add a condition
   m_settingsManager->AddCondition("IsTimerDayRepeating", IsTimerDayRepeating);
 
-  CPVRTimerInfoTag* tag = m_timerItem->GetPVRTimerInfoTag();
+  CPVRTimerInfoTagPtr tag = m_timerItem->GetPVRTimerInfoTag();
 
   m_selectedChannelEntry = 0;
   m_channelEntries.clear();
@@ -353,11 +348,10 @@ CSetting* CGUIDialogPVRTimerSettings::AddChannelNames(CSettingGroup *group, bool
   std::vector< std::pair<std::string, int> > options;
   getChannelNames(bRadio, options, m_selectedChannelEntry, true);
   
-  int timerChannelID;
+  // select the correct channel
+  int timerChannelID = 0;
   if (m_timerItem->GetPVRTimerInfoTag()->ChannelTag())
     timerChannelID = m_timerItem->GetPVRTimerInfoTag()->ChannelTag()->ChannelID();
-  else
-    timerChannelID = PVR_VIRTUAL_CHANNEL_UID;
 
   for (std::vector< std::pair<std::string, int> >::const_iterator option = options.begin(); option != options.end(); ++option)
   {
@@ -449,15 +443,11 @@ void CGUIDialogPVRTimerSettings::getChannelNames(bool bRadio, std::vector< std::
   g_PVRChannelGroups->GetGroupAll(bRadio)->GetMembers(channelsList);
   
   int entry = 0;
-  list.push_back(std::make_pair("0 dummy", entry));
-  if (updateChannelEntries)
-    m_channelEntries.insert(std::make_pair(std::make_pair(bRadio, entry), PVR_VIRTUAL_CHANNEL_UID));
-  ++entry;
 
   for (int i = 0; i < channelsList.Size(); i++)
   {
-    const CPVRChannel *channel = channelsList[i]->GetPVRChannelInfoTag();
-
+    const CPVRChannelPtr channel(channelsList[i]->GetPVRChannelInfoTag());
+    
     list.push_back(std::make_pair(StringUtils::Format("%i %s", channel->ChannelNumber(), channel->ChannelName().c_str()), entry));
     if (updateChannelEntries)
       m_channelEntries.insert(std::make_pair(std::make_pair(bRadio, entry), channel->ChannelID()));
@@ -508,7 +498,7 @@ void CGUIDialogPVRTimerSettings::DaysOptionsFiller(const CSetting *setting, std:
   if (dialog == NULL)
     return;
 
-  const CPVRTimerInfoTag *tag = dialog->m_timerItem->GetPVRTimerInfoTag();
+  const CPVRTimerInfoTagPtr tag = dialog->m_timerItem->GetPVRTimerInfoTag();
   if (tag == NULL)
     return;
 
@@ -523,7 +513,6 @@ void CGUIDialogPVRTimerSettings::DaysOptionsFiller(const CSetting *setting, std:
   CDateTime time = CDateTime::GetCurrentDateTime();
   for (int i = 1; i < 365; ++i)
   {
-    CStdString string = time.GetAsLocalizedDate();
     list.push_back(std::make_pair(time.GetAsLocalizedDate(), list.size()));
     time += CDateTimeSpan(1, 0, 0, 0);
   }

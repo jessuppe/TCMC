@@ -22,7 +22,6 @@
 
 #include "Mime.h"
 #include "FileItem.h"
-#include "StdString.h"
 #include "URIUtils.h"
 #include "music/tags/MusicInfoTag.h"
 #include "video/VideoInfoTag.h"
@@ -240,6 +239,7 @@ map<string, string> fillMimeTypes()
   mimeTypes.insert(pair<string, string>("mjpg",      "video/x-motion-jpeg"));
   mimeTypes.insert(pair<string, string>("mka",       "audio/x-matroska"));
   mimeTypes.insert(pair<string, string>("mkv",       "video/x-matroska"));
+  mimeTypes.insert(pair<string, string>("mk3d",      "video/x-matroska-3d"));
   mimeTypes.insert(pair<string, string>("mm",        "application/x-meme"));
   mimeTypes.insert(pair<string, string>("mme",       "application/base64"));
   mimeTypes.insert(pair<string, string>("mod",       "audio/mod"));
@@ -530,7 +530,7 @@ string CMime::GetMimeType(const string &extension)
 
 string CMime::GetMimeType(const CFileItem &item)
 {
-  CStdString path = item.GetPath();
+  std::string path = item.GetPath();
   if (item.HasVideoInfoTag() && !item.GetVideoInfoTag()->GetPath().empty())
     path = item.GetVideoInfoTag()->GetPath();
   else if (item.HasMusicInfoTag() && !item.GetMusicInfoTag()->GetURL().empty())
@@ -544,13 +544,13 @@ string CMime::GetMimeType(const CURL &url, bool lookup)
   
   std::string strMimeType;
 
-  if( url.GetProtocol() == "shout" || url.GetProtocol() == "http" || url.GetProtocol() == "https")
+  if( url.IsProtocol("shout") || url.IsProtocol("http") || url.IsProtocol("https"))
   {
     // If lookup is false, bail out early to leave mime type empty
     if (!lookup)
       return strMimeType;
 
-    CStdString strmime;
+    std::string strmime;
     XFILE::CCurlFile::GetMimeType(url, strmime);
 
     // try to get mime-type again but with an NSPlayer User-Agent

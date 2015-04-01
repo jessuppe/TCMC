@@ -30,6 +30,8 @@
 #include "linux/XMemUtils.h"
 #include "DVDDemuxers/DVDDemuxUtils.h"
 #include "settings/AdvancedSettings.h"
+#include "settings/MediaSettings.h"
+#include "cores/VideoRenderers/RenderManager.h"
 #include "xbmc/guilib/GraphicContext.h"
 #include "settings/Settings.h"
 #include "utils/BitstreamConverter.h"
@@ -254,13 +256,37 @@ bool COMXVideo::PortSettingsChanged()
 
   if(m_deinterlace)
   {
+    EINTERLACEMETHOD interlace_method = g_renderManager.AutoInterlaceMethod(CMediaSettings::Get().GetCurrentVideoSettings().m_InterlaceMethod);
+    bool advanced_deinterlace = (interlace_method == VS_INTERLACEMETHOD_MMAL_ADVANCED || interlace_method == VS_INTERLACEMETHOD_MMAL_ADVANCED_HALF) &&
+        port_image.format.video.nFrameWidth * port_image.format.video.nFrameHeight <= 576 * 720;
+    bool half_framerate = interlace_method == VS_INTERLACEMETHOD_MMAL_ADVANCED_HALF || interlace_method == VS_INTERLACEMETHOD_MMAL_BOB_HALF;
+    if (!advanced_deinterlace)
+    {
+      // Image_fx assumed 3 frames of context. simple deinterlace doesn't require this
+      OMX_PARAM_U32TYPE extra_buffers;
+      OMX_INIT_STRUCTURE(extra_buffers);
+      extra_buffers.nU32 = -2;
+
+      omx_err = m_omx_image_fx.SetParameter(OMX_IndexParamBrcmExtraBuffers, &extra_buffers);
+      if(omx_err != OMX_ErrorNone)
+      {
+        CLog::Log(LOGERROR, "%s::%s error OMX_IndexParamBrcmExtraBuffers omx_err(0x%08x)", CLASSNAME, __func__, omx_err);
+        return false;
+      }
+    }
+
     OMX_CONFIG_IMAGEFILTERPARAMSTYPE image_filter;
     OMX_INIT_STRUCTURE(image_filter);
 
     image_filter.nPortIndex = m_omx_image_fx.GetOutputPort();
-    image_filter.nNumParams = 1;
+    image_filter.nNumParams = 3;
     image_filter.nParams[0] = 3;
-    image_filter.eImageFilter = OMX_ImageFilterDeInterlaceAdvanced;
+    image_filter.nParams[1] = 0;
+    image_filter.nParams[2] = half_framerate;
+    if (!advanced_deinterlace)
+      image_filter.eImageFilter = OMX_ImageFilterDeInterlaceFast;
+    else
+      image_filter.eImageFilter = OMX_ImageFilterDeInterlaceAdvanced;
 
     omx_err = m_omx_image_fx.SetConfig(OMX_IndexConfigCommonImageFilterParameters, &image_filter);
     if(omx_err != OMX_ErrorNone)
@@ -584,22 +610,6 @@ bool COMXVideo::Open(CDVDStreamInfo &hints, OMXClock *clock, EDEINTERLACEMODE de
     return false;
   }
 
-  if (m_deinterlace_request != VS_DEINTERLACEMODE_OFF)
-  {
-    // the deinterlace component requires 3 additional video buffers in addition to the DPB (this is normally 2).
-    OMX_PARAM_U32TYPE extra_buffers;
-    OMX_INIT_STRUCTURE(extra_buffers);
-    extra_buffers.nU32 = 3;
-
-    omx_err = m_omx_decoder.SetParameter(OMX_IndexParamBrcmExtraBuffers, &extra_buffers);
-    if(omx_err != OMX_ErrorNone)
-    {
-      CLog::Log(LOGERROR, "COMXVideo::Open error OMX_IndexParamBrcmExtraBuffers omx_err(0x%08x)\n", omx_err);
-      return false;
-    }
-  }
-
-
   // broadcom omx entension:
   // When enabled, the timestamp fifo mode will change the way incoming timestamps are associated with output images.
   // In this mode the incoming timestamps get used without re-ordering on output images.
@@ -733,6 +743,30 @@ unsigned int COMXVideo::GetSize()
   return m_omx_decoder.GetInputBufferSize();
 }
 
+bool COMXVideo::GetPlayerInfo(double &match, double &phase, double &pll)
+{
+  CSingleLock lock (m_critSection);
+  OMX_ERRORTYPE omx_err;
+  OMX_CONFIG_BRCMRENDERSTATSTYPE renderstats;
+
+  if (!m_hdmi_clock_sync || !m_omx_render.IsInitialized())
+    return false;
+  OMX_INIT_STRUCTURE(renderstats);
+  renderstats.nPortIndex = m_omx_render.GetInputPort();
+
+  omx_err = m_omx_render.GetParameter(OMX_IndexConfigBrcmRenderStats, &renderstats);
+  if(omx_err != OMX_ErrorNone)
+  {
+    CLog::Log(LOGERROR, "COMXVideo::GetPlayerInfo error GetParameter OMX_IndexParamPortDefinition omx_err(0x%08x)\n", omx_err);
+    return false;
+  }
+  match = renderstats.nMatch * 1e-6;
+  phase = (double)renderstats.nPhase / (double)renderstats.nPeriod;
+  pll   = (double)renderstats.nPixelClock / (double)renderstats.nPixelClockNominal;
+  return true;
+}
+
+
 int COMXVideo::Decode(uint8_t *pData, int iSize, double pts)
 {
   CSingleLock lock (m_critSection);
@@ -831,9 +865,10 @@ void COMXVideo::Reset(void)
     return;
 
   m_setStartTime = true;
-  m_omx_decoder.FlushInput();
+  m_omx_decoder.FlushAll();
   if(m_deinterlace)
-    m_omx_image_fx.FlushInput();
+    m_omx_image_fx.FlushAll();
+  m_omx_sched.FlushAll();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////

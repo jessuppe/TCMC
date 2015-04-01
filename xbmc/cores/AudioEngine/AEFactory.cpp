@@ -40,22 +40,11 @@ IAE *CAEFactory::GetEngine()
 
 bool CAEFactory::LoadEngine()
 {
-  return CAEFactory::LoadEngine(AE_ENGINE_ACTIVE);
-}
-
-bool CAEFactory::LoadEngine(enum AEEngine engine)
-{
   /* can only load the engine once, XBMC restart is required to change it */
   if (AE)
     return false;
 
-  switch(engine)
-  {
-    case AE_ENGINE_NULL     :
-    case AE_ENGINE_ACTIVE   : AE = new ActiveAE::CActiveAE(); break;
-    default:
-      return false;
-  }
+  AE = new ActiveAE::CActiveAE();
 
   if (AE && !AE->CanInit())
   {
@@ -216,6 +205,20 @@ bool CAEFactory::SupportsSilenceTimeout()
   return false;
 }
 
+bool CAEFactory::HasStereoAudioChannelCount()
+{
+  if(AE)
+    return AE->HasStereoAudioChannelCount();
+  return false;
+}
+
+bool CAEFactory::HasHDAudioChannelCount()
+{
+  if(AE)
+    return AE->HasHDAudioChannelCount();
+  return false;
+}
+
 /**
   * Returns true if current AudioEngine supports at lest two basic quality levels
   * @return true if quality setting is supported, otherwise false
@@ -314,6 +317,8 @@ void CAEFactory::SettingOptionsAudioQualityLevelsFiller(const CSetting *setting,
     list.push_back(std::make_pair(g_localizeStrings.Get(13508), AE_QUALITY_HIGH));
   if(AE->SupportsQualityLevel(AE_QUALITY_REALLYHIGH))
     list.push_back(std::make_pair(g_localizeStrings.Get(13509), AE_QUALITY_REALLYHIGH));
+  if(AE->SupportsQualityLevel(AE_QUALITY_GPU))
+    list.push_back(std::make_pair(g_localizeStrings.Get(38010), AE_QUALITY_GPU));
 }
 
 void CAEFactory::SettingOptionsAudioStreamsilenceFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data)

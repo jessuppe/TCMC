@@ -40,8 +40,8 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {
   CCurlFile http;
 
-  CStdString strName, strLink;
-  CStdString strBasePath = url.GetFileName();
+  std::string strName, strLink;
+  std::string strBasePath = url.GetFileName();
 
   if(!http.Open(url))
   {
@@ -74,7 +74,7 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   char buffer[MAX_PATH + 1024];
   while(http.ReadString(buffer, sizeof(buffer)-1))
   {
-    CStdString strBuffer = buffer;
+    std::string strBuffer = buffer;
     std::string fileCharset(http.GetServerReportedCharset());
     if (!fileCharset.empty() && fileCharset != "UTF-8")
     {
@@ -93,9 +93,9 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
       if(strLink[0] == '/')
         strLink = strLink.substr(1);
 
-      CStdString strNameTemp = StringUtils::Trim(strName);
+      std::string strNameTemp = StringUtils::Trim(strName);
 
-      CStdStringW wName, wLink, wConverted;
+      std::wstring wName, wLink, wConverted;
       if (fileCharset.empty())
         g_charsetConverter.unknownToUTF8(strNameTemp);
       g_charsetConverter.utf8ToW(strNameTemp, wName, false);
@@ -103,16 +103,17 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
       g_charsetConverter.wToUTF8(wConverted, strNameTemp);
       URIUtils::RemoveSlashAtEnd(strNameTemp);
 
-      CStdString strLinkBase = strLink;
-      CStdString strLinkOptions;
+      std::string strLinkBase = strLink;
+      std::string strLinkOptions;
 
       // split link with url options
       size_t pos = strLinkBase.find('?');
-      if (pos != std::string::npos) {
+      if (pos != std::string::npos)
+      {
         strLinkOptions = strLinkBase.substr(pos);
         strLinkBase.erase(pos);
       }
-      CStdString strLinkTemp = strLinkBase;
+      std::string strLinkTemp = strLinkBase;
 
       URIUtils::RemoveSlashAtEnd(strLinkTemp);
       strLinkTemp = CURL::Decode(strLinkTemp);
@@ -133,6 +134,16 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
         CFileItemPtr pItem(new CFileItem(strNameTemp));
         pItem->SetProperty("IsHTTPDirectory", true);
         CURL url2(url);
+
+        /* NOTE: Force any &...; encoding (e.g. &amp;) into % encoding else CURL objects interpret them incorrectly
+         * due to the ; also being allowed as URL option seperator
+         */
+        if (fileCharset.empty())
+          g_charsetConverter.unknownToUTF8(strLinkBase);
+        g_charsetConverter.utf8ToW(strLinkBase, wLink, false);
+        HTML::CHTMLUtil::ConvertHTMLToW(wLink, wConverted);
+        g_charsetConverter.wToUTF8(wConverted, strLinkBase);
+
         url2.SetFileName(strBasePath + strLinkBase);
         url2.SetOptions(strLinkOptions);
         pItem->SetURL(url2);
@@ -140,7 +151,7 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
         if(URIUtils::HasSlashAtEnd(pItem->GetPath(), true))
           pItem->m_bIsFolder = true;
 
-        CStdString day, month, year, hour, minute;
+        std::string day, month, year, hour, minute;
         int monthNum = 0;
 
         if (reDateTime.RegFind(strBuffer.c_str()) >= 0)

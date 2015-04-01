@@ -21,7 +21,7 @@
 #include "GUIRadioButtonControl.h"
 #include "GUIInfoManager.h"
 #include "GUIFontManager.h"
-#include "Key.h"
+#include "input/Key.h"
 
 CGUIRadioButtonControl::CGUIRadioButtonControl(int parentID, int controlID, float posX, float posY, float width, float height,
     const CTextureInfo& textureFocus, const CTextureInfo& textureNoFocus,
@@ -184,9 +184,9 @@ void CGUIRadioButtonControl::SetHeight(float height)
   SetPosition(GetXPosition(), GetYPosition());
 }
 
-CStdString CGUIRadioButtonControl::GetDescription() const
+std::string CGUIRadioButtonControl::GetDescription() const
 {
-  CStdString strLabel = CGUIButtonControl::GetDescription();
+  std::string strLabel = CGUIButtonControl::GetDescription();
   if (m_bSelected)
     strLabel += " (*)";
   else
@@ -204,7 +204,7 @@ bool CGUIRadioButtonControl::UpdateColors()
   return changed;
 }
 
-void CGUIRadioButtonControl::SetToggleSelect(const CStdString &toggleSelect)
+void CGUIRadioButtonControl::SetToggleSelect(const std::string &toggleSelect)
 {
   m_toggleSelect = g_infoManager.Register(toggleSelect, GetParentID());
 }

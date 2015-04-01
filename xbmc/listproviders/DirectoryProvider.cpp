@@ -23,7 +23,6 @@
 #include "filesystem/FavouritesDirectory.h"
 #include "guilib/GUIWindowManager.h"
 #include "utils/JobManager.h"
-#include "utils/StringUtils.h"
 #include "utils/TimeUtils.h"
 #include "utils/XMLUtils.h"
 #include "utils/StringUtils.h"
@@ -35,8 +34,9 @@
 #include "video/VideoThumbLoader.h"
 #include "music/MusicThumbLoader.h"
 #include "pictures/PictureThumbLoader.h"
-#include "boost/make_shared.hpp"
 #include "interfaces/AnnouncementManager.h"
+
+#include <memory>
 
 using namespace std;
 using namespace XFILE;
@@ -45,7 +45,8 @@ using namespace ANNOUNCEMENT;
 class CDirectoryJob : public CJob
 {
 public:
-  CDirectoryJob(const std::string &url, int parentID) : m_url(url), m_parentID(parentID) { };
+  CDirectoryJob(const std::string &url, int limit, int parentID)
+  : m_url(url), m_limit(limit), m_parentID(parentID) {};
   virtual ~CDirectoryJob() {};
 
   virtual const char* GetType() const { return "directory"; };
@@ -65,9 +66,11 @@ public:
     CFileItemList items;
     if (CDirectory::GetDirectory(m_url, items, ""))
     {
+      // limit must not exceed the number of items
+      int limit = (m_limit == 0) ? items.Size() : min((int) m_limit, items.Size());
       // convert to CGUIStaticItem's and set visibility and targets
-      m_items.reserve(items.Size());
-      for (int i = 0; i < items.Size(); i++)
+      m_items.reserve(limit);
+      for (int i = 0; i < limit; i++)
       {
         CGUIStaticItemPtr item(new CGUIStaticItem(*items[i]));
         if (item->HasProperty("node.visible"))
@@ -82,7 +85,7 @@ public:
     return true;    
   }
 
-  boost::shared_ptr<CThumbLoader> getThumbLoader(CGUIStaticItemPtr &item)
+  std::shared_ptr<CThumbLoader> getThumbLoader(CGUIStaticItemPtr &item)
   {
     if (item->IsVideo())
     {
@@ -108,7 +111,7 @@ public:
   {
     if (!m_thumbloaders.count(type))
     {
-      boost::shared_ptr<CThumbLoader> thumbLoader = boost::make_shared<CThumbLoaderClass>();
+      std::shared_ptr<CThumbLoader> thumbLoader = std::make_shared<CThumbLoaderClass>();
       thumbLoader->OnLoaderStart();
       m_thumbloaders.insert(make_pair(type, thumbLoader));
     }
@@ -119,7 +122,7 @@ public:
   std::vector<InfoTagType> GetItemTypes(std::vector<InfoTagType> &itemTypes) const
   {
     itemTypes.clear();
-    for (std::map<InfoTagType, boost::shared_ptr<CThumbLoader> >::const_iterator
+    for (std::map<InfoTagType, std::shared_ptr<CThumbLoader> >::const_iterator
          i = m_thumbloaders.begin(); i != m_thumbloaders.end(); ++i)
       itemTypes.push_back(i->first);
     return itemTypes;
@@ -127,9 +130,10 @@ public:
 private:
   std::string m_url;
   std::string m_target;
+  unsigned int m_limit;
   int m_parentID;
   std::vector<CGUIStaticItemPtr> m_items;
-  std::map<InfoTagType, boost::shared_ptr<CThumbLoader> > m_thumbloaders;
+  std::map<InfoTagType, std::shared_ptr<CThumbLoader> > m_thumbloaders;
 };
 
 CDirectoryProvider::CDirectoryProvider(const TiXmlElement *element, int parentID)
@@ -137,7 +141,8 @@ CDirectoryProvider::CDirectoryProvider(const TiXmlElement *element, int parentID
    m_updateTime(0),
    m_updateState(OK),
    m_isAnnounced(false),
-   m_jobID(0)
+   m_jobID(0),
+   m_currentLimit(0)
 {
   assert(element);
   if (!element->NoChildren())
@@ -145,6 +150,9 @@ CDirectoryProvider::CDirectoryProvider(const TiXmlElement *element, int parentID
     const char *target = element->Attribute("target");
     if (target)
       m_target.SetLabel(target, "", parentID);
+    const char *limit = element->Attribute("limit");
+    if (limit)
+      m_limit.SetLabel(limit, "", parentID);
     m_url.SetLabel(element->FirstChild()->ValueStr(), "", parentID);
   }
 }
@@ -168,8 +176,10 @@ bool CDirectoryProvider::Update(bool forceRefresh)
     m_updateState = OK;
   }
 
-  // update the URL and fire off a new job if needed
-  if (fireJob || UpdateURL())
+  // update the URL & limit and fire off a new job if needed
+  fireJob |= UpdateURL();
+  fireJob |= UpdateLimit();
+  if (fireJob)
     FireJob();
 
   for (vector<CGUIStaticItemPtr>::iterator i = m_items.begin(); i != m_items.end(); ++i)
@@ -232,6 +242,7 @@ void CDirectoryProvider::Reset(bool immediately /* = false */)
     m_currentTarget.clear();
     m_currentUrl.clear();
     m_itemTypes.clear();
+    m_currentLimit = 0;
     m_updateState = OK;
     RegisterListProvider(false);
   }
@@ -252,7 +263,7 @@ void CDirectoryProvider::OnJobComplete(unsigned int jobID, bool success, CJob *j
 
 bool CDirectoryProvider::OnClick(const CGUIListItemPtr &item)
 {
-  CFileItem fileItem(*boost::static_pointer_cast<CFileItem>(item));
+  CFileItem fileItem(*std::static_pointer_cast<CFileItem>(item));
   string target = fileItem.GetProperty("node.target").asString();
   if (target.empty())
     target = m_currentTarget;
@@ -283,7 +294,7 @@ void CDirectoryProvider::FireJob()
   CSingleLock lock(m_section);
   if (m_jobID)
     CJobManager::GetInstance().CancelJob(m_jobID);
-  m_jobID = CJobManager::GetInstance().AddJob(new CDirectoryJob(m_currentUrl, m_parentID), this);
+  m_jobID = CJobManager::GetInstance().AddJob(new CDirectoryJob(m_currentUrl, m_currentLimit, m_parentID), this);
 }
 
 void CDirectoryProvider::RegisterListProvider(bool hasLibraryContent)
@@ -302,7 +313,7 @@ void CDirectoryProvider::RegisterListProvider(bool hasLibraryContent)
 
 bool CDirectoryProvider::UpdateURL()
 {
-  CStdString value(m_url.GetLabel(m_parentID, false));
+  std::string value(m_url.GetLabel(m_parentID, false));
   if (value == m_currentUrl)
     return false;
 
@@ -310,6 +321,17 @@ bool CDirectoryProvider::UpdateURL()
 
   // Register this provider only if we have library content
   RegisterListProvider(URIUtils::IsLibraryContent(m_currentUrl));
+
+  return true;
+}
+
+bool CDirectoryProvider::UpdateLimit()
+{
+  unsigned int value = m_limit.GetIntValue(m_parentID);
+  if (value == m_currentLimit)
+    return false;
+
+  m_currentLimit = value;
 
   return true;
 }

@@ -1,14 +1,14 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Confluence
 # Addon id: skin.confluence
-# Addon Provider: Jezz_X, Team XBMC
+# Addon Provider: Jezz_X, Team Kodi
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Estonian (http://www.transifex.com/projects/p/xbmc-main/language/et/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -461,16 +461,16 @@ msgid "[B]CONFIGURE SYSTEM SETTINGS[/B][CR][CR]Setup and calibrate displays · C
 msgstr "[B]KONFIGUREERI SÜSTEEMI SEADEID[/B][CR][CR]Seadista ja kalibreeri ekraane · Konfigureeri heliväljundit · Seadista kaugjuhtimine[CR]Määra energiasäästu valikud· Luba silumine · Seadista pealukk"
 
 msgctxt "#31408"
-msgid "[B]CONFIGURE ADD-ONS[/B][CR][CR]Manage your installed Add-ons · Browse for and install Add-ons from xbmc.org[CR]Modify Add-on settings"
-msgstr "[B]KONFIGUREERI LISAMOODULEID[/B][CR][CR]Halda enda lisamooduleid · Sirvi ja paigalda lisamooduleid aadressilt xbmc.org[CR]Muuda lisamoodulite seadeid"
+msgid "[B]CONFIGURE ADD-ONS[/B][CR][CR]Manage your installed Add-ons · Browse for and install Add-ons from kodi.tv[CR]Modify Add-on settings"
+msgstr "[B]KONFIGUREERI LISAMOODULEID[/B][CR][CR]Halda enda lisamooduleid · Sirvi ja paigalda lisamooduleid aadressilt kodi.tv[CR]Muuda lisamoodulite seadeid"
 
 msgctxt "#31409"
 msgid "[B]CONFIGURE TV SETTINGS[/B][CR][CR]Change full screen info · Manage EPG data settings"
 msgstr "[B]SEADISTA TV SEADEID[/B][CR][CR]Muuda täisekraani infot · Halda elektroonilise saatekava seadeid"
 
 msgctxt "#31410"
-msgid "[B]CONFIGURE SERVICE SETTINGS[/B][CR][CR]Setup control of XBMC via UPnP and HTTP · Configure file sharing[CR]Enable Zeroconf · Configure AirPlay"
-msgstr "[B]KONFIGUREERI TEENUSE SEADEID[/B][CR][CR]Seadista XBMC juhtimine UPnP ja HTTP kaudu · Seadista failide jagamine[CR]Luba Zeroconf · Konfigureeri AirPlay"
+msgid "[B]CONFIGURE SERVICE SETTINGS[/B][CR][CR]Setup control of Kodi via UPnP and HTTP · Configure file sharing[CR]Enable Zeroconf · Configure AirPlay"
+msgstr "[B]KONFIGUREERI TEENUSE SEADEID[/B][CR][CR]Seadista Kodi juhtimine UPnP ja HTTP kaudu · Seadista failide jagamine[CR]Luba Zeroconf · Konfigureeri AirPlay"
 
 msgctxt "#31411"
 msgid "First run help...."
@@ -484,9 +484,21 @@ msgctxt "#31413"
 msgid "Local subtitle available"
 msgstr "Lokaalsed subtiitrid on saadaval"
 
+msgctxt "#31420"
+msgid "Login"
+msgstr "Logi sisse"
+
 msgctxt "#31421"
-msgid "Select your XBMC user Profile[CR]to login and continue"
-msgstr "Vali enda XBMC profiil[CR]ja jätka"
+msgid "Select your Kodi user Profile[CR]to login and continue"
+msgstr "Vali enda Kodi profiil[CR]ja jätka"
+
+msgctxt "#31422"
+msgid "Show or hide the login screen at startup."
+msgstr "Käivitumisel näita või peida sisselogimiseekraan."
+
+msgctxt "#31423"
+msgid "Select the profile that will be used at startup when the login screen is disabled."
+msgstr "Vali profiil, mida kasutada käivitumisel, kui sisselogimise ekraan on keelatud."
 
 msgctxt "#31501"
 msgid "Scheduled Time"
@@ -536,10 +548,6 @@ msgctxt "#31903"
 msgid "Weekend Forecast"
 msgstr "Nädalalõpu prognoos"
 
-msgctxt "#31904"
-msgid "10 Day Forecast"
-msgstr "Kümne päeva prognoos"
-
 msgctxt "#31905"
 msgid "Forecast"
 msgstr "Ilmateade"
@@ -553,8 +561,8 @@ msgid "Fetching forecast info..."
 msgstr "Ilmateate andmete hankimine..."
 
 msgctxt "#31910"
-msgid "Map & Alerts"
-msgstr "Kaart ja hoiatused"
+msgid "Maps"
+msgstr "Kaardid"
 
 msgctxt "#31950"
 msgid "WEATHER"
@@ -565,8 +573,8 @@ msgid "PICTURES"
 msgstr "PILDID "
 
 msgctxt "#31952"
-msgid "LIVE TV"
-msgstr "OTSE TV"
+msgid "TV"
+msgstr "TV"
 
 msgctxt "#31953"
 msgid "VIDEOS"

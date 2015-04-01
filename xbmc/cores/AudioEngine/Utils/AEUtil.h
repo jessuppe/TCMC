@@ -20,9 +20,12 @@
  */
 
 #include "AEAudioFormat.h"
-#include "utils/StdString.h"
 #include "PlatformDefs.h"
 #include <math.h>
+
+extern "C" {
+#include "libavutil/samplefmt.h"
+}
 
 #ifdef TARGET_WINDOWS
 #if _M_IX86_FP>0 && !defined(__SSE__)
@@ -221,4 +224,9 @@ public:
   static void  FloatRand4(const float min, const float max, float result[4], __m128 *sseresult = NULL);
 
   static bool S16NeedsByteSwap(AEDataFormat in, AEDataFormat out);
+
+  static uint64_t GetAVChannelLayout(CAEChannelInfo &info);
+  static AVSampleFormat GetAVSampleFormat(AEDataFormat format);
+  static uint64_t GetAVChannel(enum AEChannel aechannel);
+  static int GetAVChannelIndex(enum AEChannel aechannel, uint64_t layout);
 };

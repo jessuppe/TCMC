@@ -51,7 +51,6 @@ public:
   ~CSoundPacket();
   uint8_t **data;                        // array with pointers to planes of data
   SampleConfig config;
-  AEDataFormat internal_format;          // used when carrying pass through
   int bytes_per_sample;                  // bytes per sample and per channel
   int linesize;                          // see ffmpeg, required for planar formats
   int planes;                            // 1 for non planar formats, #channels for planar
@@ -89,7 +88,7 @@ public:
   std::deque<CSampleBuffer*> m_freeSamples;
 };
 
-class CActiveAEResample;
+class IAEResample;
 
 class CActiveAEBufferPoolResample : public CActiveAEBufferPool
 {
@@ -105,12 +104,13 @@ public:
   std::deque<CSampleBuffer*> m_inputSamples;
   std::deque<CSampleBuffer*> m_outputSamples;
   CSampleBuffer *m_procSample;
-  CActiveAEResample *m_resampler;
+  IAEResample *m_resampler;
   uint8_t *m_planes[16];
   bool m_fillPackets;
   bool m_drain;
   bool m_empty;
   bool m_changeResampler;
+  bool m_forceResampler;
   double m_resampleRatio;
   AEQuality m_resampleQuality;
   bool m_stereoUpmix;

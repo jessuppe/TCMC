@@ -48,7 +48,7 @@ using namespace XFILE;
 using namespace std;
 
 
-static CStdString CorrectPath(const CStdString path)
+static std::string CorrectPath(const std::string& path)
 {
   if (path == "~")
     return "./";
@@ -98,7 +98,7 @@ static const char * SFTPErrorText(int sftp_error)
 
 
 
-CSFTPSession::CSFTPSession(const CStdString &host, unsigned int port, const CStdString &username, const CStdString &password)
+CSFTPSession::CSFTPSession(const std::string &host, unsigned int port, const std::string &username, const std::string &password)
 {
   CLog::Log(LOGINFO, "SFTPSession: Creating new session on host '%s:%d' with user '%s'", host.c_str(), port, username.c_str());
   CSingleLock lock(m_critSect);
@@ -114,7 +114,7 @@ CSFTPSession::~CSFTPSession()
   Disconnect();
 }
 
-sftp_file CSFTPSession::CreateFileHande(const CStdString &file)
+sftp_file CSFTPSession::CreateFileHande(const std::string &file)
 {
   if (m_connected)
   {
@@ -141,7 +141,7 @@ void CSFTPSession::CloseFileHandle(sftp_file handle)
   sftp_close(handle);
 }
 
-bool CSFTPSession::GetDirectory(const CStdString &base, const CStdString &folder, CFileItemList &items)
+bool CSFTPSession::GetDirectory(const std::string &base, const std::string &folder, CFileItemList &items)
 {
   int sftp_error = SSH_FX_OK;
   if (m_connected)
@@ -184,8 +184,8 @@ bool CSFTPSession::GetDirectory(const CStdString &base, const CStdString &folder
         
         if (attributes)
         {
-          CStdString itemName = attributes->name;
-          CStdString localPath = folder;
+          std::string itemName = attributes->name;
+          std::string localPath = folder;
           localPath.append(itemName);
 
           if (attributes->type == SSH_FILEXFER_TYPE_SYMLINK)
@@ -245,17 +245,15 @@ bool CSFTPSession::GetDirectory(const CStdString &base, const CStdString &folder
 
 bool CSFTPSession::DirectoryExists(const char *path)
 {
-  bool exists = false;
   uint32_t permissions = 0;
-  exists = GetItemPermissions(path, permissions);
+  bool exists = GetItemPermissions(path, permissions);
   return exists && S_ISDIR(permissions);
 }
 
 bool CSFTPSession::FileExists(const char *path)
 {
-  bool exists = false;
   uint32_t permissions = 0;
-  exists = GetItemPermissions(path, permissions);
+  bool exists = GetItemPermissions(path, permissions);
   return exists && S_ISREG(permissions);
 }
 
@@ -352,7 +350,7 @@ bool CSFTPSession::VerifyKnownHost(ssh_session session)
   return false;
 }
 
-bool CSFTPSession::Connect(const CStdString &host, unsigned int port, const CStdString &username, const CStdString &password)
+bool CSFTPSession::Connect(const std::string &host, unsigned int port, const std::string &username, const std::string &password)
 {
   int timeout     = SFTP_TIMEOUT;
   m_connected     = false;
@@ -435,11 +433,19 @@ bool CSFTPSession::Connect(const CStdString &host, unsigned int port, const CStd
     return false;
   }
 
+#if LIBSSH_VERSION_MINOR >= 6
+  int method = ssh_userauth_list(m_session, NULL);
+#else
   int method = ssh_auth_list(m_session);
+#endif
 
   // Try to authenticate with public key first
   int publicKeyAuth = SSH_AUTH_DENIED;
+#if LIBSSH_VERSION_MINOR >= 6
+  if (method & SSH_AUTH_METHOD_PUBLICKEY && (publicKeyAuth = ssh_userauth_publickey_auto(m_session, NULL, NULL)) == SSH_AUTH_ERROR)
+#else
   if (method & SSH_AUTH_METHOD_PUBLICKEY && (publicKeyAuth = ssh_userauth_autopubkey(m_session, NULL)) == SSH_AUTH_ERROR)
+#endif
   {
     CLog::Log(LOGERROR, "SFTPSession: Failed to authenticate via publickey '%s'", ssh_get_error(m_session));
     return false;
@@ -527,7 +533,7 @@ bool CSFTPSession::GetItemPermissions(const char *path, uint32_t &permissions)
 }
 
 CCriticalSection CSFTPSessionManager::m_critSect;
-map<CStdString, CSFTPSessionPtr> CSFTPSessionManager::sessions;
+map<std::string, CSFTPSessionPtr> CSFTPSessionManager::sessions;
 
 CSFTPSessionPtr CSFTPSessionManager::CreateSession(const CURL &url)
 {
@@ -539,15 +545,15 @@ CSFTPSessionPtr CSFTPSessionManager::CreateSession(const CURL &url)
   return CSFTPSessionManager::CreateSession(hostname, port, username, password);
 }
 
-CSFTPSessionPtr CSFTPSessionManager::CreateSession(const CStdString &host, unsigned int port, const CStdString &username, const CStdString &password)
+CSFTPSessionPtr CSFTPSessionManager::CreateSession(const std::string &host, unsigned int port, const std::string &username, const std::string &password)
 {
   // Convert port number to string
   stringstream itoa;
   itoa << port;
-  CStdString portstr = itoa.str();
+  std::string portstr = itoa.str();
 
   CSingleLock lock(m_critSect);
-  CStdString key = username + ":" + password + "@" + host + ":" + portstr;
+  std::string key = username + ':' + password + '@' + host + ':' + portstr;
   CSFTPSessionPtr ptr = sessions[key];
   if (ptr == NULL)
   {
@@ -561,12 +567,12 @@ CSFTPSessionPtr CSFTPSessionManager::CreateSession(const CStdString &host, unsig
 void CSFTPSessionManager::ClearOutIdleSessions()
 {
   CSingleLock lock(m_critSect);
-  for(map<CStdString, CSFTPSessionPtr>::iterator iter = sessions.begin(); iter != sessions.end();)
+  for(map<std::string, CSFTPSessionPtr>::iterator iter = sessions.begin(); iter != sessions.end();)
   {
     if (iter->second->IsIdle())
       sessions.erase(iter++);
     else
-      iter++;
+      ++iter;
   }
 }
 
@@ -637,10 +643,13 @@ int64_t CSFTPFile::Seek(int64_t iFilePosition, int iWhence)
   }
 }
 
-unsigned int CSFTPFile::Read(void* lpBuf, int64_t uiBufSize)
+ssize_t CSFTPFile::Read(void* lpBuf, size_t uiBufSize)
 {
   if (m_session && m_sftp_handle)
   {
+    if (uiBufSize > SSIZE_MAX)
+      uiBufSize = SSIZE_MAX;
+
     int rc = m_session->Read(m_sftp_handle, lpBuf, (size_t)uiBufSize);
 
     if (rc >= 0)

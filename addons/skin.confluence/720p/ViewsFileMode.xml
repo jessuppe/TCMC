@@ -5,7 +5,7 @@
 			<visible>Control.IsVisible(50)</visible>
 			<include>VisibleFadeEffect</include>
 			<control type="list" id="50">
-			<left>70</left>
+				<left>70</left>
 				<top>78</top>
 				<width>690</width>
 				<height>561</height>
@@ -344,7 +344,7 @@
 						<info>ListItem.Label</info>
 					</control>
 					<control type="image">
-						<left>180</left>
+						<left>170</left>
 						<top>130</top>
 						<width>30</width>
 						<height>30</height>

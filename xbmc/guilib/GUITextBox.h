@@ -60,9 +60,10 @@ public:
   virtual bool CanFocus() const;
   void SetInfo(const CGUIInfoLabel &info);
   void SetAutoScrolling(const TiXmlNode *node);
+  void SetAutoScrolling(int delay, int time, int repeatTime, const std::string &condition = "");
   void ResetAutoScrolling();
-  CStdString GetLabel(int info) const;
-  CStdString GetDescription() const;
+  std::string GetLabel(int info) const;
+  std::string GetDescription() const;
 
   void Scroll(unsigned int offset);
 

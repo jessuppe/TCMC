@@ -1,14 +1,14 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Confluence
 # Addon id: skin.confluence
-# Addon Provider: Jezz_X, Team XBMC
+# Addon Provider: Jezz_X, Team Kodi
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Amharic (http://www.transifex.com/projects/p/xbmc-main/language/am/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +26,7 @@ msgstr "የሀይል ምርጫዎች"
 
 msgctxt "#31004"
 msgid "Working..."
-msgstr "በመስራት ላይ "
+msgstr "በመስራት ላይ... "
 
 msgctxt "#31005"
 msgid "Hide Information"
@@ -139,6 +139,10 @@ msgstr "የስርአቱ ሙዚቃ ፋይሎች"
 msgctxt "#31059"
 msgid "Current playlist"
 msgstr "አሁን የሚጫወተው ዝርዝር"
+
+msgctxt "#31060"
+msgid "This file is stacked, select the part you want to play from."
+msgstr "ይህ ፋይል በጣም ትልቅ ነው ማጫወት የሚፈልጉትን ክፍል ይምረጡ"
 
 msgctxt "#31061"
 msgid "Current Selected"
@@ -268,6 +272,10 @@ msgctxt "#31320"
 msgid "Last Logged In"
 msgstr "መጨረሻ የገባው"
 
+msgctxt "#31321"
+msgid "Karaoke Song Selector"
+msgstr "ካሪዮኪ ዘፈን መራጭ"
+
 msgctxt "#31322"
 msgid "Aired"
 msgstr "የተላለፈ"
@@ -344,13 +352,17 @@ msgctxt "#31411"
 msgid "First run help...."
 msgstr "እርዳታ መጀመሪያ ጊዜ ሲያስኬዱ...."
 
+msgctxt "#31413"
+msgid "Local subtitle available"
+msgstr "የ አካባቢ ንዑስ አርእስት ዝግጁ ነው"
+
 msgctxt "#31420"
 msgid "Login"
 msgstr "መግቢያ"
 
 msgctxt "#31421"
-msgid "Select your XBMC user Profile[CR]to login and continue"
-msgstr "ይምረጡ የ እርስዎን  XBMC ተጠቃሚ ገጽታ[CR]ለ መግባት እና ለመቀጠል"
+msgid "Select your Kodi user Profile[CR]to login and continue"
+msgstr "ይምረጡ የ እርስዎን  Kodi ተጠቃሚ ገጽታ[CR]ለ መግባት እና ለመቀጠል"
 
 msgctxt "#31422"
 msgid "Show or hide the login screen at startup."
@@ -400,21 +412,21 @@ msgctxt "#31903"
 msgid "Weekend Forecast"
 msgstr "የሳምንቱ መጨረሻ ግምት "
 
-msgctxt "#31904"
-msgid "10 Day Forecast"
-msgstr "የ 10 ቀን ግምት "
-
 msgctxt "#31905"
 msgid "Forecast"
 msgstr "ግምት "
+
+msgctxt "#31908"
+msgid "Chance of Precipitation"
+msgstr "የ መዝነብ እድል "
 
 msgctxt "#31909"
 msgid "Fetching forecast info..."
 msgstr "ግምት በመፈለግ ላይ..."
 
 msgctxt "#31910"
-msgid "Map & Alerts"
-msgstr "ካርታ & ማስጠንቀቂያ"
+msgid "Maps"
+msgstr "ካርታ "
 
 msgctxt "#31950"
 msgid "WEATHER"
@@ -425,8 +437,8 @@ msgid "PICTURES"
 msgstr "ስእሎች"
 
 msgctxt "#31952"
-msgid "LIVE TV"
-msgstr "በቀጥታ የሚሰራጭ ቲቪ"
+msgid "TV"
+msgstr "ቲቪ "
 
 msgctxt "#31953"
 msgid "VIDEOS"
@@ -455,3 +467,7 @@ msgstr "ዲስክ ማጫወቻ"
 msgctxt "#31959"
 msgid "SYSTEM"
 msgstr "ስርአቱ"
+
+msgctxt "#31960"
+msgid "RADIO"
+msgstr "ራዲዮ"

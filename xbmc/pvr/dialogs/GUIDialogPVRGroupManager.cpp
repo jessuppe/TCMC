@@ -24,14 +24,14 @@
 #include "dialogs/GUIDialogOK.h"
 #include "dialogs/GUIDialogYesNo.h"
 #include "guilib/GUIWindowManager.h"
-#include "guilib/Key.h"
+#include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
+#include "guilib/GUIRadioButtonControl.h"
 #include "utils/StringUtils.h"
 
 #include "pvr/PVRManager.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"
 
-using namespace std;
 using namespace PVR;
 
 #define CONTROL_LIST_CHANNELS_LEFT    11
@@ -40,6 +40,7 @@ using namespace PVR;
 #define CONTROL_CURRENT_GROUP_LABEL   20
 #define CONTROL_UNGROUPED_LABEL       21
 #define CONTROL_IN_GROUP_LABEL        22
+#define BUTTON_HIDE_GROUP             25
 #define BUTTON_NEWGROUP               26
 #define BUTTON_RENAMEGROUP            27
 #define BUTTON_DELGROUP               28
@@ -48,6 +49,10 @@ using namespace PVR;
 CGUIDialogPVRGroupManager::CGUIDialogPVRGroupManager() :
     CGUIDialog(WINDOW_DIALOG_PVR_GROUP_MANAGER, "DialogPVRGroupManager.xml")
 {
+  m_bIsRadio = 0;
+  m_iSelectedUngroupedChannel = 0;
+  m_iSelectedGroupMember = 0;
+  m_iSelectedChannelGroup = 0;
   m_ungroupedChannels = new CFileItemList;
   m_groupMembers      = new CFileItemList;
   m_channelGroups     = new CFileItemList;
@@ -93,7 +98,7 @@ bool CGUIDialogPVRGroupManager::ActionButtonNewGroup(CGUIMessage &message)
 
   if (iControl == BUTTON_NEWGROUP)
   {
-    CStdString strGroupName = "";
+    std::string strGroupName = "";
     /* prompt for a group name */
     if (CGUIKeyboardFactory::ShowAndGetInput(strGroupName, g_localizeStrings.Get(19139), false))
     {
@@ -157,7 +162,7 @@ bool CGUIDialogPVRGroupManager::ActionButtonRenameGroup(CGUIMessage &message)
     if (!m_selectedGroup)
       return bReturn;
 
-    CStdString strGroupName(m_selectedGroup->GroupName());
+    std::string strGroupName(m_selectedGroup->GroupName());
     if (CGUIKeyboardFactory::ShowAndGetInput(strGroupName, g_localizeStrings.Get(19139), false))
     {
       if (strGroupName != "")
@@ -192,7 +197,7 @@ bool CGUIDialogPVRGroupManager::ActionButtonUngroupedChannels(CGUIMessage &messa
       else if (m_ungroupedChannels->GetFileCount() > 0)
       {
         CFileItemPtr pItemChannel = m_ungroupedChannels->Get(m_iSelectedUngroupedChannel);
-        if (m_selectedGroup->AddToGroup(*pItemChannel->GetPVRChannelInfoTag()))
+        if (m_selectedGroup->AddToGroup(pItemChannel->GetPVRChannelInfoTag()))
           Update();
       }
     }
@@ -217,7 +222,7 @@ bool CGUIDialogPVRGroupManager::ActionButtonGroupMembers(CGUIMessage &message)
       if (m_selectedGroup && m_groupMembers->GetFileCount() > 0)
       {
         CFileItemPtr pItemChannel = m_groupMembers->Get(m_iSelectedGroupMember);
-        m_selectedGroup->RemoveFromGroup(*pItemChannel->GetPVRChannelInfoTag());
+        m_selectedGroup->RemoveFromGroup(pItemChannel->GetPVRChannelInfoTag());
         Update();
       }
     }
@@ -247,6 +252,25 @@ bool CGUIDialogPVRGroupManager::ActionButtonChannelGroups(CGUIMessage &message)
   return bReturn;
 }
 
+bool CGUIDialogPVRGroupManager::ActionButtonHideGroup(CGUIMessage &message)
+{
+  bool bReturn = false;
+
+  if (message.GetSenderId() == BUTTON_HIDE_GROUP && m_selectedGroup)
+  {
+    CGUIRadioButtonControl *button = (CGUIRadioButtonControl*) GetControl(message.GetSenderId());
+    if (button)
+    {
+      m_selectedGroup->SetHidden(button->IsSelected());
+      Update();
+    }
+
+    bReturn = true;
+  }
+
+  return bReturn;
+}
+
 bool CGUIDialogPVRGroupManager::OnMessageClick(CGUIMessage &message)
 {
   return ActionButtonOk(message) ||
@@ -255,7 +279,8 @@ bool CGUIDialogPVRGroupManager::OnMessageClick(CGUIMessage &message)
       ActionButtonRenameGroup(message) ||
       ActionButtonUngroupedChannels(message) ||
       ActionButtonGroupMembers(message) ||
-      ActionButtonChannelGroups(message);
+      ActionButtonChannelGroups(message) ||
+      ActionButtonHideGroup(message);
 }
 
 bool CGUIDialogPVRGroupManager::OnMessage(CGUIMessage& message)
@@ -337,11 +362,11 @@ void CGUIDialogPVRGroupManager::Update()
     /* set this group in the pvrmanager, so it becomes the selected group in other dialogs too */
     g_PVRManager.SetPlayingGroup(m_selectedGroup);
     SET_CONTROL_LABEL(CONTROL_CURRENT_GROUP_LABEL, m_selectedGroup->GroupName());
+    SET_CONTROL_SELECTED(GetID(), BUTTON_HIDE_GROUP, m_selectedGroup->IsHidden());
 
     if (m_selectedGroup->IsInternalGroup())
     {
-      CStdString strNewLabel;
-      strNewLabel = StringUtils::Format("%s %s",
+      std::string strNewLabel = StringUtils::Format("%s %s",
                                         g_localizeStrings.Get(19022).c_str(),
                                         m_bIsRadio ? g_localizeStrings.Get(19024).c_str() : g_localizeStrings.Get(19023).c_str());
       SET_CONTROL_LABEL(CONTROL_UNGROUPED_LABEL, strNewLabel);
@@ -353,8 +378,7 @@ void CGUIDialogPVRGroupManager::Update()
     }
     else
     {
-      CStdString strNewLabel;
-      strNewLabel = StringUtils::Format("%s", g_localizeStrings.Get(19219).c_str());
+      std::string strNewLabel = StringUtils::Format("%s", g_localizeStrings.Get(19219).c_str());
       SET_CONTROL_LABEL(CONTROL_UNGROUPED_LABEL, strNewLabel);
 
       strNewLabel = StringUtils::Format("%s %s", g_localizeStrings.Get(19220).c_str(), m_selectedGroup->GroupName().c_str());

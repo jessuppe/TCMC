@@ -36,13 +36,8 @@ public:
                       NET_PROTOCOL_DAAP,
                       NET_PROTOCOL_UPNP,
                       NET_PROTOCOL_RSS,
-                      NET_PROTOCOL_HTSP,
-                      NET_PROTOCOL_VTP,
-                      NET_PROTOCOL_MYTH,
-                      NET_PROTOCOL_TUXBOX,
                       NET_PROTOCOL_SFTP,
-                      NET_PROTOCOL_NFS, 
-                      NET_PROTOCOL_AFP};
+                      NET_PROTOCOL_NFS};
   CGUIDialogNetworkSetup(void);
   virtual ~CGUIDialogNetworkSetup(void);
   virtual bool OnMessage(CGUIMessage& message);
@@ -50,10 +45,10 @@ public:
   virtual void OnInitWindow();
   virtual void OnDeinitWindow(int nextWindowID);
 
-  static bool ShowAndGetNetworkAddress(CStdString &path);
+  static bool ShowAndGetNetworkAddress(std::string &path);
 
-  CStdString ConstructPath() const;
-  void SetPath(const CStdString &path);
+  std::string ConstructPath() const;
+  void SetPath(const std::string &path);
   bool IsConfirmed() const { return m_confirmed; };
 
 protected:
@@ -64,11 +59,11 @@ protected:
   void UpdateButtons();
 
   NET_PROTOCOL m_protocol;
-  CStdString m_server;
-  CStdString m_path;
-  CStdString m_username;
-  CStdString m_password;
-  CStdString m_port;
+  std::string m_server;
+  std::string m_path;
+  std::string m_username;
+  std::string m_password;
+  std::string m_port;
 
   bool m_confirmed;
 };

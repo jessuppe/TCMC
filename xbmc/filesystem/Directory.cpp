@@ -57,8 +57,8 @@ private:
   struct CGetJob
     : CJob
   {
-    CGetJob(boost::shared_ptr<IDirectory>& imp
-          , boost::shared_ptr<CResult>& result)
+    CGetJob(std::shared_ptr<IDirectory>& imp
+          , std::shared_ptr<CResult>& result)
       : m_result(result)
       , m_imp(imp)
     {}
@@ -71,13 +71,13 @@ private:
       return m_result->m_result;
     }
 
-    boost::shared_ptr<CResult>    m_result;
-    boost::shared_ptr<IDirectory> m_imp;
+    std::shared_ptr<CResult>    m_result;
+    std::shared_ptr<IDirectory> m_imp;
   };
 
 public:
 
-  CGetDirectory(boost::shared_ptr<IDirectory>& imp, const CURL& dir, const CURL& listDir)
+  CGetDirectory(std::shared_ptr<IDirectory>& imp, const CURL& dir, const CURL& listDir)
     : m_result(new CResult(dir, listDir))
   {
     m_id = CJobManager::GetInstance().AddJob(new CGetJob(imp, m_result)
@@ -106,7 +106,7 @@ public:
     list.Copy(m_result->m_list);
     return true;
   }
-  boost::shared_ptr<CResult> m_result;
+  std::shared_ptr<CResult> m_result;
   unsigned int               m_id;
 };
 
@@ -117,7 +117,7 @@ CDirectory::CDirectory()
 CDirectory::~CDirectory()
 {}
 
-bool CDirectory::GetDirectory(const CStdString& strPath, CFileItemList &items, const CStdString &strMask /*=""*/, int flags /*=DIR_FLAG_DEFAULTS*/, bool allowThreads /* = false */)
+bool CDirectory::GetDirectory(const std::string& strPath, CFileItemList &items, const std::string &strMask /*=""*/, int flags /*=DIR_FLAG_DEFAULTS*/, bool allowThreads /* = false */)
 {
   CHints hints;
   hints.flags = flags;
@@ -125,13 +125,13 @@ bool CDirectory::GetDirectory(const CStdString& strPath, CFileItemList &items, c
   return GetDirectory(strPath, items, hints, allowThreads);
 }
 
-bool CDirectory::GetDirectory(const CStdString& strPath, CFileItemList &items, const CHints &hints, bool allowThreads)
+bool CDirectory::GetDirectory(const std::string& strPath, CFileItemList &items, const CHints &hints, bool allowThreads)
 {
   const CURL pathToUrl(strPath);
   return GetDirectory(pathToUrl, items, hints, allowThreads);
 }
 
-bool CDirectory::GetDirectory(const CURL& url, CFileItemList &items, const CStdString &strMask /*=""*/, int flags /*=DIR_FLAG_DEFAULTS*/, bool allowThreads /* = false */)
+bool CDirectory::GetDirectory(const CURL& url, CFileItemList &items, const std::string &strMask /*=""*/, int flags /*=DIR_FLAG_DEFAULTS*/, bool allowThreads /* = false */)
 {
   CHints hints;
   hints.flags = flags;
@@ -144,7 +144,7 @@ bool CDirectory::GetDirectory(const CURL& url, CFileItemList &items, const CHint
   try
   {
     CURL realURL = URIUtils::SubstitutePath(url);
-    boost::shared_ptr<IDirectory> pDirectory(CDirectoryFactory::Create(realURL));
+    std::shared_ptr<IDirectory> pDirectory(CDirectoryFactory::Create(realURL));
     if (!pDirectory.get())
       return false;
 
@@ -163,7 +163,7 @@ bool CDirectory::GetDirectory(const CURL& url, CFileItemList &items, const CHint
       bool result = false, cancel = false;
       while (!result && !cancel)
       {
-        const CStdString pathToUrl(url.Get());
+        const std::string pathToUrl(url.Get());
         if (g_application.IsCurrentThread() && allowThreads && !URIUtils::IsSpecial(pathToUrl))
         {
           CSingleExit ex(g_graphicsContext);
@@ -252,8 +252,8 @@ bool CDirectory::GetDirectory(const CURL& url, CFileItemList &items, const CHint
       FilterFileDirectories(items, hints.mask);
 
     // Correct items for path substitution
-    const CStdString pathToUrl(url.Get());
-    const CStdString pathToUrl2(realURL.Get());
+    const std::string pathToUrl(url.Get());
+    const std::string pathToUrl2(realURL.Get());
     if (pathToUrl != pathToUrl2)
     {
       for (int i = 0; i < items.Size(); ++i)
@@ -274,7 +274,7 @@ bool CDirectory::GetDirectory(const CURL& url, CFileItemList &items, const CHint
   return false;
 }
 
-bool CDirectory::Create(const CStdString& strPath)
+bool CDirectory::Create(const std::string& strPath)
 {
   const CURL pathToUrl(strPath);
   return Create(pathToUrl);
@@ -285,7 +285,7 @@ bool CDirectory::Create(const CURL& url)
   try
   {
     CURL realURL = URIUtils::SubstitutePath(url);
-    auto_ptr<IDirectory> pDirectory(CDirectoryFactory::Create(realURL));
+    unique_ptr<IDirectory> pDirectory(CDirectoryFactory::Create(realURL));
     if (pDirectory.get())
       if(pDirectory->Create(realURL))
         return true;
@@ -299,7 +299,7 @@ bool CDirectory::Create(const CURL& url)
   return false;
 }
 
-bool CDirectory::Exists(const CStdString& strPath, bool bUseCache /* = true */)
+bool CDirectory::Exists(const std::string& strPath, bool bUseCache /* = true */)
 {
   const CURL pathToUrl(strPath);
   return Exists(pathToUrl, bUseCache);
@@ -313,14 +313,14 @@ bool CDirectory::Exists(const CURL& url, bool bUseCache /* = true */)
     if (bUseCache)
     {
       bool bPathInCache;
-      CStdString realPath(realURL.Get());
+      std::string realPath(realURL.Get());
       URIUtils::AddSlashAtEnd(realPath);
       if (g_directoryCache.FileExists(realPath, bPathInCache))
         return true;
       if (bPathInCache)
         return false;
     }
-    auto_ptr<IDirectory> pDirectory(CDirectoryFactory::Create(realURL));
+    unique_ptr<IDirectory> pDirectory(CDirectoryFactory::Create(realURL));
     if (pDirectory.get())
       return pDirectory->Exists(realURL);
   }
@@ -333,7 +333,7 @@ bool CDirectory::Exists(const CURL& url, bool bUseCache /* = true */)
   return false;
 }
 
-bool CDirectory::Remove(const CStdString& strPath)
+bool CDirectory::Remove(const std::string& strPath)
 {
   const CURL pathToUrl(strPath);
   return Remove(pathToUrl);
@@ -344,7 +344,7 @@ bool CDirectory::Remove(const CURL& url)
   try
   {
     CURL realURL = URIUtils::SubstitutePath(url);
-    auto_ptr<IDirectory> pDirectory(CDirectoryFactory::Create(realURL));
+    unique_ptr<IDirectory> pDirectory(CDirectoryFactory::Create(realURL));
     if (pDirectory.get())
       if(pDirectory->Remove(realURL))
       {
@@ -361,14 +361,14 @@ bool CDirectory::Remove(const CURL& url)
   return false;
 }
 
-void CDirectory::FilterFileDirectories(CFileItemList &items, const CStdString &mask)
+void CDirectory::FilterFileDirectories(CFileItemList &items, const std::string &mask)
 {
   for (int i=0; i< items.Size(); ++i)
   {
     CFileItemPtr pItem=items[i];
     if (!pItem->m_bIsFolder && pItem->IsFileFolder(EFILEFOLDER_TYPE_ALWAYS))
     {
-      auto_ptr<IFileDirectory> pDirectory(CFileDirectoryFactory::Create(pItem->GetURL(),pItem.get(),mask));
+      unique_ptr<IFileDirectory> pDirectory(CFileDirectoryFactory::Create(pItem->GetURL(),pItem.get(),mask));
       if (pDirectory.get())
         pItem->m_bIsFolder = true;
       else

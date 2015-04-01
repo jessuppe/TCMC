@@ -36,6 +36,8 @@
 #include "AddonString.h"
 #include "Tuple.h"
 #include "commons/Exception.h"
+#include "InfoTagVideo.h"
+#include "InfoTagMusic.h"
 
 
 namespace XBMCAddon
@@ -211,7 +213,7 @@ namespace XBMCAddon
        *     - title         : string (Big Fan)
        *     - originaltitle : string (Big Fan)
        *     - sorttitle     : string (Big Fan)
-       *     - duration      : string (3:18)
+       *     - duration      : integer (245) - duration in seconds
        *     - studio        : string (Warner Bros.)
        *     - tagline       : string (An awesome movie) - short description of movie
        *     - writer        : string (Robert D. Siegel)
@@ -229,6 +231,7 @@ namespace XBMCAddon
        *     - dateadded     : string (%Y-%m-%d %h:%m:%s = 2009-04-05 23:16:04)
        * - Music Values:
        *     - tracknumber   : integer (8)
+       *     - discnumber    : integer (2)
        *     - duration      : integer (245) - duration in seconds
        *     - year          : integer (1998)
        *     - genre         : string (Rock)
@@ -247,7 +250,7 @@ namespace XBMCAddon
        * example:\n
        *   - self.list.getSelectedItem().setInfo('video', { 'Genre': 'Comedy' })n\n
        */
-      void setInfo(const char* type, const InfoLabelDict& infoLabels) throw (WrongTypeException);
+      void setInfo(const char* type, const InfoLabelDict& infoLabels);
 
       /**
        * addStreamInfo(type, values) -- Add a stream with details.\n
@@ -281,15 +284,15 @@ namespace XBMCAddon
        *   - action          : string or unicode - any built-in function to perform.
        * replaceItems        : [opt] bool - True=only your items will show/False=your items will be added to context menu(Default).
        * \n
-       * List of functions - http://wiki.xbmc.org/?title=List_of_Built_In_Functions \n
+       * List of functions - http://kodi.wiki/view/List_of_Built_In_Functions \n
        * \n
        * *Note, You can use the above as keywords for arguments and skip certain optional arguments.\n
        *        Once you use a keyword, all following arguments require the keyword.\n
        * \n
        * example:
-       *   - listitem.addContextMenuItems([('Theater Showtimes', 'XBMC.RunScript(special://home/scripts/showtimes/default.py,Iron Man)',)])n
+       *   - listitem.addContextMenuItems([('Theater Showtimes', 'RunScript(special://home/scripts/showtimes/default.py,Iron Man)',)])n
        */
-      void addContextMenuItems(const std::vector<Tuple<String,String> >& items, bool replaceItems = false) throw (ListItemException);
+      void addContextMenuItems(const std::vector<Tuple<String,String> >& items, bool replaceItems = false);
 
       /**
        * setProperty(key, value) -- Sets a listitem property, similar to an infolabel.\n
@@ -326,24 +329,6 @@ namespace XBMCAddon
       String getProperty(const char* key);
 
       /**
-       * addContextMenuItems([(label, action,)*], replaceItems) -- Adds item(s) to the context menu for media lists.\n
-       * \n
-       * items               : list - [(label, action,)*] A list of tuples consisting of label and action pairs.
-       *   - label           : string or unicode - item's label.
-       *   - action          : string or unicode - any built-in function to perform.
-       * replaceItems        : [opt] bool - True=only your items will show/False=your items will be added to context menu(Default).
-       * \n
-       * List of functions - http://wiki.xbmc.org/?title=List_of_Built_In_Functions \n
-       * \n
-       * *Note, You can use the above as keywords for arguments and skip certain optional arguments.\n
-       *        Once you use a keyword, all following arguments require the keyword.\n
-       * \n
-       * example:
-       *   - listitem.addContextMenuItems([('Theater Showtimes', 'XBMC.RunScript(special://home/scripts/showtimes/default.py,Iron Man)',)])
-       */
-      //    void addContextMenuItems();
-
-      /**
        * setPath(path) -- Sets the listitem's path.\n
        * \n
        * path           : string or unicode - path, activated when item is clicked.\n
@@ -365,6 +350,14 @@ namespace XBMCAddon
       void setMimeType(const String& mimetype);
 
       /**
+       * setSubtitles() -- Sets subtitles for this listitem.\n
+       *
+       * example:
+       *   - listitem.setSubtitles(['special://temp/example.srt', 'http://example.com/example.srt'])
+       */
+      void setSubtitles(const std::vector<String>& subtitleFiles);
+
+      /**
        * getdescription() -- Returns the description of this PlayListItem.\n
        */
       String getdescription();
@@ -378,6 +371,16 @@ namespace XBMCAddon
        * getfilename() -- Returns the filename of this PlayListItem.\n
        */
       String getfilename();
+
+      /**
+       * getVideoInfoTag() -- returns the VideoInfoTag for this item.
+       */
+      xbmc::InfoTagVideo* getVideoInfoTag();
+
+      /**
+       * getMusicInfoTag() -- returns the MusicInfoTag for this item.
+       */
+      xbmc::InfoTagMusic* getMusicInfoTag();
     };
 
     typedef std::vector<ListItem*> ListItemList;
