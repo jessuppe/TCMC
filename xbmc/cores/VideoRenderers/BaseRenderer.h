@@ -29,7 +29,7 @@
 
 #define MAX_PLANES 3
 #define MAX_FIELDS 3
-#define NUM_BUFFERS 3
+#define NUM_BUFFERS 6
 
 class CSetting;
 
@@ -80,7 +80,13 @@ public:
 
   void SetViewMode(int viewMode);
   RESOLUTION GetResolution() const;
-  void GetVideoRect(CRect &source, CRect &dest);
+
+  /*! \brief Get video rectangle and view window
+  \param source is original size of the video
+  \param dest is the target rendering area honoring aspect ratio of source
+  \param view is the entire target rendering area for the video (including black bars)
+  */
+  void GetVideoRect(CRect &source, CRect &dest, CRect &view);
   float GetAspectRatio() const;
 
   virtual bool AddVideoPicture(DVDVideoPicture* picture, int index) { return false; }
@@ -89,10 +95,12 @@ public:
   /**
    * Returns number of references a single buffer can retain when rendering a single frame
    */
-  virtual unsigned int GetProcessorSize() { return 0; }
+  virtual unsigned int GetOptimalBufferSize() { return 0; }
   virtual unsigned int GetMaxBufferSize() { return 0; }
   virtual void         SetBufferSize(int numBuffers) { }
   virtual void         ReleaseBuffer(int idx) { }
+  virtual bool         NeedBufferForRef(int idx) { return false; }
+  virtual bool         IsGuiLayer() { return true; }
 
   virtual bool Supports(ERENDERFEATURE feature) { return false; }
 
@@ -137,6 +145,7 @@ protected:
   CRect m_destRect;
   CRect m_oldDestRect; // destrect of the previous frame
   CRect m_sourceRect;
+  CRect m_viewRect;
 
   // rendering flags
   unsigned m_iFlags;

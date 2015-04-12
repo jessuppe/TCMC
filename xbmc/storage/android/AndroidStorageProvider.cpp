@@ -18,19 +18,21 @@
  *
  */
 
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <map>
+
 #include "AndroidStorageProvider.h"
 #include "android/activity/XBMCApp.h"
 #include "guilib/LocalizeStrings.h"
 #include "filesystem/File.h"
+#include "filesystem/Directory.h"
 
 #include "utils/log.h"
 #include "utils/RegExp.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
-#include <cstdio>
-#include <cstring>
-#include <cstdlib>
-#include <map>
 
 CAndroidStorageProvider::CAndroidStorageProvider()
 {
@@ -82,7 +84,7 @@ void CAndroidStorageProvider::GetLocalDrives(VECSOURCES &localDrives)
 
   // external directory
   std::string path;
-  if (CXBMCApp::GetExternalStorage(path) && !path.empty()  && XFILE::CFile::Exists(path))
+  if (CXBMCApp::GetExternalStorage(path) && !path.empty()  && XFILE::CDirectory::Exists(path))
   {
     share.strPath = path;
     share.strName = g_localizeStrings.Get(21456);
@@ -194,9 +196,9 @@ void CAndroidStorageProvider::GetRemovableDrives(VECSOURCES &removableDrives)
   }
 }
 
-std::vector<CStdString> CAndroidStorageProvider::GetDiskUsage()
+std::vector<std::string> CAndroidStorageProvider::GetDiskUsage()
 {
-  std::vector<CStdString> result;
+  std::vector<std::string> result;
 
   std::string usage;
   // add header
@@ -228,7 +230,7 @@ std::vector<CStdString> CAndroidStorageProvider::GetDiskUsage()
   return result;
 }
 
-bool CAndroidStorageProvider::Eject(CStdString mountpath)
+bool CAndroidStorageProvider::Eject(const std::string& mountpath)
 {
   return false;
 }

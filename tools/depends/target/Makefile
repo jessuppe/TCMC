@@ -10,14 +10,16 @@ DEPENDS = \
 	openssl gmp nettle gnutls libssh2 curl \
 	libjpeg-turbo tiff jasper libpng \
 	libogg libvorbis libflac fribidi libmpeg2 \
-	libass \
+	libass libsquish \
 	libmodplug librtmp libxml2 yajl libmicrohttpd mysql libffi \
-	python26 afpfs-ng libshairplay \
+	python26 libshairplay \
 	libplist libcec libbluray boost tinyxml dummy-libxbmc \
-	libamplayer libssh taglib xbmc-pvr-addons libusb libnfs libmp3lame \
+	libamplayer libssh taglib libusb libnfs libmp3lame \
 	pythonmodule-pil libxslt ffmpeg
 
-ifeq ($(ENABLE_GPLV3),1)
+FFMPEG_DEPENDS = gnutls
+
+ifeq ($(ENABLE_GPLV3),yes)
   DEPENDS+=samba-gplv3 libcdio-gplv3
 else
   DEPENDS+=samba libcdio
@@ -25,17 +27,16 @@ endif
 
 ifeq ($(OS),ios)
   DEPENDS += Backrow
-  EXCLUDED_DEPENDS = libcec libcrystalhd libusb gmp nettle gnutls
+  EXCLUDED_DEPENDS = libcec libusb
 endif
 
 ifeq ($(OS),osx)
-  DEPENDS += libGLEW libsdl libcrystalhd
-  EXCLUDED_DEPENDS = libusb gmp nettle gnutls
+  DEPENDS += libGLEW libsdl
+  EXCLUDED_DEPENDS = libusb
 endif
 
 ifeq ($(OS),android)
-  DEPENDS += mdnsresponder android-sources-ics
-  EXCLUDED_DEPENDS = gmp nettle gnutls
+  DEPENDS += mdnsresponder android-sources-ics google-breakpad
 endif
 
 DEPENDS := $(filter-out $(EXCLUDED_DEPENDS),$(DEPENDS))
@@ -57,11 +58,11 @@ LINUX_SYSTEM_LIBS=
 ifeq ($(OS),linux)
   #not for raspberry pi
   ifneq ($(TARGET_PLATFORM),raspberry-pi)
-    DEPENDS += alsa-lib libsdl linux-system-libs
-    ALSA_LIB = alsa-lib
+    DEPENDS += libsdl2 linux-system-libs
     LINUX_SYSTEM_LIBS = linux-system-libs
   endif
-  FFMPEG_DEPENDS = gnutls
+  DEPENDS += alsa-lib
+  ALSA_LIB = alsa-lib
 endif
 
 .PHONY: $(DEPENDS)
@@ -79,14 +80,12 @@ libvorbis: libogg
 libflac: libogg gettext
 libass: fontconfig libpng freetype2 expat $(ICONV)
 librtmp: openssl
-libmicrohttpd: openssl libgpg-error libgcrypt
+libmicrohttpd: gnutls libgcrypt libgpg-error
 python26: expat gettext libxml2 sqlite3 openssl libffi
 libcdio: $(ICONV)
-afpfs-ng: libgcrypt $(ICONV)
 libplist: libxml2 $(ZLIB)
 libbluray: $(ICONV) libxml2
 libssh: openssl
-xbmc-pvr-addons: boost mysql
 mysql: openssl
 libzip: $(ZLIB)
 libmp3lame: $(ICONV)
@@ -95,7 +94,7 @@ openssl: $(ZLIB)
 gnutls: nettle $(ZLIB)
 nettle: gmp
 pythonmodule-pil: $(ZLIB) libjpeg-turbo libpng freetype2 python26
-libsdl: $(LINUX_SYSTEM_LIBS)
+libsdl2: $(LINUX_SYSTEM_LIBS)
 libxslt: libgcrypt
 ffmpeg: $(ICONV) $(ZLIB) bzip2 libvorbis $(FFMPEG_DEPENDS)
 
@@ -136,3 +135,4 @@ linux-system-libs:
 	[ -f $(PREFIX)/lib/pkgconfig/ice.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/ice.pc $(PREFIX)/lib/pkgconfig/ice.pc
 	[ -f $(PREFIX)/lib/pkgconfig/sm.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/sm.pc $(PREFIX)/lib/pkgconfig/sm.pc
 	[ -f $(PREFIX)/lib/pkgconfig/xmu.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/xmu.pc $(PREFIX)/lib/pkgconfig/xmu.pc
+	[ -f $(PREFIX)/lib/pkgconfig/libdrm.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/libdrm.pc $(PREFIX)/lib/pkgconfig/libdrm.pc

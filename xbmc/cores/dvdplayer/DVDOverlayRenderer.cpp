@@ -56,7 +56,7 @@ void CDVDOverlayRenderer::Render(DVDPictureRenderer* pPicture, CDVDOverlay* pOve
       if (e->IsElementType(CDVDOverlayText::ELEMENT_TYPE_TEXT))
       {
         CDVDOverlayText::CElementText* t = (CDVDOverlayText::CElementText*)e;
-        CLog::Log(LOGDEBUG, " - %s", t->m_text);
+        CLog::Log(LOGDEBUG, " - %s", t->GetTextPtr());
       }
       e = e->pNext;
     }
@@ -71,7 +71,7 @@ void CDVDOverlayRenderer::Render(DVDPictureRenderer* pPicture, CDVDOverlaySSA* p
   height = pPicture->height;
   width = pPicture->width;
 
-  ASS_Image* img = pOverlay->m_libass->RenderImage(width, height, pts);
+  ASS_Image* img = pOverlay->m_libass->RenderImage(width, height, width, height, pts);
 
   int depth = OVERLAY::GetStereoscopicDepth();
 

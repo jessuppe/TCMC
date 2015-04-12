@@ -50,6 +50,7 @@ namespace OVERLAY {
     virtual COverlay* Acquire();
     virtual long      Release();
     virtual void      Render(SRenderState& state) = 0;
+    virtual void      PrepareRender() {};
 
     enum EType
     { TYPE_NONE
@@ -99,6 +100,7 @@ namespace OVERLAY {
     void Render(int idx);
     void Flush();
     void Release(int idx);
+    bool HasOverlay(int idx);
 
   protected:
 
@@ -118,7 +120,7 @@ namespace OVERLAY {
     typedef std::vector<COverlay*>  COverlayV;
     typedef std::vector<SElement>   SElementV;
 
-    void      Render(COverlay* o);
+    void      Render(COverlay* o, float adjust_height);
     COverlay* Convert(CDVDOverlay* o, double pts);
     COverlay* Convert(CDVDOverlaySSA* o, double pts);
 

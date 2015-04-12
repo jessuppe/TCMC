@@ -1,14 +1,14 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Confluence
 # Addon id: skin.confluence
-# Addon Provider: Jezz_X, Team XBMC
+# Addon Provider: Jezz_X, Team Kodi
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Swedish (http://www.transifex.com/projects/p/xbmc-main/language/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -461,16 +461,16 @@ msgid "[B]CONFIGURE SYSTEM SETTINGS[/B][CR][CR]Setup and calibrate displays · C
 msgstr "[B]KONFIGURERA SYSTEMINSTÄLLNINGAR[/B][CR][CR]Ange och kalibrera bildskärmar · Konfigurera ljudutgång · Ställa in fjärrkontroller[CR]Ange energisparalternativ · Aktivera debuggningen · Konfigurera huvudkod och lås"
 
 msgctxt "#31408"
-msgid "[B]CONFIGURE ADD-ONS[/B][CR][CR]Manage your installed Add-ons · Browse for and install Add-ons from xbmc.org[CR]Modify Add-on settings"
-msgstr "[B]KONFIGURERA TILLÄGG[/B][CR][CR]Hantera installerade tillägg · Visa och installera tillägg från xbmc.org[CR]Ändra inställningar för tillägg"
+msgid "[B]CONFIGURE ADD-ONS[/B][CR][CR]Manage your installed Add-ons · Browse for and install Add-ons from kodi.tv[CR]Modify Add-on settings"
+msgstr "[B]KONFIGURERA TILLÄGG[/B][CR][CR]Hantera installerade tillägg · Visa och installera tillägg från kodi.tv[CR]Ändra inställningar för tillägg"
 
 msgctxt "#31409"
 msgid "[B]CONFIGURE TV SETTINGS[/B][CR][CR]Change full screen info · Manage EPG data settings"
 msgstr "[B]KONFIGURERA TV-INSTÄLLNINGAR[/B][CR][CR]Ändra fullskärmslägesinformation · Hantera EPG-datainställningar"
 
 msgctxt "#31410"
-msgid "[B]CONFIGURE SERVICE SETTINGS[/B][CR][CR]Setup control of XBMC via UPnP and HTTP · Configure file sharing[CR]Enable Zeroconf · Configure AirPlay"
-msgstr "[B]KONFIGURERA TJÄNSTINSTÄLLNINGAR[/B][CR][CR]Ställ in kontroll av XBMC via UPnP och HTTP · Konfigurera fildelning[CR]Aktivera Zeroconf · Konfigurera AirPlay"
+msgid "[B]CONFIGURE SERVICE SETTINGS[/B][CR][CR]Setup control of Kodi via UPnP and HTTP · Configure file sharing[CR]Enable Zeroconf · Configure AirPlay"
+msgstr "[B]KONFIGURERA TJÄNSTINSTÄLLNINGAR[/B][CR][CR]Ställ in kontroll av Kodi via UPnP och HTTP · Konfigurera fildelning[CR]Aktivera Zeroconf · Konfigurera AirPlay"
 
 msgctxt "#31411"
 msgid "First run help...."
@@ -489,8 +489,8 @@ msgid "Login"
 msgstr "Logga in"
 
 msgctxt "#31421"
-msgid "Select your XBMC user Profile[CR]to login and continue"
-msgstr "Välj din XBMC-användarprofil[CR]för att logga in och fortsätta"
+msgid "Select your Kodi user Profile[CR]to login and continue"
+msgstr "Välj din Kodi-användarprofil[CR]för att logga in och fortsätta"
 
 msgctxt "#31422"
 msgid "Show or hide the login screen at startup."
@@ -549,8 +549,8 @@ msgid "Weekend Forecast"
 msgstr "Helgprognos"
 
 msgctxt "#31904"
-msgid "10 Day Forecast"
-msgstr "10-dagarsprognos"
+msgid "Daily Forecast"
+msgstr "Daglig prognos"
 
 msgctxt "#31905"
 msgid "Forecast"
@@ -565,8 +565,8 @@ msgid "Fetching forecast info..."
 msgstr "Hämtar prognosinfo..."
 
 msgctxt "#31910"
-msgid "Map & Alerts"
-msgstr "Karta & varningar"
+msgid "Maps"
+msgstr "Kartor"
 
 msgctxt "#31950"
 msgid "WEATHER"
@@ -577,8 +577,8 @@ msgid "PICTURES"
 msgstr "FOTON"
 
 msgctxt "#31952"
-msgid "LIVE TV"
-msgstr "LIVE-TV"
+msgid "TV"
+msgstr "TV"
 
 msgctxt "#31953"
 msgid "VIDEOS"
@@ -607,3 +607,7 @@ msgstr "SPELA SKIVA"
 msgctxt "#31959"
 msgid "SYSTEM"
 msgstr "SYSTEM"
+
+msgctxt "#31960"
+msgid "RADIO"
+msgstr "RADIO"

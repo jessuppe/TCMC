@@ -24,13 +24,8 @@
 #include "utils/URIUtils.h"
 #include "FileDirectoryFactory.h"
 #ifdef HAS_FILESYSTEM
-#include "OGGFileDirectory.h"
-#include "NSFFileDirectory.h"
-#include "SIDFileDirectory.h"
-#include "ASAPFileDirectory.h"
 #include "UDFDirectory.h"
 #include "RSSDirectory.h"
-#include "cores/paplayer/ASAPCodec.h"
 #endif
 #ifdef HAS_FILESYSTEM_RAR
 #include "RarDirectory.h"
@@ -50,7 +45,10 @@
 #include "FileItem.h"
 #include "utils/StringUtils.h"
 #include "URL.h"
+#include "addons/AddonManager.h"
+#include "addons/AudioDecoder.h"
 
+using namespace ADDON;
 using namespace XFILE;
 using namespace PLAYLIST;
 using namespace std;
@@ -62,69 +60,41 @@ CFileDirectoryFactory::~CFileDirectoryFactory(void)
 {}
 
 // return NULL + set pItem->m_bIsFolder to remove it completely from list.
-IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem, const CStdString& strMask)
+IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem, const std::string& strMask)
 {
-  if (url.GetProtocol() == "stack") // disqualify stack as we need to work with each of the parts instead
+  if (url.IsProtocol("stack")) // disqualify stack as we need to work with each of the parts instead
     return NULL;
 
-  CStdString strExtension=URIUtils::GetExtension(url);
+  std::string strExtension=URIUtils::GetExtension(url);
   StringUtils::ToLower(strExtension);
+  VECADDONS codecs;
+  CAddonMgr::Get().GetAddons(ADDON_AUDIODECODER, codecs);
+  for (size_t i=0;i<codecs.size();++i)
+  {
+    std::shared_ptr<CAudioDecoder> dec(std::static_pointer_cast<CAudioDecoder>(codecs[i]));
+    if (!strExtension.empty() && dec->HasTracks() &&
+        dec->GetExtensions().find(strExtension) != std::string::npos)
+    {
+      CAudioDecoder* result = new CAudioDecoder(*dec);
+      static_cast<AudioDecoderDll&>(*result).Create();
+      if (result->ContainsFiles(url))
+        return result;
+      delete result;
+      return NULL;
+    }
+  }
 
 #ifdef HAS_FILESYSTEM
-  if ((strExtension.Equals(".ogg") || strExtension.Equals(".oga")) && CFile::Exists(url))
-  {
-    IFileDirectory* pDir=new COGGFileDirectory;
-    //  Has the ogg file more than one bitstream?
-    if (pDir->ContainsFiles(url))
-    {
-      return pDir; // treat as directory
-    }
-
-    delete pDir;
-    return NULL;
-  }
-  if (strExtension.Equals(".nsf") && CFile::Exists(url))
-  {
-    IFileDirectory* pDir=new CNSFFileDirectory;
-    //  Has the nsf file more than one track?
-    if (pDir->ContainsFiles(url))
-      return pDir; // treat as directory
-
-    delete pDir;
-    return NULL;
-  }
-  if (strExtension.Equals(".sid") && CFile::Exists(url))
-  {
-    IFileDirectory* pDir=new CSIDFileDirectory;
-    //  Has the sid file more than one track?
-    if (pDir->ContainsFiles(url))
-      return pDir; // treat as directory
-
-    delete pDir;
-    return NULL;
-  }
-#ifdef HAS_ASAP_CODEC
-  if (ASAPCodec::IsSupportedFormat(strExtension) && CFile::Exists(url))
-  {
-    IFileDirectory* pDir=new CASAPFileDirectory;
-    //  Has the asap file more than one track?
-    if (pDir->ContainsFiles(url))
-      return pDir; // treat as directory
-
-    delete pDir;
-    return NULL;
-  }
-#endif
-
+  
   if (pItem->IsRSS())
     return new CRSSDirectory();
 
-  if (pItem->IsDVDImage())
+  if (pItem->IsDiscImage())
     return new CUDFDirectory();
 
 #endif
 #if defined(TARGET_ANDROID)
-  if (strExtension.Equals(".apk"))
+  if (url.IsFileType("apk"))
   {
     CURL zipURL = URIUtils::CreateArchivePath("apk", url);
 
@@ -145,7 +115,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
     return NULL;
   }
 #endif
-  if (strExtension.Equals(".zip"))
+  if (url.IsFileType("zip"))
   {
     CURL zipURL = URIUtils::CreateArchivePath("zip", url);
 
@@ -165,27 +135,27 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
     }
     return NULL;
   }
-  if (strExtension.Equals(".rar") || strExtension.Equals(".001"))
+  if (url.IsFileType("rar") || url.IsFileType("001"))
   {
     vector<std::string> tokens;
-    const CStdString strPath = url.Get();
+    const std::string strPath = url.Get();
     StringUtils::Tokenize(strPath,tokens,".");
     if (tokens.size() > 2)
     {
-      if (strExtension.Equals(".001"))
+      if (url.IsFileType("001"))
       {
         if (StringUtils::EqualsNoCase(tokens[tokens.size()-2], "ts")) // .ts.001 - treat as a movie file to scratch some users itch
           return NULL;
       }
-      CStdString token = tokens[tokens.size()-2];
-      if (StringUtils::StartsWithNoCase(token, "part")) // only list '.part01.rar'
+      std::string token = tokens[tokens.size()-2];
+      if (StringUtils::StartsWith(token, "part")) // only list '.part01.rar'
       {
         // need this crap to avoid making mistakes - yeyh for the new rar naming scheme :/
         struct __stat64 stat;
         int digits = token.size()-4;
-        CStdString strFormat = StringUtils::Format("part%%0%ii", digits);
-        CStdString strNumber = StringUtils::Format(strFormat.c_str(), 1);
-        CStdString strPath2 = strPath;
+        std::string strFormat = StringUtils::Format("part%%0%ii", digits);
+        std::string strNumber = StringUtils::Format(strFormat.c_str(), 1);
+        std::string strPath2 = strPath;
         StringUtils::Replace(strPath2,token,strNumber);
         if (atoi(token.substr(4).c_str()) > 1 && CFile::Stat(strPath2,&stat) == 0)
         {
@@ -218,7 +188,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
     }
     return NULL;
   }
-  if (strExtension.Equals(".xsp"))
+  if (url.IsFileType("xsp"))
   { // XBMC Smart playlist - just XML renamed to XSP
     // read the name of the playlist in
     CSmartPlaylist playlist;

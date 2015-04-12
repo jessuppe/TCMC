@@ -37,6 +37,11 @@
 #include "cores/VideoRenderers/RenderManager.h"
 #endif
 
+#ifdef HAS_IMXVPU
+// This has to go into another header file
+#include "cores/dvdplayer/DVDCodecs/Video/DVDVideoCodecIMX.h"
+#endif
+
 #include "filesystem/File.h"
 #include "guilib/GraphicContext.h"
 
@@ -46,6 +51,10 @@
 #include "settings/SettingPath.h"
 #include "settings/Settings.h"
 #include "settings/windows/GUIControlSettings.h"
+
+#if defined(HAS_LIBAMCODEC)
+#include "utils/ScreenshotAML.h"
+#endif
 
 using namespace std;
 using namespace XFILE;
@@ -156,12 +165,23 @@ bool CScreenshotSurface::capture()
     for (int x = 0; x < m_width; x++, swap_pixels+=4)
     {
       std::swap(swap_pixels[0], swap_pixels[2]);
-    }   
+    }
 #endif
     memcpy(m_buffer + y * m_stride, surface + (m_height - y - 1) *m_stride, m_stride);
   }
 
   delete [] surface;
+  
+#if defined(HAS_LIBAMCODEC)
+  // Captures the current visible videobuffer and blend it into m_buffer (captured overlay)
+  CScreenshotAML::CaptureVideoFrame(m_buffer, m_width, m_height);
+#endif
+
+#ifdef HAS_IMXVPU
+  // Captures the current visible framebuffer page and blends it into the
+  // captured GL overlay
+  g_IMXContext.CaptureDisplay(m_buffer, m_width, m_height);
+#endif
 
 #else
   //nothing to take a screenshot from
@@ -171,7 +191,7 @@ bool CScreenshotSurface::capture()
   return true;
 }
 
-void CScreenShot::TakeScreenshot(const CStdString &filename, bool sync)
+void CScreenShot::TakeScreenshot(const std::string &filename, bool sync)
 {
 
   CScreenshotSurface surface;
@@ -220,9 +240,9 @@ void CScreenShot::TakeScreenshot(const CStdString &filename, bool sync)
 void CScreenShot::TakeScreenshot()
 {
   static bool savingScreenshots = false;
-  static vector<CStdString> screenShots;
+  static vector<std::string> screenShots;
   bool promptUser = false;
-  CStdString strDir;
+  std::string strDir;
 
   // check to see if we have a screenshot folder yet
   CSettingPath *screenshotSetting = (CSettingPath*)CSettings::Get().GetSetting("debug.screenshotpath");
@@ -250,7 +270,7 @@ void CScreenShot::TakeScreenshot()
 
   if (!strDir.empty())
   {
-    CStdString file = CUtil::GetNextFilename(URIUtils::AddFileToFolder(strDir, "screenshot%03d.png"), 999);
+    std::string file = CUtil::GetNextFilename(URIUtils::AddFileToFolder(strDir, "screenshot%03d.png"), 999);
 
     if (!file.empty())
     {
@@ -259,7 +279,7 @@ void CScreenShot::TakeScreenshot()
         screenShots.push_back(file);
       if (promptUser)
       { // grab the real directory
-        CStdString newDir;
+        std::string newDir;
         if (screenshotSetting != NULL)
         {
           newDir = screenshotSetting->GetValue();
@@ -274,7 +294,7 @@ void CScreenShot::TakeScreenshot()
         {
           for (unsigned int i = 0; i < screenShots.size(); i++)
           {
-            CStdString file = CUtil::GetNextFilename(URIUtils::AddFileToFolder(newDir, "screenshot%03d.png"), 999);
+            std::string file = CUtil::GetNextFilename(URIUtils::AddFileToFolder(newDir, "screenshot%03d.png"), 999);
             CFile::Copy(screenShots[i], file);
           }
           screenShots.clear();

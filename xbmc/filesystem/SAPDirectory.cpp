@@ -332,7 +332,7 @@ bool CSAPSessions::ParseAnnounce(char* data, int len)
   }
 
   // check if we can find this session in our cache
-  for(std::vector<CSession>::iterator it = m_sessions.begin(); it != m_sessions.end(); it++)
+  for(std::vector<CSession>::iterator it = m_sessions.begin(); it != m_sessions.end(); ++it)
   {
     if(it->origin         == header.origin
     && it->msgid          == header.msgid
@@ -364,9 +364,9 @@ bool CSAPSessions::ParseAnnounce(char* data, int len)
   }
 
   // add a new session to our buffer
-  CStdString user = origin.username;
+  std::string user = origin.username;
   user = CURL::Encode(user);
-  CStdString path = StringUtils::Format("sap://%s/%s/0x%x.sdp", header.origin.c_str(), desc.origin.c_str(), header.msgid);
+  std::string path = StringUtils::Format("sap://%s/%s/0x%x.sdp", header.origin.c_str(), desc.origin.c_str(), header.msgid);
   CSession session;
   session.path           = path;
   session.origin         = header.origin;
@@ -487,7 +487,7 @@ namespace XFILE
 
   bool CSAPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   {
-    if(url.GetProtocol() != "sap")
+    if(!url.IsProtocol("sap"))
       return false;
 
     CSingleLock lock(g_sapsessions.m_section);
@@ -496,7 +496,7 @@ namespace XFILE
       g_sapsessions.Create();
 
     // check if we can find this session in our cache
-    for(std::vector<CSAPSessions::CSession>::iterator it = g_sapsessions.m_sessions.begin(); it != g_sapsessions.m_sessions.end(); it++)
+    for(std::vector<CSAPSessions::CSession>::iterator it = g_sapsessions.m_sessions.begin(); it != g_sapsessions.m_sessions.end(); ++it)
     {
 
       if(it->payload_type != "application/sdp")

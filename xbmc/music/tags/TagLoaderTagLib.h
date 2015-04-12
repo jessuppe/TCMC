@@ -56,9 +56,11 @@ class CTagLoaderTagLib : public MUSIC_INFO::IMusicInfoTagLoader
 public:
   CTagLoaderTagLib();
   virtual ~CTagLoaderTagLib();
-  virtual bool                   Load(const CStdString& strFileName, MUSIC_INFO::CMusicInfoTag& tag, MUSIC_INFO::EmbeddedArt *art = NULL);
+  virtual bool                   Load(const std::string& strFileName, MUSIC_INFO::CMusicInfoTag& tag, MUSIC_INFO::EmbeddedArt *art = NULL);
 
-  bool                           Load(const CStdString& strFileName, MUSIC_INFO::CMusicInfoTag& tag, const CStdString& fallbackFileExtension, MUSIC_INFO::EmbeddedArt *art = NULL);
+  bool                           Load(const std::string& strFileName, MUSIC_INFO::CMusicInfoTag& tag, const std::string& fallbackFileExtension, MUSIC_INFO::EmbeddedArt *art = NULL);
+
+  const std::vector<std::string> SplitMBID(const std::vector<std::string> &values);
 private:
   bool                           Open(const std::string& strFileName, bool readOnly);
   const std::vector<std::string> GetASFStringList(const TagLib::List<TagLib::ASF::Attribute>& list);

@@ -59,8 +59,10 @@
 		<yellow>Yellow</yellow>
 		<blue>Blue</blue>
 		<teletext>Teletext</teletext>
+		<print>Print</print>
 
 		<!-- new kernel-based lirc button names -->
+		<eject>KEY_EJECTCD</eject>
 		<left>KEY_LEFT</left>
 		<right>KEY_RIGHT</right>
 		<up>KEY_UP</up>
@@ -85,6 +87,7 @@
 		<myvideo>KEY_VIDEO</myvideo>
 		<mymusic>KEY_AUDIO</mymusic>
 		<mytv>LiveTV</mytv>
+		<guide>KEY_EPG</guide>
 		<one>KEY_1</one>
 		<two>KEY_2</two>
 		<three>KEY_3</three>
@@ -564,13 +567,15 @@
 		<display>KEY_ZOOM</display>
 		<mute>KEY_MUTE</mute>
 		<power>KEY_POWER</power>
-		<eject>KEY_EJECT</eject>
+		<eject>KEY_EJECTCD</eject>
+		<eject>KEY_EJECTCLOSECD</eject>
 		<menu>KEY_DVD</menu>
 		<menu>KEY_MENU</menu>
 		<myvideo>KEY_VIDEO</myvideo>
 		<mymusic>KEY_AUDIO</mymusic>
 		<mypictures>KEY_CAMERA</mypictures>
 		<mytv>KEY_TUNER</mytv>
+		<mytv>KEY_TV</mytv>
 		<teletext>KEY_TEXT</teletext>
 		<one>KEY_NUMERIC_1</one>
 		<two>KEY_NUMERIC_2</two>

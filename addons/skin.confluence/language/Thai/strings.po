@@ -1,14 +1,14 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Confluence
 # Addon id: skin.confluence
-# Addon Provider: Jezz_X, Team XBMC
+# Addon Provider: Jezz_X, Team Kodi
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/xbmc-main/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -461,16 +461,16 @@ msgid "[B]CONFIGURE SYSTEM SETTINGS[/B][CR][CR]Setup and calibrate displays · C
 msgstr "[B]ปรับเปลี่ยนการตั้งค่าระบบ[/B][CR][CR]การติดตั้งและปรับเทียบการแสดงผล · กำหนดค่าการส่งออกสัญญาณเสียง · การติดตั้งรีโมทคอนโทรล[CR]ตั้งค่าตัวเลือกการประหยัดพลังงาน · เปิดใช้งานการแก้จุดบกพร่อง · ติดตั้ง กุญแจหลัก"
 
 msgctxt "#31408"
-msgid "[B]CONFIGURE ADD-ONS[/B][CR][CR]Manage your installed Add-ons · Browse for and install Add-ons from xbmc.org[CR]Modify Add-on settings"
-msgstr "[B]ปรับเปลี่ยน ส่วนเสริม[/B][CR][CR]จัดการส่วนเสริมที่ติดตั้งไว้ของคุณ · เรียกดูและติดตั้งส่วนเสริม จาก xbmc.org[CR]ปรับเปลี่ยน การตั้งค่าส่วนเสริม"
+msgid "[B]CONFIGURE ADD-ONS[/B][CR][CR]Manage your installed Add-ons · Browse for and install Add-ons from kodi.tv[CR]Modify Add-on settings"
+msgstr "[B]ปรับเปลี่ยน ส่วนเสริม[/B][CR][CR]จัดการส่วนเสริมที่ติดตั้งไว้ของคุณ · เรียกดูและติดตั้งส่วนเสริม จาก kodi.tv[CR]ปรับเปลี่ยน การตั้งค่าส่วนเสริม"
 
 msgctxt "#31409"
 msgid "[B]CONFIGURE TV SETTINGS[/B][CR][CR]Change full screen info · Manage EPG data settings"
 msgstr "[B] ตั้งค่าทีวี [/B][CR][CR]เปลี่ยนแปลงข้อมูลแบบเต็มหน้าจอ·จัดการการตั้งค่าข้อมูล EPG"
 
 msgctxt "#31410"
-msgid "[B]CONFIGURE SERVICE SETTINGS[/B][CR][CR]Setup control of XBMC via UPnP and HTTP · Configure file sharing[CR]Enable Zeroconf · Configure AirPlay"
-msgstr "[B]ปรับเปลี่ยนการตั้งค่าบริการ[/B][CR][CR]การตั้งค่าของ การควบคุม XBMC ผ่าน UPnP และ HTTP · กำหนดค่าใช้ไฟล์ร่วมกัน[CR]เปิดใช้ Zeroconf · กำหนดค่า AirPlay"
+msgid "[B]CONFIGURE SERVICE SETTINGS[/B][CR][CR]Setup control of Kodi via UPnP and HTTP · Configure file sharing[CR]Enable Zeroconf · Configure AirPlay"
+msgstr "[B]ปรับเปลี่ยนการตั้งค่าบริการ[/B][CR][CR]การตั้งค่าของ การควบคุม Kodi ผ่าน UPnP และ HTTP · กำหนดค่าใช้ไฟล์ร่วมกัน[CR]เปิดใช้ Zeroconf · กำหนดค่า AirPlay"
 
 msgctxt "#31411"
 msgid "First run help...."
@@ -489,8 +489,8 @@ msgid "Login"
 msgstr "ลงชื่อเข้าใช้"
 
 msgctxt "#31421"
-msgid "Select your XBMC user Profile[CR]to login and continue"
-msgstr "เลือกโปรไฟล์ ผู้ใช้ XBMC ของคุณ[CR]เพื่อเข้าสู่ระบบและดำเนินการต่อไป"
+msgid "Select your Kodi user Profile[CR]to login and continue"
+msgstr "เลือกโปรไฟล์ ผู้ใช้ Kodi ของคุณ[CR]เพื่อเข้าสู่ระบบและดำเนินการต่อไป"
 
 msgctxt "#31422"
 msgid "Show or hide the login screen at startup."
@@ -548,10 +548,6 @@ msgctxt "#31903"
 msgid "Weekend Forecast"
 msgstr "พยากรณ์สุดสัปดาห์"
 
-msgctxt "#31904"
-msgid "10 Day Forecast"
-msgstr "พยากรณ์ ใน 10 วัน"
-
 msgctxt "#31905"
 msgid "Forecast"
 msgstr "พยากรณ์"
@@ -565,8 +561,8 @@ msgid "Fetching forecast info..."
 msgstr "กำลังเรียกข้อมูลการพยากรณ์ ..."
 
 msgctxt "#31910"
-msgid "Map & Alerts"
-msgstr "แผนที่และการเตือน"
+msgid "Maps"
+msgstr "แผนที่"
 
 msgctxt "#31950"
 msgid "WEATHER"
@@ -577,8 +573,8 @@ msgid "PICTURES"
 msgstr "รูปภาพ"
 
 msgctxt "#31952"
-msgid "LIVE TV"
-msgstr "ทีวี สด"
+msgid "TV"
+msgstr "ทีวี"
 
 msgctxt "#31953"
 msgid "VIDEOS"

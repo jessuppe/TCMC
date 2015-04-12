@@ -43,7 +43,8 @@ private:
   void         Dispose();
   void         GetRoot  (CFileItemList &items);
   void         GetTitles(bool main, CFileItemList &items);
-  CFileItemPtr GetTitle(const BLURAY_TITLE_INFO* title, const CStdString& label);
+  CFileItemPtr GetTitle(const BLURAY_TITLE_INFO* title, const std::string& label);
+  CURL         GetUnderlyingCURL(const CURL& url);
   CURL          m_url;
   DllLibbluray* m_dll;
   BLURAY*       m_bd;

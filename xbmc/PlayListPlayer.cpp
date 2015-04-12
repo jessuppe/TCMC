@@ -35,7 +35,8 @@
 #include "dialogs/GUIDialogKaiToast.h"
 #include "guilib/LocalizeStrings.h"
 #include "interfaces/AnnouncementManager.h"
-#include "guilib/Key.h"
+#include "input/Key.h"
+#include "URL.h"
 
 using namespace PLAYLIST;
 
@@ -89,7 +90,7 @@ bool CPlayListPlayer::OnMessage(CGUIMessage &message)
       for (int i = PLAYLIST_MUSIC; i <= PLAYLIST_VIDEO; i++)
       {
         CPlayList &playlist = GetPlaylist(i);
-        CFileItemPtr item = boost::static_pointer_cast<CFileItem>(message.GetItem());
+        CFileItemPtr item = std::static_pointer_cast<CFileItem>(message.GetItem());
         playlist.UpdateItem(item.get());
       }
     }
@@ -287,7 +288,7 @@ bool CPlayListPlayer::Play(int iSong, bool bAutoPlay /* = false */, bool bPlayPr
     return false;
   if (ret == PLAYBACK_FAIL)
   {
-    CLog::Log(LOGERROR,"Playlist Player: skipping unplayable item: %i, path [%s]", m_iCurrentSong, item->GetPath().c_str());
+    CLog::Log(LOGERROR,"Playlist Player: skipping unplayable item: %i, path [%s]", m_iCurrentSong, CURL::GetRedacted(item->GetPath()).c_str());
     playlist.SetUnPlayable(m_iCurrentSong);
 
     // abort on 100 failed CONSECTUTIVE songs
@@ -486,7 +487,7 @@ void CPlayListPlayer::SetShuffle(int iPlaylist, bool bYesNo, bool bNotify /* = f
 
     if (bNotify)
     {
-      CStdString shuffleStr = StringUtils::Format("%s: %s", g_localizeStrings.Get(191).c_str(), g_localizeStrings.Get(bYesNo ? 593 : 591).c_str()); // Shuffle: All/Off
+      std::string shuffleStr = StringUtils::Format("%s: %s", g_localizeStrings.Get(191).c_str(), g_localizeStrings.Get(bYesNo ? 593 : 591).c_str()); // Shuffle: All/Off
       CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, g_localizeStrings.Get(559),  shuffleStr);
     }
 

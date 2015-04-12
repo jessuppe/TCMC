@@ -100,7 +100,8 @@ do
   esac
 done
 
-BUILDTHREADS=${BUILDTHREADS:-$(grep -c processor /proc/cpuinfo)}
+BUILDTHREADS=${BUILDTHREADS:-$(grep -c "^processor" /proc/cpuinfo)}
+[ ${BUILDTHREADS} -eq 0 ] && BUILDTHREADS=1
 
 [ -z ${VERSION} ] && exit 3
 if [ -f ${FFMPEG_PREFIX}/lib/pkgconfig/libavcodec.pc ] && [ -f .ffmpeg-installed ]
@@ -126,10 +127,11 @@ tar --strip-components=1 -xf ../${ARCHIVE}
 
 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" \
 ./configure --prefix=$FFMPEG_PREFIX \
-	--extra-version="xbmc-${VERSION}" \
+	--extra-version="kodi-${VERSION}" \
 	--disable-devices \
 	--disable-ffplay \
 	--disable-ffmpeg \
+	--disable-sdl \
 	--disable-ffprobe \
 	--disable-ffserver \
 	--disable-doc \
@@ -154,14 +156,17 @@ CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" \
 	--enable-nonfree \
 	--enable-pthreads \
 	--enable-zlib \
+	--disable-mips32r2 \
+	--disable-mipsdspr1 \
+	--disable-mipsdspr2 \
         ${FLAGS}
 
 make -j ${BUILDTHREADS} 
 if [ $? -eq 0 ]
 then
-  [ ${SUDO} ] && echo "Root priviledges are required to install to ${FFMPEG_PREFIX}"
+  [ ${SUDO} ] && echo "Root privileges are required to install to ${FFMPEG_PREFIX}"
   ${SUDO} make install && echo "$VERSION" > ../.ffmpeg-installed
 else
-  echo "ERROR: building ffmpeg failed"
+  echo "ERROR: Building ffmpeg failed"
   exit 1
 fi

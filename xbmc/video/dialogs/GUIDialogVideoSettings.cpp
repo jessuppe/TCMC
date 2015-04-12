@@ -29,7 +29,6 @@
 #include "dialogs/GUIDialogYesNo.h"
 #include "guilib/GUIWindowManager.h"
 #include "profiles/ProfilesManager.h"
-#include "pvr/PVRManager.h"
 #include "settings/MediaSettings.h"
 #include "settings/Settings.h"
 #include "settings/lib/Setting.h"
@@ -37,7 +36,6 @@
 #include "utils/log.h"
 #include "video/VideoDatabase.h"
 
-#define SETTING_VIDEO_CROP                "video.crop"
 #define SETTING_VIDEO_VIEW_MODE           "video.viewmode"
 #define SETTING_VIDEO_ZOOM                "video.zoom"
 #define SETTING_VIDEO_PIXEL_RATIO         "video.pixelratio"
@@ -62,7 +60,6 @@
 #define SETTING_VIDEO_CALIBRATION         "video.calibration"
 
 using namespace std;
-using namespace PVR;
 
 CGUIDialogVideoSettings::CGUIDialogVideoSettings()
     : CGUIDialogSettingsManualBase(WINDOW_DIALOG_VIDEO_OSD_SETTINGS, "VideoOSDSettings.xml"),
@@ -89,8 +86,6 @@ void CGUIDialogVideoSettings::OnSettingChanged(const CSetting *setting)
   else if (settingId == SETTING_VIDEO_SCALINGMETHOD)
     videoSettings.m_ScalingMethod = static_cast<ESCALINGMETHOD>(static_cast<const CSettingInt*>(setting)->GetValue());
 #ifdef HAS_VIDEO_PLAYBACK
-  else if (settingId == SETTING_VIDEO_CROP)
-    videoSettings.m_Crop = static_cast<const CSettingBool*>(setting)->GetValue();
   else if (settingId == SETTING_VIDEO_VIEW_MODE)
   {
     videoSettings.m_ViewMode = static_cast<const CSettingInt*>(setting)->GetValue();
@@ -145,9 +140,6 @@ void CGUIDialogVideoSettings::OnSettingChanged(const CSetting *setting)
     videoSettings.m_StereoMode = static_cast<const CSettingInt*>(setting)->GetValue();
   else if (settingId == SETTING_VIDEO_STEREOSCOPICINVERT)
     videoSettings.m_StereoInvert = static_cast<const CSettingBool*>(setting)->GetValue();
-
-  if (g_PVRManager.IsPlayingRadio() || g_PVRManager.IsPlayingTV())
-    g_PVRManager.TriggerSaveChannelSettings();
 }
 
 void CGUIDialogVideoSettings::OnSettingAction(const CSetting *setting)
@@ -191,6 +183,13 @@ void CGUIDialogVideoSettings::Save()
     CMediaSettings::Get().GetDefaultVideoSettings().m_AudioStream = -1;
     CSettings::Get().Save();
   }
+}
+
+void CGUIDialogVideoSettings::SetupView()
+{
+  CGUIDialogSettingsManualBase::SetupView();
+
+  SetHeading(13395);
 }
 
 void CGUIDialogVideoSettings::InitializeSettings()
@@ -264,12 +263,21 @@ void CGUIDialogVideoSettings::InitializeSettings()
   entries.push_back(make_pair(16320, VS_INTERLACEMETHOD_DXVA_BOB));
   entries.push_back(make_pair(16321, VS_INTERLACEMETHOD_DXVA_BEST));
   entries.push_back(make_pair(16325, VS_INTERLACEMETHOD_AUTO_ION));
+  entries.push_back(make_pair(16327, VS_INTERLACEMETHOD_VAAPI_BOB));
+  entries.push_back(make_pair(16328, VS_INTERLACEMETHOD_VAAPI_MADI));
+  entries.push_back(make_pair(16329, VS_INTERLACEMETHOD_VAAPI_MACI));
+  entries.push_back(make_pair(16330, VS_INTERLACEMETHOD_MMAL_ADVANCED));
+  entries.push_back(make_pair(16331, VS_INTERLACEMETHOD_MMAL_ADVANCED_HALF));
+  entries.push_back(make_pair(16332, VS_INTERLACEMETHOD_MMAL_BOB));
+  entries.push_back(make_pair(16333, VS_INTERLACEMETHOD_MMAL_BOB_HALF));
+  entries.push_back(make_pair(16334, VS_INTERLACEMETHOD_IMX_FASTMOTION));
+  entries.push_back(make_pair(16335, VS_INTERLACEMETHOD_IMX_FASTMOTION_DOUBLE));
 
   /* remove unsupported methods */
   for (StaticIntegerSettingOptions::iterator it = entries.begin(); it != entries.end(); )
   {
     if (g_renderManager.Supports((EINTERLACEMETHOD)it->second))
-      it++;
+      ++it;
     else
       it = entries.erase(it);
   }
@@ -308,7 +316,7 @@ void CGUIDialogVideoSettings::InitializeSettings()
   for(StaticIntegerSettingOptions::iterator it = entries.begin(); it != entries.end(); )
   {
     if (g_renderManager.Supports((ESCALINGMETHOD)it->second))
-      it++;
+      ++it;
     else
       it = entries.erase(it);
   }
@@ -316,9 +324,6 @@ void CGUIDialogVideoSettings::InitializeSettings()
   AddSpinner(groupVideo, SETTING_VIDEO_SCALINGMETHOD, 16300, 0, static_cast<int>(videoSettings.m_ScalingMethod), entries);
 
 #ifdef HAS_VIDEO_PLAYBACK
-  if (g_renderManager.Supports(RENDERFEATURE_CROP))
-    AddToggle(groupVideo, SETTING_VIDEO_CROP, 644, 0, videoSettings.m_Crop);
-
   if (g_renderManager.Supports(RENDERFEATURE_STRETCH) || g_renderManager.Supports(RENDERFEATURE_PIXEL_RATIO))
   {
     entries.clear();
@@ -327,23 +332,23 @@ void CGUIDialogVideoSettings::InitializeSettings()
     AddSpinner(groupVideo, SETTING_VIDEO_VIEW_MODE, 629, 0, videoSettings.m_ViewMode, entries);
   }
   if (g_renderManager.Supports(RENDERFEATURE_ZOOM))
-    AddSlider(groupVideo, SETTING_VIDEO_ZOOM, 216, 0, videoSettings.m_CustomZoomAmount, "%2.2f", 0.5f, 0.01f, 2.0f, -1, usePopup);
+    AddSlider(groupVideo, SETTING_VIDEO_ZOOM, 216, 0, videoSettings.m_CustomZoomAmount, "%2.2f", 0.5f, 0.01f, 2.0f, 216, usePopup);
   if (g_renderManager.Supports(RENDERFEATURE_VERTICAL_SHIFT))
-    AddSlider(groupVideo, SETTING_VIDEO_VERTICAL_SHIFT, 225, 0, videoSettings.m_CustomVerticalShift, "%2.2f", -2.0f, 0.01f, 2.0f, -1, usePopup);
+    AddSlider(groupVideo, SETTING_VIDEO_VERTICAL_SHIFT, 225, 0, videoSettings.m_CustomVerticalShift, "%2.2f", -2.0f, 0.01f, 2.0f, 225, usePopup);
   if (g_renderManager.Supports(RENDERFEATURE_PIXEL_RATIO))
-    AddSlider(groupVideo, SETTING_VIDEO_PIXEL_RATIO, 217, 0, videoSettings.m_CustomPixelRatio, "%2.2f", 0.5f, 0.01f, 2.0f, -1, usePopup);
+    AddSlider(groupVideo, SETTING_VIDEO_PIXEL_RATIO, 217, 0, videoSettings.m_CustomPixelRatio, "%2.2f", 0.5f, 0.01f, 2.0f, 217, usePopup);
   if (g_renderManager.Supports(RENDERFEATURE_POSTPROCESS))
     AddToggle(groupVideo, SETTING_VIDEO_POSTPROCESS, 16400, 0, videoSettings.m_PostProcess);
   if (g_renderManager.Supports(RENDERFEATURE_BRIGHTNESS))
     AddPercentageSlider(groupVideoPlayback, SETTING_VIDEO_BRIGHTNESS, 464, 0, static_cast<int>(videoSettings.m_Brightness), 14047, 1, 464, usePopup);
   if (g_renderManager.Supports(RENDERFEATURE_CONTRAST))
-    AddPercentageSlider(groupVideoPlayback, SETTING_VIDEO_CONTRAST, 465, 0, static_cast<int>(videoSettings.m_Contrast), 14047, 1, 464, usePopup);
+    AddPercentageSlider(groupVideoPlayback, SETTING_VIDEO_CONTRAST, 465, 0, static_cast<int>(videoSettings.m_Contrast), 14047, 1, 465, usePopup);
   if (g_renderManager.Supports(RENDERFEATURE_GAMMA))
-    AddPercentageSlider(groupVideoPlayback, SETTING_VIDEO_GAMMA, 466, 0, static_cast<int>(videoSettings.m_Gamma), 14047, 1, 464, usePopup);
+    AddPercentageSlider(groupVideoPlayback, SETTING_VIDEO_GAMMA, 466, 0, static_cast<int>(videoSettings.m_Gamma), 14047, 1, 466, usePopup);
   if (g_renderManager.Supports(RENDERFEATURE_NOISE))
-    AddSlider(groupVideoPlayback, SETTING_VIDEO_VDPAU_NOISE, 16312, 0, videoSettings.m_NoiseReduction, "%2.2f", 0.0f, 0.01f, 1.0f, -1, usePopup);
+    AddSlider(groupVideoPlayback, SETTING_VIDEO_VDPAU_NOISE, 16312, 0, videoSettings.m_NoiseReduction, "%2.2f", 0.0f, 0.01f, 1.0f, 16312, usePopup);
   if (g_renderManager.Supports(RENDERFEATURE_SHARPNESS))
-    AddSlider(groupVideoPlayback, SETTING_VIDEO_VDPAU_SHARPNESS, 16313, 0, videoSettings.m_Sharpness, "%2.2f", -1.0f, 0.02f, 1.0f, -1, usePopup);
+    AddSlider(groupVideoPlayback, SETTING_VIDEO_VDPAU_SHARPNESS, 16313, 0, videoSettings.m_Sharpness, "%2.2f", -1.0f, 0.02f, 1.0f, 16313, usePopup);
   if (g_renderManager.Supports(RENDERFEATURE_NONLINSTRETCH))
     AddToggle(groupVideoPlayback, SETTING_VIDEO_NONLIN_STRETCH, 659, 0, videoSettings.m_CustomNonLinStretch);
 #endif

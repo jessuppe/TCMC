@@ -50,7 +50,7 @@ bool CPVRFile::Open(const CURL& url)
   if (!g_PVRManager.IsStarted())
     return false;
 
-  CStdString strURL = url.Get();
+  std::string strURL = url.Get();
 
   if (StringUtils::StartsWith(strURL, "pvr://channels/tv/") ||
       StringUtils::StartsWith(strURL, "pvr://channels/radio/"))
@@ -70,12 +70,12 @@ bool CPVRFile::Open(const CURL& url)
       return false;
     }
   }
-  else if (StringUtils::StartsWith(strURL, "pvr://recordings/"))
+  else if (StringUtils::StartsWith(strURL, "pvr://recordings/active"))
   {
     CFileItemPtr tag = g_PVRRecordings->GetByPath(strURL);
     if (tag && tag->HasPVRRecordingInfoTag())
     {
-      if (!g_PVRManager.OpenRecordedStream(*tag->GetPVRRecordingInfoTag()))
+      if (!g_PVRManager.OpenRecordedStream(tag->GetPVRRecordingInfoTag()))
         return false;
 
       m_isPlayRecording = true;
@@ -86,6 +86,11 @@ bool CPVRFile::Open(const CURL& url)
       CLog::Log(LOGERROR, "PVRFile - Recording not found with filename %s", strURL.c_str());
       return false;
     }
+  }
+  else if (StringUtils::StartsWith(strURL, "pvr://recordings/deleted/"))
+  {
+    CLog::Log(LOGNOTICE, "PVRFile - Playback of deleted recordings is not possible (%s)", strURL.c_str());
+    return false;
   }
   else
   {
@@ -101,9 +106,20 @@ void CPVRFile::Close()
   g_PVRManager.CloseStream();
 }
 
-unsigned int CPVRFile::Read(void* buffer, int64_t size)
+ssize_t CPVRFile::Read(void* buffer, size_t size)
 {
-  return g_PVRManager.IsStarted() ? g_PVRClients->ReadStream((BYTE*)buffer, size) : 0;
+  if (size > SSIZE_MAX)
+    size = SSIZE_MAX;
+
+  if (!g_PVRManager.IsStarted())
+    return -1;
+
+  // TODO: Fix overflow in case of sizeof(int) != sizeof(size_t)
+  const int ret = g_PVRClients->ReadStream((BYTE*)buffer, size);
+  if (ret < 0)
+    return -1;
+
+  return ret;
 }
 
 int64_t CPVRFile::GetLength()
@@ -209,18 +225,18 @@ bool CPVRFile::UpdateItem(CFileItem& item)
   return g_PVRManager.UpdateItem(item);
 }
 
-CStdString CPVRFile::TranslatePVRFilename(const CStdString& pathFile)
+std::string CPVRFile::TranslatePVRFilename(const std::string& pathFile)
 {
   if (!g_PVRManager.IsStarted())
-    return StringUtils::EmptyString;
+    return "";
 
-  CStdString FileName = pathFile;
+  std::string FileName = pathFile;
   if (FileName.substr(0, 14) == "pvr://channels")
   {
     CFileItemPtr channel = g_PVRChannelGroups->GetByPath(FileName);
     if (channel && channel->HasPVRChannelInfoTag())
     {
-      CStdString stream = channel->GetPVRChannelInfoTag()->StreamURL();
+      std::string stream = channel->GetPVRChannelInfoTag()->StreamURL();
       if(!stream.empty())
       {
         if (stream.compare(6, 7, "stream/") == 0)
@@ -229,7 +245,7 @@ CStdString CPVRFile::TranslatePVRFilename(const CStdString& pathFile)
           // This function was added to retrieve the stream URL for this item
           // Is is used for the MediaPortal (ffmpeg) PVR addon
           // see PVRManager.cpp
-          return g_PVRClients->GetStreamURL(*channel->GetPVRChannelInfoTag());
+          return g_PVRClients->GetStreamURL(channel->GetPVRChannelInfoTag());
         }
         else
         {
@@ -264,10 +280,10 @@ bool CPVRFile::Delete(const CURL& url)
   if (!g_PVRManager.IsStarted())
     return false;
 
-  CStdString path(url.GetFileName());
+  std::string path(url.GetFileName());
   if (StringUtils::StartsWith(path, "recordings/") && path[path.size()-1] != '/')
   {
-    CStdString strURL = url.Get();
+    std::string strURL = url.Get();
     CFileItemPtr tag = g_PVRRecordings->GetByPath(strURL);
     if (tag && tag->HasPVRRecordingInfoTag())
       return tag->GetPVRRecordingInfoTag()->Delete();
@@ -280,16 +296,16 @@ bool CPVRFile::Rename(const CURL& url, const CURL& urlnew)
   if (!g_PVRManager.IsStarted())
     return false;
 
-  CStdString path(url.GetFileName());
-  CStdString newname(urlnew.GetFileName());
+  std::string path(url.GetFileName());
+  std::string newname(urlnew.GetFileName());
 
   size_t found = newname.find_last_of("/");
-  if (found != CStdString::npos)
+  if (found != std::string::npos)
     newname = newname.substr(found+1);
 
-  if (StringUtils::StartsWith(path, "recordings/") && path[path.size()-1] != '/')
+  if (StringUtils::StartsWith(path, "recordings/active/") && path[path.size()-1] != '/')
   {
-    CStdString strURL = url.Get();
+    std::string strURL = url.Get();
     CFileItemPtr tag = g_PVRRecordings->GetByPath(strURL);
     if (tag && tag->HasPVRRecordingInfoTag())
       return tag->GetPVRRecordingInfoTag()->Rename(newname);

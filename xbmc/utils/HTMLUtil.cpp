@@ -20,6 +20,7 @@
 
 #include "HTMLUtil.h"
 #include "utils/StringUtils.h"
+#include <wctype.h>
 
 using namespace std;
 using namespace HTML;
@@ -31,101 +32,10 @@ CHTMLUtil::CHTMLUtil(void)
 CHTMLUtil::~CHTMLUtil(void)
 {}
 
-int CHTMLUtil::FindTag(const CStdString& strHTML, const CStdString& strTag, CStdString& strtagFound, int iPos)
-{
-  CStdString strHTMLLow = strHTML;
-  CStdString strTagLow = strTag;
-  StringUtils::ToLower(strHTMLLow);
-  StringUtils::ToLower(strTagLow);
-  strtagFound = "";
-
-  size_t iStart = strHTMLLow.find(strTag, iPos);
-  if (iStart == std::string::npos)
-    return -1;
-
-  size_t iEnd = strHTMLLow.find(">", iStart);
-  if (iEnd == std::string::npos)
-    iEnd = strHTMLLow.size();
-
-  strtagFound = strHTMLLow.substr(iStart, (iEnd + 1) - iStart);
-  return iStart;
-}
-
-int CHTMLUtil::FindClosingTag(const CStdString& strHTML, const CStdString& strTag, CStdString& strtagFound, int iPos)
-{
-  CStdString strHTMLLow = strHTML;
-  CStdString strTagLow = strTag;
-  StringUtils::ToLower(strHTMLLow);
-  StringUtils::ToLower(strTagLow);
-  strtagFound = "";
-
-  size_t iStart = strHTMLLow.find("</" + strTag, iPos);
-  if (iStart == std::string::npos)
-    return -1;
-
-  size_t iOpenStart = strHTMLLow.find("<" + strTag, iPos);
-  while (iOpenStart < iStart && iOpenStart != std::string::npos)
-  {
-    iStart = strHTMLLow.find("</" + strTag, iStart + 1);
-    iOpenStart = strHTMLLow.find("<" + strTag, iOpenStart + 1);
-  }
-
-  size_t iEnd = strHTMLLow.find(">", iStart);
-  if (iEnd == std::string::npos)
-    iEnd = strHTMLLow.size();
-
-  strtagFound = strHTMLLow.substr(iStart, (iEnd + 1) - iStart);
-  return iStart;
-}
-
-void CHTMLUtil::getValueOfTag(const CStdString& strTagAndValue, CStdString& strValue)
-{
-  // strTagAndValue contains:
-  // like <a href=blablabla.....>value</a>
-  strValue = strTagAndValue;
-  size_t iStart = strTagAndValue.find(">");
-  size_t iEnd = strTagAndValue.find("<", iStart + 1);
-  if (iStart != std::string::npos &&
-      iEnd != std::string::npos)
-  {
-    iStart++;
-    strValue = strTagAndValue.substr(iStart, iEnd - iStart);
-  }
-}
-
-void CHTMLUtil::getAttributeOfTag(const CStdString& strTagAndValue, const CStdString& strTag, CStdString& strValue)
-{
-  // strTagAndValue contains:
-  // like <a href=""value".....
-  strValue = strTagAndValue;
-  size_t iStart = strTagAndValue.find(strTag);
-  if (iStart == std::string::npos)
-    return ;
-
-  iStart += strTag.size();
-
-  while (strTagAndValue[iStart + 1] == 0x20 ||
-         strTagAndValue[iStart + 1] == 0x27 ||
-         strTagAndValue[iStart + 1] == 34)
-    iStart++;
-
-  size_t iEnd = iStart + 1;
-  while (strTagAndValue[iEnd] != 0x27 &&
-         strTagAndValue[iEnd] != 0x20 &&
-         strTagAndValue[iEnd] != 34 &&
-         strTagAndValue[iEnd] != '>')
-    iEnd++;
-
-  if (iStart != std::string::npos && iEnd != std::string::npos)
-  {
-    strValue = strTagAndValue.substr(iStart, iEnd - iStart);
-  }
-}
-
-void CHTMLUtil::RemoveTags(CStdString& strHTML)
+void CHTMLUtil::RemoveTags(std::string& strHTML)
 {
   int iNested = 0;
-  CStdString strReturn = "";
+  std::string strReturn = "";
   for (int i = 0; i < (int) strHTML.size(); ++i)
   {
     if (strHTML[i] == '<') iNested++;
@@ -285,7 +195,7 @@ static const HTMLMapping mappings[] =
    {L"&zwnj;",    0x200C},
    {NULL,         L'\0'}};
 
-void CHTMLUtil::ConvertHTMLToW(const CStdStringW& strHTML, CStdStringW& strStripped)
+void CHTMLUtil::ConvertHTMLToW(const std::wstring& strHTML, std::wstring& strStripped)
 {
   /* TODO:STRING_CLEANUP */
   if (strHTML.size() == 0)
@@ -297,7 +207,7 @@ void CHTMLUtil::ConvertHTMLToW(const CStdStringW& strHTML, CStdStringW& strStrip
   strStripped = strHTML;
   while (mappings[iPos].html)
   {
-    StringUtils::Replace(strStripped, mappings[iPos].html,CStdStringW(1, mappings[iPos].w));
+    StringUtils::Replace(strStripped, mappings[iPos].html,std::wstring(1, mappings[iPos].w));
     iPos++;
   }
 
@@ -306,9 +216,9 @@ void CHTMLUtil::ConvertHTMLToW(const CStdStringW& strHTML, CStdStringW& strStrip
   {
     size_t iStart = iPos + 1;
     iPos += 2;
-    CStdStringW num;
+    std::wstring num;
     int base = 10;
-    if (strStripped[iPos+1] == L'x')
+    if (strStripped[iPos] == L'x')
     {
       base = 16;
       iPos++;
@@ -316,7 +226,7 @@ void CHTMLUtil::ConvertHTMLToW(const CStdStringW& strHTML, CStdStringW& strStrip
 
     size_t i = iPos;
     while (iPos < strStripped.size() &&
-           (base==16?iswxdigit(strStripped[iPos]):iswdigit(strStripped[iPos])))
+          (base == 16 ? iswxdigit(strStripped[iPos]) : iswdigit(strStripped[iPos])))
       iPos++; 
 
     num = strStripped.substr(i, iPos-i);
@@ -326,7 +236,7 @@ void CHTMLUtil::ConvertHTMLToW(const CStdStringW& strHTML, CStdStringW& strStrip
     else
       num = StringUtils::Format(L"&#x%ls;", num.c_str());
 
-    StringUtils::Replace(strStripped, num,CStdStringW(1,val));
+    StringUtils::Replace(strStripped, num,std::wstring(1,val));
     iPos = strStripped.find(L"&#", iStart);
   }
 }

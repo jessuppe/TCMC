@@ -40,7 +40,6 @@ namespace EPG
   class CEpg : public Observable
   {
     friend class CEpgDatabase;
-    friend class CEpgInfoTag;
 
   public:
     /*!
@@ -50,14 +49,14 @@ namespace EPG
      * @param strScraperName The name of the scraper to use.
      * @param bLoadedFromDb True if this table was loaded from the database, false otherwise.
      */
-    CEpg(int iEpgID, const CStdString &strName = "", const CStdString &strScraperName = "", bool bLoadedFromDb = false);
+    CEpg(int iEpgID, const std::string &strName = "", const std::string &strScraperName = "", bool bLoadedFromDb = false);
 
     /*!
      * @brief Create a new EPG instance for a channel.
      * @param channel The channel to create the EPG for.
      * @param bLoadedFromDb True if this table was loaded from the database, false otherwise.
      */
-    CEpg(PVR::CPVRChannelPtr channel, bool bLoadedFromDb = false);
+    CEpg(const PVR::CPVRChannelPtr &channel, bool bLoadedFromDb = false);
 
     /*!
      * @brief Destroy this EPG instance.
@@ -80,24 +79,25 @@ namespace EPG
 
     int ChannelID(void) const;
     int ChannelNumber(void) const;
+    int SubChannelNumber(void) const;
 
     /*!
      * @brief Channel the channel tag linked to this EPG table.
      * @param channel The new channel tag.
      */
-    void SetChannel(PVR::CPVRChannelPtr channel);
+    void SetChannel(const PVR::CPVRChannelPtr &channel);
 
     /*!
      * @brief Get the name of the scraper to use for this table.
      * @return The name of the scraper to use for this table.
      */
-    const CStdString &ScraperName(void) const { return m_strScraperName; }
+    const std::string &ScraperName(void) const { return m_strScraperName; }
 
     /*!
      * @brief Change the name of the scraper to use.
      * @param strScraperName The new scraper.
      */
-    void SetScraperName(const CStdString &strScraperName);
+    void SetScraperName(const std::string &strScraperName);
 
     /*!
      * @brief Specify if EPG should be manually updated on the next cycle
@@ -120,13 +120,13 @@ namespace EPG
      * @brief Get the name of this table.
      * @return The name of this table.
      */
-    const CStdString &Name(void) const { return m_strName; }
+    const std::string &Name(void) const { return m_strName; }
 
     /*!
      * @brief Changed the name of this table.
      * @param strName The new name.
      */
-    void SetName(const CStdString &strName);
+    void SetName(const std::string &strName);
 
     /*!
      * @brief Get the database ID of this table.
@@ -164,16 +164,16 @@ namespace EPG
     void Clear(void);
 
     /*!
-     * @brief Get the event that is occurring now.
-     * @return The current event.
+     * @brief Get the event that is occurring now
+     * @return The current event or NULL if it wasn't found.
      */
-    bool InfoTagNow(CEpgInfoTag &tag, bool bUpdateIfNeeded = true);
+    CEpgInfoTagPtr GetTagNow(bool bUpdateIfNeeded = true) const;
 
     /*!
-     * @brief Get the event that will occur next.
-     * @return The next event.
+     * @brief Get the event that will occur next
+     * @return The next event or NULL if it wasn't found.
      */
-    bool InfoTagNext(CEpgInfoTag &tag);
+    CEpgInfoTagPtr GetTagNext() const;
 
     /*!
      * @brief Get the event that occurs at the given time.
@@ -191,16 +191,25 @@ namespace EPG
     CEpgInfoTagPtr GetTagBetween(const CDateTime &beginTime, const CDateTime &endTime) const;
 
     /*!
+     * @brief Get the infotag with the given begin time.
+     *
+     * Get the infotag with the given ID.
+     * If it wasn't found, try finding the event with the given start time
+     *
+     * @param beginTime The start time in UTC of the event to find if it wasn't found by it's unique ID.
+     * @return The found tag or an empty tag if it wasn't found.
+     */
+    CEpgInfoTagPtr GetTag(const CDateTime &beginTime) const;
+    /*!
      * @brief Get the infotag with the given ID.
      *
      * Get the infotag with the given ID.
      * If it wasn't found, try finding the event with the given start time
      *
      * @param uniqueID The unique ID of the event to find.
-     * @param beginTime The start time in UTC of the event to find if it wasn't found by it's unique ID.
-     * @return The found tag or NULL if it wasn't found.
+     * @return The found tag or an empty tag if it wasn't found.
      */
-    CEpgInfoTagPtr GetTag(const CDateTime &beginTime) const;
+    CEpgInfoTagPtr GetTag(int uniqueID) const;
 
     /*!
      * @brief Update an entry in this EPG.
@@ -270,7 +279,7 @@ namespace EPG
      * @param iSubID The genre sub ID.
      * @return A human readable name.
      */
-    static const CStdString &ConvertGenreIdToString(int iID, int iSubID);
+    static const std::string &ConvertGenreIdToString(int iID, int iSubID);
 
     /*!
      * @brief Update an entry in this EPG.
@@ -293,7 +302,7 @@ namespace EPG
     bool NeedsSave(void) const;
 
     /*!
-     * @return True when this EPG is valid and can be updated, false otherwise
+     * @return True when this EPG is valid and can be updated, false otherwise.
      */
     bool IsValid(void) const;
   protected:
@@ -347,9 +356,9 @@ namespace EPG
     bool                                m_bLoaded;         /*!< true when the initial entries have been loaded */
     bool                                m_bUpdatePending;  /*!< true if manual update is pending */
     int                                 m_iEpgID;          /*!< the database ID of this table */
-    CStdString                          m_strName;         /*!< the name of this table */
-    CStdString                          m_strScraperName;  /*!< the name of the scraper to use */
-    CDateTime                           m_nowActiveStart;  /*!< the start time of the tag that is currently active */
+    std::string                         m_strName;         /*!< the name of this table */
+    std::string                         m_strScraperName;  /*!< the name of the scraper to use */
+    mutable CDateTime                   m_nowActiveStart;  /*!< the start time of the tag that is currently active */
 
     CDateTime                           m_lastScanTime;    /*!< the last time the EPG has been updated */
 

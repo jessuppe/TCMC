@@ -29,6 +29,8 @@
 #include "video/VideoInfoTag.h"
 #include "guilib/LocalizeStrings.h"
 
+#include <cassert>
+
 namespace XFILE
 {
 
@@ -56,10 +58,10 @@ void CBlurayDirectory::Dispose()
   m_dll = NULL;
 }
 
-CFileItemPtr CBlurayDirectory::GetTitle(const BLURAY_TITLE_INFO* title, const CStdString& label)
+CFileItemPtr CBlurayDirectory::GetTitle(const BLURAY_TITLE_INFO* title, const std::string& label)
 {
-  CStdString buf;
-  CStdString chap;
+  std::string buf;
+  std::string chap;
   CFileItemPtr item(new CFileItem("", false));
   CURL path(m_url);
   buf = StringUtils::Format("BDMV/PLAYLIST/%05d.mpls", title->playlist);
@@ -71,7 +73,7 @@ CFileItemPtr CBlurayDirectory::GetTitle(const BLURAY_TITLE_INFO* title, const CS
   buf = StringUtils::Format(label.c_str(), title->playlist);
   item->m_strTitle = buf;
   item->SetLabel(buf);
-  chap = StringUtils::Format(g_localizeStrings.Get(25007), title->chapter_count, StringUtils::SecondsToTimeString(duration).c_str());
+  chap = StringUtils::Format(g_localizeStrings.Get(25007).c_str(), title->chapter_count, StringUtils::SecondsToTimeString(duration).c_str());
   item->SetProperty("Addon.Summary", chap);
   item->m_dwSize = 0;
   item->SetIconImage("DefaultVideo.png");
@@ -84,7 +86,7 @@ CFileItemPtr CBlurayDirectory::GetTitle(const BLURAY_TITLE_INFO* title, const CS
 void CBlurayDirectory::GetTitles(bool main, CFileItemList &items)
 {
   unsigned titles = m_dll->bd_get_titles(m_bd, TITLES_RELEVANT, 0);
-  CStdString buf;
+  std::string buf;
 
   std::vector<BLURAY_TITLE_INFO*> buffer;
 
@@ -149,8 +151,8 @@ bool CBlurayDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {
   Dispose();
   m_url = url;
-  CStdString root = m_url.GetHostName();
-  CStdString file = m_url.GetFileName();
+  std::string root = m_url.GetHostName();
+  std::string file = m_url.GetFileName();
   URIUtils::RemoveSlashAtEnd(file);
   URIUtils::RemoveSlashAtEnd(root);
 
@@ -174,12 +176,18 @@ bool CBlurayDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     return false;
   }
 
-  if(file == "")
+  if(file == "root")
     GetRoot(items);
-  else if(file == "titles")
+  else if(file == "root/titles")
     GetTitles(false, items);
   else
-    return false;
+  {
+    CURL url2 = GetUnderlyingCURL(url);
+    CDirectory::CHints hints;
+    hints.flags = m_flags;
+    if (!CDirectory::GetDirectory(url2, items, hints))
+      return false;
+  }
 
   items.AddSortMethod(SortByTrackNumber,  554, LABEL_MASKS("%L", "%D", "%L", ""));    // FileName, Duration | Foldername, empty
   items.AddSortMethod(SortBySize,         553, LABEL_MASKS("%L", "%I", "%L", "%I"));  // FileName, Size | Foldername, Size
@@ -187,6 +195,13 @@ bool CBlurayDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   return true;
 }
 
+CURL CBlurayDirectory::GetUnderlyingCURL(const CURL& url)
+{
+  assert(url.IsProtocol("bluray"));
+  std::string host = url.GetHostName();
+  std::string filename = url.GetFileName();
+  return CURL(host.append(filename));
+}
 
 } /* namespace XFILE */
 #endif

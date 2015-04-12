@@ -13,7 +13,7 @@ ARCHIVE=$(SOURCE).tar.bz2
 CONFIGURE=OPT="$(CFLAGS)" \
   LIBS=-lm \
   ./configure --prefix=$(PREFIX) \
-  --disable-toolbox-glue --disable-framework --with-system-ffi \
+  --disable-toolbox-glue --disable-framework --with-system-ffi --without-pymalloc \
 
 LIBDYLIB=$(PLATFORM)/libpython2.6.a
 
@@ -32,6 +32,7 @@ $(PLATFORM): $(TARBALLS_LOCATION)/$(ARCHIVE) $(DEPS)
 	cd $(PLATFORM); patch -p0 < ../Python-no-export-path.patch
 	cd $(PLATFORM); patch -p1 < ../python-osx-environ-fix.patch
 	cd $(PLATFORM); patch -p0 < ../Python-2.6.5-ffi-static.patch
+	cd $(PLATFORM); patch -p0 < ../python-android-binmodule.patch
 ifeq ($(OS),ios)
 	cd $(PLATFORM); patch -p0 < ../Python-2.6.5-urllib.diff
 endif

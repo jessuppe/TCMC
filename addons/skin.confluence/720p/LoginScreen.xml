@@ -10,24 +10,24 @@
 	<controls>
 		<include>CommonBackground</include>
 		<control type="group">
-			<include>Window_OpenClose_Animation</include>		
+			<include>Window_OpenClose_Animation</include>
 			<control type="image">
 				<left>0</left>
 				<top>100r</top>
 				<width>1280</width>
 				<height>100</height>
 				<texture>floor.png</texture>
-				<animation effect="slide" start="0,10" end="0,0" time="200" condition="Window.Previous(Home)">WindowOpen</animation>
-				<animation effect="slide" start="0,0" end="0,10" time="200" condition="Window.Next(Home)">WindowClose</animation>
+				<animation effect="slide" start="0,10" end="0,0" time="150" condition="Window.Previous(Home)">WindowOpen</animation>
+				<animation effect="slide" start="0,0" end="0,10" time="150" condition="Window.Next(Home)">WindowClose</animation>
 			</control>
 			<control type="image">
 				<description>LOGO</description>
-				<left>0</left>
-				<top>5</top>
-				<width>170</width>
-				<height>100</height>
+				<left>10</left>
+				<top>10</top>
+				<width>100</width>
+				<height>50</height>
 				<aspectratio aligny="top" align="left">keep</aspectratio>
-				<texture>xbmc-logo.png</texture>
+				<texture>kodi-logo.png</texture>
 				<include>Window_OpenClose_Animation</include>
 			</control>
 			<control type="image">
@@ -226,7 +226,7 @@
 			<shadowcolor>black</shadowcolor>
 			<label>$INFO[System.Date]</label>
 			<include>Window_OpenClose_Animation</include>
-			<animation effect="slide" start="0,0" end="-40,0" time="100" condition="Window.IsVisible(Mutebug)">conditional</animation>
+			<animation effect="slide" start="0,0" end="-40,0" time="75" condition="Window.IsVisible(Mutebug)">conditional</animation>
 		</control>
 	</controls>
 </window>

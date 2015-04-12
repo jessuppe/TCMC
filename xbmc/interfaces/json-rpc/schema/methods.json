@@ -147,11 +147,22 @@
             "properties": {
               "channelid": { "$ref": "Library.Id", "required": true }
             }
+          },
+          { "type": "object", "required": true, "additionalProperties": false,
+            "properties": {
+              "recordingid": { "$ref": "Library.Id", "required": true }
+            }
           }
         ]
       },
       { "name": "options", "type": "object", "additionalProperties": false,
         "properties": {
+          "playercoreid": { "type": [
+              "null",
+			  { "type": "string", "enum": [ "default" ], "required": true },
+              { "type": "integer", "minimum": 1, "required": true }
+            ],
+            "default": null },
           "shuffled": { "$ref": "Optional.Boolean" },
           "repeat": { "type": [ "null", { "$ref": "Player.Repeat", "required": true } ], "default": null },
           "resume": { "type": [
@@ -180,6 +191,29 @@
         "properties": {
           "playerid": { "$ref": "Player.Id", "required": true },
           "type": { "$ref": "Player.Type", "required": true }
+        }
+      }
+    }
+  },
+  "Player.GetPlayers": {
+    "type": "method",
+    "description": "Get a list of available players",
+    "transport": "Response",
+    "permission": "ReadData",
+    "params": [
+      { "name": "media", "type": "string", "enum": [ "all", "video", "audio" ], "default": "all" }
+    ],
+    "returns": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties": {
+          "playercoreid": { "type": "integer", "minimum": 1, "required": true },
+          "name": { "$ref": "Global.String.NotEmpty", "required": true },
+          "type": { "type": "string", "enum": [ "internal", "external", "remote" ], "required": true },
+          "playsvideo": { "type": "boolean", "required": true },
+          "playsaudio": { "type": "boolean", "required": true }
         }
       }
     }
@@ -257,7 +291,11 @@
       { "name": "value", "required": true, "type": [
           { "$ref": "Player.Position.Percentage", "required": true, "description": "Percentage value to seek to" },
           { "$ref": "Player.Position.Time", "required": true, "description": "Time to seek to" },
-          { "type": "string", "enum": [ "smallforward", "smallbackward", "bigforward", "bigbackward" ], "required": true, "description": "Seek by predefined jumps" }
+          { "type": "string", "enum": [ "smallforward", "smallbackward", "bigforward", "bigbackward" ], "required": true, "description": "Seek by predefined jumps" },
+          { "type": "object", "properties": { "percentage": { "$ref": "Player.Position.Percentage", "required": true, "description": "Percentage value to seek to" } }, "additionalProperties": false, "required": true },
+          { "type": "object", "properties": { "time": { "$ref": "Player.Position.Time", "required": true, "description": "Time to seek to" } }, "additionalProperties": false, "required": true },
+          { "type": "object", "properties": { "step": { "type": "string", "enum": [ "smallforward", "smallbackward", "bigforward", "bigbackward" ], "required": true, "description": "Seek by predefined jumps" } }, "additionalProperties": false, "required": true },
+          { "type": "object", "properties": { "seconds": { "type": "integer", "required": true, "description": "Seek by the given number of seconds" } }, "additionalProperties": false, "required": true }
         ]
       }
     ],
@@ -649,7 +687,8 @@
           { "type": "object", "properties": { "artist": { "type": "string", "minLength": 1, "required": true } }, "additionalProperties": false },
           { "$ref": "List.Filter.Albums" }
         ]
-      }
+      },
+      { "name": "includesingles", "type": "boolean", "default": false }
     ],
     "returns": {
       "type": "object",
@@ -695,7 +734,8 @@
           { "type": "object", "properties": { "album": { "type": "string", "minLength": 1, "required": true } }, "additionalProperties": false },
           { "$ref": "List.Filter.Songs" }
         ]
-      }
+      },
+      { "name": "includesingles", "type": "boolean", "default": true }
     ],
     "returns": {
       "type": "object",
@@ -886,7 +926,9 @@
       { "name": "musicbrainztrackid", "$ref": "Optional.String" },
       { "name": "musicbrainzartistid", "$ref": "Optional.String" },
       { "name": "musicbrainzalbumid", "$ref": "Optional.String" },
-      { "name": "musicbrainzalbumartistid", "$ref": "Optional.String" }
+      { "name": "musicbrainzalbumartistid", "$ref": "Optional.String" },
+      { "name": "playcount", "$ref": "Optional.Integer" },
+      { "name": "lastplayed", "$ref": "Optional.String" }
     ],
     "returns": "string"
   },
@@ -896,7 +938,8 @@
     "transport": "Response",
     "permission": "UpdateData",
     "params": [
-      { "name": "directory", "type": "string", "default": "" }
+      { "name": "directory", "type": "string", "default": "" },
+      { "name": "showdialogs", "type": "boolean", "default": true, "description": "Whether or not to show the progress bar or any other GUI dialog" }
     ],
     "returns": "string"
   },
@@ -928,7 +971,9 @@
     "description": "Cleans the audio library from non-existent items",
     "transport": "Response",
     "permission": "RemoveData",
-    "params": [ ],
+    "params": [
+      { "name": "showdialogs", "type": "boolean", "default": true, "description": "Whether or not to show the progress bar or any other GUI dialog" }
+    ],
     "returns": "string"
   },
   "VideoLibrary.GetMovies": {
@@ -1462,7 +1507,8 @@
     "transport": "Response",
     "permission": "UpdateData",
     "params": [
-      { "name": "directory", "type": "string", "default": "" }
+      { "name": "directory", "type": "string", "default": "" },
+      { "name": "showdialogs", "type": "boolean", "default": true, "description": "Whether or not to show the progress bar or any other GUI dialog" }
     ],
     "returns": "string"
   },
@@ -1495,7 +1541,9 @@
     "description": "Cleans the video library from non-existent items",
     "transport": "Response",
     "permission": "RemoveData",
-    "params": [ ],
+    "params": [
+      { "name": "showdialogs", "type": "boolean", "default": true, "description": "Whether or not to show the progress bar or any other GUI dialog" }
+    ],
     "returns": "string"
   },
   "GUI.ActivateWindow": {
@@ -1935,7 +1983,7 @@
   },
   "System.Shutdown": {
     "type": "method",
-    "description": "Shuts the system running XBMC down",
+    "description": "Shuts the system running Kodi down",
     "transport": "Response",
     "permission": "ControlPower",
     "params": [],
@@ -1943,7 +1991,7 @@
   },
   "System.Suspend": {
     "type": "method",
-    "description": "Suspends the system running XBMC",
+    "description": "Suspends the system running Kodi",
     "transport": "Response",
     "permission": "ControlPower",
     "params": [],
@@ -1951,7 +1999,7 @@
   },
   "System.Hibernate": {
     "type": "method",
-    "description": "Puts the system running XBMC into hibernate mode",
+    "description": "Puts the system running Kodi into hibernate mode",
     "transport": "Response",
     "permission": "ControlPower",
     "params": [],
@@ -1959,7 +2007,7 @@
   },
   "System.Reboot": {
     "type": "method",
-    "description": "Reboots the system running XBMC",
+    "description": "Reboots the system running Kodi",
     "transport": "Response",
     "permission": "ControlPower",
     "params": [],
@@ -2119,11 +2167,11 @@
   },
   "XBMC.GetInfoLabels": {
     "type": "method",
-    "description": "Retrieve info labels about XBMC and the system",
+    "description": "Retrieve info labels about Kodi and the system",
     "transport": "Response",
     "permission": "ReadData",
     "params": [
-      { "name": "labels", "type": "array", "required": true, "items": { "type": "string" }, "minItems": 1, "description": "See http://wiki.xbmc.org/index.php?title=InfoLabels for a list of possible info labels" }
+      { "name": "labels", "type": "array", "required": true, "items": { "type": "string" }, "minItems": 1, "description": "See http://kodi.wiki/view/InfoLabels for a list of possible info labels" }
     ],
     "returns": {
       "type": "object",
@@ -2133,7 +2181,7 @@
   },
   "XBMC.GetInfoBooleans": {
     "type": "method",
-    "description": "Retrieve info booleans about XBMC and the system",
+    "description": "Retrieve info booleans about Kodi and the system",
     "transport": "Response",
     "permission": "ReadData",
     "params": [

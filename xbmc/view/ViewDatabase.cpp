@@ -30,19 +30,12 @@
 #include "dbwrappers/dataset.h"
 #include "SortFileItem.h"
 
-
-//********************************************************************************************************************************
 CViewDatabase::CViewDatabase(void)
-{
-}
+{ }
 
-//********************************************************************************************************************************
 CViewDatabase::~CViewDatabase(void)
-{
+{ }
 
-}
-
-//********************************************************************************************************************************
 bool CViewDatabase::Open()
 {
   return CDatabase::Open();
@@ -52,14 +45,14 @@ void CViewDatabase::CreateTables()
 {
   CLog::Log(LOGINFO, "create view table");
   m_pDS->exec("CREATE TABLE view ("
-                "idView integer primary key,"
-                "window integer,"
-                "path text,"
-                "viewMode integer,"
-                "sortMethod integer,"
-                "sortOrder integer,"
-                "sortAttributes integer,"
-                "skin text)\n");
+              "idView integer primary key,"
+              "window integer,"
+              "path text,"
+              "viewMode integer,"
+              "sortMethod integer,"
+              "sortOrder integer,"
+              "sortAttributes integer,"
+              "skin text)");
 }
 
 void CViewDatabase::CreateAnalytics()
@@ -94,7 +87,7 @@ void CViewDatabase::UpdateTables(int version)
       }
       m_pDS->close();
 
-      for (std::vector< std::pair<int, std::string> >::const_iterator it = paths.begin(); it != paths.end(); it++)
+      for (std::vector< std::pair<int, std::string> >::const_iterator it = paths.begin(); it != paths.end(); ++it)
         m_pDS->exec(PrepareSQL("UPDATE view SET path='%s' WHERE idView=%d", it->second.c_str(), it->first).c_str());
     }
   }
@@ -119,7 +112,7 @@ void CViewDatabase::UpdateTables(int version)
     {
       SortDescription sorting = SortUtils::TranslateOldSortMethod((SORT_METHOD)m_pDS->fv(4).get_asInt());
 
-      CStdString sql = PrepareSQL("INSERT INTO view (idView, window, path, viewMode, sortMethod, sortOrder, sortAttributes, skin) VALUES (%i, %i, '%s', %i, %i, %i, %i, '%s')",
+      std::string sql = PrepareSQL("INSERT INTO view (idView, window, path, viewMode, sortMethod, sortOrder, sortAttributes, skin) VALUES (%i, %i, '%s', %i, %i, %i, %i, '%s')",
         m_pDS->fv(0).get_asInt(), m_pDS->fv(1).get_asInt(), m_pDS->fv(2).get_asString().c_str(), m_pDS->fv(3).get_asInt(),
         (int)sorting.sortBy, m_pDS->fv(5).get_asInt(), (int)sorting.sortAttributes, m_pDS->fv(6).get_asString().c_str());
       m_pDS2->exec(sql);
@@ -130,18 +123,18 @@ void CViewDatabase::UpdateTables(int version)
   }
 }
 
-bool CViewDatabase::GetViewState(const CStdString &path, int window, CViewState &state, const CStdString &skin)
+bool CViewDatabase::GetViewState(const std::string &path, int window, CViewState &state, const std::string &skin)
 {
   try
   {
     if (NULL == m_pDB.get()) return false;
     if (NULL == m_pDS.get()) return false;
 
-    CStdString path1(path);
+    std::string path1(path);
     URIUtils::AddSlashAtEnd(path1);
     if (path1.empty()) path1 = "root://";
 
-    CStdString sql;
+    std::string sql;
     if (skin.empty())
       sql = PrepareSQL("select * from view where window = %i and path='%s'", window, path1.c_str());
     else
@@ -166,18 +159,18 @@ bool CViewDatabase::GetViewState(const CStdString &path, int window, CViewState 
   return false;
 }
 
-bool CViewDatabase::SetViewState(const CStdString &path, int window, const CViewState &state, const CStdString &skin)
+bool CViewDatabase::SetViewState(const std::string &path, int window, const CViewState &state, const std::string &skin)
 {
   try
   {
     if (NULL == m_pDB.get()) return false;
     if (NULL == m_pDS.get()) return false;
 
-    CStdString path1(path);
+    std::string path1(path);
     URIUtils::AddSlashAtEnd(path1);
     if (path1.empty()) path1 = "root://";
 
-    CStdString sql = PrepareSQL("select idView from view where window = %i and path='%s' and skin='%s'", window, path1.c_str(), skin.c_str());
+    std::string sql = PrepareSQL("select idView from view where window = %i and path='%s' and skin='%s'", window, path1.c_str(), skin.c_str());
     m_pDS->query(sql.c_str());
     if (!m_pDS->eof())
     { // update the view
@@ -209,7 +202,7 @@ bool CViewDatabase::ClearViewStates(int windowID)
     if (NULL == m_pDB.get()) return false;
     if (NULL == m_pDS.get()) return false;
 
-    CStdString sql = PrepareSQL("delete from view where window = %i", windowID);
+    std::string sql = PrepareSQL("delete from view where window = %i", windowID);
     m_pDS->exec(sql.c_str());
   }
   catch (...)

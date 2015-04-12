@@ -26,7 +26,6 @@
 #include "dialogs/GUIDialogYesNo.h"
 #include "filesystem/Directory.h"
 #include "filesystem/File.h"
-#include "guilib/GUIImage.h"
 #include "guilib/GUIKeyboardFactory.h"
 #include "guilib/GUIWindowManager.h"
 #include "guilib/LocalizeStrings.h"
@@ -35,6 +34,7 @@
 #include "settings/lib/Setting.h"
 #include "storage/MediaManager.h"
 #include "utils/log.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
 #define CONTROL_PROFILE_IMAGE         CONTROL_SETTINGS_CUSTOM + 1
@@ -86,7 +86,7 @@ bool CGUIDialogProfileSettings::ShowForProfile(unsigned int iProfile, bool first
     dialog->m_thumb.clear();
 
     // prompt for a name
-    CStdString profileName;
+    std::string profileName;
     if (!CGUIKeyboardFactory::ShowAndGetInput(profileName, g_localizeStrings.Get(20093),false) || profileName.empty())
       return false;
     dialog->m_name = profileName;
@@ -129,7 +129,7 @@ bool CGUIDialogProfileSettings::ShowForProfile(unsigned int iProfile, bool first
       if (dialog->m_name.empty() || dialog->m_directory.empty())
         return false;
 
-      /*CStdString strLabel;
+      /*std::string strLabel;
       strLabel.Format(g_localizeStrings.Get(20047),dialog->m_strName);
       if (!CGUIDialogYesNo::ShowAndGetInput(g_localizeStrings.Get(20058),strLabel,dialog->m_strDirectory,""))
       {
@@ -200,8 +200,9 @@ void CGUIDialogProfileSettings::OnWindowLoaded()
 {
   CGUIDialogSettingsManualBase::OnWindowLoaded();
 
-  CGUIImage *image = (CGUIImage*)GetControl(CONTROL_PROFILE_IMAGE);
-  m_defaultImage = image ? image->GetFileName() : "";
+  CGUIMessage msg(GUI_MSG_GET_FILENAME, GetID(), CONTROL_PROFILE_IMAGE);
+  OnMessage(msg);
+  m_defaultImage = msg.GetLabel();
 }
 
 void CGUIDialogProfileSettings::OnSettingChanged(const CSetting *setting)
@@ -252,20 +253,14 @@ void CGUIDialogProfileSettings::OnSettingAction(const CSetting *setting)
     item->SetLabel(g_localizeStrings.Get(20018));
     items.Add(item);
 
-    CStdString thumb;
+    std::string thumb;
     if (CGUIDialogFileBrowser::ShowAndGetImage(items, shares, g_localizeStrings.Get(1030), thumb) &&
-        !thumb.Equals("thumb://Current"))
+        !StringUtils::EqualsNoCase(thumb, "thumb://Current"))
     {
       m_needsSaving = true;
-      m_thumb = thumb.Equals("thumb://None") ? "" : thumb;
+      m_thumb = StringUtils::EqualsNoCase(thumb, "thumb://None") ? "" : thumb;
 
-      CGUIImage *image = (CGUIImage*)GetControl(CONTROL_PROFILE_IMAGE);
-      if (image == NULL)
-        return;
-
-      image->SetFileName("");
-      image->SetInvalid();
-      image->SetFileName(!m_thumb.empty() ? m_thumb : m_defaultImage);
+      SET_CONTROL_FILENAME(CONTROL_PROFILE_IMAGE, !m_thumb.empty() ? m_thumb : m_defaultImage);
     }
   }
   else if (settingId == SETTING_PROFILE_DIRECTORY)
@@ -318,9 +313,7 @@ void CGUIDialogProfileSettings::SetupView()
   updateProfileDirectory();
 
   // set the image
-  CGUIImage *image = (CGUIImage*)GetControl(CONTROL_PROFILE_IMAGE);
-  if (image != NULL)
-    image->SetFileName(!m_thumb.empty() ? m_thumb : m_defaultImage);
+  SET_CONTROL_FILENAME(CONTROL_PROFILE_IMAGE, !m_thumb.empty() ? m_thumb : m_defaultImage);
 }
 
 void CGUIDialogProfileSettings::InitializeSettings()
@@ -361,11 +354,11 @@ void CGUIDialogProfileSettings::InitializeSettings()
     }
 
     StaticIntegerSettingOptions entries;
-    entries.push_back(std::make_pair(0, 20062));
-    entries.push_back(std::make_pair(1, 20063));
-    entries.push_back(std::make_pair(2, 20061));
+    entries.push_back(std::make_pair(20062, 0));
+    entries.push_back(std::make_pair(20063, 1));
+    entries.push_back(std::make_pair(20061, 2));
     if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE)
-      entries.push_back(std::make_pair(3, 20107));
+      entries.push_back(std::make_pair(20107, 3));
 
     AddSpinner(groupMedia, SETTING_PROFILE_MEDIA, 20060, 0, m_dbMode, entries);
     AddSpinner(groupMedia, SETTING_PROFILE_MEDIA_SOURCES, 20094, 0, m_sourcesMode, entries);
@@ -380,7 +373,7 @@ bool CGUIDialogProfileSettings::GetProfilePath(std::string &directory, bool isDe
   share.strPath = "special://masterprofile/profiles/";
   shares.push_back(share);
 
-  CStdString strDirectory;
+  std::string strDirectory;
   if (directory.empty())
     strDirectory = share.strPath;
   else

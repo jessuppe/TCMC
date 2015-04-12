@@ -37,7 +37,7 @@ using namespace JSONRPC;
 using namespace PVR;
 using namespace EPG;
 
-JSONRPC_STATUS CPVROperations::GetProperties(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CPVROperations::GetProperties(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   if (!g_PVRManager.IsStarted())
     return FailedToExecute;
@@ -45,7 +45,7 @@ JSONRPC_STATUS CPVROperations::GetProperties(const CStdString &method, ITranspor
   CVariant properties = CVariant(CVariant::VariantTypeObject);
   for (unsigned int index = 0; index < parameterObject["properties"].size(); index++)
   {
-    CStdString propertyName = parameterObject["properties"][index].asString();
+    std::string propertyName = parameterObject["properties"][index].asString();
     CVariant property;
     JSONRPC_STATUS ret;
     if ((ret = GetPropertyValue(propertyName, property)) != OK)
@@ -59,7 +59,7 @@ JSONRPC_STATUS CPVROperations::GetProperties(const CStdString &method, ITranspor
   return OK;
 }
 
-JSONRPC_STATUS CPVROperations::GetChannelGroups(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CPVROperations::GetChannelGroups(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   if (!g_PVRManager.IsStarted())
     return FailedToExecute;
@@ -82,7 +82,7 @@ JSONRPC_STATUS CPVROperations::GetChannelGroups(const CStdString &method, ITrans
   return OK;
 }
 
-JSONRPC_STATUS CPVROperations::GetChannelGroupDetails(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CPVROperations::GetChannelGroupDetails(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   if (!g_PVRManager.IsStarted())
     return FailedToExecute;
@@ -106,7 +106,7 @@ JSONRPC_STATUS CPVROperations::GetChannelGroupDetails(const CStdString &method, 
   return OK;
 }
 
-JSONRPC_STATUS CPVROperations::GetChannels(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CPVROperations::GetChannels(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   if (!g_PVRManager.IsStarted())
     return FailedToExecute;
@@ -134,7 +134,7 @@ JSONRPC_STATUS CPVROperations::GetChannels(const CStdString &method, ITransportL
   return OK;
 }
 
-JSONRPC_STATUS CPVROperations::GetChannelDetails(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CPVROperations::GetChannelDetails(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   if (!g_PVRManager.IsStarted())
     return FailedToExecute;
@@ -147,12 +147,12 @@ JSONRPC_STATUS CPVROperations::GetChannelDetails(const CStdString &method, ITran
   if (channel == NULL)
     return InvalidParams;
 
-  HandleFileItem("channelid", false, "channeldetails", CFileItemPtr(new CFileItem(*channel)), parameterObject, parameterObject["properties"], result, false);
+  HandleFileItem("channelid", false, "channeldetails", CFileItemPtr(new CFileItem(channel)), parameterObject, parameterObject["properties"], result, false);
     
   return OK;
 }
 
-JSONRPC_STATUS CPVROperations::GetBroadcasts(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CPVROperations::GetBroadcasts(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   if (!g_PVRManager.IsStarted())
     return FailedToExecute;
@@ -177,7 +177,7 @@ JSONRPC_STATUS CPVROperations::GetBroadcasts(const CStdString &method, ITranspor
   return OK;
 }
 
-JSONRPC_STATUS CPVROperations::GetBroadcastDetails(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CPVROperations::GetBroadcastDetails(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   if (!g_PVRManager.IsStarted())
     return FailedToExecute;
@@ -201,7 +201,7 @@ JSONRPC_STATUS CPVROperations::GetBroadcastDetails(const CStdString &method, ITr
 }
 
 
-JSONRPC_STATUS CPVROperations::Record(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CPVROperations::Record(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   if (!g_PVRManager.IsStarted())
     return FailedToExecute;
@@ -210,7 +210,8 @@ JSONRPC_STATUS CPVROperations::Record(const CStdString &method, ITransportLayer 
   CVariant channel = parameterObject["channel"];
   if (channel.isString() && channel.asString() == "current")
   {
-    if (!g_PVRManager.GetCurrentChannel(pChannel))
+    pChannel = g_PVRManager.GetCurrentChannel();
+    if (!pChannel)
       return InternalError;
   }
   else if (channel.isInteger())
@@ -243,7 +244,7 @@ JSONRPC_STATUS CPVROperations::Record(const CStdString &method, ITransportLayer 
   return ACK;
 }
 
-JSONRPC_STATUS CPVROperations::Scan(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CPVROperations::Scan(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   if (!g_PVRManager.IsStarted())
     return FailedToExecute;
@@ -254,20 +255,20 @@ JSONRPC_STATUS CPVROperations::Scan(const CStdString &method, ITransportLayer *t
   return ACK;
 }
 
-JSONRPC_STATUS CPVROperations::GetPropertyValue(const CStdString &property, CVariant &result)
+JSONRPC_STATUS CPVROperations::GetPropertyValue(const std::string &property, CVariant &result)
 {
   bool started = g_PVRManager.IsStarted();
 
-  if (property.Equals("available"))
+  if (property == "available")
     result = started;
-  else if (property.Equals("recording"))
+  else if (property == "recording")
   {
     if (started)
       result = g_PVRManager.IsRecording();
     else
       result = false;
   }
-  else if (property.Equals("scanning"))
+  else if (property == "scanning")
   {
     if (started)
       result = g_PVRManager.IsRunningChannelScan();
@@ -303,7 +304,7 @@ void CPVROperations::FillChannelGroupDetails(const CPVRChannelGroupPtr &channelG
   }
 }
 
-JSONRPC_STATUS CPVROperations::GetTimers(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CPVROperations::GetTimers(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   if (!g_PVRManager.IsStarted())
     return FailedToExecute;
@@ -320,7 +321,7 @@ JSONRPC_STATUS CPVROperations::GetTimers(const CStdString &method, ITransportLay
   return OK;
 }
 
-JSONRPC_STATUS CPVROperations::GetTimerDetails(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CPVROperations::GetTimerDetails(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   if (!g_PVRManager.IsStarted())
     return FailedToExecute;
@@ -333,12 +334,12 @@ JSONRPC_STATUS CPVROperations::GetTimerDetails(const CStdString &method, ITransp
   if (!timer)
     return InvalidParams;
 
-  HandleFileItem("timerid", false, "timerdetails", CFileItemPtr(new CFileItem(*timer)), parameterObject, parameterObject["properties"], result, false);
+  HandleFileItem("timerid", false, "timerdetails", CFileItemPtr(new CFileItem(timer)), parameterObject, parameterObject["properties"], result, false);
 
   return OK;
 }
 
-JSONRPC_STATUS CPVROperations::GetRecordings(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CPVROperations::GetRecordings(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   if (!g_PVRManager.IsStarted())
     return FailedToExecute;
@@ -355,7 +356,7 @@ JSONRPC_STATUS CPVROperations::GetRecordings(const CStdString &method, ITranspor
   return OK;
 }
 
-JSONRPC_STATUS CPVROperations::GetRecordingDetails(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CPVROperations::GetRecordingDetails(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   if (!g_PVRManager.IsStarted())
     return FailedToExecute;

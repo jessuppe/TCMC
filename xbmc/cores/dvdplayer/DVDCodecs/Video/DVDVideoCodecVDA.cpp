@@ -39,6 +39,7 @@ extern "C" {
 #include "utils/StringUtils.h"
 #include "utils/TimeUtils.h"
 #include "settings/Settings.h"
+#include "settings/AdvancedSettings.h"
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <VideoDecodeAcceleration/VDADecoder.h>
@@ -245,7 +246,7 @@ bool CDVDVideoCodecVDA::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options)
       return false;
     }
 
-    CStdString rendervendor = g_Windowing.GetRenderVendor();
+    std::string rendervendor = g_Windowing.GetRenderVendor();
     StringUtils::ToLower(rendervendor);
     if (rendervendor.find("nvidia") != std::string::npos)
     {
@@ -609,7 +610,8 @@ void CDVDVideoCodecVDA::VDADecoderCallback(
   }
   if (kVDADecodeInfo_FrameDropped & infoFlags)
   {
-    CLog::Log(LOGDEBUG, "%s - frame dropped", __FUNCTION__);
+    if (g_advancedSettings.CanLogComponent(LOGVIDEO))
+      CLog::Log(LOGDEBUG, "%s - frame dropped", __FUNCTION__);
     return;
   }
 

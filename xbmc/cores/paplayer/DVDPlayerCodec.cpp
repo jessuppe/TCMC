@@ -20,7 +20,7 @@
 
 #include "DVDPlayerCodec.h"
 #include "cores/AudioEngine/Utils/AEUtil.h"
-#include "cores/AudioEngine/Engines/ActiveAE/ActiveAEResample.h"
+#include "cores/AudioEngine/AEResampleFactory.h"
 
 #include "cores/dvdplayer/DVDInputStreams/DVDFactoryInputStream.h"
 #include "cores/dvdplayer/DVDDemuxers/DVDFactoryDemuxer.h"
@@ -31,6 +31,7 @@
 #include "utils/log.h"
 #include "settings/Settings.h"
 #include "URL.h"
+#include "utils/StringUtils.h"
 
 #include "AudioDecoder.h"
 
@@ -44,7 +45,6 @@ DVDPlayerCodec::DVDPlayerCodec()
   m_audioPos = 0;
   m_pPacket = NULL;
   m_nDecodedLen = 0;
-  m_strFileName = "";
   m_bInited = false;
   m_pResampler = NULL;
   m_needConvert = false;
@@ -56,12 +56,13 @@ DVDPlayerCodec::~DVDPlayerCodec()
   DeInit();
 }
 
-void DVDPlayerCodec::SetContentType(const CStdString &strContent)
+void DVDPlayerCodec::SetContentType(const std::string &strContent)
 {
   m_strContentType = strContent;
+  StringUtils::ToLower(m_strContentType);
 }
 
-bool DVDPlayerCodec::Init(const CStdString &strFile, unsigned int filecache)
+bool DVDPlayerCodec::Init(const std::string &strFile, unsigned int filecache)
 {
   // take precaution if Init()ialized earlier
   if (m_bInited)
@@ -76,10 +77,10 @@ bool DVDPlayerCodec::Init(const CStdString &strFile, unsigned int filecache)
 
   m_nDecodedLen = 0;
 
-  CStdString strFileToOpen = strFile;
+  std::string strFileToOpen = strFile;
 
   CURL urlFile(strFile);
-  if (urlFile.GetProtocol() == "shout" )
+  if (urlFile.IsProtocol("shout") )
     strFileToOpen.replace(0, 8, "http://");
 
   m_pInputStream = CDVDFactoryInputStream::CreateInputStream(NULL, strFileToOpen, m_strContentType);
@@ -161,12 +162,14 @@ bool DVDPlayerCodec::Init(const CStdString &strFile, unsigned int filecache)
 
   //  Extract ReplayGain info
   // tagLoaderTagLib.Load will try to determine tag type by file extension, so set fallback by contentType
-  CStdString strFallbackFileExtension = "";
-  if (m_strContentType.Equals("audio/aacp") || m_strContentType.Equals("audio/aacp" "audio/aac"))
+  std::string strFallbackFileExtension = "";
+  if (m_strContentType == "audio/aacp" ||
+      m_strContentType == "audio/aac")
     strFallbackFileExtension = "m4a";
-  else if (m_strContentType.Equals("audio/x-ms-wma"))
+  else if (m_strContentType == "audio/x-ms-wma")
     strFallbackFileExtension = "wma";
-  else if (m_strContentType.Equals("audio/x-ape") || m_strContentType.Equals("audio/ape"))
+  else if (m_strContentType == "audio/x-ape" ||
+           m_strContentType == "audio/ape")
     strFallbackFileExtension = "ape";
   CTagLoaderTagLib tagLoaderTagLib;
   tagLoaderTagLib.Load(strFile, m_tag, strFallbackFileExtension);
@@ -230,23 +233,24 @@ bool DVDPlayerCodec::Init(const CStdString &strFile, unsigned int filecache)
   if (NeedConvert(m_DataFormat))
   {
     m_needConvert = true;
-    m_pResampler = new ActiveAE::CActiveAEResample();
-    m_pResampler->Init(ActiveAE::CActiveAEResample::GetAVChannelLayout(m_ChannelInfo),
+    m_pResampler = ActiveAE::CAEResampleFactory::Create();
+    m_pResampler->Init(CAEUtil::GetAVChannelLayout(m_ChannelInfo),
                        m_ChannelInfo.Count(),
                        m_SampleRate,
-                       ActiveAE::CActiveAEResample::GetAVSampleFormat(AE_FMT_FLOAT),
+                       CAEUtil::GetAVSampleFormat(AE_FMT_FLOAT),
                        CAEUtil::DataFormatToUsedBits(AE_FMT_FLOAT),
                        CAEUtil::DataFormatToDitherBits(AE_FMT_FLOAT),
-                       ActiveAE::CActiveAEResample::GetAVChannelLayout(m_ChannelInfo),
+                       CAEUtil::GetAVChannelLayout(m_ChannelInfo),
                        m_ChannelInfo.Count(),
                        m_SampleRate,
-                       ActiveAE::CActiveAEResample::GetAVSampleFormat(m_DataFormat),
+                       CAEUtil::GetAVSampleFormat(m_DataFormat),
                        CAEUtil::DataFormatToUsedBits(m_DataFormat),
                        CAEUtil::DataFormatToDitherBits(m_DataFormat),
                        false,
                        false,
                        NULL,
-                       AE_QUALITY_UNKNOWN);
+                       AE_QUALITY_UNKNOWN,
+                       false);
     m_planes = AE_IS_PLANAR(m_DataFormat) ? m_ChannelInfo.Count() : 1;
     m_srcFormat = m_DataFormat;
     m_srcFrameSize = (CAEUtil::DataFormatToBits(m_DataFormat)>>3) * m_ChannelInfo.Count();

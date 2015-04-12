@@ -28,6 +28,7 @@
 #include "DVDCodecUtils.h"
 #include "DVDVideoCodecVideoToolBox.h"
 #include "settings/Settings.h"
+#include "settings/AdvancedSettings.h"
 #include "utils/log.h"
 #include "utils/TimeUtils.h"
 #include "osx/DarwinUtils.h"
@@ -66,7 +67,7 @@ enum {
 enum {
   // tells the decoder not to bother returning a CVPixelBuffer
   // in the outputCallback. The output callback will still be called.
-  kVTDecoderDecodeFlags_DontEmitFrame = 1 << 0
+  kVTDecoderDecodeFlags_DontEmitFrame = 1 << 1,
 };
 enum {
   // decode and return buffers for all frames currently in flight.
@@ -196,7 +197,8 @@ vtdec_session_dump_property(CFStringRef prop_name, CFDictionaryRef prop_attrs, V
     char *attrs_str;
 
     attrs_str = vtutil_object_to_string(prop_attrs);
-    CLog::Log(LOGDEBUG, "%s = %s\n", name_str, attrs_str);
+    if (g_advancedSettings.CanLogComponent(LOGVIDEO))
+      CLog::Log(LOGDEBUG, "%s = %s\n", name_str, attrs_str);
     free(attrs_str);
   }
 
@@ -206,7 +208,8 @@ vtdec_session_dump_property(CFStringRef prop_name, CFDictionaryRef prop_attrs, V
     char *value_str;
 
     value_str = vtutil_object_to_string(prop_value);
-    CLog::Log(LOGDEBUG, "%s = %s\n", name_str, value_str);
+    if (g_advancedSettings.CanLogComponent(LOGVIDEO))
+      CLog::Log(LOGDEBUG, "%s = %s\n", name_str, value_str);
     free(value_str);
 
     if (prop_value != NULL)
@@ -214,7 +217,8 @@ vtdec_session_dump_property(CFStringRef prop_name, CFDictionaryRef prop_attrs, V
   }
   else
   {
-    CLog::Log(LOGDEBUG, "%s = <failed to query: %d>\n", name_str, (int)status);
+    if (g_advancedSettings.CanLogComponent(LOGVIDEO))
+      CLog::Log(LOGDEBUG, "%s = <failed to query: %d>\n", name_str, (int)status);
   }
 
   free(name_str);
@@ -235,7 +239,8 @@ void vtdec_session_dump_properties(VTDecompressionSessionRef session)
   return;
 
 error:
-  CLog::Log(LOGDEBUG, "failed to dump properties\n");
+  if (g_advancedSettings.CanLogComponent(LOGVIDEO))
+    CLog::Log(LOGDEBUG, "failed to dump properties\n");
 }
 #endif
 //-----------------------------------------------------------------------------------
@@ -340,9 +345,10 @@ CreateFormatDescriptionFromCodecData(VTFormatId format_id, int width, int height
 
   FigVideoHack.lpAddress = (void*)FigVideoFormatDescriptionCreateWithSampleDescriptionExtensionAtom;
   
-  if (GetIOSVersion() < 4.3)
+  if (CDarwinUtils::GetIOSVersion() < 4.3)
   {
-    CLog::Log(LOGDEBUG, "%s - GetIOSVersion says < 4.3", __FUNCTION__);
+    if (g_advancedSettings.CanLogComponent(LOGVIDEO))
+      CLog::Log(LOGDEBUG, "%s - GetIOSVersion says < 4.3", __FUNCTION__);
     status = FigVideoHack.FigVideoFormatDescriptionCreateWithSampleDescriptionExtensionAtom1(
       NULL,
       format_id,
@@ -355,7 +361,8 @@ CreateFormatDescriptionFromCodecData(VTFormatId format_id, int width, int height
   }
   else
   {
-    CLog::Log(LOGDEBUG, "%s - GetIOSVersion says >= 4.3", __FUNCTION__);
+    if (g_advancedSettings.CanLogComponent(LOGVIDEO))
+      CLog::Log(LOGDEBUG, "%s - GetIOSVersion says >= 4.3", __FUNCTION__);
     status = FigVideoHack.FigVideoFormatDescriptionCreateWithSampleDescriptionExtensionAtom2(
       NULL,
       format_id,
@@ -1375,7 +1382,9 @@ int CDVDVideoCodecVideoToolBox::Decode(uint8_t* pData, int iSize, double dts, do
     frameInfo = CreateDictionaryWithDisplayTime(sort_time - m_sort_time_offset, dts, pts);
 
     if (m_DropPictures)
+    {
       decoderFlags = kVTDecoderDecodeFlags_DontEmitFrame;
+    }
 
     // submit for decoding
     status = VTDecompressionSessionDecodeFrame(m_vt_session, sampleBuff, decoderFlags, frameInfo, 0);
@@ -1457,7 +1466,7 @@ bool CDVDVideoCodecVideoToolBox::GetPicture(DVDVideoPicture* pDvdVideoPicture)
   DisplayQueuePop();
 
   static double old_pts;
-  if (pDvdVideoPicture->pts < old_pts)
+  if (g_advancedSettings.CanLogComponent(LOGVIDEO) && pDvdVideoPicture->pts < old_pts)
     CLog::Log(LOGDEBUG, "%s - VTBDecoderDecode dts(%f), pts(%f), old_pts(%f)", __FUNCTION__,
       pDvdVideoPicture->dts, pDvdVideoPicture->pts, old_pts);
   old_pts = pDvdVideoPicture->pts;
@@ -1506,36 +1515,38 @@ CDVDVideoCodecVideoToolBox::CreateVTSession(int width, int height, CMFormatDescr
   OSStatus status;
 
   #if defined(TARGET_DARWIN_IOS)
-    //TODO - remove the clamp for ipad3 when CVOpenGLESTextureCacheCreateTextureFromImage
-    //has been planted ...
-    //if (!DarwinIsIPad3())
-    {
-      // decoding, scaling and rendering above 1920 x 800 runs into
-      // some bandwidth limit. detect and scale down to reduce
-      // the bandwidth requirements.
-      int width_clamp = 1280;
-      if ((width * height) > (1920 * 800))
-        width_clamp = 960;
+  double scale = 0.0;
 
-      int new_width = CheckNP2(width);
-      if (width != new_width)
-      {
-        // force picture width to power of two and scale up height
-        // we do this because no GL_UNPACK_ROW_LENGTH in OpenGLES
-        // and the CVPixelBufferPixel gets created using some
-        // strange alignment when width is non-standard.
-        double w_scaler = (double)new_width / width;
-        width = new_width;
-        height = height * w_scaler;
-      }
-      // scale output pictures down to 720p size for display
-      if (width > width_clamp)
-      {
-        double w_scaler = (float)width_clamp / width;
-        width = width_clamp;
-        height = height * w_scaler;
-      }
-    }
+  // decoding, scaling and rendering above 1920 x 800 runs into
+  // some bandwidth limit. detect and scale down to reduce
+  // the bandwidth requirements.
+  int width_clamp = 1280;
+  if ((width * height) > (1920 * 800))
+    width_clamp = 960;
+
+  // for retina devices it should be safe [tm] to
+  // loosen the clamp a bit to 1280 pixels width
+  if (CDarwinUtils::DeviceHasRetina(scale))
+    width_clamp = 1280;
+
+  int new_width = CheckNP2(width);
+  if (width != new_width)
+  {
+    // force picture width to power of two and scale up height
+    // we do this because no GL_UNPACK_ROW_LENGTH in OpenGLES
+    // and the CVPixelBufferPixel gets created using some
+    // strange alignment when width is non-standard.
+    double w_scaler = (double)new_width / width;
+    width = new_width;
+    height = height * w_scaler;
+  }
+  // scale output pictures down to 720p size for display
+  if (width > width_clamp)
+  {
+    double w_scaler = (float)width_clamp / width;
+    width = width_clamp;
+    height = height * w_scaler;
+  }
   #endif
   destinationPixelBufferAttributes = CFDictionaryCreateMutable(
     NULL, // CFAllocatorRef allocator
@@ -1620,7 +1631,8 @@ CDVDVideoCodecVideoToolBox::VTDecoderCallback(
   }
   if (kVTDecodeInfo_FrameDropped & infoFlags)
   {
-    CLog::Log(LOGDEBUG, "%s - frame dropped", __FUNCTION__);
+    if (g_advancedSettings.CanLogComponent(LOGVIDEO))
+      CLog::Log(LOGDEBUG, "%s - frame dropped", __FUNCTION__);
     return;
   }
 

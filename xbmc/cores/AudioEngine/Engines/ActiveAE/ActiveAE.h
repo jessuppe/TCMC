@@ -23,10 +23,12 @@
 #include "threads/Thread.h"
 
 #include "ActiveAESink.h"
-#include "ActiveAEResample.h"
+#include "cores/AudioEngine/Interfaces/AEResample.h"
 #include "cores/AudioEngine/Interfaces/AEStream.h"
 #include "cores/AudioEngine/Interfaces/AESound.h"
 #include "cores/AudioEngine/AEFactory.h"
+#include "cores/AudioEngine/Engines/ActiveAE/ActiveAEBuffer.h"
+
 #include "guilib/DispResource.h"
 #include <queue>
 
@@ -216,7 +218,7 @@ public:
   virtual void  SetSoundMode(const int mode);
 
   /* returns a new stream for data in the specified format */
-  virtual IAEStream *MakeStream(enum AEDataFormat dataFormat, unsigned int sampleRate, unsigned int encodedSampleRate, CAEChannelInfo channelLayout, unsigned int options = 0);
+  virtual IAEStream *MakeStream(enum AEDataFormat dataFormat, unsigned int sampleRate, unsigned int encodedSampleRate, CAEChannelInfo& channelLayout, unsigned int options = 0);
   virtual IAEStream *FreeStream(IAEStream *stream);
 
   /* returns a new sound object */
@@ -229,6 +231,8 @@ public:
   virtual std::string GetDefaultDevice(bool passthrough);
   virtual bool SupportsRaw(AEDataFormat format, int samplerate);
   virtual bool SupportsSilenceTimeout();
+  virtual bool HasStereoAudioChannelCount();
+  virtual bool HasHDAudioChannelCount();
   virtual bool SupportsQualityLevel(enum AEQuality level);
   virtual bool IsSettingVisible(const std::string &settingId);
   virtual void KeepConfiguration(unsigned int millis);

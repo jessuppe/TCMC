@@ -23,7 +23,7 @@
 #include "GUIDialogFileBrowser.h"
 #include "video/windows/GUIWindowVideoBase.h"
 #include "guilib/GUIWindowManager.h"
-#include "guilib/Key.h"
+#include "input/Key.h"
 #include "Util.h"
 #include "utils/URIUtils.h"
 #include "utils/StringUtils.h"
@@ -59,6 +59,8 @@ using namespace XFILE;
 
 CGUIDialogMediaSource::CGUIDialogMediaSource(void)
     : CGUIDialog(WINDOW_DIALOG_MEDIA_SOURCE, "DialogMediaSource.xml")
+    , m_confirmed(false)
+    , m_bNameChanged(false)
 {
   m_paths =  new CFileItemList;
   m_loadType = KEEP_IN_MEMORY;
@@ -107,8 +109,6 @@ bool CGUIDialogMediaSource::OnMessage(CGUIMessage& message)
     break;
   case GUI_MSG_WINDOW_INIT:
     {
-      m_confirmed = false;
-      m_bNameChanged=false;
       UpdateButtons();
     }
     break;
@@ -128,7 +128,7 @@ bool CGUIDialogMediaSource::OnMessage(CGUIMessage& message)
 
 // \brief Show CGUIDialogMediaSource dialog and prompt for a new media source.
 // \return True if the media source is added, false otherwise.
-bool CGUIDialogMediaSource::ShowAndAddMediaSource(const CStdString &type)
+bool CGUIDialogMediaSource::ShowAndAddMediaSource(const std::string &type)
 {
   CGUIDialogMediaSource *dialog = (CGUIDialogMediaSource *)g_windowManager.GetWindow(WINDOW_DIALOG_MEDIA_SOURCE);
   if (!dialog) return false;
@@ -143,12 +143,12 @@ bool CGUIDialogMediaSource::ShowAndAddMediaSource(const CStdString &type)
     unsigned int i,j=2;
     bool bConfirmed=false;
     VECSOURCES* pShares = CMediaSourceSettings::Get().GetSources(type);
-    CStdString strName = dialog->m_name;
+    std::string strName = dialog->m_name;
     while (!bConfirmed)
     {
       for (i=0;i<pShares->size();++i)
       {
-        if ((*pShares)[i].strName.Equals(strName))
+        if (StringUtils::EqualsNoCase((*pShares)[i].strName, strName))
           break;
       }
       if (i < pShares->size()) // found a match -  try next
@@ -166,23 +166,23 @@ bool CGUIDialogMediaSource::ShowAndAddMediaSource(const CStdString &type)
   return confirmed;
 }
 
-bool CGUIDialogMediaSource::ShowAndEditMediaSource(const CStdString &type, const CStdString&share)
+bool CGUIDialogMediaSource::ShowAndEditMediaSource(const std::string &type, const std::string&share)
 {
   VECSOURCES* pShares = CMediaSourceSettings::Get().GetSources(type);
   if (pShares)
   {
     for (unsigned int i=0;i<pShares->size();++i)
     {
-      if ((*pShares)[i].strName.Equals(share))
+      if (StringUtils::EqualsNoCase((*pShares)[i].strName, share))
         return ShowAndEditMediaSource(type,(*pShares)[i]);
     }
   }
   return false;
 }
 
-bool CGUIDialogMediaSource::ShowAndEditMediaSource(const CStdString &type, const CMediaSource &share)
+bool CGUIDialogMediaSource::ShowAndEditMediaSource(const std::string &type, const CMediaSource &share)
 {
-  CStdString strOldName = share.strName;
+  std::string strOldName = share.strName;
   CGUIDialogMediaSource *dialog = (CGUIDialogMediaSource *)g_windowManager.GetWindow(WINDOW_DIALOG_MEDIA_SOURCE);
   if (!dialog) return false;
   dialog->Initialize();
@@ -195,12 +195,12 @@ bool CGUIDialogMediaSource::ShowAndEditMediaSource(const CStdString &type, const
     unsigned int i,j=2;
     bool bConfirmed=false;
     VECSOURCES* pShares = CMediaSourceSettings::Get().GetSources(type);
-    CStdString strName = dialog->m_name;
+    std::string strName = dialog->m_name;
     while (!bConfirmed)
     {
       for (i=0;i<pShares->size();++i)
       {
-        if ((*pShares)[i].strName.Equals(strName))
+        if (StringUtils::EqualsNoCase((*pShares)[i].strName, strName))
           break;
       }
       if (i < pShares->size() && (*pShares)[i].strName != strOldName) // found a match -  try next
@@ -222,12 +222,15 @@ void CGUIDialogMediaSource::OnPathBrowse(int item)
   if (item < 0 || item > m_paths->Size()) return;
   // Browse is called.  Open the filebrowser dialog.
   // Ignore current path is best at this stage??
-  CStdString path;
+  std::string path;
   bool allowNetworkShares(m_type != "programs");
   VECSOURCES extraShares;
 
   if (m_name != CUtil::GetTitleFromPath(m_paths->Get(item)->GetPath()))
     m_bNameChanged=true;
+
+  std::string strStreams = g_localizeStrings.Get(33039); //"% Streams"
+  std::string strDevices = g_localizeStrings.Get(33040); //"% Devices"
 
   if (m_type == "music")
   {
@@ -235,7 +238,7 @@ void CGUIDialogMediaSource::OnPathBrowse(int item)
 #if defined(TARGET_ANDROID)
     // add the default android music directory
     std::string path;
-    if (CXBMCApp::GetExternalStorage(path, "music") && !path.empty() && CFile::Exists(path))
+    if (CXBMCApp::GetExternalStorage(path, "music") && !path.empty() && CDirectory::Exists(path))
     {
       share1.strPath = path;
       share1.strName = g_localizeStrings.Get(20240);
@@ -251,7 +254,7 @@ void CGUIDialogMediaSource::OnPathBrowse(int item)
     extraShares.push_back(share1);
 
     share1.strPath = "sap://";
-    share1.strName = "SAP Streams";
+    share1.strName = StringUtils::Format(strStreams.c_str(), "SAP"); //"SAP Streams"
     extraShares.push_back(share1);
 
     if (CSettings::Get().GetString("audiocds.recordingpath") != "")
@@ -282,23 +285,25 @@ void CGUIDialogMediaSource::OnPathBrowse(int item)
     share1.strName = g_localizeStrings.Get(20012);
     extraShares.push_back(share1);
 
-    share1.strPath = "rtv://*/";
-    share1.strName = "ReplayTV Devices";
-    extraShares.push_back(share1);
-
     share1.strPath = "hdhomerun://";
-    share1.strName = "HDHomerun Devices";
+    share1.strName = StringUtils::Format(strDevices.c_str(), "HDHomerun"); //"HDHomerun Devices"
     extraShares.push_back(share1);
 
     share1.strPath = "sap://";
-    share1.strName = "SAP Streams";
+    share1.strName = StringUtils::Format(strStreams.c_str(), "SAP"); //"SAP Streams"
     extraShares.push_back(share1);
 
     // add the recordings dir as needed
     if (CPVRDirectory::HasRecordings())
     {
-      share1.strPath = "pvr://recordings/";
+      share1.strPath = "pvr://recordings/active/";
       share1.strName = g_localizeStrings.Get(19017); // TV Recordings
+      extraShares.push_back(share1);
+    }
+    if (CPVRDirectory::HasDeletedRecordings())
+    {
+      share1.strPath = "pvr://recordings/deleted/";
+      share1.strName = g_localizeStrings.Get(19108); // Deleted TV Recordings
       extraShares.push_back(share1);
     }
   }
@@ -360,7 +365,7 @@ void CGUIDialogMediaSource::OnPath(int item)
   if (m_name != CUtil::GetTitleFromPath(m_paths->Get(item)->GetPath()))
     m_bNameChanged=true;
 
-  CStdString path(m_paths->Get(item)->GetPath());
+  std::string path(m_paths->Get(item)->GetPath());
   CGUIKeyboardFactory::ShowAndGetInput(path, g_localizeStrings.Get(1021), false);
   m_paths->Get(item)->SetPath(path);
 
@@ -425,7 +430,7 @@ void CGUIDialogMediaSource::UpdateButtons()
   for (int i = 0; i < m_paths->Size(); i++)
   {
     CFileItemPtr item = m_paths->Get(i);
-    CStdString path;
+    std::string path;
     CURL url(item->GetPath());
     path = url.GetWithoutUserDetails();
     if (path.empty()) path = "<"+g_localizeStrings.Get(231)+">"; // <None>
@@ -455,7 +460,7 @@ void CGUIDialogMediaSource::SetShare(const CMediaSource &share)
   UpdateButtons();
 }
 
-void CGUIDialogMediaSource::SetTypeOfMedia(const CStdString &type, bool editNotAdd)
+void CGUIDialogMediaSource::SetTypeOfMedia(const std::string &type, bool editNotAdd)
 {
   m_type = type;
   int typeStringID = -1;
@@ -469,7 +474,7 @@ void CGUIDialogMediaSource::SetTypeOfMedia(const CStdString &type, bool editNotA
     typeStringID = 1213;  // "Pictures"
   else // if (type == "files");
     typeStringID = 744;  // "Files"
-  CStdString format;
+  std::string format;
   format = StringUtils::Format(g_localizeStrings.Get(editNotAdd ? 1028 : 1020).c_str(), g_localizeStrings.Get(typeStringID).c_str());
   SET_CONTROL_LABEL(CONTROL_HEADING, format);
 }
@@ -526,7 +531,7 @@ vector<string> CGUIDialogMediaSource::GetPaths() const
       // and add the user/pass to the password manager - note, we haven't confirmed that it works
       // at this point, but if it doesn't, the user will get prompted anyway in SMBDirectory.
       CURL url(m_paths->Get(i)->GetPath());
-      if (url.GetProtocol() == "smb")
+      if (url.IsProtocol("smb"))
       {
         CPasswordManager::GetInstance().SaveAuthenticatedURL(url);
         url.SetPassword("");

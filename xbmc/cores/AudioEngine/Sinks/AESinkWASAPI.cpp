@@ -23,10 +23,10 @@
 #include <avrt.h>
 #include <initguid.h>
 #include <stdint.h>
+#include <algorithm>
 
 #include "cores/AudioEngine/Utils/AEUtil.h"
 #include "settings/AdvancedSettings.h"
-#include "utils/StdString.h"
 #include "utils/log.h"
 #include "utils/TimeUtils.h"
 #include "threads/SingleLock.h"
@@ -111,9 +111,13 @@ struct sampleFormat
 };
 
 /* Sample formats go from float -> 32 bit int -> 24 bit int (packed in 32) -> -> 24 bit int -> 16 bit int */
+// versions of Kodi before 14.0 had a bug which made S24NE4MSB the first format selected
+// this bug worked around some driver bug of some IEC958 devices which report S32 but can't handle it
+// correctly. So far I have never seen and WASAPI device using S32 and don't think probing S24 before
+// S32 has any negative impact.
 static const sampleFormat testFormats[] = { {KSDATAFORMAT_SUBTYPE_IEEE_FLOAT, 32, 32, AE_FMT_FLOAT},
-                                            {KSDATAFORMAT_SUBTYPE_PCM, 32, 32, AE_FMT_S32NE},
                                             {KSDATAFORMAT_SUBTYPE_PCM, 32, 24, AE_FMT_S24NE4MSB},
+                                            {KSDATAFORMAT_SUBTYPE_PCM, 32, 32, AE_FMT_S32NE},
                                             {KSDATAFORMAT_SUBTYPE_PCM, 24, 24, AE_FMT_S24NE3},
                                             {KSDATAFORMAT_SUBTYPE_PCM, 16, 16, AE_FMT_S16NE} };
 
@@ -165,16 +169,19 @@ DWORD ChLayoutToChMask(const enum AEChannel * layout, unsigned int * numberOfCha
   return mask;
 }
 
-CStdStringA localWideToUtf(LPCWSTR wstr)
+std::string localWideToUtf(LPCWSTR wstr)
 {
   if (wstr == NULL)
     return "";
   int bufSize = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
-  CStdStringA strA ("", bufSize);
-  if ( bufSize == 0 || WideCharToMultiByte(CP_UTF8, 0, wstr, -1, strA.GetBuf(bufSize), bufSize, NULL, NULL) != bufSize )
-    strA.clear();
-  strA.RelBuf();
-  return strA;
+  char *multiStr = new char[bufSize + 1];
+  if (bufSize == 0 || WideCharToMultiByte(CP_UTF8, 0, wstr, -1, multiStr, bufSize, NULL, NULL) != bufSize)
+    multiStr[0] = 0;
+  else
+    multiStr[bufSize] = 0;
+  std::string ret(multiStr);
+  delete[] multiStr;
+  return ret;
 }
 
 CAESinkWASAPI::CAESinkWASAPI() :
@@ -370,7 +377,7 @@ void CAESinkWASAPI::Deinitialize()
     }
     catch (...)
     {
-      CLog::Log(LOGDEBUG, __FUNCTION__, "Invalidated AudioClient - Releasing");
+      CLog::Log(LOGDEBUG, "%s: Invalidated AudioClient - Releasing", __FUNCTION__);
     }
   }
   m_running = false;
@@ -1073,7 +1080,8 @@ bool CAESinkWASAPI::InitializeExclusive(AEAudioFormat &format)
   else if (AE_IS_RAW(format.m_dataFormat)) //No sense in trying other formats for passthrough.
     return false;
 
-  CLog::Log(LOGERROR, __FUNCTION__": IsFormatSupported failed (%s) - trying to find a compatible format", WASAPIErrToStr(hr));
+  if (g_advancedSettings.CanLogComponent(LOGAUDIO))
+    CLog::Log(LOGDEBUG, __FUNCTION__": IsFormatSupported failed (%s) - trying to find a compatible format", WASAPIErrToStr(hr));
 
   int closestMatch;
   unsigned int requestedChannels = wfxex.Format.nChannels;
@@ -1245,7 +1253,7 @@ initialize:
     CLog::Log(LOGDEBUG, "  Enc. Channels   : %d", wfxex_iec61937.dwEncodedChannelCount);
     CLog::Log(LOGDEBUG, "  Enc. Samples/Sec: %d", wfxex_iec61937.dwEncodedSamplesPerSec);
     CLog::Log(LOGDEBUG, "  Channel Mask    : %d", wfxex.dwChannelMask);
-    CLog::Log(LOGDEBUG, "  Periodicty      : %d", audioSinkBufferDurationMsec);
+    CLog::Log(LOGDEBUG, "  Periodicty      : %I64d", audioSinkBufferDurationMsec);
     return false;
   }
 
@@ -1336,7 +1344,10 @@ void CAESinkWASAPI::Drain()
   if(!m_pAudioClient)
     return;
 
-  Sleep( (DWORD)(GetDelay()*500) );
+  AEDelayStatus status;
+  GetDelay(status);
+
+  Sleep((DWORD)(status.GetDelay() * 500));
 
   if (m_running)
   {
@@ -1348,7 +1359,7 @@ void CAESinkWASAPI::Drain()
     }
     catch (...)
     {
-      CLog::Log(LOGDEBUG, __FUNCTION__, "Invalidated AudioClient - Releasing");
+      CLog::Log(LOGDEBUG, "%s: Invalidated AudioClient - Releasing", __FUNCTION__);
     }
   }
   m_running = false;

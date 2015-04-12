@@ -27,7 +27,7 @@
 
 using namespace std;
 
-bool CGUIListItem::icompare::operator()(const CStdString &s1, const CStdString &s2) const
+bool CGUIListItem::icompare::operator()(const std::string &s1, const std::string &s2) const
 {
   return StringUtils::CompareNoCase(s1, s2) < 0;
 }
@@ -43,23 +43,18 @@ CGUIListItem::CGUIListItem(const CGUIListItem& item)
 CGUIListItem::CGUIListItem(void)
 {
   m_bIsFolder = false;
-  m_strLabel2 = "";
-  m_strLabel = "";
   m_bSelected = false;
-  m_strIcon = "";
   m_overlayIcon = ICON_OVERLAY_NONE;
   m_layout = NULL;
   m_focusedLayout = NULL;
 }
 
-CGUIListItem::CGUIListItem(const CStdString& strLabel)
+CGUIListItem::CGUIListItem(const std::string& strLabel):
+  m_strLabel(strLabel)
 {
   m_bIsFolder = false;
-  m_strLabel2 = "";
-  m_strLabel = strLabel;
   SetSortLabel(strLabel);
   m_bSelected = false;
-  m_strIcon = "";
   m_overlayIcon = ICON_OVERLAY_NONE;
   m_layout = NULL;
   m_focusedLayout = NULL;
@@ -70,7 +65,7 @@ CGUIListItem::~CGUIListItem(void)
   FreeMemory();
 }
 
-void CGUIListItem::SetLabel(const CStdString& strLabel)
+void CGUIListItem::SetLabel(const std::string& strLabel)
 {
   if (m_strLabel == strLabel)
     return;
@@ -80,13 +75,13 @@ void CGUIListItem::SetLabel(const CStdString& strLabel)
   SetInvalid();
 }
 
-const CStdString& CGUIListItem::GetLabel() const
+const std::string& CGUIListItem::GetLabel() const
 {
   return m_strLabel;
 }
 
 
-void CGUIListItem::SetLabel2(const CStdString& strLabel2)
+void CGUIListItem::SetLabel2(const std::string& strLabel2)
 {
   if (m_strLabel2 == strLabel2)
     return;
@@ -94,23 +89,23 @@ void CGUIListItem::SetLabel2(const CStdString& strLabel2)
   SetInvalid();
 }
 
-const CStdString& CGUIListItem::GetLabel2() const
+const std::string& CGUIListItem::GetLabel2() const
 {
   return m_strLabel2;
 }
 
-void CGUIListItem::SetSortLabel(const CStdString &label)
+void CGUIListItem::SetSortLabel(const std::string &label)
 {
   g_charsetConverter.utf8ToW(label, m_sortLabel, false);
   // no need to invalidate - this is never shown in the UI
 }
 
-void CGUIListItem::SetSortLabel(const CStdStringW &label)
+void CGUIListItem::SetSortLabel(const std::wstring &label)
 {
   m_sortLabel = label;
 }
 
-const CStdStringW& CGUIListItem::GetSortLabel() const
+const std::wstring& CGUIListItem::GetSortLabel() const
 {
   return m_sortLabel;
 }
@@ -173,7 +168,7 @@ bool CGUIListItem::HasArt(const std::string &type) const
   return !GetArt(type).empty();
 }
 
-void CGUIListItem::SetIconImage(const CStdString& strIcon)
+void CGUIListItem::SetIconImage(const std::string& strIcon)
 {
   if (m_strIcon == strIcon)
     return;
@@ -181,7 +176,7 @@ void CGUIListItem::SetIconImage(const CStdString& strIcon)
   SetInvalid();
 }
 
-const CStdString& CGUIListItem::GetIconImage() const
+const std::string& CGUIListItem::GetIconImage() const
 {
   return m_strIcon;
 }
@@ -195,7 +190,7 @@ void CGUIListItem::SetOverlayImage(GUIIconOverlay icon, bool bOnOff)
   SetInvalid();
 }
 
-CStdString CGUIListItem::GetOverlayImage() const
+std::string CGUIListItem::GetOverlayImage() const
 {
   switch (m_overlayIcon)
   {
@@ -203,10 +198,6 @@ CStdString CGUIListItem::GetOverlayImage() const
     return "OverlayRAR.png";
   case ICON_OVERLAY_ZIP:
     return "OverlayZIP.png";
-  case ICON_OVERLAY_TRAINED:
-    return "OverlayTrained.png";
-  case ICON_OVERLAY_HAS_TRAINER:
-    return "OverlayHasTrainer.png";
   case ICON_OVERLAY_LOCKED:
     return "OverlayLocked.png";
   case ICON_OVERLAY_UNWATCHED:
@@ -399,7 +390,7 @@ void CGUIListItem::SetInvalid()
   if (m_focusedLayout) m_focusedLayout->SetInvalid();
 }
 
-void CGUIListItem::SetProperty(const CStdString &strKey, const CVariant &value)
+void CGUIListItem::SetProperty(const std::string &strKey, const CVariant &value)
 {
   PropertyMap::iterator iter = m_mapProperties.find(strKey);
   if (iter == m_mapProperties.end())
@@ -414,7 +405,7 @@ void CGUIListItem::SetProperty(const CStdString &strKey, const CVariant &value)
   }
 }
 
-CVariant CGUIListItem::GetProperty(const CStdString &strKey) const
+CVariant CGUIListItem::GetProperty(const std::string &strKey) const
 {
   PropertyMap::const_iterator iter = m_mapProperties.find(strKey);
   if (iter == m_mapProperties.end())
@@ -423,7 +414,7 @@ CVariant CGUIListItem::GetProperty(const CStdString &strKey) const
   return iter->second;
 }
 
-bool CGUIListItem::HasProperty(const CStdString &strKey) const
+bool CGUIListItem::HasProperty(const std::string &strKey) const
 {
   PropertyMap::const_iterator iter = m_mapProperties.find(strKey);
   if (iter == m_mapProperties.end())
@@ -432,7 +423,7 @@ bool CGUIListItem::HasProperty(const CStdString &strKey) const
   return true;
 }
 
-void CGUIListItem::ClearProperty(const CStdString &strKey)
+void CGUIListItem::ClearProperty(const std::string &strKey)
 {
   PropertyMap::iterator iter = m_mapProperties.find(strKey);
   if (iter != m_mapProperties.end())
@@ -451,14 +442,14 @@ void CGUIListItem::ClearProperties()
   }
 }
 
-void CGUIListItem::IncrementProperty(const CStdString &strKey, int nVal)
+void CGUIListItem::IncrementProperty(const std::string &strKey, int nVal)
 {
   int64_t i = GetProperty(strKey).asInteger();
   i += nVal;
   SetProperty(strKey, i);
 }
 
-void CGUIListItem::IncrementProperty(const CStdString &strKey, double dVal)
+void CGUIListItem::IncrementProperty(const std::string &strKey, double dVal)
 {
   double d = GetProperty(strKey).asDouble();
   d += dVal;

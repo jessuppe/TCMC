@@ -19,7 +19,7 @@
  */
 
 #include "GUIScrollBarControl.h"
-#include "Key.h"
+#include "input/Key.h"
 #include "utils/StringUtils.h"
 
 #define MIN_NIB_SIZE 4.0f
@@ -360,7 +360,7 @@ EVENT_RESULT CGUIScrollBar::OnMouseEvent(const CPoint &point, const CMouseEvent 
   return EVENT_RESULT_UNHANDLED;
 }
 
-CStdString CGUIScrollBar::GetDescription() const
+std::string CGUIScrollBar::GetDescription() const
 {
   return StringUtils::Format("%i/%i", m_offset, m_numItems);
 }

@@ -25,16 +25,15 @@
 #define AFX_NfoFile_H__641CCF68_6D2A_426E_9204_C0E4BEF12D00__INCLUDED_
 
 #pragma once
+#include <string>
 
-#include "utils/XBMCTinyXML.h"
 #include "addons/Scraper.h"
 #include "utils/CharsetConverter.h"
-#include "utils/XMLUtils.h"
 
 class CNfoFile
 {
 public:
-  CNfoFile() : m_doc(NULL), m_headofdoc(NULL), m_type(ADDON::ADDON_UNKNOWN) {}
+  CNfoFile() : m_headPos(0), m_type(ADDON::ADDON_UNKNOWN) {}
   virtual ~CNfoFile() { Close(); }
 
   enum NFOResult
@@ -46,18 +45,19 @@ public:
     ERROR_NFO    = 4
   };
 
-  NFOResult Create(const CStdString&, const ADDON::ScraperPtr&, int episode=-1);
+  NFOResult Create(const std::string&, const ADDON::ScraperPtr&, int episode=-1);
   template<class T>
     bool GetDetails(T& details,const char* document=NULL, bool prioritise=false)
   {
-    CXBMCTinyXML doc;
-    CStdString strDoc;
-    if (document)
-      strDoc = document;
-    else
-      strDoc = m_headofdoc;
 
-    doc.Parse(strDoc, TIXML_ENCODING_UNKNOWN);
+    CXBMCTinyXML doc;
+    if (document)
+      doc.Parse(document, TIXML_ENCODING_UNKNOWN);
+    else if (m_headPos < m_doc.size())
+      doc.Parse(m_doc.substr(m_headPos), TIXML_ENCODING_UNKNOWN);
+    else
+      return false;
+
     return details.Load(doc.RootElement(), true, prioritise);
   }
 
@@ -67,13 +67,13 @@ public:
   const CScraperUrl &ScraperUrl() const { return m_scurl; }
 
 private:
-  char* m_doc;
-  char* m_headofdoc;
+  std::string m_doc;
+  size_t m_headPos;
   ADDON::ScraperPtr m_info;
   ADDON::TYPE m_type;
   CScraperUrl m_scurl;
 
-  int Load(const CStdString&);
+  int Load(const std::string&);
   int Scrape(ADDON::ScraperPtr& scraper);
 };
 

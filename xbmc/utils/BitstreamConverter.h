@@ -177,7 +177,10 @@ protected:
   static const int  avc_parse_nal_units_buf(const uint8_t *buf_in, uint8_t **buf, int *size);
   const int         isom_write_avcc(AVIOContext *pb, const uint8_t *data, int len);
   // bitstream to bytestream (Annex B) conversion support.
-  bool              BitstreamConvertInit(void *in_extradata, int in_extrasize);
+  bool              IsIDR(uint8_t unit_type);
+  bool              IsSlice(uint8_t unit_type);
+  bool              BitstreamConvertInitAVC(void *in_extradata, int in_extrasize);
+  bool              BitstreamConvertInitHEVC(void *in_extradata, int in_extrasize);
   bool              BitstreamConvert(uint8_t* pData, int iSize, uint8_t **poutbuf, int *poutbuf_size);
   static void       BitstreamAllocAndCopy(uint8_t **poutbuf, int *poutbuf_size,
                       const uint8_t *sps_pps, uint32_t sps_pps_size, const uint8_t *in, uint32_t in_size);
@@ -185,6 +188,7 @@ protected:
   typedef struct omx_bitstream_ctx {
       uint8_t  length_size;
       uint8_t  first_idr;
+      uint8_t  idr_sps_pps_seen;
       uint8_t *sps_pps_data;
       uint32_t size;
   } omx_bitstream_ctx;

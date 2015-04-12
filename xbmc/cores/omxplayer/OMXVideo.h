@@ -61,9 +61,10 @@ public:
   std::string GetDecoderName() { return m_video_codec_name; };
   void SetVideoRect(const CRect& SrcRect, const CRect& DestRect, RENDER_STEREO_MODE video_mode, RENDER_STEREO_MODE display_mode);
   int GetInputBufferSize();
+  bool GetPlayerInfo(double &match, double &phase, double &pll);
   void SubmitEOS();
   bool IsEOS();
-  bool SubmittedEOS() { return m_submitted_eos; }
+  bool SubmittedEOS() const { return m_submitted_eos; }
   bool BadState() { return m_omx_decoder.BadState(); };
 protected:
   // Video format

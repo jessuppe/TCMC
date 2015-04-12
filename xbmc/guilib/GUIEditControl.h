@@ -70,7 +70,7 @@ public:
   virtual void SetLabel2(const std::string &text);
   void SetHint(const CGUIInfoLabel& hint);
 
-  virtual CStdString GetLabel2() const;
+  virtual std::string GetLabel2() const;
 
   unsigned int GetCursorPosition() const;
   void SetCursorPosition(unsigned int iPosition);
@@ -85,10 +85,13 @@ public:
   virtual void SetInputValidation(StringValidation::Validator inputValidator, void *data = NULL);
 
 protected:
+  virtual void SetFocus(bool focus);
   virtual void ProcessText(unsigned int currentTime);
   virtual void RenderText();
   virtual CGUILabel::COLOR GetTextColor() const;
-  CStdStringW GetDisplayedText() const;
+  std::wstring GetDisplayedText() const;
+  std::string GetDescriptionByIndex(int index) const;
+  bool SetStyledText(const std::wstring &text);
   void RecalcLabelPosition();
   void ValidateCursor();
   void UpdateText(bool sendUpdate = true);
@@ -96,7 +99,7 @@ protected:
   void OnSMSCharacter(unsigned int key);
   void DefaultConstructor();  
 
-  virtual bool ValidateInput(const CStdStringW &data) const;
+  virtual bool ValidateInput(const std::wstring &data) const;
   void ValidateInput();
 
   /*! \brief Clear out the current text input if it's an MD5 password.
@@ -104,8 +107,8 @@ protected:
    */
   bool ClearMD5();
   
-  CStdStringW m_text2;
-  CStdString  m_text;
+  std::wstring m_text2;
+  std::string  m_text;
   CGUIInfoLabel m_hintInfo;
   float m_textOffset;
   float m_textWidth;
@@ -129,6 +132,10 @@ protected:
   unsigned int m_smsKeyIndex;
   unsigned int m_smsLastKey;
   CStopWatch   m_smsTimer;
+
+  std::wstring m_edit;
+  int          m_editOffset;
+  int          m_editLength;
 
   static const char*        smsLetters[10];
   static const unsigned int smsDelay;

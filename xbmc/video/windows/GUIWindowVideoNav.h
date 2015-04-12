@@ -24,6 +24,21 @@
 
 class CFileItemList;
 
+enum SelectFirstUnwatchedItem
+{
+  NEVER = 0,
+  ON_FIRST_ENTRY = 1,
+  ALWAYS = 2
+};
+
+enum IncludeAllSeasonsAndSpecials
+{
+  NEITHER = 0,
+  BOTH = 1,
+  ALL_SEASONS = 2,
+  SPECIALS = 3
+};
+
 class CGUIWindowVideoNav : public CGUIWindowVideoBase
 {
 public:
@@ -52,21 +67,26 @@ protected:
   void LoadVideoInfo(CFileItemList &items);
 
   bool ApplyWatchedFilter(CFileItemList &items);
-  virtual bool GetFilteredItems(const CStdString &filter, CFileItemList &items);
+  virtual bool GetFilteredItems(const std::string &filter, CFileItemList &items);
 
   virtual void OnItemLoaded(CFileItem* pItem) {};
+
   // override base class methods
-  virtual bool GetDirectory(const CStdString &strDirectory, CFileItemList &items);
+  virtual bool Update(const std::string &strDirectory, bool updateFilterPath = true);
+  virtual bool GetDirectory(const std::string &strDirectory, CFileItemList &items);
   virtual void UpdateButtons();
-  virtual void DoSearch(const CStdString& strSearch, CFileItemList& items);
+  virtual void DoSearch(const std::string& strSearch, CFileItemList& items);
   virtual void PlayItem(int iItem);
   virtual void OnDeleteItem(CFileItemPtr pItem);
   virtual void GetContextButtons(int itemNumber, CContextButtons &buttons);
   virtual bool OnContextButton(int itemNumber, CONTEXT_BUTTON button);
   virtual bool OnClick(int iItem);
-  virtual CStdString GetStartFolder(const CStdString &dir);
-
-  virtual CStdString GetQuickpathName(const CStdString& strPath) const;
+  virtual std::string GetStartFolder(const std::string &dir);
 
   VECSOURCES m_shares;
+
+private:
+  virtual SelectFirstUnwatchedItem GetSettingSelectFirstUnwatchedItem();
+  virtual IncludeAllSeasonsAndSpecials GetSettingIncludeAllSeasonsAndSpecials();
+  virtual int GetFirstUnwatchedItemIndex(bool includeAllSeasons, bool includeSpecials);
 };

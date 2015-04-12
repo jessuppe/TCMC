@@ -32,11 +32,12 @@
 #include "Util.h"
 #include "StringUtils.h"
 #include "URL.h"
+#include "settings/Settings.h"
 
 using namespace XFILE;
 using namespace std;
 
-bool CFileUtils::DeleteItem(const CStdString &strPath, bool force)
+bool CFileUtils::DeleteItem(const std::string &strPath, bool force)
 {
   CFileItemPtr item(new CFileItem(strPath));
   item->SetPath(strPath);
@@ -74,24 +75,24 @@ bool CFileUtils::DeleteItem(const CFileItemPtr &item, bool force)
   return op.DoWork();
 }
 
-bool CFileUtils::RenameFile(const CStdString &strFile)
+bool CFileUtils::RenameFile(const std::string &strFile)
 {
-  CStdString strFileAndPath(strFile);
+  std::string strFileAndPath(strFile);
   URIUtils::RemoveSlashAtEnd(strFileAndPath);
-  CStdString strFileName = URIUtils::GetFileName(strFileAndPath);
-  CStdString strPath = URIUtils::GetDirectory(strFileAndPath);
+  std::string strFileName = URIUtils::GetFileName(strFileAndPath);
+  std::string strPath = URIUtils::GetDirectory(strFileAndPath);
   if (CGUIKeyboardFactory::ShowAndGetInput(strFileName, g_localizeStrings.Get(16013), false))
   {
     strPath = URIUtils::AddFileToFolder(strPath, strFileName);
     CLog::Log(LOGINFO,"FileUtils: rename %s->%s\n", strFileAndPath.c_str(), strPath.c_str());
     if (URIUtils::IsMultiPath(strFileAndPath))
     { // special case for multipath renames - rename all the paths.
-      vector<CStdString> paths;
+      vector<std::string> paths;
       CMultiPathDirectory::GetPaths(strFileAndPath, paths);
       bool success = false;
       for (unsigned int i = 0; i < paths.size(); ++i)
       {
-        CStdString filePath(paths[i]);
+        std::string filePath(paths[i]);
         URIUtils::RemoveSlashAtEnd(filePath);
         filePath = URIUtils::GetDirectory(filePath);
         filePath = URIUtils::AddFileToFolder(filePath, strFileName);
@@ -105,10 +106,10 @@ bool CFileUtils::RenameFile(const CStdString &strFile)
   return false;
 }
 
-bool CFileUtils::RemoteAccessAllowed(const CStdString &strPath)
+bool CFileUtils::RemoteAccessAllowed(const std::string &strPath)
 {
   const unsigned int SourcesSize = 5;
-  CStdString SourceNames[] = { "programs", "files", "video", "music", "pictures" };
+  std::string SourceNames[] = { "programs", "files", "video", "music", "pictures" };
 
   string realPath = URIUtils::GetRealPath(strPath);
   // for rar:// and zip:// paths we need to extract the path to the archive
@@ -142,6 +143,13 @@ bool CFileUtils::RemoteAccessAllowed(const CStdString &strPath)
     return true;
   else if (StringUtils::StartsWithNoCase(realPath, "plugin://"))
     return true;
+  else
+  {
+    std::string strPlaylistsPath = CSettings::Get().GetString("system.playlistspath");
+    URIUtils::RemoveSlashAtEnd(strPlaylistsPath);
+    if (StringUtils::StartsWithNoCase(realPath, strPlaylistsPath)) 
+      return true;
+  }
   bool isSource;
   for (unsigned int index = 0; index < SourcesSize; index++)
   {
@@ -151,16 +159,4 @@ bool CFileUtils::RemoteAccessAllowed(const CStdString &strPath)
       return true;
   }
   return false;
-}
-
-
-unsigned int CFileUtils::LoadFile(const std::string &filename, void* &outputBuffer)
-{
-  XFILE::auto_buffer buffer;
-  XFILE::CFile file;
-
-  const unsigned int total_read = file.LoadFile(filename, buffer);
-  outputBuffer = buffer.detach();
-
-  return total_read;
 }

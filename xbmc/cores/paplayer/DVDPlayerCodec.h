@@ -29,7 +29,7 @@
 
 namespace ActiveAE
 {
-  class CActiveAEResample;
+  class IAEResample;
 };
 
 class DVDPlayerCodec : public ICodec
@@ -38,7 +38,7 @@ public:
   DVDPlayerCodec();
   virtual ~DVDPlayerCodec();
 
-  virtual bool Init(const CStdString &strFile, unsigned int filecache);
+  virtual bool Init(const std::string &strFile, unsigned int filecache);
   virtual void DeInit();
   virtual int64_t Seek(int64_t iSeekTime);
   virtual int ReadPCM(BYTE *pBuffer, int size, int *actualsize);
@@ -46,7 +46,7 @@ public:
   virtual bool CanSeek();
   virtual CAEChannelInfo GetChannelInfo() {return m_ChannelInfo;}
 
-  void SetContentType(const CStdString &strContent);
+  void SetContentType(const std::string &strContent);
 
   bool NeedConvert(AEDataFormat fmt);
 
@@ -55,7 +55,7 @@ private:
   CDVDInputStream* m_pInputStream;
   CDVDAudioCodec* m_pAudioCodec;
 
-  CStdString m_strContentType;
+  std::string m_strContentType;
 
   std::string m_strFileName;
 
@@ -71,7 +71,7 @@ private:
   bool m_bInited;
   bool m_bCanSeek;
 
-  ActiveAE::CActiveAEResample *m_pResampler;
+  ActiveAE::IAEResample *m_pResampler;
   uint8_t *m_audioPlanes[8];
   int m_planes;
   bool m_needConvert;

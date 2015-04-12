@@ -25,6 +25,7 @@
 #include "cores/dvdplayer/DVDCodecs/Overlay/DVDOverlayImage.h"
 #include "cores/dvdplayer/DVDCodecs/Overlay/DVDOverlaySpu.h"
 #include "cores/dvdplayer/DVDCodecs/Overlay/DVDOverlaySSA.h"
+#include "cores/dvdplayer/DVDCodecs/Overlay/DVDOverlayText.h"
 #include "cores/VideoRenderers/RenderManager.h"
 #include "guilib/GraphicContext.h"
 #include "Application.h"
@@ -172,6 +173,7 @@ void CRenderer::Render(int idx)
 
   Release(m_cleanup);
 
+  std::vector<COverlay*> render;
   SElementV& list = m_buffers[idx];
   for(SElementV::iterator it = list.begin(); it != list.end(); ++it)
   {
@@ -184,19 +186,41 @@ void CRenderer::Render(int idx)
 
     if(!o)
       continue;
+ 
+    render.push_back(o);
+  }
 
-    Render(o);
+  float total_height = 0.0f;
+  for (std::vector<COverlay*>::iterator it = render.begin(); it != render.end(); ++it)
+  {
+    COverlay* o = *it;
+    o->PrepareRender();
+    if (o->m_align == COverlay::ALIGN_SUBTITLE)
+      total_height += o->m_height;
+  }
+
+  for (std::vector<COverlay*>::iterator it = render.begin(); it != render.end(); ++it)
+  {
+    COverlay* o = *it;
+
+    float adjust_height = 0.0f;
+    if (o->m_align == COverlay::ALIGN_SUBTITLE)
+    {
+      total_height -= o->m_height;
+      adjust_height = -total_height;
+    }
+
+    Render(o, adjust_height);
 
     o->Release();
   }
 }
 
-void CRenderer::Render(COverlay* o)
+void CRenderer::Render(COverlay* o, float adjust_height)
 {
   CRect rs, rd, rv;
   RESOLUTION_INFO res;
-  g_renderManager.GetVideoRect(rs, rd);
-  rv  = g_graphicsContext.GetViewWindow();
+  g_renderManager.GetVideoRect(rs, rd, rv);
   res = g_graphicsContext.GetResInfo(g_renderManager.GetResolution());
 
   SRenderState state;
@@ -276,20 +300,65 @@ void CRenderer::Render(COverlay* o)
   }
 
   state.x += GetStereoscopicDepth();
+  state.y += adjust_height;
 
   o->Render(state);
 }
 
+bool CRenderer::HasOverlay(int idx)
+{
+  bool hasOverlay = false;
+
+  CSingleLock lock(m_section);
+
+  SElementV& list = m_buffers[idx];
+  for(SElementV::iterator it = list.begin(); it != list.end(); ++it)
+  {
+    if (it->overlay || it->overlay_dvd)
+    {
+      hasOverlay = true;
+      break;
+    }
+  }
+  return hasOverlay;
+}
+
 COverlay* CRenderer::Convert(CDVDOverlaySSA* o, double pts)
 {
-  CRect src, dst;
-  g_renderManager.GetVideoRect(src, dst);
+  // libass render in a target area which named as frame. the frame size may bigger than video size,
+  // and including margins between video to frame edge. libass allow to render subtitles into the margins.
+  // this has been used to show subtitles in the top or bottom "black bar" between video to frame border.
+  CRect src, dst, target;
+  g_renderManager.GetVideoRect(src, dst, target);
+  int videoWidth = MathUtils::round_int(dst.Width());
+  int videoHeight = MathUtils::round_int(dst.Height());
+  int targetWidth = MathUtils::round_int(target.Width());
+  int targetHeight = MathUtils::round_int(target.Height());
+  int useMargin;
 
-  int width  = MathUtils::round_int(dst.Width());
-  int height = MathUtils::round_int(dst.Height());
-
+  int subalign = CSettings::Get().GetInt("subtitles.align");
+  if(subalign == SUBTITLE_ALIGN_BOTTOM_OUTSIDE
+  || subalign == SUBTITLE_ALIGN_TOP_OUTSIDE
+  || subalign == SUBTITLE_ALIGN_MANUAL)
+    useMargin = 1;
+  else
+    useMargin = 0;
+  double position;
+  // position used to call ass_set_line_position, it's vertical line position of subtitles in percent.
+  // value is 0-100: 0 = on the bottom (default), 100 = on top.
+  if(subalign == SUBTITLE_ALIGN_TOP_INSIDE
+  || subalign == SUBTITLE_ALIGN_TOP_OUTSIDE)
+    position = 100.0;
+  else if (subalign == SUBTITLE_ALIGN_MANUAL)
+  {
+    RESOLUTION_INFO res;
+    res = g_graphicsContext.GetResInfo(g_renderManager.GetResolution());
+    position = 100.0 - (res.iSubtitles - res.Overscan.top) * 100 / res.iHeight;
+  }
+  else
+    position = 0.0;
   int changes = 0;
-  ASS_Image* images = o->m_libass->RenderImage(width, height, pts, &changes);
+  ASS_Image* images = o->m_libass->RenderImage(targetWidth, targetHeight, videoWidth, videoHeight, pts, useMargin, position, &changes);
 
   if(o->m_overlay)
   {
@@ -297,12 +366,21 @@ COverlay* CRenderer::Convert(CDVDOverlaySSA* o, double pts)
       return o->m_overlay->Acquire();
   }
 
+  COverlay *overlay = NULL;
 #if defined(HAS_GL) || defined(HAS_GLES)
-  return new COverlayGlyphGL(images, width, height);
+  overlay = new COverlayGlyphGL(images, targetWidth, targetHeight);
 #elif defined(HAS_DX)
-  return new COverlayQuadsDX(images, width, height);
+  overlay = new COverlayQuadsDX(images, targetWidth, targetHeight);
 #endif
-  return NULL;
+  // scale to video dimensions
+  if (overlay)
+  {
+    overlay->m_width = (float)targetWidth / videoWidth;
+    overlay->m_height = (float)targetHeight / videoHeight;
+    overlay->m_x = ((float)videoWidth - targetWidth) / 2 / videoWidth;
+    overlay->m_y = ((float)videoHeight - targetHeight) / 2 / videoHeight;
+  }
+  return overlay;
 }
 
 

@@ -33,16 +33,16 @@ protected:
   {
     if (CSettings::Get().Initialize())
     {
-      std::vector<CStdString> advancedsettings =
+      std::vector<std::string> advancedsettings =
         CXBMCTestUtils::Instance().getAdvancedSettingsFiles();
-      std::vector<CStdString> guisettings =
+      std::vector<std::string> guisettings =
         CXBMCTestUtils::Instance().getGUISettingsFiles();
 
-      std::vector<CStdString>::iterator it;
-      for (it = guisettings.begin(); it < guisettings.end(); it++)
+      std::vector<std::string>::iterator it;
+      for (it = guisettings.begin(); it < guisettings.end(); ++it)
         CSettings::Get().Load(*it);
 
-      for (it = advancedsettings.begin(); it < advancedsettings.end(); it++)
+      for (it = advancedsettings.begin(); it < advancedsettings.end(); ++it)
         g_advancedSettings.ParseSettingsFile(*it);
 
       CSettings::Get().SetLoaded();
@@ -65,16 +65,16 @@ protected:
 TEST_F(TestFileFactory, Read)
 {
   XFILE::CFile file;
-  CStdString str;
+  std::string str;
   unsigned int size, i;
   unsigned char buf[16];
   int64_t count = 0;
 
-  std::vector<CStdString> urls =
+  std::vector<std::string> urls =
     CXBMCTestUtils::Instance().getTestFileFactoryReadUrls();
 
-  std::vector<CStdString>::iterator it;
-  for (it = urls.begin(); it < urls.end(); it++)
+  std::vector<std::string>::iterator it;
+  for (it = urls.begin(); it < urls.end(); ++it)
   {
     std::cout << "Testing URL: " << *it << std::endl;
     ASSERT_TRUE(file.Open(*it));
@@ -116,7 +116,7 @@ TEST_F(TestFileFactory, Read)
 TEST_F(TestFileFactory, Write)
 {
   XFILE::CFile file, inputfile;
-  CStdString str;
+  std::string str;
   unsigned int size, i;
   unsigned char buf[16];
   int64_t count = 0;
@@ -124,11 +124,11 @@ TEST_F(TestFileFactory, Write)
   str = CXBMCTestUtils::Instance().getTestFileFactoryWriteInputFile();
   ASSERT_TRUE(inputfile.Open(str));
 
-  std::vector<CStdString> urls =
+  std::vector<std::string> urls =
     CXBMCTestUtils::Instance().getTestFileFactoryWriteUrls();
 
-  std::vector<CStdString>::iterator it;
-  for (it = urls.begin(); it < urls.end(); it++)
+  std::vector<std::string>::iterator it;
+  for (it = urls.begin(); it < urls.end(); ++it)
   {
     std::cout << "Testing URL: " << *it << std::endl;
     std::cout << "Writing...";

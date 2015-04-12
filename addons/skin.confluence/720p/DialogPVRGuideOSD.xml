@@ -116,6 +116,14 @@
 						<texture>PVR-HasTimer.png</texture>
 						<visible>ListItem.HasTimer + !ListItem.IsRecording</visible>
 					</control>
+					<control type="image">
+						<left>60</left>
+						<top>7</top>
+						<width>16</width>
+						<height>16</height>
+						<texture>PVR-HasRecording.png</texture>
+						<visible>ListItem.HasRecording + !ListItem.IsRecording + !ListItem.HasTimer</visible>
+					</control>
 					<control type="label">
 						<left>100</left>
 						<top>0</top>
@@ -190,6 +198,14 @@
 						<texture>PVR-HasTimer.png</texture>
 						<visible>ListItem.HasTimer + !ListItem.IsRecording</visible>
 					</control>
+					<control type="image">
+						<left>60</left>
+						<top>7</top>
+						<width>16</width>
+						<height>16</height>
+						<texture>PVR-HasRecording.png</texture>
+						<visible>ListItem.HasRecording + !ListItem.IsRecording + !ListItem.HasTimer</visible>
+					</control>
 					<control type="label">
 						<left>100</left>
 						<top>0</top>
@@ -247,7 +263,7 @@
 				<align>right</align>
 				<aligny>center</aligny>
 				<label>([COLOR=blue]$INFO[Container(11).NumItems][/COLOR]) $LOCALIZE[31025] - $LOCALIZE[31024] ([COLOR=blue]$INFO[Container(11).CurrentPage]/$INFO[Container(11).NumPages][/COLOR])</label>
-				<include>Window_OpenClose_Animation</include>		
+				<include>Window_OpenClose_Animation</include>
 			</control>
 		</control>
 	</controls>

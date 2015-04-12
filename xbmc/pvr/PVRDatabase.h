@@ -59,7 +59,7 @@ namespace PVR
      * @brief Get the minimal database version that is required to operate correctly.
      * @return The minimal database version.
      */
-    virtual int GetSchemaVersion() const { return 24; };
+    virtual int GetSchemaVersion() const { return 29; };
 
     /*!
      * @brief Get the default sqlite database filename.
@@ -86,10 +86,9 @@ namespace PVR
     /*!
      * @brief Add or update a channel entry in the database
      * @param channel The channel to persist.
-     * @param bQueueWrite If true, don't write immediately
      * @return True when persisted or queued, false otherwise.
      */
-    bool Persist(CPVRChannel &channel, bool bQueueWrite = false);
+    bool Persist(CPVRChannel &channel);
 
     /*!
      * @brief Remove a channel entry from the database
@@ -104,39 +103,6 @@ namespace PVR
      * @return The amount of channels that were added.
      */
     int Get(CPVRChannelGroupInternal &results);
-
-    //@}
-
-    /*! @name Channel settings methods */
-    //@{
-
-    /*!
-     * @brief Remove all channel settings from the database.
-     * @return True if all channels were removed successfully, false if not.
-     */
-    bool DeleteChannelSettings();
-
-    /*!
-     * @brief Remove channel settings from the database.
-     * @return True if channel were removed successfully, false if not.
-     */
-    bool DeleteChannelSettings(const CPVRChannel &channel);
-
-    /*!
-     * @brief Get the channel settings from the database.
-     * @param channel The channel to get the settings for.
-     * @param settings Store the settings in here.
-     * @return True if the settings were fetched successfully, false if not.
-     */
-    bool GetChannelSettings(const CPVRChannel &channel, CVideoSettings &settings);
-
-    /*!
-     * @brief Store channel settings in the database.
-     * @param channel The channel to store the settings for.
-     * @param settings The settings to store.
-     * @return True if the settings were stored successfully, false if not.
-     */
-    bool PersistChannelSettings(const CPVRChannel &channel, const CVideoSettings &settings);
 
     //@}
 
@@ -187,39 +153,25 @@ namespace PVR
 
     /*! @name Client methods */
     //@{
-    /*!
-     * @brief Remove all client information from the database.
-     * @return True if all clients were removed successfully.
-     */
-    bool DeleteClients();
 
     /*!
-     * @brief Add a client to the database if it's not already in there.
-     * @param strClientName The name of the client.
-     * @param strGuid The unique ID of the client.
-     * @return The database ID of the client.
-     */
-    int Persist(const ADDON::AddonPtr addon);
+    * @brief Updates the last watched timestamp for the channel
+    * @param channel the channel
+    * @return whether the update was successful
+    */
+    bool UpdateLastWatched(const CPVRChannel &channel);
 
     /*!
-     * @brief Remove a client from the database
-     * @param strGuid The unique ID of the client.
-     * @return True if the client was removed successfully, false otherwise.
-     */
-    bool Delete(const CPVRClient &client);
-
-    /*!
-     * @brief Get the database ID of a client.
-     * @param strClientUid The unique ID of the client.
-     * @return The database ID of the client or -1 if it wasn't found.
-     */
-    int GetClientId(const CStdString &strClientUid);
+    * @brief Updates the last watched timestamp for the channel group
+    * @param group the group
+    * @return whether the update was successful
+    */
+    bool UpdateLastWatched(const CPVRChannelGroup &group);
     //@}
 
   private:
     /*!
      * @brief Create the PVR database tables.
-     * @return True if the tables were created successfully, false otherwise.
      */
     void CreateTables();
     void CreateAnalytics();
@@ -228,7 +180,6 @@ namespace PVR
     bool DeleteChannelsFromGroup(const CPVRChannelGroup &group, const std::vector<int> &channelsToDelete);
 
     bool GetCurrentGroupMembers(const CPVRChannelGroup &group, std::vector<int> &members);
-    int GetLastChannelId(void);
     bool RemoveStaleChannelsFromGroup(const CPVRChannelGroup &group);
 
     /*!
@@ -238,7 +189,7 @@ namespace PVR
     void UpdateTables(int version);
     virtual int GetMinSchemaVersion() const { return 11; }
 
-    bool PersistGroupMembers(CPVRChannelGroup &group);
+    bool PersistGroupMembers(const CPVRChannelGroup &group);
 
     bool PersistChannels(CPVRChannelGroup &group);
 

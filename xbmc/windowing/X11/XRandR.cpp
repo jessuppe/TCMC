@@ -30,6 +30,7 @@
 #include "utils/StringUtils.h"
 #include "../xbmc/utils/log.h"
 #include "threads/SystemClock.h"
+#include "CompileInfo.h"
 
 #if defined(TARGET_FREEBSD)
 #include <sys/types.h>
@@ -54,7 +55,7 @@ bool CXRandR::Query(bool force, bool ignoreoff)
 
   m_bInit = true;
 
-  if (getenv("XBMC_BIN_HOME") == NULL)
+  if (getenv("KODI_BIN_HOME") == NULL)
     return false;
 
   m_outputs.clear();
@@ -71,10 +72,15 @@ bool CXRandR::Query(bool force, bool ignoreoff)
 
 bool CXRandR::Query(bool force, int screennum, bool ignoreoff)
 {
-  CStdString cmd;
-  cmd  = getenv("XBMC_BIN_HOME");
-  cmd += "/xbmc-xrandr";
-  cmd = StringUtils::Format("%s -q --screen %d", cmd.c_str(), screennum);
+  std::string cmd;
+  std::string appname = CCompileInfo::GetAppName();
+  StringUtils::ToLower(appname);
+  if (getenv("KODI_BIN_HOME"))
+  {
+    cmd  = getenv("KODI_BIN_HOME");
+    cmd += "/" + appname + "-xrandr";
+    cmd = StringUtils::Format("%s -q --screen %d", cmd.c_str(), screennum);
+  }
 
   FILE* file = popen(cmd.c_str(),"r");
   if (!file)
@@ -111,6 +117,7 @@ bool CXRandR::Query(bool force, int screennum, bool ignoreoff)
     xoutput.h = (output->Attribute("h") != NULL ? atoi(output->Attribute("h")) : 0);
     xoutput.x = (output->Attribute("x") != NULL ? atoi(output->Attribute("x")) : 0);
     xoutput.y = (output->Attribute("y") != NULL ? atoi(output->Attribute("y")) : 0);
+    xoutput.crtc = (output->Attribute("crtc") != NULL ? atoi(output->Attribute("crtc")) : 0);
     xoutput.wmm = (output->Attribute("wmm") != NULL ? atoi(output->Attribute("wmm")) : 0);
     xoutput.hmm = (output->Attribute("hmm") != NULL ? atoi(output->Attribute("hmm")) : 0);
     if (output->Attribute("rotation") != NULL
@@ -147,16 +154,22 @@ bool CXRandR::Query(bool force, int screennum, bool ignoreoff)
   return m_outputs.size() > 0;
 }
 
-bool CXRandR::TurnOffOutput(CStdString name)
+bool CXRandR::TurnOffOutput(const std::string& name)
 {
   XOutput *output = GetOutput(name);
   if (!output)
     return false;
 
-  CStdString cmd;
-  cmd  = getenv("XBMC_BIN_HOME");
-  cmd += "/xbmc-xrandr";
-  cmd = StringUtils::Format("%s --screen %d --output %s --off", cmd.c_str(), output->screen, name.c_str());
+  std::string cmd;
+  std::string appname = CCompileInfo::GetAppName();
+  StringUtils::ToLower(appname);
+
+  if (getenv("KODI_BIN_HOME"))
+  {
+    cmd  = getenv("KODI_BIN_HOME");
+    cmd += "/" + appname + "-xrandr";
+    cmd = StringUtils::Format("%s --screen %d --output %s --off", cmd.c_str(), output->screen, name.c_str());
+  }
 
   int status = system(cmd.c_str());
   if (status == -1)
@@ -168,7 +181,7 @@ bool CXRandR::TurnOffOutput(CStdString name)
   return true;
 }
 
-bool CXRandR::TurnOnOutput(CStdString name)
+bool CXRandR::TurnOnOutput(const std::string& name)
 {
   XOutput *output = GetOutput(name);
   if (!output)
@@ -312,9 +325,14 @@ bool CXRandR::SetMode(XOutput output, XMode mode)
 
   m_currentOutput = outputFound.name;
   m_currentMode = modeFound.id;
+  std::string appname = CCompileInfo::GetAppName();
+  StringUtils::ToLower(appname);
   char cmd[255];
-  if (getenv("XBMC_BIN_HOME"))
-    snprintf(cmd, sizeof(cmd), "%s/xbmc-xrandr --screen %d --output %s --mode %s", getenv("XBMC_BIN_HOME"), outputFound.screen, outputFound.name.c_str(), modeFound.id.c_str());
+
+  if (getenv("KODI_BIN_HOME"))
+    snprintf(cmd, sizeof(cmd), "%s/%s-xrandr --screen %d --output %s --mode %s", 
+               getenv("KODI_BIN_HOME"),appname.c_str(),
+               outputFound.screen, outputFound.name.c_str(), modeFound.id.c_str());
   else
     return false;
   CLog::Log(LOGINFO, "XRANDR: %s", cmd);
@@ -328,7 +346,7 @@ bool CXRandR::SetMode(XOutput output, XMode mode)
   return true;
 }
 
-XMode CXRandR::GetCurrentMode(CStdString outputName)
+XMode CXRandR::GetCurrentMode(const std::string& outputName)
 {
   Query();
   XMode result;
@@ -351,7 +369,7 @@ XMode CXRandR::GetCurrentMode(CStdString outputName)
   return result;
 }
 
-XMode CXRandR::GetPreferredMode(CStdString outputName)
+XMode CXRandR::GetPreferredMode(const std::string& outputName)
 {
   Query();
   XMode result;
@@ -392,8 +410,8 @@ void CXRandR::LoadCustomModeLinesToAllOutputs(void)
   }
 
   char cmd[255];
-  CStdString name;
-  CStdString strModeLine;
+  std::string name;
+  std::string strModeLine;
 
   for (TiXmlElement* modeline = pRootElement->FirstChildElement("modeline"); modeline; modeline = modeline->NextSiblingElement("modeline"))
   {
@@ -401,20 +419,23 @@ void CXRandR::LoadCustomModeLinesToAllOutputs(void)
     StringUtils::Trim(name);
     strModeLine = modeline->FirstChild()->Value();
     StringUtils::Trim(strModeLine);
-    if (getenv("XBMC_BIN_HOME"))
+    std::string appname = CCompileInfo::GetAppName();
+    StringUtils::ToLower(appname);
+
+    if (getenv("KODI_BIN_HOME"))
     {
-      snprintf(cmd, sizeof(cmd), "%s/xbmc-xrandr --newmode \"%s\" %s > /dev/null 2>&1", getenv("XBMC_BIN_HOME"),
-               name.c_str(), strModeLine.c_str());
+      snprintf(cmd, sizeof(cmd), "%s/%s-xrandr --newmode \"%s\" %s > /dev/null 2>&1", getenv("KODI_BIN_HOME"),
+               appname.c_str(), name.c_str(), strModeLine.c_str());
       if (system(cmd) != 0)
         CLog::Log(LOGERROR, "Unable to create modeline \"%s\"", name.c_str());
     }
 
     for (unsigned int i = 0; i < m_outputs.size(); i++)
     {
-      if (getenv("XBMC_BIN_HOME"))
+      if (getenv("KODI_BIN_HOME"))
       {
-        snprintf(cmd, sizeof(cmd), "%s/xbmc-xrandr --addmode %s \"%s\"  > /dev/null 2>&1", getenv("XBMC_BIN_HOME"),
-                 m_outputs[i].name.c_str(), name.c_str());
+        snprintf(cmd, sizeof(cmd), "%s/%s-xrandr --addmode %s \"%s\"  > /dev/null 2>&1", getenv("KODI_BIN_HOME"),
+                 appname.c_str(), m_outputs[i].name.c_str(), name.c_str());
         if (system(cmd) != 0)
           CLog::Log(LOGERROR, "Unable to add modeline \"%s\"", name.c_str());
       }
@@ -428,7 +449,7 @@ void CXRandR::SetNumScreens(unsigned int num)
   m_bInit = false;
 }
 
-bool CXRandR::IsOutputConnected(CStdString name)
+bool CXRandR::IsOutputConnected(const std::string& name)
 {
   bool result = false;
   Query();
@@ -444,7 +465,7 @@ bool CXRandR::IsOutputConnected(CStdString name)
   return result;
 }
 
-XOutput* CXRandR::GetOutput(CStdString outputName)
+XOutput* CXRandR::GetOutput(const std::string& outputName)
 {
   XOutput *result = 0;
   Query();
@@ -457,6 +478,24 @@ XOutput* CXRandR::GetOutput(CStdString outputName)
     }
   }
   return result;
+}
+
+int CXRandR::GetCrtc(int x, int y)
+{
+  int crtc = 0;
+  for (unsigned int i = 0; i < m_outputs.size(); ++i)
+  {
+    if (!m_outputs[i].isConnected)
+      continue;
+
+    if ((m_outputs[i].x <= x && (m_outputs[i].x+m_outputs[i].w) > x) &&
+        (m_outputs[i].y <= y && (m_outputs[i].y+m_outputs[i].h) > y))
+    {
+      crtc = m_outputs[i].crtc;
+      break;
+    }
+  }
+  return crtc;
 }
 
 CXRandR g_xrandr;

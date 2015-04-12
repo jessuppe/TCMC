@@ -25,11 +25,12 @@
 #include "guilib/GUIControl.h"
 #include "guilib/GUIListItemLayout.h"
 #include "guilib/IGUIContainer.h"
+#include "pvr/channels/PVRChannel.h"
 
 namespace EPG
 {
   #define MAXCHANNELS 20
-  #define MAXBLOCKS   (16 * 24 * 60 / 5) //! 16 days of 5 minute blocks (14 days for upcoming data + 1 day for past data + 1 day for fillers)
+  #define MAXBLOCKS   (33 * 24 * 60 / 5) //! 33 days of 5 minute blocks (31 days for upcoming data + 1 day for past data + 1 day for fillers)
 
   struct GridItemsPtr
   {
@@ -61,11 +62,12 @@ namespace EPG
     virtual bool OnMessage(CGUIMessage& message);
     virtual void SetFocus(bool focus);
 
-    virtual CStdString GetDescription() const;
+    virtual std::string GetDescription() const;
     const int GetNumChannels()   { return m_channels; };
     virtual int GetSelectedItem() const;
     const int GetSelectedChannel() { return m_channelCursor + m_channelOffset; }
     void SetSelectedChannel(int channelIndex);
+    PVR::CPVRChannelPtr GetChannel(int iIndex);
     virtual EVENT_RESULT OnMouseEvent(const CPoint &point, const CMouseEvent &event);
 
     virtual void Process(unsigned int currentTime, CDirtyRegionList &dirtyregions);
@@ -75,7 +77,7 @@ namespace EPG
     void LoadContent(TiXmlElement *content);
 
     virtual CGUIListItemPtr GetListItem(int offset, unsigned int flag = 0) const;
-    virtual CStdString GetLabel(int info) const;
+    virtual std::string GetLabel(int info) const;
 
     /*! \brief Set the offset of the first item in the container from the container's position
      Useful for lists/panels where the focused item may be larger than the non-focused items and thus
@@ -88,8 +90,8 @@ namespace EPG
     void GoToEnd();
     void GoToNow();
     void SetStartEnd(CDateTime start, CDateTime end);
-    void SetChannel(const PVR::CPVRChannel &channel);
-    void SetChannel(const CStdString &channel);
+    void SetChannel(const PVR::CPVRChannelPtr &channel);
+    void SetChannel(const std::string &channel);
 
   protected:
     bool OnClick(int actionID);

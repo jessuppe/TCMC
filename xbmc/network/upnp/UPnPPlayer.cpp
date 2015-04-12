@@ -37,7 +37,7 @@
 #include "Application.h"
 #include "dialogs/GUIDialogBusy.h"
 #include "guilib/GUIWindowManager.h"
-#include "guilib/Key.h"
+#include "input/Key.h"
 #include "dialogs/GUIDialogYesNo.h"
 
 
@@ -591,7 +591,7 @@ failed:
   return 0;
 };
 
-CStdString CUPnPPlayer::GetPlayingTitle()
+std::string CUPnPPlayer::GetPlayingTitle()
 {
   return "";
 };

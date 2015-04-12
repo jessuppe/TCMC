@@ -21,10 +21,12 @@
 #include <iostream>
 #include <string>
 #include <set>
+#include <algorithm>
 
 #include "utils/log.h"
 #include "system.h" // for GetLastError()
 #include "network/WakeOnAccess.h"
+#include "Util.h"
 
 #ifdef HAS_MYSQL
 #include "mysqldataset.h"
@@ -132,7 +134,13 @@ int MysqlDatabase::connect(bool create_new) {
       return DB_CONNECTION_NONE;
 
     // establish connection with just user credentials
-    if (mysql_real_connect(conn, host.c_str(),login.c_str(),passwd.c_str(), NULL, atoi(port.c_str()),NULL,0) != NULL)
+    if (mysql_real_connect(conn, host.c_str(),
+                                 login.c_str(),
+                                 passwd.c_str(),
+                                 NULL,
+                                 atoi(port.c_str()),
+                                 NULL,
+                                 compression ? CLIENT_COMPRESS : 0) != NULL)
     {
       // disable mysql autocommit since we handle it
       //mysql_autocommit(conn, false);
@@ -430,7 +438,7 @@ long MysqlDatabase::nextid(const char* sname) {
     CLog::Log(LOGINFO,"Next id is [%.*s] ", (int) lengths[0], row[0]);
     sprintf(sqlcmd,"update %s set nextid=%d where seq_name = '%s'",seq_table,id,sname);
     mysql_free_result(res);
-    if ((last_err = query_with_reconnect(sqlcmd) != 0)) return DB_UNEXPECTED_RESULT;
+    if ((last_err = query_with_reconnect(sqlcmd)) != 0) return DB_UNEXPECTED_RESULT;
     return id;
   }
   return DB_UNEXPECTED_RESULT;
@@ -441,6 +449,7 @@ long MysqlDatabase::nextid(const char* sname) {
 void MysqlDatabase::start_transaction() {
   if (active)
   {
+    mysql_autocommit(conn, false);
     CLog::Log(LOGDEBUG,"Mysql Start transaction");
     _in_transaction = true;
   }
@@ -450,6 +459,7 @@ void MysqlDatabase::commit_transaction() {
   if (active)
   {
     mysql_commit(conn);
+    mysql_autocommit(conn, true);
     CLog::Log(LOGDEBUG,"Mysql commit transaction");
     _in_transaction = false;
   }
@@ -459,6 +469,7 @@ void MysqlDatabase::rollback_transaction() {
   if (active)
   {
     mysql_rollback(conn);
+    mysql_autocommit(conn, true);
     CLog::Log(LOGDEBUG,"Mysql rollback transaction");
     _in_transaction = false;
   }
@@ -552,8 +563,6 @@ string MysqlDatabase::vprepare(const char *format, va_list args)
 #define etSQLESCAPE3 15 /* %w -> Strings with '\"' doubled */
 
 #define etINVALID     0 /* Any unrecognized conversion type */
-
-#define ARRAY_SIZE(X)    ((int)(sizeof(X)/sizeof(X[0])))
 
 /*
 ** An "etByte" is an 8-bit unsigned value.
@@ -742,6 +751,7 @@ void MysqlDatabase::mysqlVXPrintf(
   etByte flag_rtz;           /* True if trailing zeros should be removed */
   etByte flag_exp;           /* True to force display of the exponent */
   int nsd;                   /* Number of significant digits returned */
+  size_t idx2;
 
   length = 0;
   bufpt = 0;
@@ -825,9 +835,9 @@ void MysqlDatabase::mysqlVXPrintf(
     /* Fetch the info entry for the field */
     infop = &fmtinfo[0];
     xtype = etINVALID;
-    for(idx=0; idx<ARRAY_SIZE(fmtinfo); idx++){
-      if( c==fmtinfo[idx].fmttype ){
-        infop = &fmtinfo[idx];
+    for(idx2=0; idx2<ARRAY_SIZE(fmtinfo); idx2++){
+      if( c==fmtinfo[idx2].fmttype ){
+        infop = &fmtinfo[idx2];
         if( useExtended || (infop->flags & FLAG_INTERN)==0 ){
           xtype = infop->type;
         }else{
@@ -1320,7 +1330,7 @@ void MysqlDataset::make_query(StringList &_sql) {
   {
     if (autocommit) db->start_transaction();
 
-    for (list<string>::iterator i =_sql.begin(); i!=_sql.end(); i++)
+    for (list<string>::iterator i =_sql.begin(); i!=_sql.end(); ++i)
     {
       query = *i;
       Dataset::parse_sql(query);
@@ -1471,7 +1481,7 @@ const void* MysqlDataset::getExecRes() {
 }
 
 
-bool MysqlDataset::query(const char *query) {
+bool MysqlDataset::query(const std::string &query) {
   if(!handle()) throw DbErrors("No Database Connection");
   std::string qry = query;
   int fs = qry.find("select");
@@ -1566,10 +1576,6 @@ bool MysqlDataset::query(const char *query) {
   ds_state = dsSelect;
   this->first();
   return true;
-}
-
-bool MysqlDataset::query(const string &q) {
-  return query(q.c_str());
 }
 
 void MysqlDataset::open(const string &sql) {

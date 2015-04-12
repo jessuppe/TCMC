@@ -31,7 +31,7 @@ namespace XBMCAddon
     void WindowDialogMixin::show()
     {
       XBMC_TRACE;
-      ThreadMessage tMsg = {TMSG_GUI_PYTHON_DIALOG, HACK_CUSTOM_ACTION_OPENING, 0u};
+      ThreadMessage tMsg = {TMSG_GUI_PYTHON_DIALOG, HACK_CUSTOM_ACTION_OPENING, 0};
       tMsg.lpVoid = w->window->get();
       CApplicationMessenger::Get().SendMessage(tMsg, true);
     }
@@ -59,7 +59,7 @@ namespace XBMCAddon
       case HACK_CUSTOM_ACTION_OPENING:
         {
           // This is from the CGUIPythonWindowXMLDialog::Show_Internal
-          g_windowManager.RouteToWindow(w->window->get());
+          g_windowManager.RegisterDialog(w->window->get());
           // active this dialog...
           CGUIMessage msg(GUI_MSG_WINDOW_INIT,0,0);
           w->OnMessage(msg);
