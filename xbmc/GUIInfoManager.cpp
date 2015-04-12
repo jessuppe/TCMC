@@ -567,6 +567,7 @@ const infomap listitem_labels[]= {{ "thumb",            LISTITEM_THUMB },
                                   { "isresumable",      LISTITEM_IS_RESUMABLE},
                                   { "percentplayed",    LISTITEM_PERCENT_PLAYED},
                                   { "isfolder",         LISTITEM_IS_FOLDER },
+                                  { "iscollection",     LISTITEM_IS_COLLECTION },
                                   { "originaltitle",    LISTITEM_ORIGINALTITLE },
                                   { "lastplayed",       LISTITEM_LASTPLAYED },
                                   { "playcount",        LISTITEM_PLAYCOUNT },
@@ -1037,6 +1038,8 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
         else if (cat == "tvshows") return LIBRARY_HAS_TVSHOWS;
         else if (cat == "musicvideos") return LIBRARY_HAS_MUSICVIDEOS;
         else if (cat == "moviesets") return LIBRARY_HAS_MOVIE_SETS;
+        else if (cat == "singles") return LIBRARY_HAS_SINGLES;
+        else if (cat == "compilations") return LIBRARY_HAS_COMPILATIONS;
       }
     }
     else if (cat.name == "musicplayer")
@@ -2272,7 +2275,7 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
   }
   else if (condition == PLAYER_MUTED)
     bReturn = g_application.IsMuted();
-  else if (condition >= LIBRARY_HAS_MUSIC && condition <= LIBRARY_HAS_MUSICVIDEOS)
+  else if (condition >= LIBRARY_HAS_MUSIC && condition <= LIBRARY_HAS_COMPILATIONS)
     bReturn = GetLibraryBool(condition);
   else if (condition == LIBRARY_IS_SCANNING)
   {
@@ -5382,6 +5385,13 @@ bool CGUIInfoManager::GetItemBool(const CGUIListItem *item, int condition) const
       }
       else if (pItem->HasEPGInfoTag())
       {
+        CEpgInfoTagPtr epgTag = pItem->GetEPGInfoTag();
+
+        // Check if the tag has a currently active recording associated
+        if (epgTag->HasRecording() && epgTag->IsActive())
+          return true;
+
+        // Search all timers for something that matches the tag
         CFileItemPtr timer = g_PVRTimers->GetTimerForEpgTag(pItem);
         if (timer && timer->HasPVRTimerInfoTag())
           return timer->GetPVRTimerInfoTag()->IsRecording();
@@ -5437,6 +5447,11 @@ bool CGUIInfoManager::GetItemBool(const CGUIListItem *item, int condition) const
           stereoMode = CStereoscopicsManager::Get().NormalizeStereoMode(pItem->GetVideoInfoTag()->m_streamDetails.GetStereoMode());
       if (!stereoMode.empty() && stereoMode != "mono")
         return true;
+    }
+    else if (condition == LISTITEM_IS_COLLECTION)
+    {
+      if (pItem->HasVideoInfoTag())
+        return (pItem->GetVideoInfoTag()->m_type == MediaTypeVideoCollection);
     }
   }
 
@@ -5602,6 +5617,12 @@ void CGUIInfoManager::SetLibraryBool(int condition, bool value)
     case LIBRARY_HAS_MUSICVIDEOS:
       m_libraryHasMusicVideos = value ? 1 : 0;
       break;
+    case LIBRARY_HAS_SINGLES:
+      m_libraryHasSingles = value ? 1 : 0;
+      break;
+    case LIBRARY_HAS_COMPILATIONS:
+      m_libraryHasCompilations = value ? 1 : 0;
+      break;
     default:
       break;
   }
@@ -5614,6 +5635,8 @@ void CGUIInfoManager::ResetLibraryBools()
   m_libraryHasTVShows = -1;
   m_libraryHasMusicVideos = -1;
   m_libraryHasMovieSets = -1;
+  m_libraryHasSingles = -1;
+  m_libraryHasCompilations = -1;
 }
 
 bool CGUIInfoManager::GetLibraryBool(int condition)
@@ -5682,6 +5705,32 @@ bool CGUIInfoManager::GetLibraryBool(int condition)
       }
     }
     return m_libraryHasMusicVideos > 0;
+  }
+  else if (condition == LIBRARY_HAS_SINGLES)
+  {
+    if (m_libraryHasSingles < 0)
+    {
+      CMusicDatabase db;
+      if (db.Open())
+      {
+        m_libraryHasSingles = (db.GetSinglesCount() > 0) ? 1 : 0;
+        db.Close();
+      }
+    }
+    return m_libraryHasSingles > 0;
+  }
+  else if (condition == LIBRARY_HAS_COMPILATIONS)
+  {
+    if (m_libraryHasCompilations < 0)
+    {
+      CMusicDatabase db;
+      if (db.Open())
+      {
+        m_libraryHasCompilations = (db.GetCompilationAlbumsCount() > 0) ? 1 : 0;
+        db.Close();
+      }
+    }
+    return m_libraryHasCompilations > 0;
   }
   else if (condition == LIBRARY_HAS_VIDEO)
   {

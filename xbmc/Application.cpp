@@ -107,9 +107,6 @@
 #include <SDL2/SDL.h>
 #endif
 
-#if defined(FILESYSTEM) && !defined(TARGET_POSIX)
-#include "filesystem/FileDAAP.h"
-#endif
 #ifdef HAS_UPNP
 #include "network/upnp/UPnP.h"
 #include "network/upnp/UPnPSettings.h"
@@ -190,6 +187,7 @@
 #include "utils/XMLUtils.h"
 #include "addons/AddonInstaller.h"
 #include "addons/AddonManager.h"
+#include "music/tags/MusicInfoTag.h"
 #include "music/tags/MusicInfoTagLoaderFactory.h"
 #include "CompileInfo.h"
 
@@ -330,6 +328,7 @@ CApplication::CApplication(void)
   m_currentStackPosition = 0;
   m_lastFrameTime = 0;
   m_lastRenderTime = 0;
+  m_skipGuiRender = false;
   m_bTestMode = false;
 
   m_muted = false;
@@ -1936,7 +1935,6 @@ void CApplication::Render()
   }
 
   CSingleLock lock(g_graphicsContext);
-  g_infoManager.UpdateFPS();
 
   if (g_graphicsContext.IsFullScreenVideo() && m_pPlayer->IsPlaying() && vsync_mode == VSYNC_VIDEO)
     g_Windowing.SetVSync(true);
@@ -1951,41 +1949,54 @@ void CApplication::Render()
   if(!g_Windowing.BeginRender())
     return;
 
-  CDirtyRegionList dirtyRegions = g_windowManager.GetDirty();
-  if(g_graphicsContext.GetStereoMode())
-  {
-    g_graphicsContext.SetStereoView(RENDER_STEREO_VIEW_LEFT);
-    if(RenderNoPresent())
-      hasRendered = true;
+  CDirtyRegionList dirtyRegions;
 
-    if(g_graphicsContext.GetStereoMode() != RENDER_STEREO_MODE_MONO)
+  // render gui layer
+  if (!m_skipGuiRender)
+  {
+    dirtyRegions = g_windowManager.GetDirty();
+    if (g_graphicsContext.GetStereoMode())
     {
-      g_graphicsContext.SetStereoView(RENDER_STEREO_VIEW_RIGHT);
-      if(RenderNoPresent())
+      g_graphicsContext.SetStereoView(RENDER_STEREO_VIEW_LEFT);
+      if (RenderNoPresent())
+        hasRendered = true;
+
+      if (g_graphicsContext.GetStereoMode() != RENDER_STEREO_MODE_MONO)
+      {
+        g_graphicsContext.SetStereoView(RENDER_STEREO_VIEW_RIGHT);
+        if (RenderNoPresent())
+          hasRendered = true;
+      }
+      g_graphicsContext.SetStereoView(RENDER_STEREO_VIEW_OFF);
+    }
+    else
+    {
+      if (RenderNoPresent())
         hasRendered = true;
     }
-    g_graphicsContext.SetStereoView(RENDER_STEREO_VIEW_OFF);
+    // execute post rendering actions (finalize window closing)
+    g_windowManager.AfterRender();
   }
-  else
-  {
-    if(RenderNoPresent())
-      hasRendered = true;
-  }
+
+  // render video layer
+  g_windowManager.RenderEx();
 
   g_Windowing.EndRender();
-
-  // execute post rendering actions (finalize window closing)
-  g_windowManager.AfterRender();
 
   // reset our info cache - we do this at the end of Render so that it is
   // fresh for the next process(), or after a windowclose animation (where process()
   // isn't called)
   g_infoManager.ResetCache();
-  lock.Leave();
+
 
   unsigned int now = XbmcThreads::SystemClockMillis();
   if (hasRendered)
+  {
+    g_infoManager.UpdateFPS();
     m_lastRenderTime = now;
+  }
+
+  lock.Leave();
 
   //when nothing has been rendered for m_guiDirtyRegionNoFlipTimeout milliseconds,
   //we don't call g_graphicsContext.Flip() anymore, this saves gpu and cpu usage
@@ -2469,8 +2480,26 @@ void CApplication::FrameMove(bool processEvents, bool processGUI)
   }
   if (processGUI && m_renderGUI)
   {
+    m_skipGuiRender = false;
+    int fps = 0;
+
+#if defined(TARGET_RASPBERRY_PI) || defined(HAS_IMXVPU)
+    // This code reduces rendering fps of the GUI layer when playing videos in fullscreen mode
+    // it makes only sense on architectures with multiple layers
+    if (g_graphicsContext.IsFullScreenVideo() && !m_pPlayer->IsPausedPlayback())
+      fps = CSettings::Get().GetInt("videoplayer.limitguiupdate");
+#endif
+
+    unsigned int now = XbmcThreads::SystemClockMillis();
+    unsigned int frameTime = now - m_lastRenderTime;
+    if (fps > 0 && frameTime * fps < 1000)
+      m_skipGuiRender = true;
+
     if (!m_bStop)
-      g_windowManager.Process(CTimeUtils::GetFrameTime());
+    {
+      if (!m_skipGuiRender)
+        g_windowManager.Process(CTimeUtils::GetFrameTime());
+    }
     g_windowManager.FrameMove();
   }
 }
@@ -2596,10 +2625,6 @@ void CApplication::Stop(int exitCode)
     StopServices();
     //Sleep(5000);
 
-#if HAS_FILESYTEM_DAAP
-    CLog::Log(LOGNOTICE, "stop daap clients");
-    g_DaapClient.Release();
-#endif
 #ifdef HAS_FILESYSTEM_SAP
     CLog::Log(LOGNOTICE, "stop sap announcement listener");
     g_sapsessions.StopThread();
