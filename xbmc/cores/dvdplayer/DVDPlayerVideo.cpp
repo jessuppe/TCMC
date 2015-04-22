@@ -201,10 +201,7 @@ bool CDVDPlayerVideo::OpenStream( CDVDStreamInfo &hint )
     return false;
   }
 
-  if(CSettings::Get().GetBool("videoplayer.usedisplayasclock") && !g_VideoReferenceClock.IsRunning())
-  {
-    g_VideoReferenceClock.Create();
-  }
+  g_VideoReferenceClock.Start();
 
   if(m_messageQueue.IsInited())
     m_messageQueue.Put(new CDVDMsgVideoCodecChange(hint, codec), 0);
@@ -1096,6 +1093,9 @@ int CDVDPlayerVideo::OutputPicture(const DVDVideoPicture* src, double pts)
   //try to calculate the framerate
   CalcFrameRate();
 
+  // remember original pts, we need it later for overlaying subtitles
+  double ptsovl = pts;
+
   // signal to clock what our framerate is, it may want to adjust it's
   // speed to better match with our video renderer's output speed
   double interval;
@@ -1187,7 +1187,7 @@ int CDVDPlayerVideo::OutputPicture(const DVDVideoPicture* src, double pts)
     return EOS_DROPPED;
   }
 
-  ProcessOverlays(pPicture, pts);
+  ProcessOverlays(pPicture, ptsovl);
 
   int index = g_renderManager.AddVideoPicture(*pPicture);
 
