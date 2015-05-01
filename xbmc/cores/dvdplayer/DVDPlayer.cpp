@@ -22,10 +22,8 @@
 #include "DVDPlayer.h"
 
 #include "DVDInputStreams/DVDInputStream.h"
-#include "DVDInputStreams/DVDInputStreamFile.h"
 #include "DVDInputStreams/DVDFactoryInputStream.h"
 #include "DVDInputStreams/DVDInputStreamNavigator.h"
-#include "DVDInputStreams/DVDInputStreamTV.h"
 #include "DVDInputStreams/DVDInputStreamPVRManager.h"
 
 #include "DVDDemuxers/DVDDemux.h"
@@ -33,8 +31,6 @@
 #include "DVDDemuxers/DVDDemuxVobsub.h"
 #include "DVDDemuxers/DVDFactoryDemuxer.h"
 #include "DVDDemuxers/DVDDemuxFFmpeg.h"
-#include "DVDCodecs/DVDCodecs.h"
-#include "DVDCodecs/DVDFactoryCodec.h"
 
 #include "DVDFileInfo.h"
 
@@ -49,9 +45,6 @@
 #include "guilib/StereoscopicsManager.h"
 #include "Application.h"
 #include "ApplicationMessenger.h"
-#include "filesystem/File.h"
-#include "pictures/Picture.h"
-#include "libswscale/swscale.h"
 
 #include "DVDDemuxers/DVDDemuxCC.h"
 #ifdef HAS_VIDEO_PLAYBACK
@@ -68,23 +61,17 @@
 #include "settings/Settings.h"
 #include "settings/MediaSettings.h"
 #include "utils/log.h"
-#include "utils/TimeUtils.h"
 #include "utils/StreamDetails.h"
 #include "pvr/PVRManager.h"
-#include "pvr/channels/PVRChannel.h"
-#include "filesystem/PVRFile.h"
-#include "video/dialogs/GUIDialogFullScreenInfo.h"
 #include "utils/StreamUtils.h"
 #include "utils/Variant.h"
 #include "storage/MediaManager.h"
 #include "dialogs/GUIDialogBusy.h"
 #include "dialogs/GUIDialogKaiToast.h"
-#include "xbmc/playlists/PlayListM3U.h"
 #include "utils/StringUtils.h"
 #include "Util.h"
 #include "LangInfo.h"
 #include "URL.h"
-#include "utils/LangCodeExpander.h"
 #include "video/VideoReferenceClock.h"
 
 #ifdef HAS_OMXPLAYER
@@ -92,6 +79,7 @@
 #include "cores/omxplayer/OMXPlayerVideo.h"
 #include "cores/omxplayer/OMXHelper.h"
 #endif
+#include "DVDPlayerAudio.h"
 
 using namespace std;
 using namespace PVR;
@@ -611,7 +599,7 @@ CDVDPlayer::CDVDPlayer(IPlayerCallback& callback)
   m_OmxPlayerState.current_deinterlace = CMediaSettings::Get().GetCurrentVideoSettings().m_DeinterlaceMode;
   m_OmxPlayerState.interlace_method    = VS_INTERLACEMETHOD_MAX;
 #ifdef HAS_OMXPLAYER
-  m_omxplayer_mode                     = (EDECODEMETHOD)CSettings::Get().GetInt("videoplayer.decodingmethod") == VS_DECODEMETHOD_HARDWARE && CSettings::Get().GetBool("videoplayer.useomxplayer");
+  m_omxplayer_mode                     = CSettings::Get().GetBool("videoplayer.useomxplayer");
 #else
   m_omxplayer_mode                     = false;
 #endif
@@ -1852,7 +1840,10 @@ void CDVDPlayer::HandlePlaySpeed()
       // the the bigger is the error we allow
       if (m_playSpeed > DVD_PLAYSPEED_NORMAL)
       {
-        error /= m_playSpeed / DVD_PLAYSPEED_NORMAL;
+        int errorwin = m_playSpeed / DVD_PLAYSPEED_NORMAL;
+        if (errorwin > 8)
+          errorwin = 8;
+        error /= errorwin;
       }
 
       if(error > DVD_MSEC_TO_TIME(1000))
@@ -2678,6 +2669,11 @@ void CDVDPlayer::HandleMessages()
           SetSubtitleVisibleInternal(true);
         }
       }
+      else if (pMsg->IsType(CDVDMsg::GENERAL_SYNCHRONIZE))
+      {
+        if (((CDVDMsgGeneralSynchronize*)pMsg)->Wait(100, SYNCSOURCE_OWNER))
+          CLog::Log(LOGDEBUG, "CDVDPlayer - CDVDMsg::GENERAL_SYNCHRONIZE");
+      }
 
     pMsg->Release();
   }
@@ -3168,6 +3164,15 @@ void CDVDPlayer::SeekTime(int64_t iTime)
   m_messenger.Put(new CDVDMsgPlayerSeek((int)iTime, true, true, true));
   SynchronizeDemuxer(100);
   m_callback.OnPlayBackSeek((int)iTime, seekOffset);
+}
+
+bool CDVDPlayer::SeekTimeRelative(int64_t iTime)
+{
+  int64_t abstime = GetTime() + iTime;
+  m_messenger.Put(new CDVDMsgPlayerSeek((int)abstime, (iTime < 0) ? true : false, true, false));
+  SynchronizeDemuxer(100);
+  m_callback.OnPlayBackSeek((int)abstime, iTime);
+  return true;
 }
 
 // return the time in milliseconds
