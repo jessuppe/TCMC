@@ -114,6 +114,7 @@ public:
   bool  GetSubtitleVisible();
   TextCacheStruct_t* GetTeletextCache();
   int64_t GetTime() const;
+  int64_t GetDisplayTime() const;
   int64_t GetTotalTime() const;
   void  GetVideoInfo(std::string& strVideoInfo);
   void  GetVideoStreamInfo(SPlayerVideoStreamInfo &info);
@@ -140,6 +141,7 @@ public:
   void  SeekPercentage(float fPercent = 0);
   bool  SeekScene(bool bPlus = true);
   void  SeekTime(int64_t iTime = 0);
+  void  SeekTimeRelative(int64_t iTime = 0);
   void  SetAudioStream(int iStream);
   void  SetAVDelay(float fValue = 0.0f);
   void  SetDynamicRangeCompression(long drc);

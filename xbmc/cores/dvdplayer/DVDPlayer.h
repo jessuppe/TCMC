@@ -27,18 +27,12 @@
 
 #include "DVDMessageQueue.h"
 #include "DVDClock.h"
-#include "DVDPlayerAudio.h"
 #include "DVDPlayerVideo.h"
 #include "DVDPlayerSubtitle.h"
 #include "DVDPlayerTeletext.h"
 
-//#include "DVDChapterReader.h"
-#include "DVDSubtitles/DVDFactorySubtitle.h"
-#include "utils/BitstreamStats.h"
-
 #include "Edl.h"
 #include "FileItem.h"
-#include "threads/SingleLock.h"
 #include "utils/StreamDetails.h"
 #include "threads/SystemClock.h"
 
@@ -94,6 +88,7 @@ class CDemuxStreamVideo;
 class CDemuxStreamAudio;
 class CStreamInfo;
 class CDVDDemuxCC;
+class CDVDPlayer;
 
 namespace PVR
 {
@@ -272,7 +267,9 @@ public:
   virtual int  SeekChapter(int iChapter);
 
   virtual void SeekTime(int64_t iTime);
+  virtual bool SeekTimeRelative(int64_t iTime);
   virtual int64_t GetTime();
+  virtual int64_t GetDisplayTime();
   virtual int64_t GetTotalTime();
   virtual void ToFFRW(int iSpeed);
   virtual bool OnAction(const CAction &action);
@@ -476,6 +473,7 @@ protected:
       player        = 0;
       timestamp     = 0;
       time          = 0;
+      disptime      = 0;
       time_total    = 0;
       time_offset   = 0;
       time_src      = ETIMESOURCE_CLOCK;
@@ -501,6 +499,7 @@ protected:
     double time_offset;       // difference between time and pts
 
     double time;              // current playback time
+    double disptime;          // current time of frame on screen
     double time_total;        // total playback time
     ETimeSource time_src;     // current time source
     double dts;               // last known dts
