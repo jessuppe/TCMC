@@ -178,19 +178,17 @@ double CDVDPlayerVideo::GetOutputDelay()
 
 bool CDVDPlayerVideo::OpenStream( CDVDStreamInfo &hint )
 {
-  unsigned int surfaces = 0;
-  std::vector<ERenderFormat> formats;
-#ifdef HAS_VIDEO_PLAYBACK
-  surfaces = g_renderManager.GetOptimalBufferSize();
-  formats  = g_renderManager.SupportedFormats();
-#endif
+  CRenderInfo info;
+  #ifdef HAS_VIDEO_PLAYBACK
+  info = g_renderManager.GetRenderInfo();
+  #endif
 
   m_pullupCorrection.ResetVFRDetection();
   if(hint.flags & AV_DISPOSITION_ATTACHED_PIC)
     return false;
 
   CLog::Log(LOGNOTICE, "Creating video codec with codec id: %i", hint.codec);
-  CDVDVideoCodec* codec = CDVDFactoryCodec::CreateVideoCodec(hint, surfaces, formats);
+  CDVDVideoCodec* codec = CDVDFactoryCodec::CreateVideoCodec(hint, info);
   if(!codec)
   {
     CLog::Log(LOGERROR, "Unsupported video codec");
@@ -470,6 +468,7 @@ void CDVDPlayerVideo::Process()
         if (pts == DVD_NOPTS_VALUE)
           pts = m_pClock->GetClock();
         state.time = DVD_TIME_TO_MSEC(pts + state.time_offset);
+        state.disptime = state.time;
         state.timestamp = CDVDClock::GetAbsoluteClock();
       }
       else
@@ -1157,8 +1156,10 @@ int CDVDPlayerVideo::OutputPicture(const DVDVideoPicture* src, double pts)
     int bufferLevel;
     g_renderManager.GetStats(sleepTime, renderPts, bufferLevel);
 
+    // estimate the time it will take for the next frame to get rendered
+    // drop the frame if it's late in regard to this estimation
     double diff = pts_org - renderPts;
-    double mindiff = DVD_SEC_TO_TIME(1/m_fFrameRate * m_speed / DVD_PLAYSPEED_NORMAL) * (bufferLevel +1);
+    double mindiff = DVD_SEC_TO_TIME(1/m_fFrameRate) * (bufferLevel + 1);
     if (diff < mindiff)
     {
       m_droppingStats.AddOutputDropGain(pts, 1/m_fFrameRate);
