@@ -19,17 +19,17 @@
  */
 
 #include "PVRDatabase.h"
+
+#include <utility>
+
 #include "dbwrappers/dataset.h"
+#include "addons/PVRClient.h"
+#include "pvr/channels/PVRChannelGroupInternal.h"
+#include "pvr/channels/PVRChannelGroupsContainer.h"
 #include "settings/AdvancedSettings.h"
-#include "settings/VideoSettings.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
-
-#include "PVRManager.h"
-#include "channels/PVRChannelGroupsContainer.h"
-#include "channels/PVRChannelGroupInternal.h"
-#include "addons/PVRClient.h"
 
 using namespace dbiplus;
 using namespace PVR;
@@ -63,7 +63,7 @@ void CPVRDatabase::CreateTables()
         "sEPGScraper          varchar(32), "
         "iLastWatched         integer,"
 
-        // TODO use mapping table
+        //! @todo use mapping table
         "iClientId            integer, "
 
         "idEpg                integer"
@@ -121,7 +121,7 @@ void CPVRDatabase::UpdateTables(int iVersion)
 
   if (iVersion < 24)
     m_pDS->exec("ALTER TABLE channels ADD bIsUserSetName bool");
-  
+
   if (iVersion < 25)
     m_pDS->exec("DROP TABLE IF EXISTS channelsettings");
 
@@ -138,42 +138,6 @@ void CPVRDatabase::UpdateTables(int iVersion)
 
   if (iVersion < 28)
   {
-    VECADDONS addons;
-    CAddonDatabase database;
-    if (database.Open() && CAddonMgr::Get().GetAddons(ADDON_PVRDLL, addons, true))
-    {
-      /** find all old client IDs */
-      std::string strQuery(PrepareSQL("SELECT idClient, sUid FROM clients"));
-      m_pDS->query(strQuery);
-      while (!m_pDS->eof() && !addons.empty())
-      {
-        /** try to find an add-on that matches the sUid */
-        for (VECADDONS::iterator it = addons.begin(); it != addons.end(); ++it)
-        {
-          if ((*it)->ID() == m_pDS->fv(1).get_asString())
-          {
-            /** try to get the current ID from the database */
-            int iAddonId = database.GetAddonId(*it);
-            /** register a new id if it didn't exist */
-            if (iAddonId <= 0)
-              iAddonId = database.AddAddon(*it, 0);
-            if (iAddonId > 0)
-            {
-              // this fails when an id becomes the id of one that's being replaced next iteration
-              // but since almost everyone only has 1 add-on enabled...
-              /** update the iClientId in the channels table */
-              strQuery = PrepareSQL("UPDATE channels SET iClientId = %u WHERE iClientId = %u", iAddonId, m_pDS->fv(0).get_asInt());
-              m_pDS->exec(strQuery);
-
-              /** no need to check this add-on again */
-              it = addons.erase(it);
-              break;
-            }
-          }
-        }
-        m_pDS->next();
-      }
-    }
     m_pDS->exec("DROP TABLE clients");
   }
 
@@ -187,23 +151,6 @@ bool CPVRDatabase::DeleteChannels(void)
 {
   CLog::Log(LOGDEBUG, "PVR - %s - deleting all channels from the database", __FUNCTION__);
   return DeleteValues("channels");
-}
-
-bool CPVRDatabase::DeleteClientChannels(const CPVRClient &client)
-{
-  /* invalid client Id */
-  if (client.GetID() <= 0)
-  {
-    CLog::Log(LOGERROR, "PVR - %s - invalid client id: %i", __FUNCTION__, client.GetID());
-    return false;
-  }
-
-  CLog::Log(LOGDEBUG, "PVR - %s - deleting all channels from client '%i' from the database", __FUNCTION__, client.GetID());
-
-  Filter filter;
-  filter.AppendWhere(PrepareSQL("iClientId = %u", client.GetID()));
-
-  return DeleteValues("channels", filter);
 }
 
 bool CPVRDatabase::Delete(const CPVRChannel &channel)
@@ -229,12 +176,12 @@ int CPVRDatabase::Get(CPVRChannelGroupInternal &results)
       "map_channelgroups_channels.iChannelNumber, channels.idEpg "
       "FROM map_channelgroups_channels "
       "LEFT JOIN channels ON channels.idChannel = map_channelgroups_channels.idChannel "
-      "WHERE map_channelgroups_channels.idGroup = %u", results.IsRadio() ? PVR_INTERNAL_GROUP_ID_RADIO : PVR_INTERNAL_GROUP_ID_TV);
+      "WHERE map_channelgroups_channels.idGroup = %u", results.GroupID());
   if (ResultQuery(strQuery))
   {
     try
     {
-      bool bIgnoreEpgDB = CSettings::Get().GetBool("epg.ignoredbforclient");
+      bool bIgnoreEpgDB = CSettings::GetInstance().GetBool(CSettings::SETTING_EPG_IGNOREDBFORCLIENT);
       while (!m_pDS->eof())
       {
         CPVRChannelPtr channel = CPVRChannelPtr(new CPVRChannel());
@@ -328,21 +275,6 @@ bool CPVRDatabase::GetCurrentGroupMembers(const CPVRChannelGroup &group, std::ve
   }
 
   return bReturn;
-}
-
-bool CPVRDatabase::DeleteChannelsFromGroup(const CPVRChannelGroup &group)
-{
-  /* invalid group id */
-  if (group.GroupID() <= 0)
-  {
-    CLog::Log(LOGERROR, "PVR - %s - invalid group id: %d", __FUNCTION__, group.GroupID());
-    return false;
-  }
-
-  Filter filter;
-  filter.AppendWhere(PrepareSQL("idGroup = %u", group.GroupID()));
-
-  return DeleteValues("map_channelgroups_channels", filter);
 }
 
 bool CPVRDatabase::DeleteChannelsFromGroup(const CPVRChannelGroup &group, const std::vector<int> &channelsToDelete)
@@ -526,7 +458,7 @@ int CPVRDatabase::Get(CPVRChannelGroup &group)
           PVRChannelGroupMember newMember = { channel, (unsigned int)iChannelNumber };
           group.m_sortedMembers.push_back(newMember);
           group.m_members.insert(std::make_pair(channel->StorageId(), newMember));
-          iReturn++;
+          ++iReturn;
         }
         else
         {
@@ -561,7 +493,13 @@ bool CPVRDatabase::PersistChannels(CPVRChannelGroup &group)
   for (PVR_CHANNEL_GROUP_MEMBERS::iterator it = group.m_members.begin(); it != group.m_members.end(); ++it)
   {
     if (it->second.channel->IsChanged() || it->second.channel->IsNew())
-      bReturn &= Persist(*it->second.channel);
+    {
+      if (Persist(*it->second.channel))
+      {
+        it->second.channel->Persisted();
+        bReturn = true;
+      }
+    }
   }
 
   bReturn &= CommitInsertQueries();

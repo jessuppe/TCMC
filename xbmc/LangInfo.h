@@ -19,19 +19,20 @@
  *
  */
 
+#include <locale>
+#include <map>
+#include <memory>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
+
 #include "settings/lib/ISettingCallback.h"
 #include "settings/lib/ISettingsHandler.h"
 #include "utils/GlobalsHandling.h"
 #include "utils/Locale.h"
 #include "utils/Speed.h"
 #include "utils/Temperature.h"
-
-#include <map>
-#include <memory>
-#include <set>
-#include <string>
-#include <vector>
-#include <locale>
 
 #ifdef TARGET_WINDOWS
 #ifdef GetDateFormat
@@ -63,10 +64,10 @@ public:
   virtual ~CLangInfo();
 
   // implementation of ISettingCallback
-  virtual void OnSettingChanged(const CSetting *setting);
+  virtual void OnSettingChanged(const CSetting *setting) override;
 
   // implementation of ISettingsHandler
-  virtual void OnSettingsLoaded();
+  virtual void OnSettingsLoaded() override;
 
   bool Load(const std::string& strLanguage);
 
@@ -129,6 +130,8 @@ public:
 
   const std::string& GetRegionLocale() const;
 
+  const std::locale& GetOriginalLocale() const;
+
   /*!
   \brief Returns the full locale of the current language.
   */
@@ -183,7 +186,9 @@ public:
   static void LoadTokens(const TiXmlNode* pTokens, std::set<std::string>& vecTokens);
 
   static void SettingOptionsLanguageNamesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
-  static void SettingOptionsStreamLanguagesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
+  static void SettingOptionsAudioStreamLanguagesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
+  static void SettingOptionsSubtitleStreamLanguagesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
+  static void SettingOptionsSubtitleDownloadlanguagesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
   static void SettingOptionsISO6391LanguagesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
   static void SettingOptionsRegionsFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
   static void SettingOptionsShortDateFormatsFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
@@ -199,6 +204,7 @@ protected:
   static bool DetermineUse24HourClockFromTimeFormat(const std::string& timeFormat);
   static bool DetermineUseMeridiemFromTimeFormat(const std::string& timeFormat);
   static std::string PrepareTimeFormat(const std::string& timeFormat, bool use24HourClock);
+  static void AddLanguages(std::vector< std::pair<std::string, std::string> > &list);
 
   class CRegion
   {
@@ -210,6 +216,27 @@ protected:
     void SetTemperatureUnit(const std::string& strUnit);
     void SetSpeedUnit(const std::string& strUnit);
     void SetTimeZone(const std::string& strTimeZone);
+
+    class custom_numpunct : public std::numpunct<char>
+    {
+    public:
+      custom_numpunct(const char decimal_point, const char thousands_sep, const std::string grouping)
+        : cDecimalPoint(decimal_point), cThousandsSep(thousands_sep), sGroup(grouping) {}
+    protected:
+      virtual char do_decimal_point() const { return cDecimalPoint; }
+      virtual char do_thousands_sep() const { return cThousandsSep; }
+      virtual std::string do_grouping() const { return sGroup; }
+    private:
+      const char cDecimalPoint;
+      const char cThousandsSep;
+      const std::string sGroup;
+    };
+
+    /*! \brief Set the locale associated with this region global.
+
+    Set the locale associated with this region global. This affects string
+    sorting & transformations.
+    */
     void SetGlobalLocale();
     std::string m_strLangLocaleName;
     std::string m_strLangLocaleCodeTwoChar;
@@ -220,6 +247,9 @@ protected:
     std::string m_strTimeFormat;
     std::string m_strMeridiemSymbols[2];
     std::string m_strTimeZone;
+    std::string m_strGrouping;
+    char m_cDecimalSep;
+    char m_cThousandsSep;
 
     CTemperature::Unit m_tempUnit;
     CSpeed::Unit m_speedUnit;
@@ -233,6 +263,7 @@ protected:
   CRegion* m_currentRegion; // points to the current region
   CRegion m_defaultRegion; // default, will be used if no region available via langinfo.xml
   std::locale m_systemLocale;     // current locale, matching GUI settings
+  std::locale m_originalLocale; // original locale, without changes of collate
 
   LanguageResourcePtr m_languageAddon;
 

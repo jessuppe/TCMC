@@ -26,7 +26,7 @@
 #include "threads/Atomics.h"
 #endif
 
-#if defined(TARGET_ANDROID)
+#if defined(TARGET_ANDROID) && !defined(__LP64__)
 #include <time64.h>
 #endif
 
@@ -88,7 +88,7 @@ BOOL FileTimeToLocalFileTime(const FILETIME* lpFileTime, LPFILETIME lpLocalFileT
   FileTimeToTimeT(lpFileTime, &ft);
   localtime_r(&ft, &tm_ft);
 
-  l.QuadPart += tm_ft.tm_gmtoff * 10000000;
+  l.QuadPart += (ULONGLONG)tm_ft.tm_gmtoff * 10000000;
 
   lpLocalFileTime->dwLowDateTime = l.u.LowPart;
   lpLocalFileTime->dwHighDateTime = l.u.HighPart;
@@ -121,7 +121,7 @@ BOOL   SystemTimeToFileTime(const SYSTEMTIME* lpSystemTime,  LPFILETIME lpFileTi
   CAtomicSpinLock lock(timegm_lock);
 #endif
 
-#if defined(TARGET_ANDROID)
+#if defined(TARGET_ANDROID) && !defined(__LP64__)
   time64_t t = timegm64(&sysTime);
 #else
   time_t t = timegm(&sysTime);

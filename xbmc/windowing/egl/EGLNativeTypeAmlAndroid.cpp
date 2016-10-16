@@ -23,19 +23,23 @@
 #include "EGLNativeTypeAmlAndroid.h"
 #include "utils/log.h"
 #include "guilib/gui3d.h"
-#include "android/activity/XBMCApp.h"
+#include "platform/android/activity/XBMCApp.h"
 #include "utils/StringUtils.h"
 #include "utils/SysfsUtils.h"
 #include "utils/AMLUtils.h"
+
+bool CEGLNativeTypeAmlAndroid::m_isWritable = false;
 
 bool CEGLNativeTypeAmlAndroid::CheckCompatibility()
 {
   if (aml_present())
   {
+    m_isWritable = false;
     if (SysfsUtils::HasRW("/sys/class/display/mode"))
-      return true;
+      m_isWritable = true;
     else
-      CLog::Log(LOGERROR, "AMLEGL: no rw on /sys/class/display/mode");
+      CLog::Log(LOGINFO, "AMLEGL: no rw on /sys/class/display/mode");
+    return true;
   }
   return false;
 }
@@ -62,78 +66,24 @@ bool CEGLNativeTypeAmlAndroid::GetNativeResolution(RESOLUTION_INFO *res) const
 
 bool CEGLNativeTypeAmlAndroid::SetNativeResolution(const RESOLUTION_INFO &res)
 {
-  switch((int)(res.fRefreshRate*10))
+  if (!m_isWritable)
+    return false;
+
+  if (res.iScreenWidth == 720 && !aml_IsHdmiConnected())
   {
-    default:
-    case 600:
-      switch(res.iScreenWidth)
-      {
-        default:
-        case 1280:
-          return SetDisplayResolution("720p");
-          break;
-        case 1920:
-          if (res.dwFlags & D3DPRESENTFLAG_INTERLACED)
-            return SetDisplayResolution("1080i");
-          else
-            return SetDisplayResolution("1080p");
-          break;
-      }
-      break;
-    case 500:
-      switch(res.iScreenWidth)
-      {
-        default:
-        case 1280:
-          return SetDisplayResolution("720p50hz");
-          break;
-        case 1920:
-          if (res.dwFlags & D3DPRESENTFLAG_INTERLACED)
-            return SetDisplayResolution("1080i50hz");
-          else
-            return SetDisplayResolution("1080p50hz");
-          break;
-      }
-      break;
-    case 300:
-      switch(res.iScreenWidth)
-      {
-        case 3840:
-          return SetDisplayResolution("4k2k30hz");
-          break;
-        default:
-          return SetDisplayResolution("1080p30hz");
-          break;
-      }
-      break;
-    case 250:
-      switch(res.iScreenWidth)
-      {
-        case 3840:
-          return SetDisplayResolution("4k2k25hz");
-          break;
-        default:
-          return SetDisplayResolution("1080p25hz");
-          break;
-      }
-      break;
-    case 240:
-      switch(res.iScreenWidth)
-      {
-        case 3840:
-          return SetDisplayResolution("4k2k24hz");
-          break;
-        case 4096:
-          return SetDisplayResolution("4k2ksmpte");
-          break;
-        default:
-          return SetDisplayResolution("1080p24hz");
-          break;
-      }
-      break;
+    if (res.iScreenHeight == 480)
+      return SetDisplayResolution("480cvbs");
+    else
+      return SetDisplayResolution("576cvbs");
   }
 
-  return false;
+  // Don't set the same mode as current
+  std::string mode;
+  SysfsUtils::GetString("/sys/class/display/mode", mode);
+  if (res.strId == mode)
+    return false;
+
+  return SetDisplayResolution(res.strId.c_str());
 }
 
 bool CEGLNativeTypeAmlAndroid::ProbeResolutions(std::vector<RESOLUTION_INFO> &resolutions)

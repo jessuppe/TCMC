@@ -22,6 +22,9 @@
 
 #if defined(TARGET_DARWIN_OSX)
 
+#include <string>
+#include <vector>
+
 #include "windowing/WinSystem.h"
 #include "threads/CriticalSection.h"
 #include "threads/Timer.h"
@@ -61,7 +64,6 @@ public:
   virtual void EnableSystemScreenSaver(bool bEnable);
   virtual bool IsSystemScreenSaverEnabled();
   virtual void ResetOSScreensaver();
-  virtual bool EnableFrameLimiter();
 
   virtual void EnableTextInput(bool bEnable);
   virtual bool IsTextInputEnabled();
@@ -71,6 +73,7 @@ public:
   
   virtual int GetNumScreens();
   virtual int GetCurrentScreen();
+  virtual double GetCurrentRefreshrate() { return m_refreshRate; }
   
   void        WindowChangedScreen();
 
@@ -80,10 +83,12 @@ public:
   void        StopLostDeviceTimer();
   
   void* GetCGLContextObj();
+  void* GetNSOpenGLContext();
 
   std::string GetClipboardText(void);
 
 protected:
+  void  HandlePossibleRefreshrateChange();
   void* CreateWindowedContext(void* shareCtx);
   void* CreateFullScreenContext(int screen_index, void* shareCtx);
   void  GetScreenResolution(int* w, int* h, double* fps, int screenIdx);
@@ -109,6 +114,7 @@ protected:
   void                        *m_windowDidMove;
   void                        *m_windowDidReSize;
   void                        *m_windowChangedScreen;
+  double                       m_refreshRate;
 
   CCriticalSection             m_resourceSection;
   std::vector<IDispResource*>  m_resources;

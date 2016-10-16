@@ -32,11 +32,13 @@
 #include "utils/TimeUtils.h"
 #include <string>
 
-using namespace std;
+#ifdef TARGET_POSIX
+#include "linux/XTimeUtils.h"
+#endif
 
 Display* CVideoSyncGLX::m_Dpy = NULL;
 
-void CVideoSyncGLX::OnLostDevice()
+void CVideoSyncGLX::OnLostDisplay()
 {
   if (!m_displayLost)
   {
@@ -45,7 +47,7 @@ void CVideoSyncGLX::OnLostDevice()
   }
 }
 
-void CVideoSyncGLX::OnResetDevice()
+void CVideoSyncGLX::OnResetDisplay()
 {
   m_displayReset = true;
 }
@@ -102,8 +104,8 @@ bool CVideoSyncGLX::Setup(PUPDATECLOCK func)
   }
 
   bool          ExtensionFound = false;
-  istringstream Extensions(glXQueryExtensionsString(m_Dpy, g_Windowing.GetCurrentScreen()));
-  string        ExtensionStr;
+  std::istringstream Extensions(glXQueryExtensionsString(m_Dpy, g_Windowing.GetCurrentScreen()));
+  std::string        ExtensionStr;
 
   while (!ExtensionFound)
   {
@@ -181,7 +183,7 @@ bool CVideoSyncGLX::Setup(PUPDATECLOCK func)
   return true;
 }
 
-void CVideoSyncGLX::Run(volatile bool& stop)
+void CVideoSyncGLX::Run(std::atomic<bool>& stop)
 {
   unsigned int  PrevVblankCount;
   unsigned int  VblankCount;
@@ -208,7 +210,7 @@ void CVideoSyncGLX::Run(volatile bool& stop)
 
     if (VblankCount > PrevVblankCount)
     {
-      UpdateClock((int)(VblankCount - PrevVblankCount), Now);
+      UpdateClock((int)(VblankCount - PrevVblankCount), Now, m_refClock);
       IsReset = false;
     }
     else

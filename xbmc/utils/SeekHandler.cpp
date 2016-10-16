@@ -20,16 +20,22 @@
 
 #include "SeekHandler.h"
 
+#include <cmath>
 #include <stdlib.h>
-#include "guilib/LocalizeStrings.h"
-#include "guilib/GraphicContext.h"
+
 #include "Application.h"
+#include "cores/DataCacheCore.h"
 #include "FileItem.h"
+#include "guilib/GraphicContext.h"
+#include "guilib/LocalizeStrings.h"
+#include "ServiceBroker.h"
 #include "settings/AdvancedSettings.h"
-#include "settings/Settings.h"
 #include "settings/lib/Setting.h"
+#include "settings/Settings.h"
 #include "utils/log.h"
+#include "utils/MathUtils.h"
 #include "utils/StringUtils.h"
+#include "utils/Variant.h"
 
 CSeekHandler::CSeekHandler()
 : m_seekDelay(500),
@@ -47,38 +53,36 @@ CSeekHandler::~CSeekHandler()
   m_backwardSeekSteps.clear();
 }
 
-CSeekHandler& CSeekHandler::Get()
+CSeekHandler& CSeekHandler::GetInstance()
 {
   static CSeekHandler instance;
   return instance;
 }
 
-void CSeekHandler::Reset()
+void CSeekHandler::Configure()
 {
-  m_requireSeek = false;
-  m_seekStep = 0;
-  m_seekSize = 0;
+  Reset();
 
   m_seekDelays.clear();
-  m_seekDelays.insert(std::make_pair(SEEK_TYPE_VIDEO, CSettings::Get().GetInt("videoplayer.seekdelay")));
-  m_seekDelays.insert(std::make_pair(SEEK_TYPE_MUSIC, CSettings::Get().GetInt("musicplayer.seekdelay")));
+  m_seekDelays.insert(std::make_pair(SEEK_TYPE_VIDEO, CSettings::GetInstance().GetInt(CSettings::SETTING_VIDEOPLAYER_SEEKDELAY)));
+  m_seekDelays.insert(std::make_pair(SEEK_TYPE_MUSIC, CSettings::GetInstance().GetInt(CSettings::SETTING_MUSICPLAYER_SEEKDELAY)));
 
   m_forwardSeekSteps.clear();
   m_backwardSeekSteps.clear();
 
   std::map<SeekType, std::string> seekTypeSettingMap;
-  seekTypeSettingMap.insert(std::make_pair(SEEK_TYPE_VIDEO, "videoplayer.seeksteps"));
-  seekTypeSettingMap.insert(std::make_pair(SEEK_TYPE_MUSIC, "musicplayer.seeksteps"));
+  seekTypeSettingMap.insert(std::make_pair(SEEK_TYPE_VIDEO, CSettings::SETTING_VIDEOPLAYER_SEEKSTEPS));
+  seekTypeSettingMap.insert(std::make_pair(SEEK_TYPE_MUSIC, CSettings::SETTING_MUSICPLAYER_SEEKSTEPS));
 
   for (std::map<SeekType, std::string>::iterator it = seekTypeSettingMap.begin(); it!=seekTypeSettingMap.end(); ++it)
   {
     std::vector<int> forwardSeekSteps;
     std::vector<int> backwardSeekSteps;
 
-    std::vector<CVariant> seekSteps = CSettings::Get().GetList(it->second);
+    std::vector<CVariant> seekSteps = CSettings::GetInstance().GetList(it->second);
     for (std::vector<CVariant>::iterator it = seekSteps.begin(); it != seekSteps.end(); ++it)
     {
-      int stepSeconds = (*it).asInteger();
+      int stepSeconds = static_cast<int>((*it).asInteger());
       if (stepSeconds < 0)
         backwardSeekSteps.insert(backwardSeekSteps.begin(), stepSeconds);
       else
@@ -90,8 +94,19 @@ void CSeekHandler::Reset()
   }
 }
 
+void CSeekHandler::Reset()
+{
+  m_requireSeek = false;
+  m_analogSeek = false;
+  m_seekStep = 0;
+  m_seekSize = 0;
+}
+
 int CSeekHandler::GetSeekStepSize(SeekType type, int step)
 {
+  if (step == 0)
+    return 0;
+
   std::vector<int> seekSteps(step > 0 ? m_forwardSeekSteps.at(type) : m_backwardSeekSteps.at(type));
 
   if (seekSteps.empty())
@@ -127,8 +142,6 @@ void CSeekHandler::Seek(bool forward, float amount, float duration /* = 0 */, bo
     }
 
     m_requireSeek = true;
-    m_seekStep = 0;
-    m_seekSize = 0;
     m_analogSeek = analogSeek;
     m_seekDelay = analogSeek ? analogSeekDelay : m_seekDelays.at(type);
   }
@@ -147,7 +160,7 @@ void CSeekHandler::Seek(bool forward, float amount, float duration /* = 0 */, bo
     if (totalTime < 0)
       totalTime = 0;
 
-    int seekSize = (amount * amount * speed) * totalTime / 100;
+    double seekSize = (amount * amount * speed) * totalTime / 100;
     if (forward)
       m_seekSize += seekSize;
     else
@@ -164,7 +177,7 @@ void CSeekHandler::Seek(bool forward, float amount, float duration /* = 0 */, bo
     else
     {
       // nothing to do, abort seeking
-      m_requireSeek = false;
+      Reset();
     }
   }
 
@@ -182,16 +195,18 @@ void CSeekHandler::SeekSeconds(int seconds)
 
   // perform relative seek
   g_application.m_pPlayer->SeekTimeRelative(static_cast<int64_t>(seconds * 1000));
+
+  Reset();
 }
 
 int CSeekHandler::GetSeekSize() const
 {
-  return m_seekSize;
+  return MathUtils::round_int(m_seekSize);
 }
 
 bool CSeekHandler::InProgress() const
 {
-  return m_requireSeek;
+  return m_requireSeek || CServiceBroker::GetDataCacheCore().IsSeeking();
 }
 
 void CSeekHandler::Process()
@@ -203,7 +218,7 @@ void CSeekHandler::Process()
     // perform relative seek
     g_application.m_pPlayer->SeekTimeRelative(static_cast<int64_t>(m_seekSize * 1000));
 
-    m_requireSeek = false;
+    Reset();
   }
 }
 
@@ -227,11 +242,11 @@ void CSeekHandler::OnSettingChanged(const CSetting *setting)
   if (setting == NULL)
     return;
 
-  if (setting->GetId() == "videoplayer.seekdelay" ||
-      setting->GetId() == "videoplayer.seeksteps" ||
-      setting->GetId() == "musicplayer.seekdelay" ||
-      setting->GetId() == "musicplayer.seeksteps")
-    Reset();
+  if (setting->GetId() == CSettings::SETTING_VIDEOPLAYER_SEEKDELAY ||
+      setting->GetId() == CSettings::SETTING_VIDEOPLAYER_SEEKSTEPS ||
+      setting->GetId() == CSettings::SETTING_MUSICPLAYER_SEEKDELAY ||
+      setting->GetId() == CSettings::SETTING_MUSICPLAYER_SEEKSTEPS)
+    Configure();
 }
 
 bool CSeekHandler::OnAction(const CAction &action)

@@ -20,11 +20,15 @@
  *
  */
 
+#include <map>
+#include <set>
 #include <vector>
+#include <utility>
 
-#include "Addon.h"
+#include "addons/Addon.h"
 #include "guilib/GraphicContext.h" // needed for the RESOLUTION members
 #include "guilib/GUIIncludes.h"    // needed for the GUIInclude member
+
 #define CREDIT_LINE_LENGTH 50
 
 class CSetting;
@@ -32,13 +36,69 @@ class CSetting;
 namespace ADDON
 {
 
+class CSkinSetting
+{
+public:
+  virtual ~CSkinSetting() { }
+
+  bool Serialize(TiXmlElement* parent) const;
+
+  virtual std::string GetType() const = 0;
+
+  virtual bool Deserialize(const TiXmlElement* element);
+
+  std::string name;
+
+protected:
+  virtual bool SerializeSetting(TiXmlElement* element) const = 0;
+};
+
+typedef std::shared_ptr<CSkinSetting> CSkinSettingPtr;
+
+class CSkinSettingString : public CSkinSetting
+{
+public:
+  virtual ~CSkinSettingString() { }
+
+  virtual std::string GetType() const { return "string"; }
+
+  virtual bool Deserialize(const TiXmlElement* element);
+
+  std::string value;
+
+protected:
+  virtual bool SerializeSetting(TiXmlElement* element) const;
+};
+
+typedef std::shared_ptr<CSkinSettingString> CSkinSettingStringPtr;
+
+class CSkinSettingBool : public CSkinSetting
+{
+public:
+  CSkinSettingBool()
+    : value(false)
+  { }
+  virtual ~CSkinSettingBool() { }
+
+  virtual std::string GetType() const { return "bool"; }
+
+  virtual bool Deserialize(const TiXmlElement* element);
+
+  bool value;
+
+protected:
+  virtual bool SerializeSetting(TiXmlElement* element) const;
+};
+
+typedef std::shared_ptr<CSkinSettingBool> CSkinSettingBoolPtr;
+
 class CSkinInfo : public CAddon
 {
 public:
   class CStartupWindow
   {
   public:
-    CStartupWindow(int id, const std::string &name):
+    CStartupWindow(int id, const char *name):
         m_id(id), m_name(name)
     {
     };
@@ -46,11 +106,21 @@ public:
     std::string m_name;
   };
 
-  //FIXME remove this, kept for current repo handling
-  CSkinInfo(const AddonProps &props, const RESOLUTION_INFO &res = RESOLUTION_INFO());
-  CSkinInfo(const cp_extension_t *ext);
-  virtual ~CSkinInfo();
-  virtual AddonPtr Clone() const;
+  static std::unique_ptr<CSkinInfo> FromExtension(AddonProps props, const cp_extension_t* ext);
+
+  //FIXME: CAddonCallbacksGUI/WindowXML hack
+  explicit CSkinInfo(AddonProps props, const RESOLUTION_INFO& resolution = RESOLUTION_INFO())
+      : CAddon(std::move(props)),
+        m_defaultRes(resolution),
+        m_effectsSlowDown(1.f),
+        m_debugging(false) {}
+
+  CSkinInfo(
+      AddonProps props,
+      const RESOLUTION_INFO& resolution,
+      const std::vector<RESOLUTION_INFO>& resolutions,
+      float effectsSlowDown,
+      bool debugging);
 
   /*! \brief Load resultion information from directories in Path().
    */
@@ -66,8 +136,6 @@ public:
    \return path to the XML file
    */
   std::string GetSkinPath(const std::string& file, RESOLUTION_INFO *res = NULL, const std::string& baseDir = "") const;
-
-  AddonVersion APIVersion() const { return m_version; };
 
   /*! \brief Return whether skin debugging is enabled
    \return true if skin debugging (set via <debugging>true</debugging> in skin.xml) is enabled.
@@ -110,13 +178,31 @@ public:
   const std::string& GetCurrentAspect() const { return m_currentAspect; }
 
   void LoadIncludes();
+  void ToggleDebug();
   const INFO::CSkinVariableString* CreateSkinVariable(const std::string& name, int context);
 
   static void SettingOptionsSkinColorsFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
   static void SettingOptionsSkinFontsFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
-  static void SettingOptionsSkinSoundFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
   static void SettingOptionsSkinThemesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
   static void SettingOptionsStartupWindowsFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
+
+  /*! \brief Don't handle skin settings like normal addon settings
+   */
+  virtual bool HasSettings() { return false; }
+  virtual bool HasUserSettings() { return false; }
+
+  int TranslateString(const std::string &setting);
+  const std::string& GetString(int setting) const;
+  void SetString(int setting, const std::string &label);
+
+  int TranslateBool(const std::string &setting);
+  bool GetBool(int setting) const;
+  void SetBool(int setting, bool set);
+
+  void Reset(const std::string &setting);
+  void Reset();
+
+  static std::set<CSkinSettingPtr> ParseSettings(const TiXmlElement* rootElement);
 
   virtual void OnPreInstall();
   virtual void OnPostInstall(bool update, bool modal);
@@ -137,10 +223,15 @@ protected:
 
   bool LoadStartupWindows(const cp_extension_t *ext);
 
+  static CSkinSettingPtr ParseSetting(const TiXmlElement* element);
+
+  virtual bool HasSettingsDefinition() const { return false; }
+  virtual bool HasSettingsToSave() const;
+  virtual bool SettingsFromXML(const CXBMCTinyXML &doc, bool loadDefaults = false);
+  virtual void SettingsToXML(CXBMCTinyXML &doc) const;
+
   RESOLUTION_INFO m_defaultRes;
   std::vector<RESOLUTION_INFO> m_resolutions;
-
-  AddonVersion m_version;
 
   float m_effectsSlowDown;
   CGUIIncludes m_includes;
@@ -148,6 +239,10 @@ protected:
 
   std::vector<CStartupWindow> m_startupWindows;
   bool m_debugging;
+
+private:
+  std::map<int, CSkinSettingStringPtr> m_strings;
+  std::map<int, CSkinSettingBoolPtr> m_bools;
 };
 
 } /*namespace ADDON*/

@@ -29,7 +29,7 @@
 #include "system.h"
 #include "PythonInvoker.h"
 #include "Application.h"
-#include "ApplicationMessenger.h"
+#include "messaging/ApplicationMessenger.h"
 #include "addons/AddonManager.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "filesystem/File.h"
@@ -49,8 +49,12 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
+#ifdef TARGET_POSIX
+#include "linux/XTimeUtils.h"
+#endif
 
 #ifdef TARGET_WINDOWS
+#pragma comment(lib, "python27.lib")
 extern "C" FILE *fopen_utf8(const char *_Filename, const char *_Mode);
 #else
 #define fopen_utf8 fopen
@@ -65,8 +69,8 @@ extern "C" FILE *fopen_utf8(const char *_Filename, const char *_Mode);
 // Time before ill-behaved scripts are terminated
 #define PYTHON_SCRIPT_TIMEOUT 5000 // ms
 
-using namespace std;
 using namespace XFILE;
+using namespace KODI::MESSAGING;
 
 extern "C"
 {
@@ -202,7 +206,7 @@ bool CPythonInvoker::execute(const std::string &script, const std::vector<std::s
         "modules installed to python path as fallback. This behaviour will be removed in future "
         "version.", GetId());
     ADDON::VECADDONS addons;
-    ADDON::CAddonMgr::Get().GetAddons(ADDON::ADDON_SCRIPT_MODULE, addons);
+    ADDON::CAddonMgr::GetInstance().GetAddons(addons, ADDON::ADDON_SCRIPT_MODULE);
     for (unsigned int i = 0; i < addons.size(); ++i)
       addPath(CSpecialProtocol::TranslatePath(addons[i]->LibPath()));
   }
@@ -476,8 +480,7 @@ bool CPythonInvoker::stop(bool abort)
       // on TMSG_GUI_PYTHON_DIALOG messages, so pump the message loop.
       if (g_application.IsCurrentThread())
       {
-        CSingleExit ex(g_graphicsContext);
-        CApplicationMessenger::Get().ProcessMessages();
+        CApplicationMessenger::GetInstance().ProcessMessages();
       }
     }
 
@@ -629,7 +632,7 @@ void CPythonInvoker::getAddonModuleDeps(const ADDON::AddonPtr& addon, std::set<s
   {
     //Check if dependency is a module addon
     ADDON::AddonPtr dependency;
-    if (ADDON::CAddonMgr::Get().GetAddon(it->first, dependency, ADDON::ADDON_SCRIPT_MODULE))
+    if (ADDON::CAddonMgr::GetInstance().GetAddon(it->first, dependency, ADDON::ADDON_SCRIPT_MODULE))
     {
       std::string path = CSpecialProtocol::TranslatePath(dependency->LibPath());
       if (paths.find(path) == paths.end())

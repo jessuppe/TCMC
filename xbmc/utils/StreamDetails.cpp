@@ -21,7 +21,7 @@
 #include <math.h>
 #include "StreamDetails.h"
 #include "StreamUtils.h"
-#include "Variant.h"
+#include "utils/Variant.h"
 #include "LangInfo.h"
 #include "utils/LangCodeExpander.h"
 #include "utils/Archive.h"
@@ -53,6 +53,7 @@ void CStreamDetailVideo::Archive(CArchive& ar)
     ar << m_iWidth;
     ar << m_iDuration;
     ar << m_strStereoMode;
+    ar << m_strLanguage;
   }
   else
   {
@@ -62,6 +63,7 @@ void CStreamDetailVideo::Archive(CArchive& ar)
     ar >> m_iWidth;
     ar >> m_iDuration;
     ar >> m_strStereoMode;
+    ar >> m_strLanguage;
   }
 }
 void CStreamDetailVideo::Serialize(CVariant& value) const
@@ -72,6 +74,7 @@ void CStreamDetailVideo::Serialize(CVariant& value) const
   value["width"] = m_iWidth;
   value["duration"] = m_iDuration;
   value["stereomode"] = m_strStereoMode;
+  value["language"] = m_strLanguage;
 }
 
 bool CStreamDetailVideo::IsWorseThan(CStreamDetail *that)
@@ -267,6 +270,15 @@ CStreamDetail *CStreamDetails::NewStream(CStreamDetail::StreamType type)
   return retVal;
 }
 
+std::string CStreamDetails::GetVideoLanguage(int idx) const
+{
+  CStreamDetailVideo *item = (CStreamDetailVideo*)GetNthStream(CStreamDetail::VIDEO, idx);
+  if (item)
+    return item->m_strLanguage;
+  else
+    return "";
+}
+
 int CStreamDetails::GetStreamCount(CStreamDetail::StreamType type) const
 {
   int retVal = 0;
@@ -294,6 +306,9 @@ int CStreamDetails::GetSubtitleStreamCount(void) const
 
 CStreamDetails::CStreamDetails(const CStreamDetails &that)
 {
+  m_pBestVideo = nullptr;
+  m_pBestAudio = nullptr;
+  m_pBestSubtitle = nullptr;
   *this = that;
 }
 
@@ -305,9 +320,9 @@ void CStreamDetails::AddStream(CStreamDetail *item)
 
 void CStreamDetails::Reset(void)
 {
-  m_pBestVideo = NULL;
-  m_pBestAudio = NULL;
-  m_pBestSubtitle = NULL;
+  m_pBestVideo = nullptr;
+  m_pBestAudio = nullptr;
+  m_pBestSubtitle = nullptr;
 
   std::vector<CStreamDetail *>::iterator iter;
   for (iter = m_vecItems.begin(); iter != m_vecItems.end(); ++iter)

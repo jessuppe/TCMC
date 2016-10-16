@@ -17,20 +17,19 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <cstdlib>
 
+#include "system.h"
+#include "addons/kodi-addon-dev-kit/include/kodi/xbmc_pvr_types.h"
 #include "dbwrappers/dataset.h"
 #include "settings/AdvancedSettings.h"
-#include "settings/VideoSettings.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
-#include "addons/include/xbmc_pvr_types.h"
 
-#include "EpgDatabase.h"
 #include "EpgContainer.h"
-#include "system.h"
+#include "EpgDatabase.h"
 
-using namespace std;
 using namespace dbiplus;
 using namespace EPG;
 
@@ -80,7 +79,8 @@ void CEpgDatabase::CreateTables(void)
         "iSeriesId       integer, "
         "iEpisodeId      integer, "
         "iEpisodePart    integer, "
-        "sEpisodeName    varchar(128)"
+        "sEpisodeName    varchar(128), "
+        "iFlags          integer"
       ")"
   );
   CLog::Log(LOGDEBUG, "EpgDB - %s - creating table 'lastepgscan'", __FUNCTION__);
@@ -105,7 +105,7 @@ void CEpgDatabase::UpdateTables(int iVersion)
 
   if (iVersion < 9)
     m_pDS->exec("ALTER TABLE epgtags ADD sIconPath varchar(255);");
-  
+
   if (iVersion < 10)
   {
     m_pDS->exec("ALTER TABLE epgtags ADD sOriginalTitle varchar(128);");
@@ -114,6 +114,11 @@ void CEpgDatabase::UpdateTables(int iVersion)
     m_pDS->exec("ALTER TABLE epgtags ADD sWriter varchar(255);");
     m_pDS->exec("ALTER TABLE epgtags ADD iYear integer;");
     m_pDS->exec("ALTER TABLE epgtags ADD sIMDBNumber varchar(50);");
+  }
+
+  if (iVersion < 11)
+  {
+    m_pDS->exec("ALTER TABLE epgtags ADD iFlags integer;");
   }
 }
 
@@ -144,15 +149,13 @@ bool CEpgDatabase::Delete(const CEpg &table)
   return DeleteValues("epg", filter);
 }
 
-bool CEpgDatabase::DeleteOldEpgEntries(void)
+bool CEpgDatabase::DeleteEpgEntries(const CDateTime &maxEndTime)
 {
-  time_t iCleanupTime;
-  CDateTime cleanupTime = CDateTime::GetCurrentDateTime().GetAsUTCDateTime() -
-      CDateTimeSpan(0, g_advancedSettings.m_iEpgLingerTime / 60, g_advancedSettings.m_iEpgLingerTime % 60, 0);
-  cleanupTime.GetAsTime(iCleanupTime);
+  time_t iMaxEndTime;
+  maxEndTime.GetAsTime(iMaxEndTime);
 
   Filter filter;
-  filter.AppendWhere(PrepareSQL("iEndTime < %u", iCleanupTime));
+  filter.AppendWhere(PrepareSQL("iEndTime < %u", iMaxEndTime));
 
   return DeleteValues("epgtags", filter);
 }
@@ -228,7 +231,10 @@ int CEpgDatabase::Get(CEpg &epg)
         CDateTime firstAired(iFirstAired);
         newTag->m_firstAired = firstAired;
 
-        newTag->m_iUniqueBroadcastID = m_pDS->fv("iBroadcastUid").get_asInt();
+        int iBroadcastUID = m_pDS->fv("iBroadcastUid").get_asInt();
+        // Compat: null value for broadcast uid changed from numerical -1 to 0 with PVR Addon API v4.0.0
+        newTag->m_iUniqueBroadcastID = iBroadcastUID == -1 ? EPG_TAG_INVALID_UID : iBroadcastUID;
+
         newTag->m_iBroadcastId       = m_pDS->fv("idBroadcast").get_asInt();
         newTag->m_strTitle           = m_pDS->fv("sTitle").get_asString().c_str();
         newTag->m_strPlotOutline     = m_pDS->fv("sPlotOutline").get_asString().c_str();
@@ -250,6 +256,7 @@ int CEpgDatabase::Get(CEpg &epg)
         newTag->m_strEpisodeName     = m_pDS->fv("sEpisodeName").get_asString().c_str();
         newTag->m_iSeriesNumber      = m_pDS->fv("iSeriesId").get_asInt();
         newTag->m_strIconPath        = m_pDS->fv("sIconPath").get_asString().c_str();
+        newTag->m_iFlags             = m_pDS->fv("iFlags").get_asInt();
 
         epg.AddEntry(*newTag);
         ++iReturn;
@@ -293,13 +300,12 @@ bool CEpgDatabase::PersistLastEpgScanTime(int iEpgId /* = 0 */, bool bQueueWrite
   return bQueueWrite ? QueueInsertQuery(strQuery) : ExecuteQuery(strQuery);
 }
 
-bool CEpgDatabase::Persist(const map<unsigned int, CEpg *> &epgs)
+bool CEpgDatabase::Persist(const EPGMAP &epgs)
 {
-  for (map<unsigned int, CEpg *>::const_iterator it = epgs.begin(); it != epgs.end(); ++it)
+  for (const auto &epgEntry : epgs)
   {
-    CEpg *epg = it->second;
-    if (epg)
-      Persist(*epg, true);
+    if (epgEntry.second)
+      Persist(*epgEntry.second, true);
   }
 
   return CommitInsertQueries();
@@ -348,7 +354,7 @@ int CEpgDatabase::Persist(const CEpgInfoTag &tag, bool bSingleUpdate /* = true *
 
   int iBroadcastId = tag.BroadcastId();
   std::string strQuery;
-  
+
   /* Only store the genre string when needed */
   std::string strGenre = (tag.GenreType() == EPG_GENRE_USE_STRING) ? StringUtils::Join(tag.Genre(), g_advancedSettings.m_videoItemSeparator) : "";
 
@@ -357,14 +363,14 @@ int CEpgDatabase::Persist(const CEpgInfoTag &tag, bool bSingleUpdate /* = true *
     strQuery = PrepareSQL("REPLACE INTO epgtags (idEpg, iStartTime, "
         "iEndTime, sTitle, sPlotOutline, sPlot, sOriginalTitle, sCast, sDirector, sWriter, iYear, sIMDBNumber, "
         "sIconPath, iGenreType, iGenreSubType, sGenre, iFirstAired, iParentalRating, iStarRating, bNotify, iSeriesId, "
-        "iEpisodeId, iEpisodePart, sEpisodeName, iBroadcastUid) "
-        "VALUES (%u, %u, %u, '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, %i, '%s', %u, %i, %i, %i, %i, %i, %i, '%s', %i);",
+        "iEpisodeId, iEpisodePart, sEpisodeName, iFlags, iBroadcastUid) "
+        "VALUES (%u, %u, %u, '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, %i, '%s', %u, %i, %i, %i, %i, %i, %i, '%s', %i, %i);",
         tag.EpgID(), iStartTime, iEndTime,
         tag.Title(true).c_str(), tag.PlotOutline(true).c_str(), tag.Plot(true).c_str(),
         tag.OriginalTitle(true).c_str(), tag.Cast().c_str(), tag.Director().c_str(), tag.Writer().c_str(), tag.Year(), tag.IMDBNumber().c_str(),
         tag.Icon().c_str(), tag.GenreType(), tag.GenreSubType(), strGenre.c_str(),
         iFirstAired, tag.ParentalRating(), tag.StarRating(), tag.Notify(),
-        tag.SeriesNumber(), tag.EpisodeNumber(), tag.EpisodePart(), tag.EpisodeName().c_str(),
+        tag.SeriesNumber(), tag.EpisodeNumber(), tag.EpisodePart(), tag.EpisodeName().c_str(), tag.Flags(),
         tag.UniqueBroadcastID());
   }
   else
@@ -372,14 +378,14 @@ int CEpgDatabase::Persist(const CEpgInfoTag &tag, bool bSingleUpdate /* = true *
     strQuery = PrepareSQL("REPLACE INTO epgtags (idEpg, iStartTime, "
         "iEndTime, sTitle, sPlotOutline, sPlot, sOriginalTitle, sCast, sDirector, sWriter, iYear, sIMDBNumber, "
         "sIconPath, iGenreType, iGenreSubType, sGenre, iFirstAired, iParentalRating, iStarRating, bNotify, iSeriesId, "
-        "iEpisodeId, iEpisodePart, sEpisodeName, iBroadcastUid, idBroadcast) "
-        "VALUES (%u, %u, %u, '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, %i, '%s', %u, %i, %i, %i, %i, %i, %i, '%s', %i, %i);",
+        "iEpisodeId, iEpisodePart, sEpisodeName, iFlags, iBroadcastUid, idBroadcast) "
+        "VALUES (%u, %u, %u, '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, %i, '%s', %u, %i, %i, %i, %i, %i, %i, '%s', %i, %i, %i);",
         tag.EpgID(), iStartTime, iEndTime,
         tag.Title(true).c_str(), tag.PlotOutline(true).c_str(), tag.Plot(true).c_str(),
         tag.OriginalTitle(true).c_str(), tag.Cast().c_str(), tag.Director().c_str(), tag.Writer().c_str(), tag.Year(), tag.IMDBNumber().c_str(),
         tag.Icon().c_str(), tag.GenreType(), tag.GenreSubType(), strGenre.c_str(),
         iFirstAired, tag.ParentalRating(), tag.StarRating(), tag.Notify(),
-        tag.SeriesNumber(), tag.EpisodeNumber(), tag.EpisodePart(), tag.EpisodeName().c_str(),
+        tag.SeriesNumber(), tag.EpisodeNumber(), tag.EpisodePart(), tag.EpisodeName().c_str(), tag.Flags(),
         tag.UniqueBroadcastID(), iBroadcastId);
   }
 

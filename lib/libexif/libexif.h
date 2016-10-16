@@ -85,9 +85,9 @@ typedef struct {
 #define MAX_DATE_COPIES 10
 
 typedef struct {
-    char  CameraMake   [32];
-    char  CameraModel  [40];
-    char  DateTime     [20];
+    char  CameraMake   [33];
+    char  CameraModel  [41];
+    char  DateTime     [21];
     int   Height, Width;
     int   Orientation;
     int   IsColor;
@@ -108,8 +108,11 @@ typedef struct {
     int   ISOequivalent;
     int   LightSource;
     int   CommentsCharset;             // EXIF_COMMENT_CHARSET_*
-    char  Comments[MAX_COMMENT];
-    char  Description[MAX_COMMENT];
+    int   XPCommentsCharset;
+    char  Comments[MAX_COMMENT + 1];   // +1 for null termination
+    char  FileComment[MAX_COMMENT + 1];
+    char  XPComment[MAX_COMMENT + 1];
+    char  Description[MAX_COMMENT + 1];
 
     unsigned ThumbnailOffset;          // Exif offset to thumbnail
     unsigned ThumbnailSize;            // Size of thumbnail.

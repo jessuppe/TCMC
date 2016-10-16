@@ -19,12 +19,15 @@
  */
 
 #include "GUIColorManager.h"
-#include "filesystem/SpecialProtocol.h"
+
+#include <utility>
+
 #include "addons/Skin.h"
+#include "filesystem/SpecialProtocol.h"
 #include "utils/log.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/XBMCTinyXML.h"
-#include "utils/StringUtils.h"
 
 CGUIColorManager g_colorManager;
 
@@ -53,8 +56,7 @@ void CGUIColorManager::Load(const std::string &colorFile)
     LoadXML(xmlDoc);
 
   // first load the default color map if it exists
-  std::string basePath = URIUtils::AddFileToFolder(g_SkinInfo->Path(), "colors");
-  std::string path = URIUtils::AddFileToFolder(basePath, "defaults.xml");
+  std::string path = URIUtils::AddFileToFolder(g_SkinInfo->Path(), "colors", "defaults.xml");
 
   if (xmlDoc.LoadFile(CSpecialProtocol::TranslatePathConvertCase(path)))
     LoadXML(xmlDoc);
@@ -63,7 +65,7 @@ void CGUIColorManager::Load(const std::string &colorFile)
   if (StringUtils::EqualsNoCase(colorFile, "SKINDEFAULT"))
     return; // nothing to do
 
-  path = URIUtils::AddFileToFolder(basePath, colorFile);
+  path = URIUtils::AddFileToFolder(g_SkinInfo->Path(), "colors", colorFile);
   if (!URIUtils::HasExtension(path))
     path += ".xml";
   CLog::Log(LOGINFO, "Loading colors from %s", path.c_str());

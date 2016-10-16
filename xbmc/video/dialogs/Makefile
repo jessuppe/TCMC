@@ -1,12 +1,11 @@
 SRCS=GUIDialogAudioSubtitleSettings.cpp \
-     GUIDialogFileStacking.cpp \
+     GUIDialogCMSSettings.cpp \
      GUIDialogFullScreenInfo.cpp \
      GUIDialogSubtitles.cpp \
      GUIDialogTeletext.cpp \
      GUIDialogVideoBookmarks.cpp \
      GUIDialogVideoInfo.cpp \
      GUIDialogVideoOSD.cpp \
-     GUIDialogVideoOverlay.cpp \
      GUIDialogVideoSettings.cpp \
 
 LIB=videodialogs.a

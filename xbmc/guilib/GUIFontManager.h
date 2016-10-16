@@ -28,6 +28,9 @@
  *
  */
 
+#include <utility>
+#include <vector>
+
 #include "GraphicContext.h"
 #include "IMsgTargetCallback.h"
 #include "utils/GlobalsHandling.h"

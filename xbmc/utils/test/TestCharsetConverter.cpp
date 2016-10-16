@@ -89,29 +89,30 @@ protected:
     /* Add default settings for locale.
      * Settings here are taken from CGUISettings::Initialize()
      */
-    /* TODO
-    CSettingsCategory *loc = CSettings::Get().AddCategory(7, "locale", 14090);
-    CSettings::Get().AddString(loc, "locale.language",248,"english",
+    /*
+    //! @todo implement
+    CSettingsCategory *loc = CSettings::GetInstance().AddCategory(7, "locale", 14090);
+    CSettings::GetInstance().AddString(loc, CSettings::SETTING_LOCALE_LANGUAGE,248,"english",
                             SPIN_CONTROL_TEXT);
-    CSettings::Get().AddString(loc, "locale.country", 20026, "USA",
+    CSettings::GetInstance().AddString(loc, CSettings::SETTING_LOCALE_COUNTRY, 20026, "USA",
                             SPIN_CONTROL_TEXT);
-    CSettings::Get().AddString(loc, "locale.charset", 14091, "DEFAULT",
+    CSettings::GetInstance().AddString(loc, CSettings::SETTING_LOCALE_CHARSET, 14091, "DEFAULT",
                             SPIN_CONTROL_TEXT); // charset is set by the
                                                 // language file
 
     // Add default settings for subtitles
-    CSettingsCategory *sub = CSettings::Get().AddCategory(5, "subtitles", 287);
-    CSettings::Get().AddString(sub, "subtitles.charset", 735, "DEFAULT",
+    CSettingsCategory *sub = CSettings::GetInstance().AddCategory(5, "subtitles", 287);
+    CSettings::GetInstance().AddString(sub, CSettings::SETTING_SUBTITLES_CHARSET, 735, "DEFAULT",
                             SPIN_CONTROL_TEXT);
     */
-    CSettings::Get().Initialize();
+    CSettings::GetInstance().Initialize();
     g_charsetConverter.reset();
     g_charsetConverter.clear();
   }
 
   ~TestCharsetConverter()
   {
-    CSettings::Get().Unload();
+    CSettings::GetInstance().Unload();
   }
 
   std::string refstra1, refstra2, varstra1;
@@ -132,7 +133,7 @@ TEST_F(TestCharsetConverter, utf8ToW)
 //TEST_F(TestCharsetConverter, utf16LEtoW)
 //{
 //  refstrw1 = L"ｔｅｓｔ＿ｕｔｆ１６ＬＥｔｏｗ";
-//  /* TODO: Should be able to use '=' operator instead of assign() */
+//  //! @todo Should be able to use '=' operator instead of assign()
 //  std::wstring refstr16_1;
 //  refstr16_1.assign(refutf16LE1);
 //  varstrw1.clear();
@@ -248,7 +249,7 @@ TEST_F(TestCharsetConverter, isValidUtf8_4)
   EXPECT_FALSE(CUtf8Utils::isValidUtf8(refutf16LE3));
 }
 
-/* TODO: Resolve correct input/output for this function */
+//! @todo Resolve correct input/output for this function
 // TEST_F(TestCharsetConverter, ucs2CharsetToStringCharset)
 // {
 //   void ucs2CharsetToStringCharset(const std::wstring& strSource,
@@ -258,7 +259,7 @@ TEST_F(TestCharsetConverter, isValidUtf8_4)
 TEST_F(TestCharsetConverter, wToUTF8)
 {
   refstrw1 = L"ｔｅｓｔ＿ｗＴｏＵＴＦ８";
-  refstra1 = "ｔｅｓｔ＿ｗＴｏＵＴＦ８";
+  refstra1 = u8"ｔｅｓｔ＿ｗＴｏＵＴＦ８";
   varstra1.clear();
   g_charsetConverter.wToUTF8(refstrw1, varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
@@ -300,7 +301,7 @@ TEST_F(TestCharsetConverter, utf8logicalToVisualBiDi)
   EXPECT_STREQ(refstra2.c_str(), varstra1.c_str());
 }
 
-/* TODO: Resolve correct input/output for this function */
+//! @todo Resolve correct input/output for this function
 // TEST_F(TestCharsetConverter, utf32ToStringCharset)
 // {
 //   void utf32ToStringCharset(const unsigned long* strSource, std::string& strDest);

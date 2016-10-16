@@ -18,15 +18,16 @@
  *
  */
 
-#include "GUIDialogPVRGuideOSD.h"
 #include "FileItem.h"
-#include "GUIDialogPVRGuideInfo.h"
+#include "epg/Epg.h"
 #include "guilib/GUIWindowManager.h"
 #include "input/Key.h"
 #include "view/ViewState.h"
-#include "epg/Epg.h"
 
 #include "pvr/PVRManager.h"
+
+#include "GUIDialogPVRGuideInfo.h"
+#include "GUIDialogPVRGuideOSD.h"
 
 using namespace PVR;
 
@@ -95,7 +96,7 @@ void CGUIDialogPVRGuideOSD::OnInitWindow()
 
   // select the active entry
   unsigned int iSelectedItem = 0;
-  for (int iEpgPtr = 0; iEpgPtr < m_vecItems->Size(); iEpgPtr++)
+  for (int iEpgPtr = 0; iEpgPtr < m_vecItems->Size(); ++iEpgPtr)
   {
     CFileItemPtr entry = m_vecItems->Get(iEpgPtr);
     if (entry->HasEPGInfoTag() && entry->GetEPGInfoTag()->IsActive())
@@ -132,8 +133,8 @@ void CGUIDialogPVRGuideOSD::ShowInfo(int item)
     return;
 
   /* inform dialog about the file item and open dialog window */
-  pDlgInfo->SetProgInfo(pItem.get());
-  pDlgInfo->DoModal();
+  pDlgInfo->SetProgInfo(pItem->GetEPGInfoTag());
+  pDlgInfo->Open();
 }
 
 void CGUIDialogPVRGuideOSD::OnWindowLoaded()

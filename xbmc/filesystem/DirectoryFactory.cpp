@@ -35,6 +35,7 @@
 #include "VideoDatabaseDirectory.h"
 #include "FavouritesDirectory.h"
 #include "LibraryDirectory.h"
+#include "EventsDirectory.h"
 #include "AddonsDirectory.h"
 #include "SourcesDirectory.h"
 #include "FTPDirectory.h"
@@ -42,7 +43,6 @@
 #include "DAVDirectory.h"
 #include "UDFDirectory.h"
 #include "Application.h"
-#include "addons/Addon.h"
 #include "utils/log.h"
 #include "network/WakeOnAccess.h"
 
@@ -68,21 +68,17 @@
 #ifdef HAS_UPNP
 #include "UPnPDirectory.h"
 #endif
-#ifdef HAS_FILESYSTEM_SAP
-#include "SAPDirectory.h"
-#endif
 #ifdef HAS_PVRCLIENTS
 #include "PVRDirectory.h"
 #endif
 #if defined(TARGET_ANDROID)
 #include "APKDirectory.h"
 #endif
+#include "XbtDirectory.h"
 #include "ZipDirectory.h"
 #ifdef HAS_FILESYSTEM_RAR
 #include "RarDirectory.h"
 #endif
-#include "HDHomeRunDirectory.h"
-#include "SlingboxDirectory.h"
 #include "FileItem.h"
 #include "URL.h"
 #include "RSSDirectory.h"
@@ -113,10 +109,10 @@ using namespace XFILE;
  */
 IDirectory* CDirectoryFactory::Create(const CURL& url)
 {
-  if (!CWakeOnAccess::Get().WakeUpHost(url))
+  if (!CWakeOnAccess::GetInstance().WakeUpHost(url))
     return NULL;
 
-  CFileItem item(url.Get(), false);
+  CFileItem item(url.Get(), true);
   IFileDirectory* pDir=CFileDirectoryFactory::Create(url, &item);
   if (pDir)
     return pDir;
@@ -151,6 +147,7 @@ IDirectory* CDirectoryFactory::Create(const CURL& url)
     CLog::Log(LOGWARNING, "%s - Compiled without non-free, rar support is disabled", __FUNCTION__);
 #endif
   }
+  if (url.IsProtocol("xbt")) return new CXbtDirectory();
   if (url.IsProtocol("multipath")) return new CMultiPathDirectory();
   if (url.IsProtocol("stack")) return new CStackDirectory();
   if (url.IsProtocol("playlistmusic")) return new CPlaylistDirectory();
@@ -160,16 +157,16 @@ IDirectory* CDirectoryFactory::Create(const CURL& url)
   if (url.IsProtocol("videodb")) return new CVideoDatabaseDirectory();
   if (url.IsProtocol("library")) return new CLibraryDirectory();
   if (url.IsProtocol("favourites")) return new CFavouritesDirectory();
-  if (url.IsProtocol("filereader"))
-  {
-    CURL url2(url.GetFileName());
-    return CDirectoryFactory::Create(url2);
-  }
 #if defined(TARGET_ANDROID)
   if (url.IsProtocol("androidapp")) return new CAndroidAppDirectory();
 #endif
+#ifdef HAVE_LIBBLURAY
+  if (url.IsProtocol("bluray")) return new CBlurayDirectory();
+#endif
+  if (url.IsProtocol("resource")) return new CResourceDirectory();
+  if (url.IsProtocol("events")) return new CEventsDirectory();
 
-  bool networkAvailable = g_application.getNetwork().IsAvailable(true); // true to wait for the network (if possible)
+  bool networkAvailable = g_application.getNetwork().IsAvailable();
   if (networkAvailable)
   {
     if (url.IsProtocol("ftp") || url.IsProtocol("ftps")) return new CFTPDirectory();
@@ -190,12 +187,7 @@ IDirectory* CDirectoryFactory::Create(const CURL& url)
 #ifdef HAS_UPNP
     if (url.IsProtocol("upnp")) return new CUPnPDirectory();
 #endif
-    if (url.IsProtocol("hdhomerun")) return new CHomeRunDirectory();
-    if (url.IsProtocol("sling")) return new CSlingboxDirectory();
     if (url.IsProtocol("rss")) return new CRSSDirectory();
-#ifdef HAS_FILESYSTEM_SAP
-    if (url.IsProtocol("sap")) return new CSAPDirectory();
-#endif
 #ifdef HAS_PVRCLIENTS
     if (url.IsProtocol("pvr")) return new CPVRDirectory();
 #endif
@@ -205,10 +197,6 @@ IDirectory* CDirectoryFactory::Create(const CURL& url)
 #ifdef HAS_FILESYSTEM_NFS
     if (url.IsProtocol("nfs")) return new CNFSDirectory();
 #endif
-#ifdef HAVE_LIBBLURAY
-      if (url.IsProtocol("bluray")) return new CBlurayDirectory();
-#endif
-      if (url.IsProtocol("resource")) return new CResourceDirectory();
   }
 
   CLog::Log(LOGWARNING, "%s - %sunsupported protocol(%s) in %s", __FUNCTION__, networkAvailable ? "" : "Network down or ", url.GetProtocol().c_str(), url.GetRedacted().c_str() );

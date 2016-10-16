@@ -22,26 +22,25 @@
 #if defined(TARGET_WINDOWS)
 
 #include "video/videosync/VideoSync.h"
-#include <d3d9.h>
-#include "guilib/D3DResource.h"
-#include "threads/CriticalSection.h"
+#include "guilib/DispResource.h"
 #include "threads/Event.h"
 
-class CVideoSyncD3D : public CVideoSync, ID3DResource
+class CVideoSyncD3D : public CVideoSync, IDispResource
 {
 public:
-  virtual bool Setup(PUPDATECLOCK func);
-  virtual void Run(volatile bool& stop);
-  virtual void Cleanup();
-  virtual float GetFps();
-  virtual void RefreshChanged();
+  CVideoSyncD3D(CVideoReferenceClock *clock) : CVideoSync(clock) {};
+  bool Setup(PUPDATECLOCK func) override;
+  void Run(std::atomic<bool>& stop) override;
+  void Cleanup() override;
+  float GetFps() override;
+  void RefreshChanged() override;
+  // IDispResource overrides
+  void OnLostDisplay() override;
+  void OnResetDisplay() override;
 
-  virtual void OnCreateDevice() {}
-  virtual void OnDestroyDevice();
-  virtual void OnResetDevice();
 private:
-  LPDIRECT3DDEVICE9 m_D3dDev;
-  int m_height;
+  static std::string GetErrorDescription(HRESULT hr);
+
   volatile bool m_displayLost;
   volatile bool m_displayReset;
   CEvent m_lostEvent;

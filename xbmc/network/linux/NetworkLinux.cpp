@@ -30,7 +30,7 @@
   #include <linux/sockios.h>
 #endif
 #ifdef TARGET_ANDROID
-#include "android/bionic_supplement/bionic_supplement.h"
+#include "platform/android/bionic_supplement/bionic_supplement.h"
 #include "sys/system_properties.h"
 #include <sys/wait.h>
 #endif
@@ -66,8 +66,6 @@
 #include "utils/StringUtils.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
-
-using namespace std;
 
 CNetworkInterfaceLinux::CNetworkInterfaceLinux(CNetworkLinux* network, std::string interfaceName, char interfaceMacAddrRaw[6]):
   m_interfaceName(interfaceName),
@@ -203,7 +201,7 @@ std::string CNetworkInterfaceLinux::GetCurrentDefaultGateway(void)
 
 #if defined(TARGET_DARWIN)
   FILE* pipe = popen("echo \"show State:/Network/Global/IPv4\" | scutil | grep Router", "r");
-  Sleep(100);
+  usleep(100000);
   if (pipe)
   {
     std::string tmpStr;
@@ -281,7 +279,7 @@ std::string CNetworkInterfaceLinux::GetCurrentDefaultGateway(void)
          continue;
 
       // search where the word begins
-      n = sscanf(line,  "%16s %128s %128s",
+      n = sscanf(line,  "%15s %127s %127s",
          iface, dst, gateway);
 
       if (n < 3)
@@ -321,7 +319,7 @@ CNetworkLinux::~CNetworkLinux(void)
   if (m_sock != -1)
     close(CNetworkLinux::m_sock);
 
-  vector<CNetworkInterface*>::iterator it = m_interfaces.begin();
+  std::vector<CNetworkInterface*>::iterator it = m_interfaces.begin();
   while(it != m_interfaces.end())
   {
     CNetworkInterface* nInt = *it;
@@ -335,10 +333,11 @@ std::vector<CNetworkInterface*>& CNetworkLinux::GetInterfaceList(void)
    return m_interfaces;
 }
 
-// Overwrite the GetFirstConnectedInterface and requery
-// the interface list if no connected device is found
-// this fixes a bug when no network is available after first start of xbmc
-// and the interface comes up during runtime
+//! @bug
+//! Overwrite the GetFirstConnectedInterface and requery
+//! the interface list if no connected device is found
+//! this fixes a bug when no network is available after first start of xbmc
+//! and the interface comes up during runtime
 CNetworkInterface* CNetworkLinux::GetFirstConnectedInterface(void)
 {
     CNetworkInterface *pNetIf=CNetwork::GetFirstConnectedInterface();
@@ -475,10 +474,10 @@ std::vector<std::string> CNetworkLinux::GetNameServers(void)
 
 #if defined(TARGET_DARWIN)
   FILE* pipe = popen("scutil --dns | grep \"nameserver\" | tail -n2", "r");
-  Sleep(100);
+  usleep(100000);
   if (pipe)
   {
-    vector<std::string> tmpStr;
+    std::vector<std::string> tmpStr;
     char buffer[256] = {'\0'};
     if (fread(buffer, sizeof(char), sizeof(buffer), pipe) > 0 && !ferror(pipe))
     {
@@ -533,7 +532,7 @@ void CNetworkLinux::SetNameServers(const std::vector<std::string>& nameServers)
    }
    else
    {
-      // TODO:
+      //! @todo implement
    }
 #endif
 }
@@ -907,7 +906,7 @@ void CNetworkInterfaceLinux::GetSettings(NetworkAssignment& assignment, std::str
    FILE* fp = fopen("/etc/network/interfaces", "r");
    if (!fp)
    {
-      // TODO
+      //! @todo implement
       return;
    }
 
@@ -984,14 +983,14 @@ void CNetworkInterfaceLinux::SetSettings(NetworkAssignment& assignment, std::str
    FILE* fr = fopen("/etc/network/interfaces", "r");
    if (!fr)
    {
-      // TODO
+      //! @todo implement
       return;
    }
 
    FILE* fw = fopen("/tmp/interfaces.temp", "w");
    if (!fw)
    {
-      // TODO
+      //! @todo implement
       fclose(fr);
       return;
    }
@@ -1061,7 +1060,7 @@ void CNetworkInterfaceLinux::SetSettings(NetworkAssignment& assignment, std::str
    // Rename the file
    if (rename("/tmp/interfaces.temp", "/etc/network/interfaces") < 0)
    {
-      // TODO
+      //! @todo implement
       return;
    }
 

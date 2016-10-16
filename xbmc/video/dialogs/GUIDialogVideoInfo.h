@@ -37,6 +37,7 @@ public:
   bool NeedRefresh() const;
   bool RefreshAll() const;
   bool HasUpdatedThumb() const { return m_hasUpdatedThumb; };
+  bool HasUpdatedUserrating() const { return m_hasUpdatedUserrating; };
 
   std::string GetThumbnail() const;
   virtual CFileItemPtr GetCurrentListItem(int offset = 0) { return m_movieItem; }
@@ -64,10 +65,14 @@ public:
   static bool ManageVideoItemArtwork(const CFileItemPtr &item, const MediaType &type);
 
   static std::string GetLocalizedVideoType(const std::string &strType);
+
+  static void ShowFor(const CFileItem& item);
+
 protected:
   virtual void OnInitWindow();
   void Update();
   void SetLabel(int iControl, const std::string& strLabel);
+  void SetUserrating(int userrating);
 
   // link cast to movies
   void ClearCastList();
@@ -77,6 +82,7 @@ protected:
   void Play(bool resume = false);
   void OnGetArt();
   void OnGetFanart();
+  void OnSetUserrating();
   void PlayTrailer();
 
   static bool UpdateVideoItemSortTitle(const CFileItemPtr &pItem);
@@ -93,4 +99,6 @@ protected:
   bool m_bRefresh;
   bool m_bRefreshAll;
   bool m_hasUpdatedThumb;
+  bool m_hasUpdatedUserrating;
+  int m_startUserrating;
 };

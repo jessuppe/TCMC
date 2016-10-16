@@ -24,7 +24,6 @@
 #include "utils/StringUtils.h"
 #include "utils/Variant.h"
 
-using namespace std;
 using namespace XFILE;
 using namespace XFILE::MUSICDATABASEDIRECTORY;
 
@@ -102,6 +101,10 @@ bool CMusicDbUrl::parse()
 
     case NODE_TYPE_GENRE:
       m_type = "genres";
+      break;
+
+    case NODE_TYPE_ROLE:
+      m_type = "roles";
       break;
 
     case NODE_TYPE_YEAR:

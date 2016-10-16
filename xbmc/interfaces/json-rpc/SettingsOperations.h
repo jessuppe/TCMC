@@ -19,8 +19,11 @@
  *
  */
 
+#include <vector>
+
 #include "JSONRPC.h"
 
+class CVariant;
 class ISetting;
 class CSettingSection;
 class CSettingCategory;

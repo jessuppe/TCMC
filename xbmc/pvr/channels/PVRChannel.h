@@ -1,5 +1,4 @@
 #pragma once
-
 /*
  *      Copyright (C) 2012-2013 Team XBMC
  *      http://xbmc.org
@@ -20,20 +19,23 @@
  *
  */
 
-#include "XBDateTime.h"
-#include "FileItem.h"
-#include "addons/include/xbmc_pvr_types.h"
-#include "utils/Observer.h"
+#include "addons/kodi-addon-dev-kit/include/kodi/xbmc_pvr_types.h"
 #include "threads/CriticalSection.h"
 #include "utils/ISerializable.h"
+#include "utils/ISortable.h"
+#include "utils/Observer.h"
 
 #include <memory>
+#include <string>
+#include <utility>
 
-#define PVR_INVALID_CHANNEL_UID -1
+class CVariant;
+class CFileItemList;
 
 namespace EPG
 {
   class CEpg;
+  typedef std::shared_ptr<CEpg> CEpgPtr;
   class CEpgInfoTag;
   typedef std::shared_ptr<CEpgInfoTag> CEpgInfoTagPtr;
 
@@ -43,6 +45,9 @@ namespace PVR
 {
   class CPVRDatabase;
   class CPVRChannelGroupInternal;
+
+  class CPVRRecording;
+  typedef std::shared_ptr<CPVRRecording> CPVRRecordingPtr;
 
   class CPVRChannel;
   typedef std::shared_ptr<PVR::CPVRChannel> CPVRChannelPtr;
@@ -144,11 +149,6 @@ namespace PVR
      */
     std::string FormattedChannelNumber(void) const;
 
-    /**
-     * @return True when this channel is marked as sub channel by the add-on, false if it's marked as main channel
-     */
-    bool IsClientSubChannel(void) const;
-
     /*!
      * @brief Set to true to hide this channel. Set to false to unhide it.
      *
@@ -249,6 +249,11 @@ namespace PVR
     bool IsEmpty() const;
 
     bool IsChanged() const;
+
+    /*!
+     * @brief reset changed flag after persist
+     */
+    void Persisted();
     //@}
 
     /*! @name Client related channel methods
@@ -297,7 +302,7 @@ namespace PVR
      *
      * The stream input type
      * If it is empty, ffmpeg will try to scan the stream to find the right input format.
-     * See "xbmc/cores/dvdplayer/Codecs/ffmpeg/libavformat/allformats.c" for a
+     * See "xbmc/cores/VideoPlayer/Codecs/ffmpeg/libavformat/allformats.c" for a
      * list of the input formats.
      *
      * @return The stream input type
@@ -354,7 +359,6 @@ namespace PVR
      */
     bool IsEncrypted(void) const;
 
-
     /*!
      * @brief Return the encryption system ID for this channel. 0 for FTA.
      *
@@ -390,7 +394,7 @@ namespace PVR
      * @brief Get the EPG table for this channel.
      * @return The EPG for this channel.
      */
-    EPG::CEpg *GetEPG(void) const;
+    EPG::CEpgPtr GetEPG(void) const;
 
     /*!
      * @brief Get the EPG table for this channel.

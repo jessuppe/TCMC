@@ -19,10 +19,12 @@
  *
  */
 
-#include "Variant.h"
+#include <string>
+#include <vector>
+
+#include "utils/Variant.h"
 
 #include <yajl/yajl_parse.h>
-#include <yajl/yajl_gen.h>
 
 class IParseCallback
 {
@@ -51,6 +53,8 @@ public:
   void push_buffer(const unsigned char *buffer, unsigned int length);
 
   static CVariant Parse(const unsigned char *json, unsigned int length);
+
+  static CVariant Parse(const std::string& json);
 
 private:
   static int ParseNull(void * ctx);

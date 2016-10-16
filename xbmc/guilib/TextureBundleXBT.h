@@ -21,18 +21,21 @@
  */
 
 #include <map>
+#include <memory>
 #include <string>
-#include "XBTFReader.h"
+#include <vector>
 
 class CBaseTexture;
+class CXBTFReader;
+class CXBTFFrame;
 
 class CTextureBundleXBT
 {
 public:
-  CTextureBundleXBT(void);
-  ~CTextureBundleXBT(void);
+  CTextureBundleXBT();
+  explicit CTextureBundleXBT(bool themeBundle);
+  ~CTextureBundleXBT();
 
-  void Cleanup();
   void SetThemeBundle(bool themeBundle);
   bool HasFile(const std::string& Filename);
   void GetTexturesFromPath(const std::string &path, std::vector<std::string> &textures);
@@ -44,6 +47,8 @@ public:
   int LoadAnim(const std::string& Filename, CBaseTexture*** ppTextures,
                 int &width, int &height, int& nLoops, int** ppDelays);
 
+  static uint8_t* UnpackFrame(const CXBTFReader& reader, const CXBTFFrame& frame);
+
 private:
   bool OpenBundle();
   bool ConvertFrameToTexture(const std::string& name, CXBTFFrame& frame, CBaseTexture** ppTexture);
@@ -51,7 +56,8 @@ private:
   time_t m_TimeStamp;
 
   bool m_themeBundle;
-  CXBTFReader m_XBTFReader;
+  std::string m_path;
+  std::shared_ptr<CXBTFReader> m_XBTFReader;
 };
 
 

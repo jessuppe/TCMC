@@ -24,6 +24,7 @@
 #include "MusicInfoTagLoaderCDDA.h"
 #include "MusicInfoTagLoaderShn.h"
 #include "MusicInfoTagLoaderDatabase.h"
+#include "MusicInfoTagLoaderFFmpeg.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "FileItem.h"
@@ -58,7 +59,7 @@ IMusicInfoTagLoader* CMusicInfoTagLoaderFactory::CreateLoader(const CFileItem& i
     return NULL;
 
   VECADDONS codecs;
-  CAddonMgr::Get().GetAddons(ADDON_AUDIODECODER, codecs);
+  CAddonMgr::GetInstance().GetAddons(codecs, ADDON_AUDIODECODER);
   for (size_t i=0;i<codecs.size();++i)
   {
     std::shared_ptr<CAudioDecoder> dec(std::static_pointer_cast<CAudioDecoder>(codecs[i]));
@@ -79,6 +80,7 @@ IMusicInfoTagLoader* CMusicInfoTagLoaderFactory::CreateLoader(const CFileItem& i
       strExtension == "m4a" || strExtension == "mp4" ||
       strExtension == "mpc" || strExtension == "mpp" || strExtension == "mp+" ||
       strExtension == "ogg" || strExtension == "oga" || strExtension == "oggstream" ||
+      strExtension == "opus" ||
       strExtension == "aif" || strExtension == "aiff" ||
       strExtension == "wav" ||
       strExtension == "mod" ||
@@ -100,6 +102,9 @@ IMusicInfoTagLoader* CMusicInfoTagLoaderFactory::CreateLoader(const CFileItem& i
     CMusicInfoTagLoaderSHN *pTagLoader = new CMusicInfoTagLoaderSHN();
     return (IMusicInfoTagLoader*)pTagLoader;
   }
+  else if (strExtension == "mka" || strExtension == "dsf" ||
+           strExtension == "dff")
+    return new CMusicInfoTagLoaderFFmpeg();
 
   return NULL;
 }

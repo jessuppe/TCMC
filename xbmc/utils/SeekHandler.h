@@ -19,10 +19,12 @@
  *
  */
 
+#include <map>
+#include <utility>
 #include <vector>
+
 #include "input/Key.h"
 #include "interfaces/IActionListener.h"
-#include "settings/Settings.h"
 #include "settings/lib/ISettingCallback.h"
 #include "threads/CriticalSection.h"
 #include "utils/Stopwatch.h"
@@ -36,17 +38,18 @@ enum SeekType
 class CSeekHandler : public ISettingCallback, public IActionListener
 {
 public:
-  static CSeekHandler& Get();
+  static CSeekHandler& GetInstance();
 
   static void SettingOptionsSeekStepsFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
   
-  virtual void OnSettingChanged(const CSetting *setting);
-  virtual bool OnAction(const CAction &action);
+  virtual void OnSettingChanged(const CSetting *setting) override;
+  virtual bool OnAction(const CAction &action) override;
 
   void Seek(bool forward, float amount, float duration = 0, bool analogSeek = false, SeekType type = SEEK_TYPE_VIDEO);
   void SeekSeconds(int seconds);
   void Process();
   void Reset();
+  void Configure();
 
   int GetSeekSize() const;
   bool InProgress() const;
@@ -60,13 +63,13 @@ protected:
 private:
   static const int analogSeekDelay = 500;
   
-  int        GetSeekStepSize(SeekType type, int step);
-  int        m_seekDelay;
+  int GetSeekStepSize(SeekType type, int step);
+  int m_seekDelay;
   std::map<SeekType, int > m_seekDelays;
-  bool       m_requireSeek;
-  bool       m_analogSeek;
-  int        m_seekSize;
-  int        m_seekStep;
+  bool m_requireSeek;
+  bool m_analogSeek;
+  double m_seekSize;
+  int m_seekStep;
   std::map<SeekType, std::vector<int> > m_forwardSeekSteps;
   std::map<SeekType, std::vector<int> > m_backwardSeekSteps;
   CStopWatch m_timer;

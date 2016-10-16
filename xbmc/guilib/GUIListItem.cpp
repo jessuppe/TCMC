@@ -19,13 +19,14 @@
  */
 
 #include "GUIListItem.h"
+
+#include <utility>
+
 #include "GUIListItemLayout.h"
 #include "utils/Archive.h"
 #include "utils/CharsetConverter.h"
 #include "utils/StringUtils.h"
 #include "utils/Variant.h"
-
-using namespace std;
 
 bool CGUIListItem::icompare::operator()(const std::string &s1, const std::string &s2) const
 {
@@ -405,11 +406,13 @@ void CGUIListItem::SetProperty(const std::string &strKey, const CVariant &value)
   }
 }
 
-CVariant CGUIListItem::GetProperty(const std::string &strKey) const
+const CVariant &CGUIListItem::GetProperty(const std::string &strKey) const
 {
   PropertyMap::const_iterator iter = m_mapProperties.find(strKey);
+  static CVariant nullVariant = CVariant(CVariant::VariantTypeNull);
+  
   if (iter == m_mapProperties.end())
-    return CVariant(CVariant::VariantTypeNull);
+    return nullVariant;
 
   return iter->second;
 }

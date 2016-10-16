@@ -24,7 +24,7 @@
 #include <climits>
 #include <cmath>
 
-#ifdef __SSE2__
+#if defined(HAVE_SSE2) && defined(__SSE2__)
 #include <emmintrin.h>
 #endif
 
@@ -35,7 +35,8 @@
 #if defined(__ppc__) || \
     defined(__powerpc__) || \
     defined(__mips__) || \
-    defined(__arm__)
+    defined(__arm__) || \
+    defined(__aarch64__)
   #define DISABLE_MATHUTILS_ASM_ROUND_INT
 #endif
 
@@ -62,8 +63,8 @@ namespace MathUtils
   */
   inline int round_int(double x)
   {
-    assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
-    assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
+    assert(x > static_cast<double>((int) (INT_MIN / 2)) - 1.0);
+    assert(x < static_cast<double>((int) (INT_MAX / 2)) + 1.0);
 
 #if defined(DISABLE_MATHUTILS_ASM_ROUND_INT)
     /* This implementation warrants some further explanation.
@@ -120,7 +121,7 @@ namespace MathUtils
 #else
     const float round_to_nearest = 0.5f;
     int i;
-#if defined(__SSE2__)
+#if defined(HAVE_SSE2) && defined(__SSE2__)
     const float round_dn_to_nearest = 0.4999999f;
     i = (x > 0) ? _mm_cvttsd_si32(_mm_set_sd(x + round_to_nearest)) : _mm_cvttsd_si32(_mm_set_sd(x - round_dn_to_nearest));
 

@@ -20,12 +20,16 @@
  */
 
 #include "guilib/IMsgTargetCallback.h"
+#include "messaging/IMessageTarget.h"
+#include "ServiceBroker.h"
 #include <memory>
 
 #define PLAYLIST_NONE    -1
 #define PLAYLIST_MUSIC   0
 #define PLAYLIST_VIDEO   1
 #define PLAYLIST_PICTURE 2
+
+#define g_playlistPlayer CServiceBroker::GetPlaylistPlayer()
 
 class CAction;
 class CFileItem; typedef std::shared_ptr<CFileItem> CFileItemPtr;
@@ -43,13 +47,17 @@ enum REPEAT_STATE { REPEAT_NONE = 0, REPEAT_ONE, REPEAT_ALL };
 
 class CPlayList;
 
-class CPlayListPlayer : public IMsgTargetCallback
+class CPlayListPlayer : public IMsgTargetCallback,
+                        public KODI::MESSAGING::IMessageTarget
 {
 
 public:
   CPlayListPlayer(void);
   virtual ~CPlayListPlayer(void);
-  virtual bool OnMessage(CGUIMessage &message);
+  virtual bool OnMessage(CGUIMessage &message) override;
+
+  virtual int GetMessageMask() override;
+  virtual void OnApplicationMessage(KODI::MESSAGING::ThreadMessage* pMsg) override;
 
   /*! \brief Play the next (or another) entry in the current playlist
    \param offset The offset from the current entry (defaults to 1, i.e. the next entry).
@@ -69,7 +77,7 @@ public:
    \param replace whether this item should replace the currently playing item. See CApplication::PlayFile (defaults to false).
    \param playPreviousOnFail whether to go back to the previous item if playback fails (default to false)
    */
-  bool Play(int index, bool replace = false, bool playPreviousOnFail = false);
+  bool Play(int index, std::string player, bool replace = false, bool playPreviousOnFail = false);
 
   /*! \brief Returns the index of the current item in active playlist.
    \return Current item in the active playlist.
@@ -200,9 +208,3 @@ protected:
 };
 
 }
-
-/*!
- \ingroup windows
- \brief Global instance of playlist player
- */
-extern PLAYLIST::CPlayListPlayer g_playlistPlayer;

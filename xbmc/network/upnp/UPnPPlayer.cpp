@@ -29,17 +29,21 @@
 #include "threads/Event.h"
 #include "utils/log.h"
 #include "utils/TimeUtils.h"
+#include "utils/Variant.h"
 #include "GUIInfoManager.h"
 #include "ThumbLoader.h"
 #include "video/VideoThumbLoader.h"
 #include "music/MusicThumbLoader.h"
-#include "ApplicationMessenger.h"
+#include "messaging/ApplicationMessenger.h"
+#include "messaging/helpers/DialogHelper.h"
 #include "Application.h"
 #include "dialogs/GUIDialogBusy.h"
 #include "guilib/GUIWindowManager.h"
 #include "input/Key.h"
-#include "dialogs/GUIDialogYesNo.h"
 
+using namespace KODI::MESSAGING;
+
+using KODI::MESSAGING::HELPERS::DialogResponse;
 
 NPT_SET_LOCAL_LOGGER("xbmc.upnp.player")
 
@@ -189,25 +193,10 @@ static NPT_Result WaitOnEvent(CEvent& event, XbmcThreads::EndTime& timeout, CGUI
   if(event.WaitMSec(0))
     return NPT_SUCCESS;
 
-  if(dialog == NULL) {
-    dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
-    dialog->Show();
-  }
+  if (!CGUIDialogBusy::WaitOnEvent(event))
+    return NPT_FAILURE;
 
-  g_windowManager.ProcessRenderLoop(false);
-
-  do {
-    if(event.WaitMSec(100))
-      return NPT_SUCCESS;
-
-    g_windowManager.ProcessRenderLoop(false);
-
-    if(dialog->IsCanceled())
-      return NPT_FAILURE;
-
-  } while(!timeout.IsTimePast());
-
-  return NPT_FAILURE;
+  return NPT_SUCCESS;
 }
 
 int CUPnPPlayer::PlayFile(const CFileItem& file, const CPlayerOptions& options, CGUIDialogBusy*& dialog, XbmcThreads::EndTime& timeout)
@@ -226,7 +215,7 @@ int CUPnPPlayer::PlayFile(const CFileItem& file, const CPlayerOptions& options, 
   else if (item.IsMusicDb())
     thumb_loader = NPT_Reference<CThumbLoader>(new CMusicThumbLoader());
 
-  obj = BuildObject(item, path, false, thumb_loader, NULL, CUPnP::GetServer());
+  obj = BuildObject(item, path, false, thumb_loader, NULL, CUPnP::GetServer(), UPnPPlayer);
   if(obj.IsNull()) goto failed;
 
   NPT_CHECK_LABEL_SEVERE(PLT_Didl::ToDidl(*obj, "", tmp), failed_todidl);
@@ -413,7 +402,7 @@ bool CUPnPPlayer::QueueNextFile(const CFileItem& file)
     thumb_loader = NPT_Reference<CThumbLoader>(new CMusicThumbLoader());
 
 
-  obj = BuildObject(item, path, 0, thumb_loader, NULL, CUPnP::GetServer());
+  obj = BuildObject(item, path, 0, thumb_loader, NULL, CUPnP::GetServer(), UPnPPlayer);
   if(!obj.IsNull())
   {
     NPT_CHECK_LABEL_SEVERE(PLT_Didl::ToDidl(*obj, "", tmp), failed);
@@ -527,7 +516,7 @@ void CUPnPPlayer::DoAudioWork()
       m_current_meta = (const char*)meta;
       CFileItemPtr item = GetFileItem(uri, meta);
       g_application.CurrentFileItem() = *item;
-      CApplicationMessenger::Get().SetCurrentItem(*item.get());
+      CApplicationMessenger::GetInstance().PostMsg(TMSG_UPDATE_CURRENT_ITEM, 0, -1, static_cast<void*>(new CFileItem(*item)));
     }
 
     NPT_CHECK_LABEL(m_delegate->m_transport->GetStateVariableValue("TransportState", data), failed);
@@ -603,15 +592,27 @@ bool CUPnPPlayer::OnAction(const CAction &action)
     case ACTION_STOP:
       if(IsPlaying())
       {
-        if(CGUIDialogYesNo::ShowAndGetInput(37022, 37023, 0, 0)) /* stop on remote system */
-          m_stopremote = true;
-        else
-          m_stopremote = false;
+        //stop on remote system
+        m_stopremote = HELPERS::ShowYesNoDialogText(CVariant{37022}, CVariant{37023}) == DialogResponse::YES;
+        
         return false; /* let normal code handle the action */
       }
     default:
       return false;
   }
+}
+
+void CUPnPPlayer::SetSpeed(float speed)
+{
+
+}
+
+float CUPnPPlayer::GetSpeed()
+{
+  if (IsPaused())
+    return 0;
+  else
+    return 1;
 }
 
 } /* namespace UPNP */

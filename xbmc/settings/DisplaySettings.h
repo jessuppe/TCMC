@@ -21,6 +21,7 @@
 
 #include <map>
 #include <set>
+#include <utility>
 #include <vector>
 
 #include "guilib/Resolution.h"
@@ -35,14 +36,15 @@ class CDisplaySettings : public ISettingCallback, public ISubSettings,
                          public Observable
 {
 public:
-  static CDisplaySettings& Get();
+  static CDisplaySettings& GetInstance();
 
-  virtual bool Load(const TiXmlNode *settings);
-  virtual bool Save(TiXmlNode *settings) const;
-  virtual void Clear();
+  virtual bool Load(const TiXmlNode *settings) override;
+  virtual bool Save(TiXmlNode *settings) const override;
+  virtual void Clear() override;
 
-  virtual bool OnSettingChanging(const CSetting *setting);
-  virtual bool OnSettingUpdate(CSetting* &setting, const char *oldSettingId, const TiXmlNode *oldSettingNode);
+  virtual void OnSettingAction(const CSetting *setting);
+  virtual bool OnSettingChanging(const CSetting *setting) override;
+  virtual bool OnSettingUpdate(CSetting* &setting, const char *oldSettingId, const TiXmlNode *oldSettingNode) override;
 
   /*!
    \brief Returns the currently active resolution
@@ -93,10 +95,14 @@ public:
   static void SettingOptionsRefreshRatesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
   static void SettingOptionsResolutionsFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
   static void SettingOptionsScreensFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
-  static void SettingOptionsVerticalSyncsFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
   static void SettingOptionsStereoscopicModesFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
   static void SettingOptionsPreferredStereoscopicViewModesFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
   static void SettingOptionsMonitorsFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);
+  static void SettingOptionsCmsModesFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
+  static void SettingOptionsCmsWhitepointsFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
+  static void SettingOptionsCmsPrimariesFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
+  static void SettingOptionsCmsGammaModesFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
+  
 
 protected:
   CDisplaySettings();

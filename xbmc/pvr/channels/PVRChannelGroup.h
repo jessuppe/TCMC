@@ -1,5 +1,4 @@
 #pragma once
-
 /*
  *      Copyright (C) 2012-2013 Team XBMC
  *      http://xbmc.org
@@ -20,12 +19,17 @@
  *
  */
 
-#include "FileItem.h"
 #include "PVRChannel.h"
 #include "settings/lib/ISettingCallback.h"
-#include "utils/JobManager.h"
+#include "utils/Job.h"
 
 #include <memory>
+#include <utility>
+#include <vector>
+
+class CDateTime;
+class CFileItem;
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace EPG
 {
@@ -34,9 +38,6 @@ namespace EPG
 
 namespace PVR
 {
-#define PVR_INTERNAL_GROUP_ID_RADIO 1
-#define PVR_INTERNAL_GROUP_ID_TV    2
-
 #define PVR_GROUP_TYPE_DEFAULT      0
 #define PVR_GROUP_TYPE_INTERNAL     1
 #define PVR_GROUP_TYPE_USER_DEFINED 2
@@ -60,7 +61,7 @@ namespace PVR
     EPG_FIRST_DATE = 0,
     EPG_LAST_DATE = 1
   };
-  
+
   class CPVRChannelGroup;
   typedef std::shared_ptr<PVR::CPVRChannelGroup> CPVRChannelGroupPtr;
 
@@ -107,13 +108,6 @@ namespace PVR
      * Empty group member
      */
     static PVRChannelGroupMember EmptyMember;
-
-    /*!
-     * Translate an id used in the path to a client id + unique channel id pair
-     * @param pathId Id in the path to translate
-     * @return The requested pair
-     */
-    static std::pair<int, int> PathIdToStorageId(uint64_t pathId);
 
     /*!
      * @return The amount of group members
@@ -195,7 +189,7 @@ namespace PVR
      * @brief Check if this group is the internal group containing all channels.
      * @return True if it's the internal group, false otherwise.
      */
-    virtual bool IsInternalGroup(void) const { return false; }
+    virtual bool IsInternalGroup(void) const { return m_iGroupType == PVR_GROUP_TYPE_INTERNAL; }
 
     /*!
      * @brief True if this group holds radio channels, false if it holds TV channels.
@@ -274,7 +268,7 @@ namespace PVR
 
     //@}
 
-    virtual void OnSettingChanged(const CSetting *setting);
+    virtual void OnSettingChanged(const CSetting *setting) override;
 
     /*!
      * @brief Get a channel given it's EPG ID.
@@ -317,14 +311,14 @@ namespace PVR
      * @param channel The current channel.
      * @return The channel or NULL if it wasn't found.
      */
-    CFileItemPtr GetByChannelUp(const CFileItem &channel) const;
+    CFileItemPtr GetByChannelUp(const CPVRChannelPtr &channel) const;
 
     /*!
      * @brief Get the previous channel in this group.
      * @param channel The current channel.
      * @return The channel or NULL if it wasn't found.
      */
-    CFileItemPtr GetByChannelDown(const CFileItem &channel) const;
+    CFileItemPtr GetByChannelDown(const CPVRChannelPtr &channel) const;
 
     /*!
      * Get the current members of this group
@@ -382,22 +376,15 @@ namespace PVR
      */
     void ResetChannelNumberCache(void);
 
-    void OnJobComplete(unsigned int jobID, bool success, CJob* job) {}
-
-    /*!
-     * @brief Get all EPG tables and apply a filter.
-     * @param results The fileitem list to store the results in.
-     * @param filter The filter to apply.
-     * @return The amount of entries that were added.
-     */
-    int GetEPGSearch(CFileItemList &results, const EPG::EpgSearchFilter &filter);
+    void OnJobComplete(unsigned int jobID, bool success, CJob* job) override {}
 
     /*!
      * @brief Get all EPG tables.
      * @param results The fileitem list to store the results in.
+     * @param bIncludeChannelsWithoutEPG, for channels without EPG data, put an empty EPG tag associated with the channel into results
      * @return The amount of entries that were added.
      */
-    int GetEPGAll(CFileItemList &results) const;
+    int GetEPGAll(CFileItemList &results, bool bIncludeChannelsWithoutEPG = false) const;
 
     /*!
      * @brief Get all entries that are active now.
@@ -412,13 +399,13 @@ namespace PVR
      * @return The amount of entries that were added.
      */
     int GetEPGNext(CFileItemList &results) const { return GetEPGNowOrNext(results, true); }
-    
+
     /*!
      * @brief Get the start time of the first entry.
      * @return The start time.
      */
     CDateTime GetFirstEPGDate(void) const;
-    
+
     /*!
      * @brief Get the end time of the last entry.
      * @return The end time.
@@ -426,8 +413,6 @@ namespace PVR
     CDateTime GetLastEPGDate(void) const;
 
     bool UpdateChannel(const CFileItem &channel, bool bHidden, bool bEPGEnabled, bool bParentalLocked, int iEPGSource, int iChannelNumber, const std::string &strChannelName, const std::string &strIconPath, const std::string &strStreamURL, bool bUserSetIcon = false);
-
-    bool ToggleChannelLocked(const CFileItem &channel);
 
     /*!
      * @brief Get a channel given the channel number on the client.
@@ -439,7 +424,6 @@ namespace PVR
     const PVRChannelGroupMember& GetByUniqueID(const std::pair<int, int>& id) const;
 
     void SetSelectedGroup(bool bSetTo);
-    bool IsSelectedGroup(void) const;
 
     void SetHidden(bool bHidden);
     bool IsHidden(void) const;
@@ -448,6 +432,11 @@ namespace PVR
     void SetPosition(int iPosition);
 
   protected:
+    /*!
+     * @brief Init class
+     */
+    virtual void OnInit(void);
+
     /*!
      * @brief Load the channels stored in the database.
      * @param bCompress If true, compress the database after storing the channels.
@@ -476,11 +465,6 @@ namespace PVR
      * @return True if all tables were created successfully, false otherwise.
      */
     virtual bool CreateChannelEpgs(bool bForce = false);
-
-    /*!
-     * @brief Remove invalid channels from this container.
-     */
-    void RemoveInvalidChannels(void);
 
     /*!
      * @brief Load the channels from the database.
@@ -538,7 +522,7 @@ namespace PVR
     PVR_CHANNEL_GROUP_SORTED_MEMBERS m_sortedMembers; /*!< members sorted by channel number */
     PVR_CHANNEL_GROUP_MEMBERS        m_members;       /*!< members with key clientid+uniqueid */
     CCriticalSection m_critSection;
-    
+
   private:
     CDateTime GetEPGDate(EpgDateType epgDateType) const;
     /*!

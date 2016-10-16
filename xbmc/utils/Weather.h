@@ -111,7 +111,7 @@ private:
    \param text the string to format
    \param temp the temperature (in degrees celcius).
    */
-  static void FormatTemperature(std::string &text, int temp);
+  static void FormatTemperature(std::string &text, double temp);
 
   struct ci_less : std::binary_function<std::string, std::string, bool>
   {
@@ -156,13 +156,13 @@ public:
   void SetArea(int iLocation);
   int GetArea() const;
 protected:
-  virtual CJob *GetJob() const;
-  virtual std::string TranslateInfo(int info) const;
-  virtual std::string BusyInfo(int info) const;
-  virtual void OnJobComplete(unsigned int jobID, bool success, CJob *job);
+  virtual CJob *GetJob() const override;
+  virtual std::string TranslateInfo(int info) const override;
+  virtual std::string BusyInfo(int info) const override;
+  virtual void OnJobComplete(unsigned int jobID, bool success, CJob *job) override;
 
-  virtual void OnSettingChanged(const CSetting *setting);
-  virtual void OnSettingAction(const CSetting *setting);
+  virtual void OnSettingChanged(const CSetting *setting) override;
+  virtual void OnSettingAction(const CSetting *setting) override;
 
 private:
 

@@ -1,6 +1,3 @@
-#if !defined(AFX_RARMANAGER_H__06BA7C2E_3FCA_11D9_8186_0050FC718317__INCLUDED_)
-#define AFX_RARMANAGER_H__06BA7C2E_3FCA_11D9_8186_0050FC718317__INCLUDED_
-
 #pragma once
 /*
  *      Copyright (C) 2005-2013 Team XBMC
@@ -22,13 +19,15 @@
  *
  */
 
-#include <string>
-#include "threads/CriticalSection.h"
 #include <map>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "threads/CriticalSection.h"
 #include "UnrarXLib/UnrarX.hpp"
 #include "utils/Stopwatch.h"
-
-#include "threads/Thread.h"
+#include "utils/GlobalsHandling.h"
 
 class CFileItemList;
 
@@ -42,7 +41,7 @@ class CFileItemList;
 class CFileInfo{
 public:
   CFileInfo();
-  ~CFileInfo();
+  ~CFileInfo() = default;
   std::string m_strCachedPath;
   std::string m_strPathInRar;
   bool  m_bAutoDel;
@@ -88,6 +87,6 @@ protected:
   int64_t CheckFreeSpace(const std::string& strDrive);
 };
 
-extern CRarManager g_RarManager;
-#endif
+XBMC_GLOBAL_REF(CRarManager, g_RarManager);
+#define g_RarManager XBMC_GLOBAL_USE(CRarManager)
 

@@ -100,6 +100,12 @@ void CJpegParse::ProcessSOFn (void)
 //--------------------------------------------------------------------------
 bool CJpegParse::GetSection (FILE *infile, const unsigned short sectionLength)
 {
+  if (sectionLength < 2)
+  {
+    printf("JpgParse: invalid section length");
+    return false;
+  }
+
   m_SectionBuffer = new unsigned char[sectionLength];
   if (m_SectionBuffer == NULL)
   {
@@ -155,7 +161,7 @@ bool CJpegParse::ExtractInfo (FILE *infile)
   {
     BYTE marker = 0;
     for (a=0; a<7; a++) {
-      bytesRead = fread(&marker, 1, sizeof(BYTE), infile);
+      fread(&marker, 1, sizeof(BYTE), infile);
       if (marker != 0xFF)
         break;
 
@@ -165,13 +171,6 @@ bool CJpegParse::ExtractInfo (FILE *infile)
         return false;
       }
       marker = 0;
-    }
-
-    if (marker == 0xff)
-    {
-      // 0xff is legal padding, but if we get that many, something's wrong.
-      printf("JpgParse: too many padding bytes");
-      return false;
     }
 
     // Read the length of the section.
@@ -200,7 +199,9 @@ bool CJpegParse::ExtractInfo (FILE *infile)
         if (m_SectionBuffer != NULL)
         {
        //   CExifParse::FixComment(comment);          // Ensure comment is printable
-          strncpy(m_ExifInfo.Comments, (char *)&m_SectionBuffer[2], min(itemlen-2, MAX_COMMENT));
+          unsigned short length = min(itemlen - 2, MAX_COMMENT);
+          strncpy(m_ExifInfo.FileComment, (char *)&m_SectionBuffer[2], length);
+          m_ExifInfo.FileComment[length] = '\0';
 		    }
         ReleaseSection();
       break;

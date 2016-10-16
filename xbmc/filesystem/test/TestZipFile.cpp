@@ -39,13 +39,14 @@ protected:
     /* Add default settings for locale.
      * Settings here are taken from CGUISettings::Initialize()
      */
-    /* TODO
-    CSettingsCategory *loc = CSettings::Get().AddCategory(7, "locale", 14090);
-    CSettings::Get().AddString(loc, "locale.language",248,"english",
+    //! @todo implement
+    /*
+    CSettingsCategory *loc = CSettings::GetInstance().AddCategory(7, "locale", 14090);
+    CSettings::GetInstance().AddString(loc, CSettings::SETTING_LOCALE_LANGUAGE,248,"english",
                             SPIN_CONTROL_TEXT);
-    CSettings::Get().AddString(loc, "locale.country", 20026, "USA",
+    CSettings::GetInstance().AddString(loc, CSettings::SETTING_LOCALE_COUNTRY, 20026, "USA",
                             SPIN_CONTROL_TEXT);
-    CSettings::Get().AddString(loc, "locale.charset", 14091, "DEFAULT",
+    CSettings::GetInstance().AddString(loc, CSettings::SETTING_LOCALE_CHARSET, 14091, "DEFAULT",
                             SPIN_CONTROL_TEXT); // charset is set by the
                                                 // language file
     */
@@ -53,7 +54,7 @@ protected:
 
   ~TestZipFile()
   {
-    CSettings::Get().Unload();
+    CSettings::GetInstance().Unload();
   }
 };
 
@@ -193,7 +194,7 @@ TEST_F(TestZipFile, CorruptedFile)
   std::cout << "File contents:" << std::endl;
   while ((size = file->Read(buf, sizeof(buf))) > 0)
   {
-    str = StringUtils::Format("  %08X", count);
+    str = StringUtils::Format("  %08llX", count);
     std::cout << str << "  ";
     count += size;
     for (i = 0; i < size; i++)

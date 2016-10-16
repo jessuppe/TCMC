@@ -28,11 +28,11 @@
 #define AFX_FILEPIPE_H__DD2B0A9E_4971_4A29_B525_78CEFCDAF4A1__INCLUDED_
 
 #pragma once
+#include <string>
+#include <vector>
 
 #include "IFile.h"
-#include "threads/Event.h"
 #include "threads/CriticalSection.h"
-#include "utils/RingBuffer.h"
 #include "PipesManager.h"
 
 namespace XFILE

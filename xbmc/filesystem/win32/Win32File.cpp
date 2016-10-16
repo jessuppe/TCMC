@@ -20,23 +20,20 @@
 
 #ifdef TARGET_WINDOWS
 #include "Win32File.h"
-#include "win32/WIN32Util.h"
+#include "platform/win32/WIN32Util.h"
 #include "utils/win32/Win32Log.h"
 #include "utils/SystemInfo.h"
 #include "utils/auto_buffer.h"
-#include "utils/StringUtils.h"
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN 1
 #endif // WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
-#include <sys/types.h>
 #include <sys/stat.h>
 
 #include <intsafe.h>
 #include <wchar.h>
-#include <limits.h>
 #include <cassert>
 
 
@@ -250,7 +247,7 @@ ssize_t CWin32File::Write(const void* lpBuf, size_t uiBufSize)
     if (!WriteFile(m_hFile, dummyBuf.get(), 0, &bytesWritten, NULL))
       return -1;
 
-    assert(bytesWritten != 0);
+    assert(bytesWritten == 0);
     return 0;
   }
 
@@ -396,7 +393,7 @@ bool CWin32File::Rename(const CURL& urlCurrentName, const CURL& urlNewName)
   if (m_smbFile)
     m_lastSMBFileErr = ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
 
-  // TODO: check whether it's file or directory
+  //! @todo check whether it's file or directory
   std::wstring curNameW(CWIN32Util::ConvertPathToWin32Form(urlCurrentName));
   if (curNameW.empty())
     return false;
@@ -468,6 +465,12 @@ int CWin32File::Stat(const CURL& url, struct __stat64* statData)
     return -1;
 
   std::wstring pathnameW(CWIN32Util::ConvertPathToWin32Form(url));
+  if (pathnameW.empty())
+  {
+    errno = ENOENT;
+    return -1;
+  }
+
   if (pathnameW.length() <= 6) // 6 is length of "\\?\x:"
     return -1; // pathnameW is empty or points to device ("\\?\x:"), on win32 stat() for devices is not supported
 

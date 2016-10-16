@@ -21,10 +21,12 @@
 #include "threads/SystemClock.h"
 #include "CacheStrategy.h"
 #include "IFile.h"
+#ifdef TARGET_POSIX
+#include "PlatformInclude.h"
+#include "ConvUtils.h"
+#endif
 #include "Util.h"
 #include "utils/log.h"
-#include "threads/SingleLock.h"
-#include "utils/TimeUtils.h"
 #include "SpecialProtocol.h"
 #include "PlatformDefs.h" //for PRIdS, PRId64
 #include "URL.h"

@@ -28,8 +28,6 @@
 #include "utils/StringUtils.h"
 #include "interfaces/info/SkinVariable.h"
 
-using namespace std;
-
 CGUIIncludes::CGUIIncludes()
 {
   m_constantAttributes.insert("x");
@@ -75,8 +73,6 @@ CGUIIncludes::CGUIIncludes()
   m_constantNodes.insert("radioposy");
   m_constantNodes.insert("radiowidth");
   m_constantNodes.insert("radioheight");
-  m_constantNodes.insert("markwidth");
-  m_constantNodes.insert("markheight");
   m_constantNodes.insert("sliderwidth");
   m_constantNodes.insert("sliderheight");
   m_constantNodes.insert("itemgap");
@@ -84,6 +80,14 @@ CGUIIncludes::CGUIIncludes()
   m_constantNodes.insert("timeperimage");
   m_constantNodes.insert("fadetime");
   m_constantNodes.insert("pauseatend");
+  m_constantNodes.insert("depth");
+
+  m_expressionAttributes.insert("condition");
+
+  m_expressionNodes.insert("visible");
+  m_expressionNodes.insert("enable");
+  m_expressionNodes.insert("usealttexture");
+  m_expressionNodes.insert("selected");
 }
 
 CGUIIncludes::~CGUIIncludes()
@@ -97,6 +101,7 @@ void CGUIIncludes::ClearIncludes()
   m_constants.clear();
   m_skinvariables.clear();
   m_files.clear();
+  m_expressions.clear();
 }
 
 bool CGUIIncludes::LoadIncludes(const std::string &includeFile)
@@ -146,8 +151,21 @@ bool CGUIIncludes::LoadIncludesFromXML(const TiXmlElement *root)
         m_includes.insert({ tagName, { *includeBody, std::move(defaultParams) } });
     }
     else if (node->Attribute("file"))
-    { // load this file in as well
-      LoadIncludes(g_SkinInfo->GetSkinPath(node->Attribute("file")));
+    { 
+      const char *condition = node->Attribute("condition");
+      if (condition)
+      { // check this condition
+        INFO::InfoPtr conditionID = g_infoManager.Register(condition);
+        bool value = conditionID->Get();
+
+        if (value)
+        {
+          // load this file in as well
+          LoadIncludes(g_SkinInfo->GetSkinPath(node->Attribute("file")));
+        }
+      }
+      else
+        LoadIncludes(g_SkinInfo->GetSkinPath(node->Attribute("file")));
     }
     node = node->NextSiblingElement("include");
   }
@@ -158,7 +176,7 @@ bool CGUIIncludes::LoadIncludesFromXML(const TiXmlElement *root)
     if (node->Attribute("type") && node->FirstChild())
     {
       std::string tagName = node->Attribute("type");
-      m_defaults.insert(pair<std::string, TiXmlElement>(tagName, *node));
+      m_defaults.insert(std::pair<std::string, TiXmlElement>(tagName, *node));
     }
     node = node->NextSiblingElement("default");
   }
@@ -183,6 +201,17 @@ bool CGUIIncludes::LoadIncludesFromXML(const TiXmlElement *root)
       m_skinvariables.insert(make_pair(tagName, *node));
     }
     node = node->NextSiblingElement("variable");
+  }
+
+  node = root->FirstChildElement("expression");
+  while (node)
+  {
+    if (node->Attribute("name") && node->FirstChild())
+    {
+      std::string tagName = node->Attribute("name");
+      m_expressions.insert(make_pair(tagName, node->FirstChild()->ValueStr()));
+    }
+    node = node->NextSiblingElement("expression");
   }
 
   return true;
@@ -220,7 +249,7 @@ void CGUIIncludes::ResolveIncludesForNode(TiXmlElement *node, std::map<INFO::Inf
   if (node->ValueStr() == "control")
   {
     type = XMLUtils::GetAttribute(node, "type");
-    map<std::string, TiXmlElement>::const_iterator it = m_defaults.find(type);
+    std::map<std::string, TiXmlElement>::const_iterator it = m_defaults.find(type);
     if (it != m_defaults.end())
     {
       // we don't insert <left> et. al. if <posx> or <posy> is specified
@@ -273,7 +302,7 @@ void CGUIIncludes::ResolveIncludesForNode(TiXmlElement *node, std::map<INFO::Inf
     Params params;
     std::string tagName;
     // determine which form of include call we have
-    const char *name = include->Attribute("name");
+    const char *name = include->Attribute("content");
     if (name)
     {
       // 1. <include name="MyControl" />
@@ -329,11 +358,15 @@ void CGUIIncludes::ResolveIncludesForNode(TiXmlElement *node, std::map<INFO::Inf
   { // check the attribute against our set
     if (m_constantAttributes.count(attribute->Name()))
       attribute->SetValue(ResolveConstant(attribute->ValueStr()));
+    if (m_expressionAttributes.count(attribute->Name()))
+      attribute->SetValue(ResolveExpressions(attribute->ValueStr()));
     attribute = attribute->Next();
   }
   // also do the value
   if (node->FirstChild() && node->FirstChild()->Type() == TiXmlNode::TINYXML_TEXT && m_constantNodes.count(node->ValueStr()))
     node->FirstChild()->SetValue(ResolveConstant(node->FirstChild()->ValueStr()));
+  if (node->FirstChild() && node->FirstChild()->Type() == TiXmlNode::TINYXML_TEXT && m_expressionNodes.count(node->ValueStr()))
+    node->FirstChild()->SetValue(ResolveExpressions(node->FirstChild()->ValueStr()));
 }
 
 bool CGUIIncludes::GetParameters(const TiXmlElement *include, const char *valueAttribute, Params& params)
@@ -468,19 +501,32 @@ CGUIIncludes::ResolveParamsResult CGUIIncludes::ResolveParameters(const std::str
 
 std::string CGUIIncludes::ResolveConstant(const std::string &constant) const
 {
-  vector<string> values = StringUtils::Split(constant, ",");
-  for (vector<string>::iterator i = values.begin(); i != values.end(); ++i)
+  std::vector<std::string> values = StringUtils::Split(constant, ",");
+  for (std::vector<std::string>::iterator i = values.begin(); i != values.end(); ++i)
   {
-    map<std::string, std::string>::const_iterator it = m_constants.find(*i);
+    std::map<std::string, std::string>::const_iterator it = m_constants.find(*i);
     if (it != m_constants.end())
       *i = it->second;
   }
   return StringUtils::Join(values, ",");
 }
 
+std::string CGUIIncludes::ResolveExpressions(const std::string &expression) const
+{
+  std::string work(expression);
+  CGUIInfoLabel::ReplaceSpecialKeywordReferences(work, "EXP", [&](const std::string &str) -> std::string {
+    std::map<std::string, std::string>::const_iterator it = m_expressions.find(str);
+    if (it != m_expressions.end())
+      return it->second;
+    return "";
+  });
+
+  return work;
+}
+
 const INFO::CSkinVariableString* CGUIIncludes::CreateSkinVariable(const std::string& name, int context)
 {
-  map<std::string, TiXmlElement>::const_iterator it = m_skinvariables.find(name);
+  std::map<std::string, TiXmlElement>::const_iterator it = m_skinvariables.find(name);
   if (it != m_skinvariables.end())
     return INFO::CSkinVariable::CreateFromXML(it->second, context);
   return NULL;

@@ -20,8 +20,9 @@
  */
 
 #include <map>
-#include <set>
 #include <memory>
+#include <set>
+#include <vector>
 
 #include "addons/IAddon.h"
 #include "interfaces/generic/ILanguageInvoker.h"
@@ -33,7 +34,7 @@ typedef std::shared_ptr<CLanguageInvokerThread> CLanguageInvokerThreadPtr;
 class CScriptInvocationManager
 {
 public:
-  static CScriptInvocationManager& Get();
+  static CScriptInvocationManager& GetInstance();
 
   void Process();
   void Uninitialize();

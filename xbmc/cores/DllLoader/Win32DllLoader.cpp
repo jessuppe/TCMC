@@ -31,7 +31,8 @@
 #include "exports/emu_kernel32.h"
 #include "exports/emu_msvcrt.h"
 
-extern "C" FILE _iob[];
+#include <limits>
+
 extern "C" FARPROC WINAPI dllWin32GetProcAddress(HMODULE hModule, LPCSTR function);
 
 // our exports
@@ -123,9 +124,6 @@ Export win32_exports[] =
   // workarounds for non-win32 signals
   { "signal",                     -1, (void*)dll_signal,                    NULL },
 
-  // reading/writing from stdin/stdout needs this
-  { "_iob",                       -1, (void*)&_iob,                         NULL },
-
   // libdvdnav + python need this (due to us using dll_putenv() to put stuff only?)
   { "getenv",                     -1, (void*)dll_getenv,                    NULL },
   { "_environ",                   -1, (void*)&dll__environ,                 NULL },
@@ -134,10 +132,11 @@ Export win32_exports[] =
   { NULL,                          -1, NULL,                                NULL }
 };
 
-Win32DllLoader::Win32DllLoader(const std::string& dll) : LibraryLoader(dll)
+Win32DllLoader::Win32DllLoader(const std::string& dll, bool isSystemDll)
+  : LibraryLoader(dll)
+  , bIsSystemDll(isSystemDll)
 {
   m_dllHandle = NULL;
-  bIsSystemDll = false;
   DllLoaderContainer::RegisterDll(this);
 }
 
@@ -160,7 +159,7 @@ bool Win32DllLoader::Load()
   m_dllHandle = LoadLibraryExW(strDllW.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
   if (!m_dllHandle)
   {
-    DWORD dw = GetLastError(); 
+    DWORD dw = GetLastError();
     wchar_t* lpMsgBuf = NULL;
     DWORD strLen = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, dw, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), (LPWSTR)&lpMsgBuf, 0, NULL);
     if (strLen == 0)
@@ -174,7 +173,7 @@ bool Win32DllLoader::Load()
     }
     else
       CLog::Log(LOGERROR, "%s: Failed to load \"%s\" with error %lu", __FUNCTION__, CSpecialProtocol::TranslatePath(strFileName).c_str(), dw);
-    
+
     LocalFree(lpMsgBuf);
     return false;
   }
@@ -182,8 +181,6 @@ bool Win32DllLoader::Load()
   // handle functions that the dll imports
   if (NeedsHooking(strFileName.c_str()))
     OverrideImports(strFileName);
-  else
-    bIsSystemDll = true;
 
   return true;
 }
@@ -247,7 +244,7 @@ void Win32DllLoader::OverrideImports(const std::string &dll)
 
   if (!image_base)
   {
-    CLog::Log(LOGERROR, "%s - unable to GetModuleHandle for dll %s", dll.c_str());
+    CLog::Log(LOGERROR, "%s - unable to GetModuleHandle for dll %s", __FUNCTION__, dll.c_str());
     return;
   }
 
@@ -259,7 +256,7 @@ void Win32DllLoader::OverrideImports(const std::string &dll)
 
   if (!imp_desc)
   {
-    CLog::Log(LOGERROR, "%s - unable to get import directory for dll %s", dll.c_str());
+    CLog::Log(LOGERROR, "%s - unable to get import directory for dll %s", __FUNCTION__, dll.c_str());
     return;
   }
 
@@ -326,6 +323,10 @@ void Win32DllLoader::OverrideImports(const std::string &dll)
 
 bool Win32DllLoader::NeedsHooking(const char *dllName)
 {
+  if ( !StringUtils::EndsWithNoCase(dllName, "libdvdcss-2.dll")
+  && !StringUtils::EndsWithNoCase(dllName, "libdvdnav.dll"))
+    return false;
+
   LibraryLoader *loader = DllLoaderContainer::GetModule(dllName);
   if (loader)
   {
@@ -336,24 +337,7 @@ bool Win32DllLoader::NeedsHooking(const char *dllName)
         return false;
     }
   }
-  std::wstring strdllNameW;
-  g_charsetConverter.utf8ToW(CSpecialProtocol::TranslatePath(dllName), strdllNameW, false);
-  HMODULE hModule = GetModuleHandleW(strdllNameW.c_str());
-  if (hModule == NULL)
-    return false;
-
-  wchar_t filepathW[MAX_PATH];
-  GetModuleFileNameW(hModule, filepathW, MAX_PATH);
-  std::string dllPath;
-  g_charsetConverter.wToUTF8(filepathW, dllPath);
-
-  // compare this filepath with some special directories
-  std::string xbmcPath = CSpecialProtocol::TranslatePath("special://xbmc");
-  std::string homePath = CSpecialProtocol::TranslatePath("special://home");
-  std::string tempPath = CSpecialProtocol::TranslatePath("special://temp");
-  return (StringUtils::StartsWith(dllPath, xbmcPath) ||
-          StringUtils::StartsWith(dllPath, homePath) ||
-          StringUtils::StartsWith(dllPath, tempPath));
+  return true;
 }
 
 void Win32DllLoader::RestoreImports()
@@ -387,7 +371,7 @@ bool FunctionNeedsWrapping(Export *exports, const char *functionName, void **fix
   while (exp->name)
   {
     if (strcmp(exp->name, functionName) == 0)
-    { // TODO: Should we be tracking stuff?
+    { //! @todo Should we be tracking stuff?
       if (0)
         *fixup = exp->track_function;
       else
@@ -410,7 +394,7 @@ bool Win32DllLoader::ResolveOrdinal(const char *dllName, unsigned long ordinal, 
   while (exp->name)
   {
     if (exp->ordinal == ordinal)
-    { // TODO: Should we be tracking stuff?
+    { //! @todo Should we be tracking stuff?
       if (0)
         *fixup = exp->track_function;
       else
@@ -424,10 +408,14 @@ bool Win32DllLoader::ResolveOrdinal(const char *dllName, unsigned long ordinal, 
 
 extern "C" FARPROC __stdcall dllWin32GetProcAddress(HMODULE hModule, LPCSTR function)
 {
-  // first check whether this function is one of the ones we need to wrap
-  void *fixup = NULL;
-  if (FunctionNeedsWrapping(win32_exports, function, &fixup))
-    return (FARPROC)fixup;
+  // if the high-order word is zero, then lpProcName is the function's ordinal value
+  if (reinterpret_cast<uintptr_t>(function) > std::numeric_limits<WORD>::max())
+  {
+    // first check whether this function is one of the ones we need to wrap
+    void *fixup = NULL;
+    if (FunctionNeedsWrapping(win32_exports, function, &fixup))
+      return (FARPROC)fixup;
+  }
 
   // Nope
   return GetProcAddress(hModule, function);

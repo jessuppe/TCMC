@@ -21,8 +21,10 @@
 #include "WindowDialogMixin.h"
 #include "WindowInterceptor.h"
 
-#include "ApplicationMessenger.h"
+#include "messaging/ApplicationMessenger.h"
 #include "guilib/GUIWindowManager.h"
+
+using namespace KODI::MESSAGING;
 
 namespace XBMCAddon
 {
@@ -31,9 +33,7 @@ namespace XBMCAddon
     void WindowDialogMixin::show()
     {
       XBMC_TRACE;
-      ThreadMessage tMsg = {TMSG_GUI_PYTHON_DIALOG, HACK_CUSTOM_ACTION_OPENING, 0};
-      tMsg.lpVoid = w->window->get();
-      CApplicationMessenger::Get().SendMessage(tMsg, true);
+      CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_PYTHON_DIALOG, HACK_CUSTOM_ACTION_OPENING, 0, static_cast<void*>(w->window->get()));
     }
 
     void WindowDialogMixin::close()
@@ -42,9 +42,7 @@ namespace XBMCAddon
       w->bModal = false;
       w->PulseActionEvent();
 
-      ThreadMessage tMsg = {TMSG_GUI_PYTHON_DIALOG, HACK_CUSTOM_ACTION_CLOSING, 0};
-      tMsg.lpVoid = w->window->get();
-      CApplicationMessenger::Get().SendMessage(tMsg, true);
+      CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_PYTHON_DIALOG, HACK_CUSTOM_ACTION_CLOSING, 0, static_cast<void*>(w->window->get()));
 
       w->iOldWindowId = 0;
     }
@@ -64,7 +62,7 @@ namespace XBMCAddon
           CGUIMessage msg(GUI_MSG_WINDOW_INIT,0,0);
           w->OnMessage(msg);
           w->window->setActive(true);
-          // TODO: Figure out how to clean up the CAction
+          //! @todo Figure out how to clean up the CAction
           return true;
         }
         break;

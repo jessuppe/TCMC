@@ -19,8 +19,12 @@
  *
  */
 
+#include <map>
+#include <string>
+#include <vector>
+
 #include "dialogs/GUIDialogBoxBase.h"
-#include "addons/Addon.h"
+#include "IAddon.h"
 
 class CGUIDialogAddonSettings : public CGUIDialogBoxBase
 {

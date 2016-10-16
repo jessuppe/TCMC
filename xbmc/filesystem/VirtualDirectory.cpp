@@ -20,20 +20,14 @@
 
 #include "system.h"
 #include "VirtualDirectory.h"
-#include "DirectoryFactory.h"
 #include "URL.h"
 #include "Util.h"
 #include "utils/URIUtils.h"
 #include "utils/StringUtils.h"
 #include "Directory.h"
-#include "DirectoryCache.h"
 #include "SourcesDirectory.h"
 #include "storage/MediaManager.h"
-#include "File.h"
 #include "FileItem.h"
-#ifdef TARGET_WINDOWS
-#include "WIN32Util.h"
-#endif
 
 using namespace XFILE;
 
@@ -156,12 +150,12 @@ bool CVirtualDirectory::IsInSource(const std::string &path) const
     {
       CMediaSource &share = shares[i];
       if (URIUtils::IsOnDVD(share.strPath) &&
-          StringUtils::StartsWith(path, share.strPath))
+          URIUtils::PathHasParent(path, share.strPath))
         return true;
     }
     return false;
   }
-  // TODO: May need to handle other special cases that GetMatchingSource() fails on
+  //! @todo May need to handle other special cases that GetMatchingSource() fails on
   return (iShare > -1);
 }
 

@@ -19,12 +19,9 @@
  */
 
 #include "GUIRenderingControl.h"
-#include "GUIUserMessages.h"
 #include "threads/SingleLock.h"
 #include "guilib/IRenderingCallback.h"
 #include "windowing/WindowingFactory.h"
-
-using namespace std;
 
 #define LABEL_ROW1 10
 #define LABEL_ROW2 11
@@ -62,7 +59,7 @@ bool CGUIRenderingControl::InitCallback(IRenderingCallback *callback)
 
   void *device = NULL;
 #if HAS_DX
-  device = g_Windowing.Get3DDevice();
+  device = g_Windowing.Get3D11Device();
 #endif
   if (callback->Create((int)(x+0.5f), (int)(y+0.5f), (int)(w+0.5f), (int)(h+0.5f), device))
     m_callback = callback;
@@ -84,7 +81,7 @@ void CGUIRenderingControl::UpdateVisibility(const CGUIListItem *item)
 
 void CGUIRenderingControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {
-  // TODO Add processing to the addon so it could mark when actually changing
+  //! @todo Add processing to the addon so it could mark when actually changing
   CSingleLock lock(m_rendering);
   if (m_callback && m_callback->IsDirty())
     MarkDirtyRegion();
@@ -116,7 +113,7 @@ void CGUIRenderingControl::FreeResources(bool immediately)
 
   if (!m_callback) return;
 
-  g_graphicsContext.CaptureStateBlock(); //TODO locking
+  g_graphicsContext.CaptureStateBlock(); //! @todo locking
   m_callback->Stop();
   g_graphicsContext.ApplyStateBlock();
   m_callback = NULL;

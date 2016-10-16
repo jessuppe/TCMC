@@ -1,17 +1,14 @@
-SRCS  = AnimatedGif.cpp
-SRCS += DDSImage.cpp
+SRCS = DDSImage.cpp
 SRCS += DirectXGraphics.cpp
 SRCS += DirtyRegionSolvers.cpp
 SRCS += DirtyRegionTracker.cpp
-SRCS += cximage.cpp
-SRCS += FrameBufferObject.cpp
+SRCS += FFmpegImage.cpp
 SRCS += GraphicContext.cpp
 SRCS += GUIAction.cpp
 SRCS += GUIAudioManager.cpp
 SRCS += GUIBaseContainer.cpp
 SRCS += GUIBorderedImage.cpp
 SRCS += GUIButtonControl.cpp
-SRCS += GUICheckMarkControl.cpp
 SRCS += GUIColorManager.cpp
 SRCS += GUIControl.cpp
 SRCS += GUIControlFactory.cpp
@@ -40,7 +37,6 @@ SRCS += GUIListLabel.cpp
 SRCS += GUIMessage.cpp
 SRCS += GUIMoverControl.cpp
 SRCS += GUIMultiImage.cpp
-SRCS += GUIMultiSelectText.cpp
 SRCS += GUIPanelContainer.cpp
 SRCS += GUIProgressControl.cpp
 SRCS += GUIRadioButtonControl.cpp
@@ -48,7 +44,6 @@ SRCS += GUIResizeControl.cpp
 SRCS += GUIRenderingControl.cpp
 SRCS += GUIRSSControl.cpp
 SRCS += GUIScrollBarControl.cpp
-SRCS += GUISelectButtonControl.cpp
 SRCS += GUISettingsSliderControl.cpp
 SRCS += GUISliderControl.cpp
 SRCS += GUISpinControl.cpp
@@ -65,12 +60,11 @@ SRCS += GUIWindowManager.cpp
 SRCS += GUIWrappingListContainer.cpp
 SRCS += imagefactory.cpp
 SRCS += IWindowManagerCallback.cpp
-SRCS += JpegIO.cpp
 SRCS += LocalizeStrings.cpp
+SRCS += Resolution.cpp
 SRCS += Shader.cpp
 SRCS += StereoscopicsManager.cpp
 SRCS += Texture.cpp
-SRCS += TextureBundleXPR.cpp
 SRCS += TextureBundleXBT.cpp
 SRCS += TextureBundle.cpp
 SRCS += TextureManager.cpp
@@ -100,6 +94,4 @@ include @abs_top_srcdir@/Makefile.include
 -include $(patsubst %.cpp,%.P,$(patsubst %.c,%.P,$(SRCS)))
 
 try : try.o TextureBundle.o DirectXGraphics.o GUIFontTTF.o
-	g++ -o try try.o TextureBundle.o DirectXGraphics.o GraphicContext.o GUIIncludes.o ../utils/CriticalSection.o ../XBVideoConfig.o SkinInfo.o ../linux/CriticalSection.o GUIFontTTF.o GUIFontBase.o GUIFontManager.o GUIFont.o ../utils/XMLUtils.o GUIImage.o GUIControl.o TextureManager.o GUIMessage.o ../utils/SingleLock.o VisibleEffect.o GUIWindowManager.o AnimatedGif.o -lSDL_image -lSDL_gfx -lSDL -llzo -lfreetype
-
-
+	g++ -o try try.o TextureBundle.o DirectXGraphics.o GraphicContext.o GUIIncludes.o ../utils/CriticalSection.o ../XBVideoConfig.o SkinInfo.o ../linux/CriticalSection.o GUIFontTTF.o GUIFontBase.o GUIFontManager.o GUIFont.o ../utils/XMLUtils.o GUIImage.o GUIControl.o TextureManager.o GUIMessage.o ../utils/SingleLock.o VisibleEffect.o GUIWindowManager.o -llzo -lfreetype

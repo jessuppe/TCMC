@@ -20,6 +20,8 @@
  *
  */
 
+#include <vector>
+
 #include "utils/LabelFormatter.h"
 #include "utils/SortUtils.h"
 #include "MediaSource.h"
@@ -37,11 +39,13 @@ public:
   void SaveViewAsControl(int viewAsControl);
   int GetViewAsControl() const;
 
+  bool ChooseSortMethod();
   SortDescription SetNextSortMethod(int direction = 1);
   void SetCurrentSortMethod(int method);
   SortDescription GetSortMethod() const;
   bool HasMultipleSortMethods() const;
   int GetSortMethodLabel() const;
+  int GetSortOrderLabel() const;
   void GetSortMethodLabelMasks(LABEL_MASKS& masks) const;
 
   SortOrder SetNextSortOrder();
@@ -74,9 +78,6 @@ protected:
    \param thumb the skin image to use as the icon
    */
   void AddAddonsSource(const std::string &content, const std::string &label, const std::string& thumb);
-#if defined(TARGET_ANDROID)
-  void AddAndroidSource(const std::string &content, const std::string &label, const std::string& thumb);
-#endif
   void AddLiveTVSources();
 
   /*! \brief Add the sort order defined in a smartplaylist

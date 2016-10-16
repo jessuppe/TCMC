@@ -19,13 +19,18 @@
  *
  */
 
-#include "dbwrappers/Database.h"
-#include "XBDateTime.h"
 #include <map>
+#include <memory>
+
+#include "XBDateTime.h"
+#include "dbwrappers/Database.h"
+
+#include "Epg.h"
 
 namespace EPG
 {
   class CEpg;
+  typedef std::shared_ptr<CEpg> CEpgPtr;
   class CEpgInfoTag;
   class CEpgContainer;
 
@@ -54,7 +59,7 @@ namespace EPG
      * @brief Get the minimal database version that is required to operate correctly.
      * @return The minimal database version.
      */
-    virtual int GetSchemaVersion(void) const { return 10; };
+    virtual int GetSchemaVersion(void) const { return 11; };
 
     /*!
      * @brief Get the default sqlite database filename.
@@ -79,10 +84,11 @@ namespace EPG
     virtual bool Delete(const CEpg &table);
 
     /*!
-     * @brief Erase all EPG entries older than 1 day.
+     * @brief Erase all EPG entries with an end time less than the given time.
+     * @param maxEndTime The maximum allowed end time.
      * @return True if the entries were removed successfully, false otherwise.
      */
-    virtual bool DeleteOldEpgEntries(void);
+    virtual bool DeleteEpgEntries(const CDateTime &maxEndTime);
 
     /*!
      * @brief Remove a single EPG entry.
@@ -121,7 +127,7 @@ namespace EPG
      */
     virtual bool PersistLastEpgScanTime(int iEpgId = 0, bool bQueueWrite = false);
 
-    bool Persist(const std::map<unsigned int, CEpg *> &epgs);
+    bool Persist(const EPGMAP &epgs);
 
     /*!
      * @brief Persist an EPG table. It's entries are not persisted.

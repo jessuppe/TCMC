@@ -18,7 +18,7 @@
  *
  */
 
-// TODO: Need a uniform way of returning an error status
+//! @todo Need a uniform way of returning an error status
 
 #if (defined HAVE_CONFIG_H) && (!defined TARGET_WINDOWS)
   #include "config.h"
@@ -28,7 +28,7 @@
 #include "ModuleXbmc.h"
 
 #include "Application.h"
-#include "ApplicationMessenger.h"
+#include "messaging/ApplicationMessenger.h"
 #include "utils/URIUtils.h"
 #include "aojsonrpc.h"
 #ifndef TARGET_WINDOWS
@@ -43,26 +43,29 @@
 #include "utils/Crc32.h"
 #include "FileItem.h"
 #include "LangInfo.h"
+#include "PlayListPlayer.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "guilib/TextureManager.h"
 #include "Util.h"
-#include "URL.h"
 #include "cores/AudioEngine/AEFactory.h"
 #include "storage/MediaManager.h"
-#include "utils/FileUtils.h"
 #include "utils/LangCodeExpander.h"
 #include "utils/StringUtils.h"
-#include "CallbackHandler.h"
+#include "utils/SystemInfo.h"
 #include "AddonUtils.h"
 
 #include "LanguageHook.h"
 
-#include "cores/VideoRenderers/RenderCapture.h"
-
 #include "threads/SystemClock.h"
-#include "Exception.h"
 #include <vector>
+#include "utils/log.h"
+
+using namespace KODI::MESSAGING;
+
+#ifdef TARGET_POSIX
+#include "linux/XMemUtils.h"
+#endif
 
 namespace XBMCAddon
 {
@@ -76,22 +79,20 @@ namespace XBMCAddon
     {
       // check for a valid loglevel
       if (level < LOGDEBUG || level > LOGNONE)
-        level = LOGNOTICE;
+        level = LOGDEBUG;
       CLog::Log(level, "%s", msg);
     }
 
     void shutdown()
     {
       XBMC_TRACE;
-      ThreadMessage tMsg = {TMSG_SHUTDOWN};
-      CApplicationMessenger::Get().SendMessage(tMsg);
+      CApplicationMessenger::GetInstance().PostMsg(TMSG_SHUTDOWN);
     }
 
     void restart()
     {
       XBMC_TRACE;
-      ThreadMessage tMsg = {TMSG_RESTART};
-      CApplicationMessenger::Get().SendMessage(tMsg);
+      CApplicationMessenger::GetInstance().PostMsg(TMSG_RESTART);
     }
 
     void executescript(const char* script)
@@ -100,9 +101,7 @@ namespace XBMCAddon
       if (! script)
         return;
 
-      ThreadMessage tMsg = {TMSG_EXECUTE_SCRIPT};
-      tMsg.strParam = script;
-      CApplicationMessenger::Get().SendMessage(tMsg);
+      CApplicationMessenger::GetInstance().PostMsg(TMSG_EXECUTE_SCRIPT, -1, -1, nullptr, script);
     }
 
     void executebuiltin(const char* function, bool wait /* = false*/)
@@ -110,7 +109,10 @@ namespace XBMCAddon
       XBMC_TRACE;
       if (! function)
         return;
-      CApplicationMessenger::Get().ExecBuiltIn(function,wait);
+      if (wait)
+        CApplicationMessenger::GetInstance().SendMsg(TMSG_EXECUTE_BUILT_IN, -1, -1, nullptr, function);
+      else
+        CApplicationMessenger::GetInstance().PostMsg(TMSG_EXECUTE_BUILT_IN, -1, -1, nullptr, function);
     }
 
     String executeJSONRPC(const char* jsonrpccommand)
@@ -172,7 +174,7 @@ namespace XBMCAddon
     String getSkinDir()
     {
       XBMC_TRACE;
-      return CSettings::Get().GetString("lookandfeel.skin");
+      return CSettings::GetInstance().GetString(CSettings::SETTING_LOOKANDFEEL_SKIN);
     }
 
     String getLanguage(int format /* = CLangCodeExpander::ENGLISH_NAME */, bool region /*= false*/)
@@ -368,9 +370,8 @@ namespace XBMCAddon
     String getCacheThumbName(const String& path)
     {
       XBMC_TRACE;
-      Crc32 crc;
-      crc.ComputeFromLowerCase(path);
-      return StringUtils::Format("%08x.tbn", (unsigned __int32)crc);;
+      auto crc = Crc32::ComputeFromLowerCase(path);
+      return StringUtils::Format("%08x.tbn", crc);
     }
 
     String makeLegalFilename(const String& filename, bool fatX)
@@ -422,6 +423,13 @@ namespace XBMCAddon
           result = g_langInfo.GetDateFormat(false);
           StringUtils::Replace(result, "MM", "%m");
           StringUtils::Replace(result, "DD", "%d");
+#ifdef TARGET_WINDOWS
+          StringUtils::Replace(result, "M", "%#m");
+          StringUtils::Replace(result, "D", "%#d");
+#else
+          StringUtils::Replace(result, "M", "%-m");
+          StringUtils::Replace(result, "D", "%-d");
+#endif
           StringUtils::Replace(result, "YYYY", "%Y");
         }
       else if (strcmpi(id, "tempunit") == 0)
@@ -445,7 +453,7 @@ namespace XBMCAddon
       return result;
     }
 
-    // TODO: Add a mediaType enum
+    //! @todo Add a mediaType enum
     String getSupportedMedia(const char* mediaType)
     {
       XBMC_TRACE;
@@ -457,7 +465,7 @@ namespace XBMCAddon
       else if (strcmpi(mediaType, "picture") == 0)
         result = g_advancedSettings.m_pictureExtensions;
 
-      // TODO:
+      //! @todo implement
       //    else
       //      return an error
 
@@ -516,6 +524,11 @@ namespace XBMCAddon
       return convertedLanguage;
     }
 
+    String getUserAgent()
+    {
+      return CSysInfo::GetUserAgent();
+    }
+
     int getSERVER_WEBSERVER() { return CApplication::ES_WEBSERVER; }
     int getSERVER_AIRPLAYSERVER() { return CApplication::ES_AIRPLAYSERVER; }
     int getSERVER_UPNPSERVER() { return CApplication::ES_UPNPSERVER; }
@@ -526,10 +539,6 @@ namespace XBMCAddon
 
     int getPLAYLIST_MUSIC() { return PLAYLIST_MUSIC; }
     int getPLAYLIST_VIDEO() { return PLAYLIST_VIDEO; }
-    int getPLAYER_CORE_AUTO() { return EPC_NONE; }
-    int getPLAYER_CORE_DVDPLAYER() { return EPC_DVDPLAYER; }
-    int getPLAYER_CORE_MPLAYER() { return EPC_MPLAYER; }
-    int getPLAYER_CORE_PAPLAYER() { return EPC_PAPLAYER; }
     int getTRAY_OPEN() { return TRAY_OPEN; }
     int getDRIVE_NOT_READY() { return DRIVE_NOT_READY; }
     int getTRAY_CLOSED_NO_MEDIA() { return TRAY_CLOSED_NO_MEDIA; }
@@ -543,20 +552,11 @@ namespace XBMCAddon
     int getLOGFATAL() { return LOGFATAL; }
     int getLOGNONE() { return LOGNONE; }
 
-    // render capture user states
-    int getCAPTURE_STATE_WORKING() { return CAPTURESTATE_WORKING; }
-    int getCAPTURE_STATE_DONE(){ return CAPTURESTATE_DONE; }
-    int getCAPTURE_STATE_FAILED() { return CAPTURESTATE_FAILED; }
-
-    // render capture flags
-    int getCAPTURE_FLAG_CONTINUOUS() { return (int)CAPTUREFLAG_CONTINUOUS; }
-    int getCAPTURE_FLAG_IMMEDIATELY() { return (int)CAPTUREFLAG_IMMEDIATELY; }
-
     // language string formats
     int getISO_639_1() { return CLangCodeExpander::ISO_639_1; } 
     int getISO_639_2(){ return CLangCodeExpander::ISO_639_2; }
     int getENGLISH_NAME() { return CLangCodeExpander::ENGLISH_NAME; }
 
-    const int lLOGNOTICE = LOGNOTICE;
+    const int lLOGDEBUG = LOGDEBUG;
   }
 }

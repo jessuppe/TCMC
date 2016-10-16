@@ -19,16 +19,16 @@
  */
 
 #include "GUIDialogPVRGuideSearch.h"
-#include "Application.h"
-#include "guilib/LocalizeStrings.h"
-#include "guilib/GUIEditControl.h"
-#include "guilib/GUIWindowManager.h"
-#include "utils/StringUtils.h"
 
-#include "addons/include/xbmc_pvr_types.h"
-#include "pvr/PVRManager.h"
+#include <utility>
+
+#include "addons/kodi-addon-dev-kit/include/kodi/xbmc_pvr_types.h"
 #include "epg/EpgSearchFilter.h"
+#include "guilib/GUIEditControl.h"
+#include "guilib/LocalizeStrings.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"
+#include "pvr/PVRManager.h"
+#include "utils/StringUtils.h"
 
 using namespace PVR;
 
@@ -125,7 +125,7 @@ void CGUIDialogPVRGuideSearch::UpdateDurationSpin(void)
   std::vector< std::pair<std::string, int> > labels;
 
   labels.push_back(std::make_pair("-", EPG_SEARCH_UNSET));
-  for (int i = 1; i < 12*60/5; i++)
+  for (int i = 1; i < 12*60/5; ++i)
     labels.push_back(std::make_pair(StringUtils::Format(g_localizeStrings.Get(14044).c_str(), i*5), i*5));
 
   SET_CONTROL_LABELS(CONTROL_SPIN_MIN_DURATION, m_searchFilter->m_iMinimumDuration, &labels);
@@ -134,7 +134,7 @@ void CGUIDialogPVRGuideSearch::UpdateDurationSpin(void)
   labels.clear();
 
   labels.push_back(std::make_pair("-", EPG_SEARCH_UNSET));
-  for (int i = 1; i < 12*60/5; i++)
+  for (int i = 1; i < 12*60/5; ++i)
     labels.push_back(std::make_pair(StringUtils::Format(g_localizeStrings.Get(14044).c_str(), i*5), i*5));
 
   SET_CONTROL_LABELS(CONTROL_SPIN_MAX_DURATION, m_searchFilter->m_iMaximumDuration, &labels);

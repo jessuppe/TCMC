@@ -29,8 +29,6 @@
 #include "utils/log.h"
 #ifdef TARGET_WINDOWS
 #include "my_ntddcdrm.h"
-#include "WIN32Util.h"
-#include "utils/CharsetConverter.h"
 #endif
 #if defined(TARGET_LINUX)
 #include <linux/limits.h>
@@ -60,10 +58,10 @@
 #include <sys/syslimits.h>
 #endif
 #include "cdioSupport.h"
-#include "filesystem/iso9660.h"
 #include "MediaManager.h"
 #ifdef TARGET_POSIX
 #include "XHandle.h"
+#include "XFileUtils.h"
 #endif
 
 #ifdef HAS_DVD_DRIVE
