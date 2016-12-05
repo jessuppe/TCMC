@@ -5,9 +5,18 @@ AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_FILES([target/config.site native/config.site.native Makefile.include target/Toolchain.cmake
                  target/config-binaddons.site target/Toolchain_binaddons.cmake])
 AC_CANONICAL_HOST
+
+# save flags before autotools checks the compiler, since
+# it will automatically include -g in c/cxxflags
+passed_cflags="$CFLAGS"
+passed_ldflags="$LDFLAGS"
+passed_cxxflags="$CXXFLAGS"
+
 m4_include([../../m4/xbmc_arch.m4])
 m4_include([../../m4/ax_cxx_compile_stdcxx_11.m4])
-AX_CXX_COMPILE_STDCXX_11(,[optional])
+AX_CXX_COMPILE_STDCXX_11(,[mandatory])
+c11_flags="$CFLAGS"
+cxx11_flags="$CXXFLAGS"
 
 # check for not same cpu value
 AC_DEFUN([MC_CHECK_NOT_CPU],
@@ -21,6 +30,12 @@ AC_DEFUN([MC_CHECK_NOT_CPU],
       AC_MSG_RESULT([$1 is not $2])
   esac
 ])
+
+AC_ARG_ENABLE([debug],
+  [AS_HELP_STRING([--enable-debug],
+  [enable debugging information (default is yes)])],
+  [use_debug=$enableval],
+  [use_debug=yes])
 
 AC_ARG_WITH([toolchain],
   [AS_HELP_STRING([--with-toolchain],
@@ -101,9 +116,6 @@ deps_dir=$use_host
 tool_dir=$build_cpu-$build_os-native
 cross_compiling="yes"
 
-passed_cflags="$CFLAGS"
-passed_ldflags="$LDFLAGS"
-passed_cxxflags="$CXXFLAGS"
 platform_cc=gcc
 platform_cxx=g++
 
@@ -373,6 +385,7 @@ case $host in
     platform_includes="-isysroot $use_sdk_path"
     deps_dir=$sdk_name"_"$use_cpu-target
     tool_dir=buildtools-native;
+    AC_CHECK_LIB([z], [main], has_zlib=1, AC_MSG_WARN("No zlib support in toolchain. Will build libz."); has_zlib=0)
   ;;
   *)
     AC_MSG_ERROR(unsupported host ($use_host))
@@ -464,7 +477,6 @@ AC_PATH_PROG([OBJDUMP_FOR_BUILD], [objdump], objdump, $PATH_FOR_BUILD)
 AC_PATH_PROG([CC_FOR_BUILD],[gcc llvm-gcc $platform_cc], gcc, $PATH_FOR_BUILD)
 AC_PATH_PROG([CXX_FOR_BUILD],[g++ llvm-g++ $platform_cxx], g++, $PATH_FOR_BUILD)
 
-AC_CHECK_LIB([z],   [main], has_zlib=1, AC_MSG_WARN("No zlib support in toolchain. Will build libz."); has_zlib=0)
 AC_SEARCH_LIBS([iconv_open],iconv, link_iconv=$ac_cv_search_iconv_open, link_iconv=-liconv; AC_MSG_WARN("No iconv support in toolchain. Will build libiconv."); need_libiconv=1)
 AC_TRY_LINK([#include <locale.h>],[struct lconv* test=localeconv();], has_localeconv=yes, AC_MSG_WARN("No localeconv support in toolchain. Using replacement."); has_localeconv=no)
 AC_CHECK_LIB([crystax],   [main], has_libcrystax=1, has_libcrystax=0)
@@ -568,6 +580,15 @@ if test "$platform_os" == "android"; then
   fi
 fi
 
+if test "$use_debug" = "yes"; then
+  DEBUG_FLAGS="-g -D_DEBUG"
+else
+  DEBUG_FLAGS="-DNDEBUG=1"
+fi
+platform_cflags+="$c11_flags $DEBUG_FLAGS"
+platform_cxxflags+="$cxx11_flags $DEBUG_FLAGS"
+
+
 if test "$platform_os" == "android"; then
 echo -e
   AC_SUBST(use_sdk_path)
@@ -576,6 +597,7 @@ echo -e
   AC_SUBST(build_tools_path)
 fi
 
+AC_SUBST(use_debug)
 AC_SUBST(use_host)
 AC_SUBST(deps_dir)
 AC_SUBST(tool_dir)

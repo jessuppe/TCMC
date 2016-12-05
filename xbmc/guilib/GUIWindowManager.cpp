@@ -35,6 +35,7 @@
 #include "utils/Variant.h"
 #include "input/Key.h"
 #include "utils/StringUtils.h"
+#include "utils/SeekHandler.h"
 
 #include "windows/GUIWindowHome.h"
 #include "events/windows/GUIWindowEventLog.h"
@@ -148,6 +149,7 @@
 
 /* Game related include files */
 #include "games/controllers/windows/GUIControllerWindow.h"
+#include "games/windows/GUIWindowGames.h"
 
 using namespace PVR;
 using namespace PERIPHERALS;
@@ -300,6 +302,7 @@ void CGUIWindowManager::CreateWindows()
   Add(new CGUIWindowEventLog);
 
   Add(new GAME::CGUIControllerWindow);
+  Add(new GAME::CGUIWindowGames);
 }
 
 bool CGUIWindowManager::DestroyWindows()
@@ -404,12 +407,14 @@ bool CGUIWindowManager::DestroyWindows()
     Delete(WINDOW_PICTURES);
     Delete(WINDOW_WEATHER);
     Delete(WINDOW_DIALOG_GAME_CONTROLLERS);
+    Delete(WINDOW_GAMES);
 
     Remove(WINDOW_SETTINGS_SERVICE);
     Remove(WINDOW_SETTINGS_MYPVR);
     Remove(WINDOW_SETTINGS_PLAYER);
     Remove(WINDOW_SETTINGS_MEDIA);
     Remove(WINDOW_SETTINGS_INTERFACE);
+    Remove(WINDOW_SETTINGS_MYGAMES);
     Remove(WINDOW_DIALOG_KAI_TOAST);
 
     Remove(WINDOW_DIALOG_SEEK_BAR);
@@ -676,6 +681,15 @@ void CGUIWindowManager::PreviousWindow()
 
   // ok to go to the previous window now
 
+  // pause game when leaving fullscreen or resume game when entering fullscreen
+  if (g_application.m_pPlayer->IsPlayingGame())
+  {
+    if (previousWindow == WINDOW_FULLSCREEN_VIDEO && g_application.m_pPlayer->IsPaused())
+      g_application.OnAction(ACTION_PAUSE);
+    else if (currentWindow == WINDOW_FULLSCREEN_VIDEO && !g_application.m_pPlayer->IsPaused())
+      g_application.OnAction(ACTION_PAUSE);
+  }
+
   // tell our info manager which window we are going to
   g_infoManager.SetNextWindow(previousWindow);
 
@@ -786,6 +800,15 @@ void CGUIWindowManager::ActivateWindow_Internal(int iWindowID, const std::vector
     CLog::Log(LOGINFO, "Activate of window '%i' refused because there are active modal dialogs", iWindowID);
     g_audioManager.PlayActionSound(CAction(ACTION_ERROR));
     return;
+  }
+
+  // pause game when leaving fullscreen or resume game when entering fullscreen
+  if (g_application.m_pPlayer->IsPlayingGame())
+  {
+    if (GetActiveWindow() == WINDOW_FULLSCREEN_VIDEO && !g_application.m_pPlayer->IsPaused())
+      g_application.OnAction(ACTION_PAUSE);
+    else if (iWindowID == WINDOW_FULLSCREEN_VIDEO && g_application.m_pPlayer->IsPaused())
+      g_application.OnAction(ACTION_PAUSE);
   }
 
   g_infoManager.SetNextWindow(iWindowID);
@@ -1242,14 +1265,14 @@ void CGUIWindowManager::RemoveDialog(int id)
   }
 }
 
-bool CGUIWindowManager::HasModalDialog(const std::vector<DialogModalityType>& types) const
+bool CGUIWindowManager::HasModalDialog(const std::vector<DialogModalityType>& types, bool ignoreClosing /* = true */) const
 {
   CSingleLock lock(g_graphicsContext);
   for (ciDialog it = m_activeDialogs.begin(); it != m_activeDialogs.end(); ++it)
   {
     if ((*it)->IsDialog() &&
         (*it)->IsModalDialog() &&
-        !(*it)->IsAnimating(ANIM_TYPE_WINDOW_CLOSE))
+        (!ignoreClosing || !(*it)->IsAnimating(ANIM_TYPE_WINDOW_CLOSE)))
     {
       if (!types.empty())
       {
@@ -1265,6 +1288,11 @@ bool CGUIWindowManager::HasModalDialog(const std::vector<DialogModalityType>& ty
     }
   }
   return false;
+}
+
+bool CGUIWindowManager::HasVisibleModalDialog(const std::vector<DialogModalityType>& types) const
+{
+  return HasModalDialog(types, false);
 }
 
 bool CGUIWindowManager::HasDialogOnScreen() const
@@ -1396,11 +1424,22 @@ int CGUIWindowManager::GetActiveWindowID()
     // check for LiveTV and switch to it's virtual window
     else if (g_PVRManager.IsStarted() && g_application.CurrentFileItem().HasPVRChannelInfoTag())
       iWin = WINDOW_FULLSCREEN_LIVETV;
+    // special casing for numeric seek
+    else if (CSeekHandler::GetInstance().HasTimeCode())
+      iWin = WINDOW_VIDEO_TIME_SEEK;
+    // check if a game is playing
+    else if (g_application.m_pPlayer->IsPlayingGame())
+      iWin = WINDOW_FULLSCREEN_GAME;
   }
-  // special casing for PVR radio
-  if (iWin == WINDOW_VISUALISATION && g_PVRManager.IsStarted() && g_application.CurrentFileItem().HasPVRChannelInfoTag())
-    iWin = WINDOW_FULLSCREEN_RADIO;
-
+  if (iWin == WINDOW_VISUALISATION)
+  {
+    // special casing for PVR radio
+    if (g_PVRManager.IsStarted() && g_application.CurrentFileItem().HasPVRChannelInfoTag())
+      iWin = WINDOW_FULLSCREEN_RADIO;
+    // special casing for numeric seek
+    else if (CSeekHandler::GetInstance().HasTimeCode())
+      iWin = WINDOW_VIDEO_TIME_SEEK;
+  }
   // Return the window id
   return iWin;
 }

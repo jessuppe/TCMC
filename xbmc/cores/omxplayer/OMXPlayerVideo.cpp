@@ -34,6 +34,7 @@
 
 #include "OMXPlayerVideo.h"
 
+#include "ServiceBroker.h"
 #include "linux/XMemUtils.h"
 #include "utils/BitstreamStats.h"
 
@@ -114,7 +115,7 @@ OMXPlayerVideo::~OMXPlayerVideo()
 bool OMXPlayerVideo::OpenStream(CDVDStreamInfo &hints)
 {
   m_hints       = hints;
-  m_hdmi_clock_sync = (CSettings::GetInstance().GetInt(CSettings::SETTING_VIDEOPLAYER_ADJUSTREFRESHRATE) != ADJUST_REFRESHRATE_OFF);
+  m_hdmi_clock_sync = (CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOPLAYER_ADJUSTREFRESHRATE) != ADJUST_REFRESHRATE_OFF);
   m_syncState = IDVDStreamPlayer::SYNC_STARTING;
   m_flush       = false;
   m_stalled     = m_messageQueue.GetPacketCount(CDVDMsg::DEMUXER_PACKET) == 0;
@@ -737,9 +738,6 @@ void OMXPlayerVideo::ResolutionUpdateCallBack(uint32_t width, uint32_t height, f
     m_bAllowFullscreen = false; // only allow on first configure
   }
 
-  m_processInfo.SetVideoDimensions(width, height);
-  m_processInfo.SetVideoDAR(display_aspect);
-
   unsigned int iDisplayWidth  = width;
   unsigned int iDisplayHeight = height;
 
@@ -751,6 +749,8 @@ void OMXPlayerVideo::ResolutionUpdateCallBack(uint32_t width, uint32_t height, f
 
   m_fFrameRate = DVD_TIME_BASE / CDVDCodecUtils::NormalizeFrameduration((double)DVD_TIME_BASE / framerate);
   m_processInfo.SetVideoFps(m_fFrameRate);
+  m_processInfo.SetVideoDimensions(width, height);
+  m_processInfo.SetVideoDAR((float)iDisplayWidth / (float)iDisplayHeight);
 
   CLog::Log(LOGDEBUG,"%s - change configuration. video:%dx%d. framerate: %4.2f. %dx%d format: BYPASS",
       __FUNCTION__, video_width, video_height, m_fFrameRate, iDisplayWidth, iDisplayHeight);

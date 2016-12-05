@@ -19,6 +19,7 @@
  */
 
 #include "system.h"
+#include "ServiceBroker.h"
 #include "cores/VideoPlayer/VideoRenderers/RenderFlags.h"
 #include "windowing/WindowingFactory.h"
 #include "settings/AdvancedSettings.h"
@@ -28,7 +29,6 @@
 #include "VideoPlayerVideo.h"
 #include "DVDCodecs/DVDFactoryCodec.h"
 #include "DVDCodecs/DVDCodecUtils.h"
-#include "DVDCodecs/Video/DVDVideoPPFFmpeg.h"
 #include "DVDCodecs/Video/DVDVideoCodecFFmpeg.h"
 #include "DVDDemuxers/DVDDemux.h"
 #include "DVDDemuxers/DVDDemuxPacket.h"
@@ -168,8 +168,8 @@ void CVideoPlayerVideo::OpenStream(CDVDStreamInfo &hint, CDVDVideoCodec* codec)
   }
 
   m_pullupCorrection.ResetVFRDetection();
-  m_bCalcFrameRate = CSettings::GetInstance().GetBool(CSettings::SETTING_VIDEOPLAYER_USEDISPLAYASCLOCK) ||
-                     CSettings::GetInstance().GetInt(CSettings::SETTING_VIDEOPLAYER_ADJUSTREFRESHRATE) != ADJUST_REFRESHRATE_OFF;
+  m_bCalcFrameRate = CServiceBroker::GetSettings().GetBool(CSettings::SETTING_VIDEOPLAYER_USEDISPLAYASCLOCK) ||
+                     CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOPLAYER_ADJUSTREFRESHRATE) != ADJUST_REFRESHRATE_OFF;
   ResetFrameRateCalc();
 
   m_iDroppedRequest = 0;
@@ -513,10 +513,6 @@ void CVideoPlayerVideo::Process()
 
 bool CVideoPlayerVideo::ProcessDecoderOutput(int &decoderState, double &frametime, double &pts)
 {
-  std::string sPostProcessType;
-  bool bPostProcessDeint = false;
-  CDVDVideoPPFFmpeg mPostProcess("");
-
   // if decoder was flushed, we need to seek back again to resume rendering
   if (decoderState & VC_FLUSHED)
   {
@@ -568,8 +564,6 @@ bool CVideoPlayerVideo::ProcessDecoderOutput(int &decoderState, double &frametim
     {
       bool hasTimestamp = true;
 
-      sPostProcessType.clear();
-
       if (m_picture.iDuration == 0.0)
         m_picture.iDuration = frametime;
 
@@ -587,21 +581,6 @@ bool CVideoPlayerVideo::ProcessDecoderOutput(int &decoderState, double &frametim
       /* use forced aspect if any */
       if( m_fForcedAspectRatio != 0.0f )
         m_picture.iDisplayWidth = (int) (m_picture.iDisplayHeight * m_fForcedAspectRatio);
-
-      if (CMediaSettings::GetInstance().GetCurrentVideoSettings().m_PostProcess)
-      {
-        if (!sPostProcessType.empty())
-          sPostProcessType += ",";
-        // This is what mplayer uses for its "high-quality filter combination"
-        sPostProcessType += g_advancedSettings.m_videoPPFFmpegPostProc;
-      }
-
-      if (!sPostProcessType.empty())
-      {
-        mPostProcess.SetType(sPostProcessType, bPostProcessDeint);
-        if (mPostProcess.Process(&m_picture))
-          mPostProcess.GetPicture(&m_picture);
-      }
 
       /* if frame has a pts (usually originiating from demux packet), use that */
       if (m_picture.pts != DVD_NOPTS_VALUE)
@@ -868,15 +847,15 @@ int CVideoPlayerVideo::OutputPicture(const DVDVideoPicture* src, double pts)
   if (pPicture->iFlags & DVP_FLAG_INTERLACED)
   {
     deintMethod = CMediaSettings::GetInstance().GetCurrentVideoSettings().m_InterlaceMethod;
-    if (m_processInfo.Supports(deintMethod))
+    if (!m_processInfo.Supports(deintMethod))
+      deintMethod = m_processInfo.GetDeinterlacingMethodDefault();
+    if (deintMethod != EINTERLACEMETHOD::VS_INTERLACEMETHOD_NONE)
     {
       if (pPicture->iFlags & DVP_FLAG_TOP_FIELD_FIRST)
         mDisplayField = FS_TOP;
       else
         mDisplayField = FS_BOT;
     }
-    else
-      deintMethod = EINTERLACEMETHOD::VS_INTERLACEMETHOD_NONE;
   }
 
   int timeToDisplay = DVD_TIME_TO_MSEC(pts - iPlayingClock);

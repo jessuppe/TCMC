@@ -31,6 +31,7 @@
 #include <utility>
 
 #include "Application.h"
+#include "ServiceBroker.h"
 #include "cores/VideoPlayer/DVDDemuxers/DVDDemuxBXA.h"
 #include "FileItem.h"
 #include "filesystem/File.h"
@@ -465,7 +466,7 @@ void  CAirTunesServer::AudioOutputFunctions::audio_set_volume(void *cls, void *s
 #ifdef HAS_AIRPLAY
   CAirPlayServer::backupVolume();
 #endif
-  if (CSettings::GetInstance().GetBool(CSettings::SETTING_SERVICES_AIRPLAYVOLUMECONTROL))
+  if (CServiceBroker::GetSettings().GetBool(CSettings::SETTING_SERVICES_AIRPLAYVOLUMECONTROL))
     g_application.SetVolume(volPercent, false);//non-percent volume 0.0-1.0
 }
 
@@ -617,13 +618,23 @@ void CAirTunesServer::StopServer(bool bWait)
   }
 }
 
- bool CAirTunesServer::IsRunning()
- {
-   if (ServerInstance == NULL)
-     return false;
+bool CAirTunesServer::IsRunning()
+{
+  if (ServerInstance == NULL)
+    return false;
 
-   return ((CThread*)ServerInstance)->IsRunning();
- }
+  return ServerInstance->IsRAOPRunningInternal();
+}
+
+bool CAirTunesServer::IsRAOPRunningInternal()
+{
+  if (m_pLibShairplay != nullptr && m_pRaop != nullptr)
+  {
+    return m_pLibShairplay->raop_is_running(m_pRaop);
+  }
+  return false;
+}
+
 
 CAirTunesServer::CAirTunesServer(int port, bool nonlocal)
 : CThread("AirTunesActionThread"),
@@ -718,6 +729,7 @@ void CAirTunesServer::Deinitialize()
     m_pLibShairplay->raop_stop(m_pRaop);
     m_pLibShairplay->raop_destroy(m_pRaop);
     m_pLibShairplay->Unload();
+    m_pRaop = nullptr;
   }
 }
 

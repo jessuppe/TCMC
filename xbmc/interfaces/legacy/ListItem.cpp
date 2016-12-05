@@ -27,6 +27,8 @@
 #include "video/VideoInfoTag.h"
 #include "music/tags/MusicInfoTag.h"
 #include "pictures/PictureInfoTag.h"
+#include "games/tags/GameInfoTag.h"
+#include "games/GameTypes.h"
 #include "utils/log.h"
 #include "utils/Variant.h"
 #include "utils/StringUtils.h"
@@ -592,7 +594,78 @@ namespace XBMCAddon
           }
         }
       }
+      else if (StringUtils::EqualsNoCase(type, "game"))
+      {
+        for (InfoLabelDict::const_iterator it = infoLabels.begin(); it != infoLabels.end(); it++)
+        {
+          String key = it->first;
+          StringUtils::ToLower(key);
+
+          const InfoLabelValue& alt = it->second;
+          const String value(alt.which() == first ? alt.former() : emptyString);
+
+          if (key == "title")
+          {
+            item->m_strTitle = value;
+            item->GetGameInfoTag()->SetTitle(value);
+          }
+          else if (key == "platform")
+            item->GetGameInfoTag()->SetPlatform(value);
+          else if (key == "genres")
+          {
+            if (alt.which() != second)
+              throw WrongTypeException("When using \"genres\" you need to supply a list of strings for the value in the dictionary");
+
+            std::vector<std::string> genres;
+
+            const std::vector<InfoLabelStringOrTuple>& listValue = alt.later();
+            for (std::vector<InfoLabelStringOrTuple>::const_iterator viter = listValue.begin(); viter != listValue.end(); ++viter)
+            {
+
+              const InfoLabelStringOrTuple& genreEntry = *viter;
+              const String& genre = genreEntry.which() == first ? genreEntry.former() : genreEntry.later().first();
+              genres.emplace_back(std::move(genre));
+            }
+
+            item->GetGameInfoTag()->SetGenres(genres);
+          }
+          else if (key == "publisher")
+            item->GetGameInfoTag()->SetPublisher(value);
+          else if (key == "developer")
+            item->GetGameInfoTag()->SetDeveloper(value);
+          else if (key == "overview")
+            item->GetGameInfoTag()->SetOverview(value);
+          else if (key == "year")
+            item->GetGameInfoTag()->SetYear(strtol(value.c_str(), NULL, 10));
+          else if (key == "emulator")
+            item->GetGameInfoTag()->SetGameClient(value);
+        }
+      }
     } // end ListItem::setInfo
+
+    void ListItem::setCast(const std::vector<Properties>& actors)
+    {
+      LOCKGUI;
+      item->GetVideoInfoTag()->m_cast.clear();
+      for (const auto& dictionary: actors)
+      {
+        SActorInfo info;
+        for (auto it = dictionary.begin(); it != dictionary.end(); ++it)
+        {
+          const String& key = it->first;
+          const String& value = it->second;
+          if (key == "name")
+            info.strName = value;
+          else if (key == "role")
+            info.strRole = value;
+          else if (key == "thumbnail")
+            info.thumbUrl = value;
+          else if (key == "order")
+            info.order = strtol(value.c_str(), NULL, 10);
+        }
+        item->GetVideoInfoTag()->m_cast.push_back(std::move(info));
+      }
+    }
 
     void ListItem::addStreamInfo(const char* cType, const Properties& dictionary)
     {
@@ -653,6 +726,7 @@ namespace XBMCAddon
         }
         item->GetVideoInfoTag()->m_streamDetails.AddStream(subtitle);
       }
+      item->GetVideoInfoTag()->m_streamDetails.DetermineBestStreams();
     } // end ListItem::addStreamInfo
 
     void ListItem::addContextMenuItems(const std::vector<Tuple<String,String> >& items, bool replaceItems /* = false */)

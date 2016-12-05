@@ -25,6 +25,7 @@
 #include "addons/kodi-addon-dev-kit/include/kodi/xbmc_epg_types.h"
 #include "EpgContainer.h"
 #include "EpgDatabase.h"
+#include "ServiceBroker.h"
 #include "guilib/LocalizeStrings.h"
 #include "pvr/addons/PVRClients.h"
 #include "pvr/PVRManager.h"
@@ -381,7 +382,7 @@ CDateTime CEpg::GetLastScanTime(void)
 
     if (!m_lastScanTime.IsValid())
     {
-      if (!CSettings::GetInstance().GetBool(CSettings::SETTING_EPG_IGNOREDBFORCLIENT))
+      if (!CServiceBroker::GetSettings().GetBool(CSettings::SETTING_EPG_IGNOREDBFORCLIENT))
       {
         CEpgDatabase *database = g_EpgContainer.GetDatabase();
         CDateTime dtReturn; dtReturn.SetValid(false);
@@ -414,29 +415,33 @@ bool CEpg::UpdateEntry(const EPG_TAG *data, bool bUpdateDatabase /* = false */)
 bool CEpg::UpdateEntry(const CEpgInfoTagPtr &tag, bool bUpdateDatabase /* = false */)
 {
   CEpgInfoTagPtr infoTag;
-  CSingleLock lock(m_critSection);
-  std::map<CDateTime, CEpgInfoTagPtr>::iterator it = m_tags.find(tag->StartAsUTC());
-  bool bNewTag(false);
-  if (it != m_tags.end())
+
   {
-    infoTag = it->second;
-  }
-  else
-  {
-    infoTag.reset(new CEpgInfoTag(this, m_pvrChannel, m_strName, m_pvrChannel ? m_pvrChannel->IconPath() : ""));
-    infoTag->SetUniqueBroadcastID(tag->UniqueBroadcastID());
-    m_tags.insert(std::make_pair(tag->StartAsUTC(), infoTag));
-    bNewTag = true;
+    CSingleLock lock(m_critSection);
+    std::map<CDateTime, CEpgInfoTagPtr>::iterator it = m_tags.find(tag->StartAsUTC());
+    bool bNewTag(false);
+    if (it != m_tags.end())
+    {
+      infoTag = it->second;
+    }
+    else
+    {
+      infoTag.reset(new CEpgInfoTag(this, m_pvrChannel, m_strName, m_pvrChannel ? m_pvrChannel->IconPath() : ""));
+      infoTag->SetUniqueBroadcastID(tag->UniqueBroadcastID());
+      m_tags.insert(std::make_pair(tag->StartAsUTC(), infoTag));
+      bNewTag = true;
+    }
+
+    infoTag->Update(*tag, bNewTag);
+    infoTag->SetEpg(this);
+    infoTag->SetPVRChannel(m_pvrChannel);
+
+    if (bUpdateDatabase)
+      m_changedTags.insert(std::make_pair(infoTag->UniqueBroadcastID(), infoTag));
   }
 
-  infoTag->Update(*tag, bNewTag);
-  infoTag->SetEpg(this);
-  infoTag->SetPVRChannel(m_pvrChannel);
   infoTag->SetTimer(g_PVRTimers->GetTimerForEpgTag(infoTag));
   infoTag->SetRecording(g_PVRRecordings->GetRecordingForEpgTag(infoTag));
-
-  if (bUpdateDatabase)
-    m_changedTags.insert(std::make_pair(infoTag->UniqueBroadcastID(), infoTag));
 
   return true;
 }
@@ -583,7 +588,7 @@ int CEpg::Get(CFileItemList &results, const EpgSearchFilter &filter) const
 
 bool CEpg::Persist(void)
 {
-  if (CSettings::GetInstance().GetBool(CSettings::SETTING_EPG_IGNOREDBFORCLIENT) || !NeedsSave())
+  if (CServiceBroker::GetSettings().GetBool(CSettings::SETTING_EPG_IGNOREDBFORCLIENT) || !NeedsSave())
     return true;
 
 #if EPG_DEBUGGING
@@ -800,13 +805,13 @@ bool CEpg::LoadFromClients(time_t start, time_t end)
   {
     CEpg tmpEpg(channel);
     if (tmpEpg.UpdateFromScraper(start, end))
-      bReturn = UpdateEntries(tmpEpg, !CSettings::GetInstance().GetBool(CSettings::SETTING_EPG_IGNOREDBFORCLIENT));
+      bReturn = UpdateEntries(tmpEpg, !CServiceBroker::GetSettings().GetBool(CSettings::SETTING_EPG_IGNOREDBFORCLIENT));
   }
   else
   {
     CEpg tmpEpg(m_iEpgID, m_strName, m_strScraperName);
     if (tmpEpg.UpdateFromScraper(start, end))
-      bReturn = UpdateEntries(tmpEpg, !CSettings::GetInstance().GetBool(CSettings::SETTING_EPG_IGNOREDBFORCLIENT));
+      bReturn = UpdateEntries(tmpEpg, !CServiceBroker::GetSettings().GetBool(CSettings::SETTING_EPG_IGNOREDBFORCLIENT));
   }
 
   return bReturn;
