@@ -456,6 +456,8 @@ namespace XBMCAddon
             item->GetVideoInfoTag()->SetVotes(StringUtils::ReturnDigits(value));
           else if (key == "trailer")
             item->GetVideoInfoTag()->m_strTrailer = value;
+          else if (key == "path")
+            item->GetVideoInfoTag()->m_strPath = value;
           else if (key == "date")
           {
             if (value.length() == 10)
@@ -637,7 +639,7 @@ namespace XBMCAddon
             item->GetGameInfoTag()->SetOverview(value);
           else if (key == "year")
             item->GetGameInfoTag()->SetYear(strtol(value.c_str(), NULL, 10));
-          else if (key == "emulator")
+          else if (key == "gameclient")
             item->GetGameInfoTag()->SetGameClient(value);
         }
       }

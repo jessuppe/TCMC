@@ -593,6 +593,7 @@ namespace XBMCAddon
       /// | album         | string (The Joshua Tree)
       /// | artist        | list (['U2'])
       /// | votes         | string (12345 votes)
+      /// | path          | string (/home/user/movie.avi)
       /// | trailer       | string (/home/user/trailer.avi)
       /// | dateadded     | string (%Y-%m-%d %h:%m:%s = 2009-04-05 23:16:04)
       /// | mediatype     | string - "video", "movie", "tvshow", "season", "episode" or "musicvideo"
@@ -639,7 +640,7 @@ namespace XBMCAddon
       /// | developer     | string (Square)
       /// | overview      | string (Long Description)
       /// | year          | integer (1980)
-      /// | emulator      | string (game.libretro.fceumm)
+      /// | gameclient    | string (game.libretro.fceumm)
       ///
       ///
       ///-----------------------------------------------------------------------
@@ -647,8 +648,9 @@ namespace XBMCAddon
       /// @python_v15 **duration** has to be set in seconds.
       /// @python_v16 Added new label **mediatype**.
       /// @python_v17
-      /// Added labels **setid**, **set**, **imdbnumber**, **code**, **dbid** and **userrating**.
+      /// Added labels **setid**, **set**, **imdbnumber**, **code**, **dbid**, **path** and **userrating**.
       /// Expanded the possible infoLabels for the option **mediatype**.
+      /// @python_v18 Added new **game** type and associated infolabels.
       ///
       /// **Example:**
       /// ~~~~~~~~~~~~~{.py}

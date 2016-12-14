@@ -23,20 +23,12 @@
 #include "addons/binary/interfaces/AddonInterfaces.h"
 #include "addons/kodi-addon-dev-kit/include/kodi/libXBMC_codec.h"
 
-namespace V1
-{
 namespace KodiAPI
 {
-
+namespace V1
+{
 namespace Codec
 {
-
-typedef xbmc_codec_t (*CODECGetCodecByName)(const void* addonData, const char* strCodecName);
-
-typedef struct CB_CODEC
-{
-  CODECGetCodecByName   GetCodecByName;
-} CB_CodecLib;
 
 class CAddonCallbacksCodec : public ADDON::IAddonInterface
 {
@@ -56,6 +48,5 @@ private:
 };
 
 } /* namespace Codec */
-
-} /* namespace KoidAPI */
 } /* namespace V1 */
+} /* namespace KodiAPI */

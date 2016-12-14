@@ -94,7 +94,7 @@ set(INCLUDES ${CORE_SOURCE_DIR}
              ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR})
 
 find_package(PkgConfig)
-if(CMAKE_CROSSCOMPILING)
+if(KODI_DEPENDSBUILD)
   if(PKG_CONFIG_EXECUTABLE)
     set(PKG_CONFIG_FOUND TRUE)
   endif()
@@ -119,7 +119,7 @@ endif()
 # Optional dependencies
 set(optional_deps MicroHttpd MySqlClient SSH XSLT
                   Alsa UDEV DBus Avahi SmbClient
-                  PulseAudio VDPAU VAAPI)
+                  PulseAudio VDPAU VAAPI Bluetooth CAP)
 
 # Required, dyloaded deps
 set(required_dyload Curl ASS)
@@ -347,9 +347,12 @@ unset(_MAIN_LIBRARIES)
 if(WIN32)
   set_target_properties(${APP_NAME_LC} PROPERTIES WIN32_EXECUTABLE ON)
   set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME_LC})
-  target_sources(kodi PRIVATE ${CORE_SOURCE_DIR}/xbmc/platform/win32/app.manifest)
+  target_sources(${APP_NAME_LC} PRIVATE ${CORE_SOURCE_DIR}/xbmc/platform/win32/app.manifest)
 elseif(CORE_SYSTEM_NAME STREQUAL android)
   # Nothing
+elseif(CORE_SYSTEM_NAME STREQUAL ios)
+  set_target_properties(${APP_NAME_LC} PROPERTIES OUTPUT_NAME ${APP_NAME}
+                                                  MACOSX_BUNDLE_INFO_PLIST ${CORE_SOURCE_DIR}/xbmc/platform/darwin/ios/Info.plist.in)
 else()
   set_target_properties(${APP_NAME_LC} PROPERTIES SUFFIX ".bin")
 endif()

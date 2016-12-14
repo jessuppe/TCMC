@@ -916,6 +916,9 @@ bool CFileItem::IsGame() const
   if (HasPictureInfoTag())
     return false;
 
+  if (IsPVR())
+    return false;
+
   if (HasAddonInfo())
     return CGameUtils::IsStandaloneGame(std::const_pointer_cast<ADDON::IAddon>(GetAddonInfo()));
 
@@ -3285,6 +3288,8 @@ bool CFileItem::LoadGameTag()
 
   //! @todo
   GetGameInfoTag();
+
+  m_gameInfoTag->SetLoaded(true);
 
   return false;
 }
