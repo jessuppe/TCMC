@@ -10,14 +10,14 @@ IF NOT EXIST %msys_dir% (SET msys_dir=%builddeps_dir%\msys32)
 SET awk_exe=%msys_dir%\usr\bin\awk.exe
 SET sed_exe=%msys_dir%\usr\bin\sed.exe
 
-REM read the version values from version.txt
-FOR /f %%i IN ('%awk_exe% "/APP_NAME/ {print $2}" %base_dir%\version.txt') DO SET APP_NAME=%%i
-FOR /f %%i IN ('%awk_exe% "/COMPANY_NAME/ {print $2}" %base_dir%\version.txt') DO SET COMPANY_NAME=%%i
-FOR /f %%i IN ('%awk_exe% "/WEBSITE/ {print $2}" %base_dir%\version.txt') DO SET WEBSITE=%%i
-FOR /f %%i IN ('%awk_exe% "/VERSION_MAJOR/ {print $2}" %base_dir%\version.txt') DO SET MAJOR=%%i
-FOR /f %%i IN ('%awk_exe% "/VERSION_MINOR/ {print $2}" %base_dir%\version.txt') DO SET MINOR=%%i
-FOR /f %%i IN ('%awk_exe% "/VERSION_TAG/ {print $2}" %base_dir%\version.txt') DO SET TAG=%%i
-FOR /f %%i IN ('%awk_exe% "/ADDON_API/ {print $2}" %base_dir%\version.txt') DO SET VERSION_NUMBER=%%i.0
+REM read the version values from version.xbmcintc.txt
+FOR /f %%i IN ('%awk_exe% "/APP_NAME/ {print $2}" %base_dir%\version.xbmcintc.txt') DO SET APP_NAME=%%i
+FOR /f %%i IN ('%awk_exe% "/COMPANY_NAME/ {print $2}" %base_dir%\version.xbmcintc.txt') DO SET COMPANY_NAME=%%i
+FOR /f %%i IN ('%awk_exe% "/WEBSITE/ {print $2}" %base_dir%\version.xbmcintc.txt') DO SET WEBSITE=%%i
+FOR /f %%i IN ('%awk_exe% "/VERSION_MAJOR/ {print $2}" %base_dir%\version.xbmcintc.txt') DO SET MAJOR=%%i
+FOR /f %%i IN ('%awk_exe% "/VERSION_MINOR/ {print $2}" %base_dir%\version.xbmcintc.txt') DO SET MINOR=%%i
+FOR /f %%i IN ('%awk_exe% "/VERSION_TAG/ {print $2}" %base_dir%\version.xbmcintc.txt') DO SET TAG=%%i
+FOR /f %%i IN ('%awk_exe% "/ADDON_API/ {print $2}" %base_dir%\version.xbmcintc.txt') DO SET VERSION_NUMBER=%%i.0
 
 SET APP_VERSION=%MAJOR%.%MINOR%
 IF NOT [%TAG%] == [] (
@@ -59,7 +59,7 @@ FOR %%b in (%1, %2, %3, %4, %5, %6) DO (
 )
 
 SET buildconfig=Release
-set WORKSPACE=%CD%\..\..\kodi-build
+set WORKSPACE=%CD%\..\..\xbmcintc-build
 
 
   :: sets the BRANCH env var
