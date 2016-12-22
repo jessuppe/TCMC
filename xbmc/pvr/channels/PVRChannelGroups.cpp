@@ -27,6 +27,7 @@
 #include "settings/Settings.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
+#include "utils/URIUtils.h"
 
 #include "pvr/PVRDatabase.h"
 #include "pvr/PVRManager.h"
@@ -519,6 +520,7 @@ bool CPVRChannelGroups::DeleteGroup(const CPVRChannelGroup &group)
   }
 
   bool bFound(false);
+  CPVRChannelGroupPtr playingGroup;
 
   // delete the group in this container
   {
@@ -530,7 +532,7 @@ bool CPVRChannelGroups::DeleteGroup(const CPVRChannelGroup &group)
         // update the selected group in the gui if it's deleted
         CPVRChannelGroupPtr selectedGroup = GetSelectedGroup();
         if (selectedGroup && *selectedGroup == group)
-          g_PVRManager.SetPlayingGroup(GetGroupAll());
+          playingGroup = GetGroupAll();
 
         it = m_groups.erase(it);
         bFound = true;
@@ -541,6 +543,9 @@ bool CPVRChannelGroups::DeleteGroup(const CPVRChannelGroup &group)
       }
     }
   }
+
+  if (playingGroup)
+    g_PVRManager.SetPlayingGroup(playingGroup);
 
   if (group.GroupID() > 0)
   {

@@ -34,6 +34,7 @@
 #include "GUITexture.h"
 #include "utils/Variant.h"
 #include "input/Key.h"
+#include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/SeekHandler.h"
 
@@ -145,7 +146,7 @@
 #include "settings/dialogs/GUIDialogAudioDSPSettings.h"
 
 #include "peripherals/dialogs/GUIDialogPeripheralSettings.h"
-#include "addons/binary/interfaces/AddonInterfaces.h"
+#include "addons/interfaces/AddonInterfaces.h"
 
 /* Game related include files */
 #include "games/controllers/windows/GUIControllerWindow.h"

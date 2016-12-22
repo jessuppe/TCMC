@@ -31,7 +31,7 @@
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
-
+#include "utils/StringUtils.h"
 #include "pvr/PVRGUIActions.h"
 #include "pvr/PVRManager.h"
 #include "pvr/addons/PVRClients.h"
@@ -45,7 +45,6 @@ using namespace EPG;
 
 CGUIWindowPVRGuide::CGUIWindowPVRGuide(bool bRadio) :
   CGUIWindowPVRBase(bRadio, bRadio ? WINDOW_RADIO_GUIDE : WINDOW_TV_GUIDE, "MyPVRGuide.xml"),
-  m_refreshTimelineItemsThread(new CPVRRefreshTimelineItemsThread(this)),
   m_cachedChannelGroup(new CPVRChannelGroup)
 {
   m_bRefreshTimelineItems = false;
@@ -109,12 +108,14 @@ void CGUIWindowPVRGuide::OnDeinitWindow(int nextWindowID)
 void CGUIWindowPVRGuide::StartRefreshTimelineItemsThread()
 {
   StopRefreshTimelineItemsThread();
+  m_refreshTimelineItemsThread.reset(new CPVRRefreshTimelineItemsThread(this));
   m_refreshTimelineItemsThread->Create();
 }
 
 void CGUIWindowPVRGuide::StopRefreshTimelineItemsThread()
 {
-  m_refreshTimelineItemsThread->StopThread(false);
+  if (m_refreshTimelineItemsThread)
+    m_refreshTimelineItemsThread->StopThread(false);
 }
 
 void CGUIWindowPVRGuide::Notify(const Observable &obs, const ObservableMessage msg)
@@ -256,11 +257,11 @@ bool CGUIWindowPVRGuide::OnMessage(CGUIMessage& message)
                   bReturn = true;
                   break;
                 case EPG_SELECT_ACTION_SWITCH:
-                  CPVRGUIActions::GetInstance().SwitchToChannel(pItem, false, true);
+                  CPVRGUIActions::GetInstance().SwitchToChannel(pItem, true);
                   bReturn = true;
                   break;
                 case EPG_SELECT_ACTION_PLAY_RECORDING:
-                  CPVRGUIActions::GetInstance().PlayRecording(pItem, false, true);
+                  CPVRGUIActions::GetInstance().PlayRecording(pItem, true);
                   bReturn = true;
                   break;
                 case EPG_SELECT_ACTION_INFO:
@@ -278,7 +279,7 @@ bool CGUIWindowPVRGuide::OnMessage(CGUIMessage& message)
               bReturn = true;
               break;
             case ACTION_PLAY:
-              CPVRGUIActions::GetInstance().PlayRecording(pItem, false, true);
+              CPVRGUIActions::GetInstance().PlayRecording(pItem, true);
               bReturn = true;
               break;
             case ACTION_RECORD:
@@ -312,7 +313,7 @@ bool CGUIWindowPVRGuide::OnMessage(CGUIMessage& message)
                 const CFileItemPtr item(epgGridContainer->GetSelectedChannelItem());
                 if (item)
                 {
-                  CPVRGUIActions::GetInstance().SwitchToChannel(item, false, true);
+                  CPVRGUIActions::GetInstance().SwitchToChannel(item, true);
                   bReturn = true;
                 }
               }

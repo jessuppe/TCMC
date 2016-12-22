@@ -120,9 +120,6 @@ install(FILES ${CORE_SOURCE_DIR}/tools/Linux/packaging/media/icon256x256.png
         RENAME ${APP_NAME_LC}.png
         DESTINATION ${datarootdir}/icons/hicolor/256x256/apps
         COMPONENT kodi)
-install(CODE "execute_process(COMMAND gtk-update-icon-cache -f -q -t
-        $ENV{DESTDIR}${datarootdir}/icons/hicolor ERROR_QUIET)"
-        COMPONENT kodi)
 
 # Install docs
 install(FILES ${CORE_SOURCE_DIR}/copying.txt
@@ -138,7 +135,7 @@ install(FILES ${CORE_SOURCE_DIR}/privacy-policy.txt
 
 # Install kodi-tools-texturepacker
 if(NOT WITH_TEXTUREPACKER)
-  install(PROGRAMS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/texturepacker/TexturePacker
+  install(PROGRAMS $<TARGET_FILE:TexturePacker::TexturePacker>
           DESTINATION ${bindir}
           COMPONENT kodi-tools-texturepacker)
 endif()
@@ -314,8 +311,7 @@ install(FILES ${CORE_SOURCE_DIR}/xbmc/addons/kodi-addon-dev-kit/include/kodi/kod
         COMPONENT kodi-peripheral-dev)
 
 # Install kodi-game-dev
-install(FILES ${CORE_SOURCE_DIR}/xbmc/addons/kodi-addon-dev-kit/include/kodi/kodi_game_callbacks.h
-              ${CORE_SOURCE_DIR}/xbmc/addons/kodi-addon-dev-kit/include/kodi/kodi_game_dll.h
+install(FILES ${CORE_SOURCE_DIR}/xbmc/addons/kodi-addon-dev-kit/include/kodi/kodi_game_dll.h
               ${CORE_SOURCE_DIR}/xbmc/addons/kodi-addon-dev-kit/include/kodi/kodi_game_types.h
         DESTINATION ${includedir}/${APP_NAME_LC}
         COMPONENT kodi-game-dev)

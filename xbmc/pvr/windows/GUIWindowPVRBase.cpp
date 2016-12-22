@@ -23,6 +23,7 @@
 #include "ServiceBroker.h"
 #include "addons/AddonManager.h"
 #include "dialogs/GUIDialogExtendedProgressBar.h"
+#include "dialogs/GUIDialogOK.h"
 #include "dialogs/GUIDialogSelect.h"
 #include "epg/Epg.h"
 #include "GUIUserMessages.h"
@@ -38,6 +39,7 @@
 #include "pvr/PVRManager.h"
 #include "pvr/timers/PVRTimers.h"
 #include "ServiceBroker.h"
+#include "utils/log.h"
 #include "utils/Variant.h"
 
 #define MAX_INVALIDATION_FREQUENCY 2000 // limit to one invalidation per X milliseconds
@@ -88,17 +90,20 @@ void CGUIWindowPVRBase::UpdateSelectedItemPath()
 
 void CGUIWindowPVRBase::RegisterObservers(void)
 {
-  CSingleLock lock(m_critSection);
   g_PVRManager.RegisterObserver(this);
+
+  CSingleLock lock(m_critSection);
   if (m_channelGroup)
     m_channelGroup->RegisterObserver(this);
 };
 
 void CGUIWindowPVRBase::UnregisterObservers(void)
 {
-  CSingleLock lock(m_critSection);
-  if (m_channelGroup)
-    m_channelGroup->UnregisterObserver(this);
+  {
+    CSingleLock lock(m_critSection);
+    if (m_channelGroup)
+      m_channelGroup->UnregisterObserver(this);
+  }
   g_PVRManager.UnregisterObserver(this);
 };
 
@@ -311,18 +316,26 @@ CPVRChannelGroupPtr CGUIWindowPVRBase::GetChannelGroup(void)
 
 void CGUIWindowPVRBase::SetChannelGroup(const CPVRChannelGroupPtr &group)
 {
-  CSingleLock lock(m_critSection);
   if (!group)
     return;
 
-  if (m_channelGroup != group)
+  CPVRChannelGroupPtr channelGroup;
   {
-    if (m_channelGroup)
-      m_channelGroup->UnregisterObserver(this);
-    m_channelGroup = group;
-    // we need to register the window to receive changes from the new group
-    m_channelGroup->RegisterObserver(this);
-    g_PVRManager.SetPlayingGroup(m_channelGroup);
+    CSingleLock lock(m_critSection);
+    if (m_channelGroup != group)
+    {
+      if (m_channelGroup)
+        m_channelGroup->UnregisterObserver(this);
+      m_channelGroup = group;
+      // we need to register the window to receive changes from the new group
+      m_channelGroup->RegisterObserver(this);
+      channelGroup = m_channelGroup;
+    }
+  }
+
+  if (channelGroup)
+  {
+    g_PVRManager.SetPlayingGroup(channelGroup);
     Update(GetDirectoryPath());
   }
 }
