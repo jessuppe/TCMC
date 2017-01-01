@@ -62,6 +62,7 @@ public:
   static const std::string SETTING_LOCALE_COUNTRY;
   static const std::string SETTING_LOCALE_CHARSET;
   static const std::string SETTING_LOCALE_KEYBOARDLAYOUTS;
+  static const std::string SETTING_LOCALE_ACTIVEKEYBOARDLAYOUT;
   static const std::string SETTING_LOCALE_TIMEZONECOUNTRY;
   static const std::string SETTING_LOCALE_TIMEZONE;
   static const std::string SETTING_LOCALE_SHORTDATEFORMAT;
@@ -347,6 +348,7 @@ public:
   static const std::string SETTING_POWERMANAGEMENT_SHUTDOWNTIME;
   static const std::string SETTING_POWERMANAGEMENT_SHUTDOWNSTATE;
   static const std::string SETTING_POWERMANAGEMENT_WAKEONACCESS;
+  static const std::string SETTING_POWERMANAGEMENT_WAITNETAFTERWAKEUP;
   static const std::string SETTING_DEBUG_SHOWLOGINFO;
   static const std::string SETTING_DEBUG_EXTRALOGGING;
   static const std::string SETTING_DEBUG_SETEXTRALOGLEVEL;

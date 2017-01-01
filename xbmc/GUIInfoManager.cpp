@@ -64,7 +64,6 @@
 #include "utils/CPUInfo.h"
 #include "utils/SortUtils.h"
 #include "utils/StringUtils.h"
-#include "utils/MathUtils.h"
 #include "utils/SeekHandler.h"
 #include "URL.h"
 #include "addons/Skin.h"
@@ -72,6 +71,7 @@
 #include <functional>
 #include <iterator>
 #include <memory>
+#include <math.h>
 #include "cores/DataCacheCore.h"
 #include "guiinfo/GUIInfoLabels.h"
 #include "messaging/ApplicationMessenger.h"
@@ -4276,16 +4276,6 @@ const infomap playlist[] =       {{ "length",           PLAYLIST_LENGTH },
 ///                  _string_,
 ///     Backend number
 ///   }
-///   \table_row3{   <b>`Pvr.HasEpg`</b>,
-///                  \anchor Pvr_HasEpg
-///                  _boolean_,
-///     Returns true when an epg is available.
-///   }
-///   \table_row3{   <b>`Pvr.HasTxt`</b>,
-///                  \anchor Pvr_HasTxt
-///                  _boolean_,
-///     Returns true when teletext is available.
-///   }
 ///   \table_row3{   <b>`Pvr.TotalDiscSpace`</b>,
 ///                  \anchor Pvr_TotalDiscSpace
 ///                  _string_,
@@ -4558,8 +4548,6 @@ const infomap pvr[] =            {{ "isrecording",              PVR_IS_RECORDING
                                   { "backendrecordings",        PVR_BACKEND_RECORDINGS },
                                   { "backenddeletedrecordings", PVR_BACKEND_DELETED_RECORDINGS },
                                   { "backendnumber",            PVR_BACKEND_NUMBER },
-                                  { "hasepg",                   PVR_HAS_EPG },
-                                  { "hastxt",                   PVR_HAS_TXT },
                                   { "totaldiscspace",           PVR_TOTAL_DISKSPACE },
                                   { "nexttimer",                PVR_NEXT_TIMER },
                                   { "isplayingtv",              PVR_IS_PLAYING_TV },
@@ -6736,19 +6724,19 @@ bool CGUIInfoManager::GetInt(int &value, int info, int contextWindow, const CGUI
             {
               const CEpgInfoTagPtr tag(GetEpgInfoTag());
               if (tag)
-                value = MathUtils::round_int(tag->ProgressPercentage());
+                value = lrintf(tag->ProgressPercentage());
               else
-                value = MathUtils::round_int(g_application.GetPercentage());
+                value = lrintf(g_application.GetPercentage());
               break;
             }
           case PLAYER_PROGRESS_CACHE:
-            value = MathUtils::round_int(g_application.GetCachePercentage());
+            value = lrintf(g_application.GetCachePercentage());
             break;
           case PLAYER_SEEKBAR:
-            value = MathUtils::round_int(GetSeekPercent());
+            value = lrintf(GetSeekPercent());
             break;
           case PLAYER_CACHELEVEL:
-            value = (int)(g_application.m_pPlayer->GetCacheLevel());
+            value = g_application.m_pPlayer->GetCacheLevel();
             break;
           case PLAYER_CHAPTER:
             value = g_application.m_pPlayer->GetChapter();
@@ -7065,18 +7053,9 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
            condition == CONTAINER_SCROLLING || condition == CONTAINER_ISUPDATING ||
            condition == CONTAINER_HAS_PARENT_ITEM)
   {
-    const CGUIControl *control = NULL;
-    CGUIWindow *window = GetWindowWithCondition(contextWindow, WINDOW_CONDITION_IS_MEDIA_WINDOW);
-    if (window)
-      control = window->GetControl(window->GetViewContainerID());
-
-    if (control)
-    {
-      if (control->IsContainer())
-        bReturn = control->GetCondition(condition, 0);
-      else if (control->GetControlType() == CGUIControl::GUICONTROL_TEXTBOX)
-        bReturn = ((CGUITextBox *)control)->GetCondition(condition, 0);
-    }
+    auto activeContainer = GetActiveContainer(0, contextWindow);
+    if (activeContainer)
+      bReturn = activeContainer->GetCondition(condition, 0);
   }
   else if (condition == CONTAINER_CAN_FILTER)
   {
@@ -7389,24 +7368,9 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
   {
     if (!item)
     {
-      CGUIWindow *window = NULL;
-      int data1 = info.GetData1();
-      if (!data1) // No container specified, so we lookup the current view container
-      {
-        window = GetWindowWithCondition(contextWindow, WINDOW_CONDITION_HAS_LIST_ITEMS);
-        if (window && window->IsMediaWindow())
-          data1 = ((CGUIMediaWindow*)(window))->GetViewContainerID();
-      }
-
-      if (!window) // If we don't have a window already (from lookup above), get one
-        window = GetWindowWithCondition(contextWindow, 0);
-
-      if (window)
-      {
-        const CGUIControl *control = window->GetControl(data1);
-        if (control && control->IsContainer())
-          item = ((IGUIContainer *)control)->GetListItem(info.GetData2(), info.GetInfoFlag()).get();
-      }
+      auto activeContainer = GetActiveContainer(info.GetData1(), contextWindow);
+      if (activeContainer)
+        item = static_cast<IGUIContainer *>(activeContainer)->GetListItem(info.GetData2(), info.GetInfoFlag()).get();
     }
     if (item) // If we got a valid item, do the lookup
       bReturn = GetItemBool(item, condition); // Image prioritizes images over labels (in the case of music item ratings for instance)
@@ -7693,21 +7657,9 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
       case CONTAINER_ISUPDATING:
       case CONTAINER_HAS_PARENT_ITEM:
         {
-          const CGUIControl *control = NULL;
-          if (info.GetData1())
-          { // container specified
-            CGUIWindow *window = GetWindowWithCondition(contextWindow, 0);
-            if (window)
-              control = window->GetControl(info.GetData1());
-          }
-          else
-          { // no container specified - assume a mediawindow
-            CGUIWindow *window = GetWindowWithCondition(contextWindow, WINDOW_CONDITION_IS_MEDIA_WINDOW);
-            if (window)
-              control = window->GetControl(window->GetViewContainerID());
-          }
-          if (control)
-            bReturn = control->GetCondition(condition, info.GetData2());
+          auto activeContainer = GetActiveContainer(info.GetData1(), contextWindow);
+          if (activeContainer)
+            bReturn = activeContainer->GetCondition(condition, info.GetData2());
         }
         break;
       case CONTAINER_HAS_FOCUS:
@@ -7872,31 +7824,40 @@ bool CGUIInfoManager::GetMultiInfoInt(int &value, const GUIInfo &info, int conte
   if (info.m_info >= LISTITEM_START && info.m_info <= LISTITEM_END)
   {
     CFileItemPtr item;
-    CGUIWindow *window = NULL;
-
-    int data1 = info.GetData1();
-    if (!data1) // No container specified, so we lookup the current view container
-    {
-      window = GetWindowWithCondition(contextWindow, WINDOW_CONDITION_HAS_LIST_ITEMS);
-      if (window && window->IsMediaWindow())
-        data1 = ((CGUIMediaWindow*)(window))->GetViewContainerID();
-    }
-
-    if (!window) // If we don't have a window already (from lookup above), get one
-      window = GetWindowWithCondition(contextWindow, 0);
-
-    if (window)
-    {
-      const CGUIControl *control = window->GetControl(data1);
-      if (control && control->IsContainer())
-        item = std::static_pointer_cast<CFileItem>(((IGUIContainer *)control)->GetListItem(info.GetData2(), info.GetInfoFlag()));
-    }
+    auto activeContainer = GetActiveContainer(info.GetData1(), contextWindow);
+    if (activeContainer)
+      item = std::static_pointer_cast<CFileItem>(static_cast<IGUIContainer *>(activeContainer)->GetListItem(info.GetData2(), info.GetInfoFlag()));
 
     if (item) // If we got a valid item, do the lookup
       return GetItemInt(value, item.get(), info.m_info);
   }
 
   return 0;
+}
+
+/// \brief Returns the currently chosen container (view control for MediaWindows, currently focused container for non-MediaWindows)
+CGUIControl* CGUIInfoManager::GetActiveContainer(int containerId, int contextWindow) const
+{
+  CGUIWindow *window = GetWindowWithCondition(contextWindow, 0);
+  if (!window)
+    return nullptr;
+  if (!containerId) // No container specified, so we lookup the current view container
+  {
+    if (window->IsMediaWindow())
+      containerId = static_cast<CGUIMediaWindow*>(window)->GetViewContainerID();
+    else
+    {
+      auto control = window->GetFocusedControl();
+      if (control && control->IsContainer())
+        return control;
+    }
+  }
+  
+  CGUIControl *control = window->GetControl(containerId);
+  if (control && control->IsContainer())
+    return control;
+
+  return nullptr;
 }
 
 /// \brief Examines the multi information sent and returns the string as appropriate
@@ -7915,30 +7876,9 @@ std::string CGUIInfoManager::GetMultiInfoLabel(const GUIInfo &info, int contextW
   if (info.m_info >= LISTITEM_START && info.m_info <= LISTITEM_END)
   {
     CFileItemPtr item;
-    CGUIWindow *window = GetWindowWithCondition(contextWindow, 0);
-
-    int data1 = info.GetData1();
-    if (!data1) // No container specified, so we lookup the current view container
-    {
-      if (window)
-      {
-        if (window->IsMediaWindow())
-          data1 = static_cast<CGUIMediaWindow*>(window)->GetViewContainerID();
-        else
-        {
-          auto control = window->GetFocusedControl();
-          if (control && control->IsContainer())
-            data1 = control->GetID();
-        }
-      }
-    }
-
-    if (window)
-    {
-      const CGUIControl *control = window->GetControl(data1);
-      if (control && control->IsContainer())
-        item = std::static_pointer_cast<CFileItem>(((IGUIContainer *)control)->GetListItem(info.GetData2(), info.GetInfoFlag()));
-    }
+    auto activeContainer = GetActiveContainer(info.GetData1(), contextWindow);
+    if (activeContainer)
+      item = std::static_pointer_cast<CFileItem>(static_cast<IGUIContainer *>(activeContainer)->GetListItem(info.GetData2(), info.GetInfoFlag()));
 
     if (item) // If we got a valid item, do the lookup
       return GetItemImage(item.get(), info.m_info, fallback); // Image prioritizes images over labels (in the case of music item ratings for instance)
@@ -7953,28 +7893,18 @@ std::string CGUIInfoManager::GetMultiInfoLabel(const GUIInfo &info, int contextW
   }
   else if (info.m_info == PLAYER_FINISH_TIME)
   {
-    CDateTime time;
-    CEpgInfoTagPtr currentTag(GetEpgInfoTag());
-    if (currentTag)
-      time = currentTag->EndAsLocalTime();
-    else
-    {
-      time = CDateTime::GetCurrentDateTime();
-      time += CDateTimeSpan(0, 0, 0, GetPlayTimeRemaining());
-    }
+    CDateTime time(CDateTime::GetCurrentDateTime());
+    int playTimeRemaining = GetPlayTimeRemaining();
+    float speed = g_application.m_pPlayer->GetPlaySpeed();
+    if (speed >= 0.75 && speed <= 1.55)
+      playTimeRemaining /= speed;
+    time += CDateTimeSpan(0, 0, 0, playTimeRemaining);
     return LocalizeTime(time, (TIME_FORMAT)info.GetData1());
   }
   else if (info.m_info == PLAYER_START_TIME)
   {
-    CDateTime time;
-    CEpgInfoTagPtr currentTag(GetEpgInfoTag());
-    if (currentTag)
-      time = currentTag->StartAsLocalTime();
-    else
-    {
-      time = CDateTime::GetCurrentDateTime();
-      time -= CDateTimeSpan(0, 0, 0, (int)GetPlayTime());
-    }
+    CDateTime time(CDateTime::GetCurrentDateTime());
+    time -= CDateTimeSpan(0, 0, 0, static_cast<int>(GetPlayTime()));
     return LocalizeTime(time, (TIME_FORMAT)info.GetData1());
   }
   else if (info.m_info == PLAYER_TIME_SPEED)
@@ -8072,17 +8002,9 @@ std::string CGUIInfoManager::GetMultiInfoLabel(const GUIInfo &info, int contextW
     return GetMusicPlaylistInfo(info);
   else if (info.m_info == CONTAINER_PROPERTY)
   {
-    CGUIWindow *window = NULL;
-    if (info.GetData1())
-    { // container specified
-      window = GetWindowWithCondition(contextWindow, 0);
-    }
-    else
-    { // no container specified - assume a mediawindow
-      window = GetWindowWithCondition(contextWindow, WINDOW_CONDITION_IS_MEDIA_WINDOW);
-    }
+    CGUIWindow *window = GetWindowWithCondition(contextWindow, WINDOW_CONDITION_IS_MEDIA_WINDOW);
     if (window)
-      return ((CGUIMediaWindow *)window)->CurrentDirectory().GetProperty(m_stringParameters[info.GetData2()]).asString();
+      return static_cast<CGUIMediaWindow *>(window)->CurrentDirectory().GetProperty(m_stringParameters[info.GetData2()]).asString();
   }
   else if (info.m_info == CONTAINER_ART)
   {
@@ -8092,17 +8014,9 @@ std::string CGUIInfoManager::GetMultiInfoLabel(const GUIInfo &info, int contextW
   }
   else if (info.m_info == CONTAINER_CONTENT)
   {
-    CGUIWindow *window = NULL;
-    if (info.GetData1())
-    { // container specified
-      window = GetWindowWithCondition(contextWindow, 0);
-    }
-    else
-    { // no container specified - assume a mediawindow
-      window = GetWindowWithCondition(contextWindow, WINDOW_CONDITION_IS_MEDIA_WINDOW);
-    }
+    CGUIWindow *window = GetWindowWithCondition(contextWindow, WINDOW_CONDITION_IS_MEDIA_WINDOW);;
     if (window)
-      return ((CGUIMediaWindow *)window)->CurrentDirectory().GetContent();
+      return static_cast<CGUIMediaWindow *>(window)->CurrentDirectory().GetContent();
   }
   else if (info.m_info == CONTROL_GET_LABEL)
   {
@@ -8281,7 +8195,7 @@ std::string CGUIInfoManager::GetDuration(TIME_FORMAT format) const
   }
   if (g_application.m_pPlayer->IsPlayingVideo() && !m_currentMovieDuration.empty())
     return m_currentMovieDuration;
-  unsigned int iTotal = MathUtils::round_int(g_application.GetTotalTime());
+  int iTotal = lrint(g_application.GetTotalTime());
   if (iTotal > 0)
     return StringUtils::SecondsToTimeString(iTotal, format);
   return "";
@@ -8395,7 +8309,7 @@ std::string CGUIInfoManager::GetPlaylistLabel(int item, int playlistid /* = PLAY
   case PLAYLIST_RANDOM:
     {
       if (g_playlistPlayer.IsShuffled(iPlaylist))
-        return g_localizeStrings.Get(590); // 590: Random
+        return g_localizeStrings.Get(16041); // 16041: On
       else
         return g_localizeStrings.Get(591); // 591: Off
     }
@@ -8603,7 +8517,7 @@ std::string CGUIInfoManager::GetMusicLabel(int item)
     {
       std::string strBitrate = "";
       if (m_audioInfo.bitrate > 0)
-        strBitrate = StringUtils::Format("%i", MathUtils::round_int((double)m_audioInfo.bitrate / 1000.0));
+        strBitrate = StringUtils::Format("%i", lrint(static_cast<double>(m_audioInfo.bitrate) / 1000.0));
       return strBitrate;
     }
     break;
@@ -9115,7 +9029,7 @@ std::string CGUIInfoManager::GetCurrentPlayTime(TIME_FORMAT format) const
   if (format == TIME_FORMAT_GUESS && GetTotalPlayTime() >= 3600)
     format = TIME_FORMAT_HH_MM_SS;
   if (g_application.m_pPlayer->IsPlaying())
-    return StringUtils::SecondsToTimeString(MathUtils::round_int(GetPlayTime()/1000.0), format);
+    return StringUtils::SecondsToTimeString(lrint(GetPlayTime()/1000.0), format);
   return "";
 }
 
@@ -9128,13 +9042,13 @@ std::string CGUIInfoManager::GetCurrentSeekTime(TIME_FORMAT format) const
 
 int CGUIInfoManager::GetTotalPlayTime() const
 {
-  int iTotalTime = MathUtils::round_int(g_application.GetTotalTime());
+  int iTotalTime = lrint(g_application.GetTotalTime());
   return iTotalTime > 0 ? iTotalTime : 0;
 }
 
 int CGUIInfoManager::GetPlayTimeRemaining() const
 {
-  int iReverse = GetTotalPlayTime() - MathUtils::round_int(g_application.GetTime());
+  int iReverse = GetTotalPlayTime() - lrint(g_application.GetTime());
   return iReverse > 0 ? iReverse : 0;
 }
 

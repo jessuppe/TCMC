@@ -8577,6 +8577,7 @@ msgstr ""
 
 #empty string with id 16040
 
+#: xbmc/GUIInfoManager.cpp
 #: xbmc/guilib/GUIRadioButtonControl.cpp"
 msgctxt "#16041"
 msgid "On"
@@ -14327,7 +14328,6 @@ msgid "Add-on options"
 msgstr ""
 
 #: xbmc/addons/ContextMenus.h
-#: xbmc/games/windows/GUIWindowGames.cpp
 msgctxt "#24003"
 msgid "Add-on information"
 msgstr ""
@@ -20393,4 +20393,15 @@ msgstr ""
 #: view/GUIViewState.cpp
 msgctxt "#39010"
 msgid "Select sort method"
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#39011"
+msgid "Maximum wait time for network"
+msgstr ""
+
+#. Description of setting with label #39011 "Maximum wait time for network"
+#: system/settings/settings.xml
+msgctxt "#39012"
+msgid "Set the maximum time to wait for the network to come up after waking up. When time has passed before network is up startup will continue."
 msgstr ""
