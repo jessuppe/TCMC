@@ -245,7 +245,7 @@ bool CAESinkAUDIOTRACK::Initialize(AEAudioFormat &format, std::string &device)
   int stream = CJNIAudioManager::STREAM_MUSIC;
   m_encoding = CJNIAudioFormat::ENCODING_PCM_16BIT;
 
-  uint32_t distance = 192000; // max upper distance
+  uint32_t distance = UINT32_MAX; // max upper distance, update at least ones to use one of our samplerates
   for (auto& s : m_sink_sampleRates)
   {
      // prefer best match or alternatively something that divides nicely and
@@ -469,7 +469,10 @@ bool CAESinkAUDIOTRACK::Initialize(AEAudioFormat &format, std::string &device)
       Deinitialize();
       return false;
     }
-    CLog::Log(LOGDEBUG, "CAESinkAUDIOTRACK::Initialize returned: m_sampleRate %u; format:%s; min_buffer_size %u; m_frames %u; m_frameSize %u; channels: %d", m_sink_sampleRate, CAEUtil::DataFormatToStr(m_format.m_dataFormat), m_min_buffer_size, m_format.m_frames, m_format.m_frameSize, m_format.m_channelLayout.Count());
+    const char* method = m_passthrough ? (m_info.m_wantsIECPassthrough ? "IEC (PT)" : "RAW (PT)") : "PCM";
+    CLog::Log(LOGNOTICE, "CAESinkAUDIOTRACK::Initializing with: m_sampleRate: %u format: %s (AE) method: %s stream-type: %s min_buffer_size: %u m_frames: %u m_frameSize: %u channels: %d",
+                          m_sink_sampleRate, CAEUtil::DataFormatToStr(m_format.m_dataFormat), method, m_passthrough ? CAEUtil::StreamTypeToStr(m_format.m_streamInfo.m_type) : "PCM-STREAM",
+                          m_min_buffer_size, m_format.m_frames, m_format.m_frameSize, m_format.m_channelLayout.Count());
   }
   format = m_format;
 
@@ -532,7 +535,7 @@ void CAESinkAUDIOTRACK::GetDelay(AEDelayStatus& status)
 
   // In their infinite wisdom, Google decided to make getPlaybackHeadPosition
   // return a 32bit "int" that you should "interpret as unsigned."  As such,
-  // for wrap saftey, we need to do all ops on it in 32bit integer math.
+  // for wrap safety, we need to do all ops on it in 32bit integer math.
 
   uint32_t head_pos = (uint32_t)m_at_jni->getPlaybackHeadPosition();
 
@@ -822,7 +825,7 @@ void CAESinkAUDIOTRACK::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
     else
     {
       bool supports_192khz = false;
-      int test_sample[] = { 32000, 44100, 48000, 96000, 192000 };
+      int test_sample[] = { 32000, 44100, 48000, 88200, 96000, 176400, 192000 };
       int test_sample_sz = sizeof(test_sample) / sizeof(int);
       int encoding = CJNIAudioFormat::ENCODING_PCM_16BIT;
       if (CJNIAudioManager::GetSDKVersion() >= 21)

@@ -41,6 +41,10 @@ configure_file(${CMAKE_SOURCE_DIR}/cmake/KodiConfig.cmake.in
 
 # Configure xsession entry
 configure_file(${CMAKE_SOURCE_DIR}/tools/Linux/kodi-xsession.desktop.in
+               ${CORE_BUILD_DIR}/${APP_NAME_LC}-xsession.desktop @ONLY)
+
+# Configure desktop entry
+configure_file(${CMAKE_SOURCE_DIR}/tools/Linux/kodi.desktop.in
                ${CORE_BUILD_DIR}/${APP_NAME_LC}.desktop @ONLY)
 
 # Install app
@@ -78,12 +82,13 @@ foreach(file ${install_data})
 endforeach()
 
 # Install xsession entry
-install(FILES ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/${APP_NAME_LC}.desktop
+install(FILES ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/${APP_NAME_LC}-xsession.desktop
+        RENAME ${APP_NAME_LC}.desktop
         DESTINATION ${datarootdir}/xsessions
         COMPONENT kodi)
 
 # Install desktop entry
-install(FILES ${CMAKE_SOURCE_DIR}/tools/Linux/kodi.desktop
+install(FILES ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/${APP_NAME_LC}.desktop
         DESTINATION ${datarootdir}/applications
         COMPONENT kodi)
 
@@ -191,6 +196,12 @@ install(FILES ${CMAKE_SOURCE_DIR}/xbmc/cores/AudioEngine/Utils/AEChannelData.h
         DESTINATION ${includedir}/${APP_NAME_LC}
         COMPONENT kodi-audio-dev)
 
+# Install kodi-image-dev
+install(FILES ${CMAKE_SOURCE_DIR}/xbmc/addons/kodi-addon-dev-kit/include/kodi/kodi_imagedec_types.h
+              ${CMAKE_SOURCE_DIR}/xbmc/addons/kodi-addon-dev-kit/include/kodi/kodi_imagedec_dll.h
+        DESTINATION ${includedir}/${APP_NAME_LC}
+        COMPONENT kodi-image-dev)
+
 if(ENABLE_EVENTCLIENTS)
   # Install kodi-eventclients-common BT python files
   install(PROGRAMS ${CMAKE_SOURCE_DIR}/tools/EventClients/lib/python/bt/__init__.py
@@ -266,7 +277,7 @@ if(ENABLE_EVENTCLIENTS)
           DESTINATION ${bindir}
           COMPONENT kodi-eventclients-ps3)
 
-  if(BLUETOOTH_FOUND)
+  if(BLUETOOTH_FOUND AND CWIID_FOUND)
     # Install kodi-eventclients-wiiremote
     install(PROGRAMS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/WiiRemote/${APP_NAME_LC}-wiiremote
             DESTINATION ${bindir}
@@ -318,6 +329,13 @@ install(FILES ${CMAKE_SOURCE_DIR}/xbmc/addons/kodi-addon-dev-kit/include/kodi/ko
         DESTINATION ${includedir}/${APP_NAME_LC}
         COMPONENT kodi-game-dev)
 
+# Install kodi-vfs-dev
+install(FILES ${CORE_SOURCE_DIR}/xbmc/addons/kodi-addon-dev-kit/include/kodi/kodi_vfs_dll.h
+              ${CORE_SOURCE_DIR}/xbmc/addons/kodi-addon-dev-kit/include/kodi/kodi_vfs_types.h
+              ${CORE_SOURCE_DIR}/xbmc/filesystem/IFileTypes.h
+        DESTINATION include/${APP_NAME_LC}
+        COMPONENT kodi-vfs-dev)
+
 # Install XBT skin files
 foreach(texture ${XBT_FILES})
   string(REPLACE "${CMAKE_BINARY_DIR}/" "" dir ${texture})
@@ -352,7 +370,7 @@ endforeach()
 
 # generate packages? yes please, if everything checks out
 if(CPACK_GENERATOR)
-  if(CPACK_GENERATOR STREQUAL DEB AND CORE_SYSTEM_NAME STREQUAL linux)
+  if(CPACK_GENERATOR STREQUAL DEB AND ( CORE_SYSTEM_NAME STREQUAL linux OR CORE_SYSTEM_NAME STREQUAL rbpi ) )
     if(CMAKE_BUILD_TYPE STREQUAL Debug)
       message(STATUS "DEB Generator: Build type is set to 'Debug'. Packaged binaries will be unstripped.")
     endif()

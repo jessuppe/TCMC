@@ -69,7 +69,7 @@
 #include "bus/virtual/PeripheralBusCEC.h"
 #endif
 
-
+using namespace KODI;
 using namespace JOYSTICK;
 using namespace PERIPHERALS;
 using namespace XFILE;
@@ -132,7 +132,7 @@ void CPeripherals::Initialise()
   m_eventScanner.Start();
 
   m_bInitialised = true;
-  KODI::MESSAGING::CApplicationMessenger::GetInstance().RegisterReceiver(this);
+  MESSAGING::CApplicationMessenger::GetInstance().RegisterReceiver(this);
 }
 
 void CPeripherals::Clear()
@@ -366,6 +366,8 @@ void CPeripherals::OnDeviceAdded(const CPeripheralBus &bus, const CPeripheral &p
 {
   OnDeviceChanged();
 
+  //! @todo Improve device notifications in v18
+#if 0
   bool bNotify = true;
 
   // don't show a notification for devices detected during the initial scan
@@ -378,6 +380,7 @@ void CPeripherals::OnDeviceAdded(const CPeripheralBus &bus, const CPeripheral &p
 
   if (bNotify)
     CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, g_localizeStrings.Get(35005), peripheral.DeviceName());
+#endif
 }
 
 void CPeripherals::OnDeviceDeleted(const CPeripheralBus &bus, const CPeripheral &peripheral)
@@ -385,7 +388,8 @@ void CPeripherals::OnDeviceDeleted(const CPeripheralBus &bus, const CPeripheral 
   OnDeviceChanged();
 
   //! @todo Improve device notifications in v18
-  bool bNotify = false;
+#if 0
+  bool bNotify = true;
 
   // don't show a notification for emulated peripherals
   if (peripheral.Type() == PERIPHERAL_JOYSTICK_EMULATION) //! @todo Change to peripheral.IsEmulated()
@@ -393,6 +397,7 @@ void CPeripherals::OnDeviceDeleted(const CPeripheralBus &bus, const CPeripheral 
 
   if (bNotify)
     CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, g_localizeStrings.Get(35006), peripheral.DeviceName());
+#endif
 }
 
 void CPeripherals::OnDeviceChanged()
@@ -959,7 +964,7 @@ void CPeripherals::OnSettingAction(const CSetting *setting)
     TestFeature(FEATURE_RUMBLE);
 }
 
-void CPeripherals::OnApplicationMessage(KODI::MESSAGING::ThreadMessage* pMsg)
+void CPeripherals::OnApplicationMessage(MESSAGING::ThreadMessage* pMsg)
 {
   switch (pMsg->dwMessage)
   {

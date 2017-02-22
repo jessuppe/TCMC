@@ -173,7 +173,6 @@ public:
   static const std::string SETTING_SCRAPERS_MOVIESDEFAULT;
   static const std::string SETTING_SCRAPERS_TVSHOWSDEFAULT;
   static const std::string SETTING_SCRAPERS_MUSICVIDEOSDEFAULT;
-  static const std::string SETTING_PVRMANAGER_HIDECONNECTIONLOSTWARNING;
   static const std::string SETTING_PVRMANAGER_SYNCCHANNELGROUPS;
   static const std::string SETTING_PVRMANAGER_BACKENDCHANNELORDER;
   static const std::string SETTING_PVRMANAGER_USEBACKENDCHANNELNUMBERS;
@@ -254,6 +253,7 @@ public:
   static const std::string SETTING_AUDIOCDS_EJECTONRIP;
   static const std::string SETTING_MYMUSIC_SONGTHUMBINVIS;
   static const std::string SETTING_MYMUSIC_DEFAULTLIBVIEW;
+  static const std::string SETTING_PICTURES_USETAGS;
   static const std::string SETTING_PICTURES_GENERATETHUMBS;
   static const std::string SETTING_PICTURES_SHOWVIDEOS;
   static const std::string SETTING_PICTURES_DISPLAYRESOLUTION;
@@ -348,7 +348,7 @@ public:
   static const std::string SETTING_POWERMANAGEMENT_SHUTDOWNTIME;
   static const std::string SETTING_POWERMANAGEMENT_SHUTDOWNSTATE;
   static const std::string SETTING_POWERMANAGEMENT_WAKEONACCESS;
-  static const std::string SETTING_POWERMANAGEMENT_WAITNETAFTERWAKEUP;
+  static const std::string SETTING_POWERMANAGEMENT_WAITFORNETWORK;
   static const std::string SETTING_DEBUG_SHOWLOGINFO;
   static const std::string SETTING_DEBUG_EXTRALOGGING;
   static const std::string SETTING_DEBUG_SETEXTRALOGLEVEL;

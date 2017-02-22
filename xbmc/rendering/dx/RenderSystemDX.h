@@ -115,7 +115,7 @@ protected:
   void OnResize(unsigned int width, unsigned int height);
   void SetFullScreenInternal();
   void GetClosestDisplayModeToCurrent(IDXGIOutput* output, DXGI_MODE_DESC* outCurrentDisplayMode, bool useCached = false);
-  void CheckInterlasedStereoView(void);
+  void CheckInterlacedStereoView(void);
   void SetMaximumFrameLatency(uint8_t latency = -1) const;
 
   bool GetStereoEnabled() const;
@@ -179,7 +179,7 @@ protected:
   ID3D11Texture2D*            m_pTextureRight{nullptr};
   ID3D11RenderTargetView*     m_pRenderTargetViewRight{nullptr};
   ID3D11ShaderResourceView*   m_pShaderResourceViewRight{nullptr};
-  bool                        m_bResizeRequred{false};
+  bool                        m_bResizeRequired{false};
   bool                        m_bHWStereoEnabled{false};
   // improve get current mode
   DXGI_MODE_DESC              m_cachedMode;

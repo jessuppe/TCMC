@@ -53,6 +53,7 @@
 #include "addons/BinaryAddonCache.h"
 #include "addons/LanguageResource.h"
 #include "addons/Skin.h"
+#include "addons/VFSEntry.h"
 #include "interfaces/generic/ScriptInvocationManager.h"
 #ifdef HAS_PYTHON
 #include "interfaces/python/XBPython.h"
@@ -204,6 +205,7 @@
 #ifdef TARGET_POSIX
 #include "XHandle.h"
 #include "XTimeUtils.h"
+#include "filesystem/posix/PosixDirectory.h"
 #endif
 
 #if defined(TARGET_ANDROID)
@@ -255,6 +257,9 @@ using KODI::MESSAGING::HELPERS::DialogResponse;
 //extern IDirectSoundRenderer* m_pAudioDecoder;
 CApplication::CApplication(void)
   : m_pPlayer(new CApplicationPlayer)
+#ifdef HAS_DVD_DRIVE
+  , m_Autorun(new CAutorun())
+#endif
   , m_iScreenSaveLock(0)
   , m_bPlaybackStarting(false)
   , m_ePlayState(PLAY_STATE_NONE)
@@ -264,10 +269,10 @@ CApplication::CApplication(void)
   , m_autoExecScriptExecuted(false)
   , m_bScreenSave(false)
   , m_bInhibitIdleShutdown(false)
-  , m_dpms(nullptr)
   , m_dpmsIsActive(false)
   , m_dpmsIsManual(false)
   , m_itemCurrentFile(new CFileItem)
+  , m_currentStack(new CFileItemList)
   , m_stackFileItemToUpdate(new CFileItem)
   , m_threadID(0)
   , m_bInitializing(true)
@@ -297,27 +302,13 @@ CApplication::CApplication(void)
 #ifdef HAS_GLX
   XInitThreads();
 #endif
-
-  /* for now always keep this around */
-  m_currentStack = new CFileItemList;
-
-#ifdef HAS_DVD_DRIVE
-  m_Autorun = new CAutorun();
-#endif
 }
 
 CApplication::~CApplication(void)
 {
-  delete m_musicInfoScanner;
   delete &m_progressTrackingVideoResumeBookmark;
-#ifdef HAS_DVD_DRIVE
-  delete m_Autorun;
-#endif
-  delete m_currentStack;
 
-  delete m_dpms;
   delete m_pInertialScrollingHandler;
-  delete m_pPlayer;
 
   m_actionListeners.clear();
 }
@@ -960,6 +951,10 @@ bool CApplication::InitDirectoriesOSX()
   else
     userHome = "/root";
 
+  std::string binaddonAltDir;
+  if (getenv("KODI_BINADDON_PATH"))
+    binaddonAltDir = getenv("KODI_BINADDON_PATH");
+
   std::string appPath = CUtil::GetHomePath();
   setenv("KODI_HOME", appPath.c_str(), 0);
 
@@ -978,6 +973,7 @@ bool CApplication::InitDirectoriesOSX()
   {
     // map our special drives
     CSpecialProtocol::SetXBMCBinPath(appPath);
+    CSpecialProtocol::SetXBMCAltBinAddonPath(binaddonAltDir);
     CSpecialProtocol::SetXBMCPath(appPath);
     #if defined(TARGET_DARWIN_IOS)
       std::string appName = CCompileInfo::GetAppName();
@@ -1015,6 +1011,7 @@ bool CApplication::InitDirectoriesOSX()
     URIUtils::AddSlashAtEnd(appPath);
 
     CSpecialProtocol::SetXBMCBinPath(appPath);
+    CSpecialProtocol::SetXBMCAltBinAddonPath(binaddonAltDir);
     CSpecialProtocol::SetXBMCPath(appPath);
     CSpecialProtocol::SetHomePath(URIUtils::AddFileToFolder(appPath, "portable_data"));
     CSpecialProtocol::SetMasterProfilePath(URIUtils::AddFileToFolder(appPath, "portable_data/userdata"));
@@ -1070,10 +1067,10 @@ void CApplication::CreateUserDirs() const
 
   //Let's clear our archive cache before starting up anything more
   auto archiveCachePath = CSpecialProtocol::TranslatePath("special://temp/archive_cache/");
-  if (CDirectory::RemoveRecursive(archiveCachePath))
-    CDirectory::Create(archiveCachePath);
-  else
-    CLog::Log(LOGWARNING, "Failed to remove the archive cache at %s", archiveCachePath.c_str());
+  if (CDirectory::Exists(archiveCachePath))
+    if (!CDirectory::RemoveRecursive(archiveCachePath))
+      CLog::Log(LOGWARNING, "Failed to remove the archive cache at %s", archiveCachePath.c_str());
+  CDirectory::Create(archiveCachePath);
 
 }
 
@@ -1105,6 +1102,8 @@ bool CApplication::Initialize()
 #if !defined(TARGET_DARWIN_IOS)
   g_peripherals.Initialise();
 #endif
+
+  getNetwork().WaitForNet();
 
   // Load curl so curl_global_init gets called before any service threads
   // are started. Unloading will have no effect as curl is never fully unloaded.
@@ -1140,7 +1139,7 @@ bool CApplication::Initialize()
   StartServices();
 
   // Init DPMS, before creating the corresponding setting control.
-  m_dpms = new DPMSSupport();
+  m_dpms.reset(new DPMSSupport());
   bool uiInitializationFinished = true;
   if (g_windowManager.Initialized())
   {
@@ -2586,7 +2585,7 @@ void CApplication::OnApplicationMessage(ThreadMessage* pMsg)
       else
         pathToUrl = URIUtils::CreateArchivePath("rar", CURL(pMsg->strParam), "");
 
-      CUtil::GetRecursiveListing(pathToUrl.Get(), items, g_advancedSettings.m_pictureExtensions, XFILE::DIR_FLAG_NO_FILE_DIRS);
+      CUtil::GetRecursiveListing(pathToUrl.Get(), items, g_advancedSettings.GetPictureExtensions(), XFILE::DIR_FLAG_NO_FILE_DIRS);
       if (items.Size() > 0)
       {
         pSlideShow->Reset();
@@ -2621,7 +2620,7 @@ void CApplication::OnApplicationMessage(ThreadMessage* pMsg)
 
     CFileItemList items;
     std::string strPath = pMsg->strParam;
-    std::string extensions = g_advancedSettings.m_pictureExtensions;
+    std::string extensions = g_advancedSettings.GetPictureExtensions();
     if (pMsg->param1)
       extensions += "|.tbn";
     CUtil::GetRecursiveListing(strPath, items, extensions);
@@ -2712,7 +2711,7 @@ void CApplication::FrameMove(bool processEvents, bool processGUI)
     // currently we calculate the repeat time (ie time from last similar keypress) just global as fps
     float frameTime = m_frameTime.GetElapsedSeconds();
     m_frameTime.StartZero();
-    // never set a frametime less than 2 fps to avoid problems when debuggin and on breaks
+    // never set a frametime less than 2 fps to avoid problems when debugging and on breaks
     if( frameTime > 0.5 ) frameTime = 0.5;
 
     if (processGUI && m_renderGUI)
@@ -2746,11 +2745,14 @@ void CApplication::FrameMove(bool processEvents, bool processGUI)
       CSingleExit ex(g_graphicsContext);
       m_frameMoveGuard.unlock();
       // Calculate a window size between 2 and 10ms, 4 continuous requests let the window grow by 1ms
-      unsigned int sleepTime = std::max(static_cast<unsigned int>(2), std::min(m_ProcessedExternalCalls >> 2, static_cast<unsigned int>(10)));
+      // WHen not playing video we allow it to increase to 80ms
+      unsigned int max_sleep = m_pPlayer->IsPlayingVideo() && !m_pPlayer->IsPausedPlayback() ? 10 : 80;
+      unsigned int sleepTime = std::max(static_cast<unsigned int>(2), std::min(m_ProcessedExternalCalls >> 2, max_sleep));
       Sleep(sleepTime);
       m_frameMoveGuard.lock();
+      m_ProcessedExternalDecay = 5;
     }
-    else
+    if (m_ProcessedExternalDecay && --m_ProcessedExternalDecay == 0)
       m_ProcessedExternalCalls = 0;
   }
 
@@ -2942,6 +2944,14 @@ void CApplication::Stop(int exitCode)
 #ifdef HAS_FILESYSTEM_SFTP
     CSFTPSessionManager::DisconnectAllSessions();
 #endif
+    VECADDONS addons;
+    CServiceBroker::GetBinaryAddonCache().GetAddons(addons, ADDON_VFS);
+    for (auto& it : addons)
+    {
+      AddonPtr addon = CServiceBroker::GetBinaryAddonCache().GetAddonInstance(it->ID(), ADDON_VFS);
+      VFSEntryPtr vfs = std::static_pointer_cast<CVFSEntry>(addon);
+      vfs->DisconnectAll();
+    }
 
 #if defined(TARGET_POSIX) && defined(HAS_FILESYSTEM_SMB)
     smb.Deinit();
@@ -3829,6 +3839,11 @@ void CApplication::UpdateFileState()
           m_progressTrackingVideoResumeBookmark.timeInSeconds = 0.0f;
         }
       }
+      if (m_pPlayer->IsPlayingAudio() && !m_pPlayer->IsPlayingGame())
+      {
+        if (m_progressTrackingItem->IsAudioBook())
+          m_progressTrackingVideoResumeBookmark.timeInSeconds = GetTime();
+      }
     }
   }
 }
@@ -3942,7 +3957,7 @@ bool CApplication::WakeUpScreenSaverAndDPMS(bool bPowerOffKeyPressed /* = false 
 
   if(result)
   {
-    // allow listeners to ignore the deactivation if it preceeds a powerdown/suspend etc
+    // allow listeners to ignore the deactivation if it precedes a powerdown/suspend etc
     CVariant data(CVariant::VariantTypeObject);
     data["shuttingdown"] = bPowerOffKeyPressed;
     CAnnouncementManager::GetInstance().Announce(GUI, "xbmc", "OnScreensaverDeactivated", data);
@@ -4086,7 +4101,9 @@ void CApplication::ActivateScreenSaver(bool forceType /*= false */)
   if (!forceType)
   {
     // set to Dim in the case of a dialog on screen or playing video
-    if (g_windowManager.HasModalDialog() || (m_pPlayer->IsPlayingVideo() && m_ServiceManager->GetSettings().GetBool(CSettings::SETTING_SCREENSAVER_USEDIMONPAUSE)) || g_PVRManager.IsRunningChannelScan())
+    if (g_windowManager.HasModalDialog() ||
+        (m_pPlayer->IsPlayingVideo() && m_ServiceManager->GetSettings().GetBool(CSettings::SETTING_SCREENSAVER_USEDIMONPAUSE)) ||
+        CPVRGUIActions::GetInstance().IsRunningChannelScan())
     {
       if (!CAddonMgr::GetInstance().GetAddon("screensaver.xbmc.builtin.dim", m_screenSaver))
         m_screenSaver.reset(new CScreenSaver(""));
@@ -4515,7 +4532,7 @@ void CApplication::ProcessSlow()
   }
 #endif
 
-  // Temporarely pause pausable jobs when viewing video/picture
+  // Temporarily pause pausable jobs when viewing video/picture
   int currentWindow = g_windowManager.GetActiveWindow();
   if (CurrentFileItem().IsVideo() || CurrentFileItem().IsPicture() || currentWindow == WINDOW_FULLSCREEN_VIDEO || currentWindow == WINDOW_SLIDESHOW)
   {
@@ -4580,6 +4597,15 @@ void CApplication::ProcessSlow()
   CSFTPSessionManager::ClearOutIdleSessions();
 #endif
 
+  VECADDONS addons;
+  CServiceBroker::GetBinaryAddonCache().GetAddons(addons, ADDON_VFS);
+  for (auto& it : addons)
+  {
+    AddonPtr addon = CServiceBroker::GetBinaryAddonCache().GetAddonInstance(it->ID(), ADDON_VFS);
+    VFSEntryPtr vfs = std::static_pointer_cast<CVFSEntry>(addon);
+    vfs->ClearOutIdle();
+  }
+
   g_mediaManager.ProcessEvents();
 
   CAEFactory::GarbageCollect();
@@ -4592,7 +4618,7 @@ void CApplication::ProcessSlow()
 }
 
 // Global Idle Time in Seconds
-// idle time will be resetet if on any OnKey()
+// idle time will be reset if on any OnKey()
 // int return: system Idle time in seconds! 0 is no idle!
 int CApplication::GlobalIdleTime()
 {
@@ -4662,6 +4688,11 @@ void CApplication::Restart(bool bSamePosition)
 const std::string& CApplication::CurrentFile()
 {
   return m_itemCurrentFile->GetPath();
+}
+
+std::shared_ptr<CFileItem> CApplication::CurrentFileItemPtr()
+{
+  return m_itemCurrentFile;
 }
 
 CFileItem& CApplication::CurrentFileItem()
@@ -5064,6 +5095,11 @@ void CApplication::StartMusicScan(const std::string &strDirectory, bool userInit
       flags |= CMusicInfoScanner::SCAN_ONLINE;
     if (!userInitiated || m_ServiceManager->GetSettings().GetBool(CSettings::SETTING_MUSICLIBRARY_BACKGROUNDUPDATE))
       flags |= CMusicInfoScanner::SCAN_BACKGROUND;
+    // Ask for full rescan of music files
+    //! @todo replace with a music library setting in UI
+    if (g_advancedSettings.m_bMusicLibraryPromptFullTagScan)
+      if (CGUIDialogYesNo::ShowAndGetInput(CVariant{ 799 }, CVariant{ 38062 }))
+        flags |= CMusicInfoScanner::SCAN_RESCAN;
   }
 
   if (!(flags & CMusicInfoScanner::SCAN_BACKGROUND))
@@ -5201,6 +5237,15 @@ void CApplication::CloseNetworkShares()
 #ifdef HAS_FILESYSTEM_SFTP
   CSFTPSessionManager::DisconnectAllSessions();
 #endif
+
+  VECADDONS addons;
+  CServiceBroker::GetBinaryAddonCache().GetAddons(addons, ADDON_VFS);
+  for (auto& it : addons)
+  {
+    AddonPtr addon = CServiceBroker::GetBinaryAddonCache().GetAddonInstance(it->ID(), ADDON_VFS);
+    VFSEntryPtr vfs = std::static_pointer_cast<CVFSEntry>(addon);
+    vfs->DisconnectAll();
+  }
 }
 
 void CApplication::RegisterActionListener(IActionListener *listener)

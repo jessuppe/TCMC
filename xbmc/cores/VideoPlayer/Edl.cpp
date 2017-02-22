@@ -46,6 +46,7 @@ void CEdl::Clear()
   m_vecCuts.clear();
   m_vecSceneMarkers.clear();
   m_iTotalCutTime = 0;
+  m_lastQueryTime = 0;
 }
 
 bool CEdl::ReadEditDecisionLists(const std::string& strMovie, const float fFrameRate, const int iHeight)
@@ -750,7 +751,7 @@ int CEdl::RemoveCutTime(int iSeek) const
     return iSeek;
 
   /**
-   * @todo Consider an optimisation of using the (now unused) total cut time if the seek time
+   * @todo Consider an optimization of using the (now unused) total cut time if the seek time
    * requested is later than the end of the last recorded cut. For example, when calculating the
    * total duration for display.
    */
@@ -822,8 +823,10 @@ std::string CEdl::GetInfo() const
   return strInfo.empty() ? "-" : strInfo;
 }
 
-bool CEdl::InCut(const int iSeek, Cut *pCut) const
+bool CEdl::InCut(const int iSeek, Cut *pCut)
 {
+  m_lastQueryTime = iSeek;
+
   for (int i = 0; i < (int)m_vecCuts.size(); i++)
   {
     if (iSeek < m_vecCuts[i].start) // Early exit if not even up to the cut start time.
@@ -838,6 +841,11 @@ bool CEdl::InCut(const int iSeek, Cut *pCut) const
   }
 
   return false;
+}
+
+int CEdl::GetLastQueryTime() const
+{
+  return m_lastQueryTime;
 }
 
 bool CEdl::GetNearestCut(bool bPlus, const int iSeek, Cut *pCut) const
@@ -885,7 +893,7 @@ bool CEdl::GetNearestCut(bool bPlus, const int iSeek, Cut *pCut) const
   }
 }
 
-bool CEdl::GetNextSceneMarker(bool bPlus, const int iClock, int *iSceneMarker) const
+bool CEdl::GetNextSceneMarker(bool bPlus, const int iClock, int *iSceneMarker)
 {
   if (!HasSceneMarker())
     return false;

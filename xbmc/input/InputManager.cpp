@@ -70,7 +70,8 @@
 using EVENTSERVER::CEventServer;
 #endif
 
-using namespace KODI::MESSAGING;
+using namespace KODI;
+using namespace MESSAGING;
 using PERIPHERALS::CPeripherals;
 
 CInputManager::CInputManager() :
@@ -368,7 +369,7 @@ bool CInputManager::OnEvent(XBMC_Event& newEvent)
       // Do not repeat long presses
       break;
     }
-    if (!CButtonTranslator::GetInstance().HasLonpressMapping(g_windowManager.GetActiveWindowID(), key))
+    if (!CButtonTranslator::GetInstance().HasLongpressMapping(g_windowManager.GetActiveWindowID(), key))
     {
       m_LastKey.Reset();
       OnKey(key);

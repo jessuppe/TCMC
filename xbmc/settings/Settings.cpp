@@ -217,7 +217,6 @@ const std::string CSettings::SETTING_ACCESSIBILITY_SUBHEARING = "accessibility.s
 const std::string CSettings::SETTING_SCRAPERS_MOVIESDEFAULT = "scrapers.moviesdefault";
 const std::string CSettings::SETTING_SCRAPERS_TVSHOWSDEFAULT = "scrapers.tvshowsdefault";
 const std::string CSettings::SETTING_SCRAPERS_MUSICVIDEOSDEFAULT = "scrapers.musicvideosdefault";
-const std::string CSettings::SETTING_PVRMANAGER_HIDECONNECTIONLOSTWARNING = "pvrmanager.hideconnectionlostwarning";
 const std::string CSettings::SETTING_PVRMANAGER_SYNCCHANNELGROUPS = "pvrmanager.syncchannelgroups";
 const std::string CSettings::SETTING_PVRMANAGER_BACKENDCHANNELORDER = "pvrmanager.backendchannelorder";
 const std::string CSettings::SETTING_PVRMANAGER_USEBACKENDCHANNELNUMBERS = "pvrmanager.usebackendchannelnumbers";
@@ -298,6 +297,7 @@ const std::string CSettings::SETTING_AUDIOCDS_SETTINGS = "audiocds.settings";
 const std::string CSettings::SETTING_AUDIOCDS_EJECTONRIP = "audiocds.ejectonrip";
 const std::string CSettings::SETTING_MYMUSIC_SONGTHUMBINVIS = "mymusic.songthumbinvis";
 const std::string CSettings::SETTING_MYMUSIC_DEFAULTLIBVIEW = "mymusic.defaultlibview";
+const std::string CSettings::SETTING_PICTURES_USETAGS = "pictures.usetags";
 const std::string CSettings::SETTING_PICTURES_GENERATETHUMBS = "pictures.generatethumbs";
 const std::string CSettings::SETTING_PICTURES_SHOWVIDEOS = "pictures.showvideos";
 const std::string CSettings::SETTING_PICTURES_DISPLAYRESOLUTION = "pictures.displayresolution";
@@ -392,7 +392,7 @@ const std::string CSettings::SETTING_POWERMANAGEMENT_DISPLAYSOFF = "powermanagem
 const std::string CSettings::SETTING_POWERMANAGEMENT_SHUTDOWNTIME = "powermanagement.shutdowntime";
 const std::string CSettings::SETTING_POWERMANAGEMENT_SHUTDOWNSTATE = "powermanagement.shutdownstate";
 const std::string CSettings::SETTING_POWERMANAGEMENT_WAKEONACCESS = "powermanagement.wakeonaccess";
-const std::string CSettings::SETTING_POWERMANAGEMENT_WAITNETAFTERWAKEUP = "powermanagement.waitnetafterwakeup";
+const std::string CSettings::SETTING_POWERMANAGEMENT_WAITFORNETWORK = "powermanagement.waitfornetwork";
 const std::string CSettings::SETTING_DEBUG_SHOWLOGINFO = "debug.showloginfo";
 const std::string CSettings::SETTING_DEBUG_EXTRALOGGING = "debug.extralogging";
 const std::string CSettings::SETTING_DEBUG_SETEXTRALOGLEVEL = "debug.setextraloglevel";
@@ -728,7 +728,7 @@ bool CSettings::InitializeDefinitions()
 #elif defined(TARGET_RASPBERRY_PI)
   if (CFile::Exists(SETTINGS_XML_FOLDER "rbp.xml") && !Initialize(SETTINGS_XML_FOLDER "rbp.xml"))
     CLog::Log(LOGFATAL, "Unable to load rbp-specific settings definitions");
-  if (g_RBP.RasberryPiVersion() > 1 && CFile::Exists(SETTINGS_XML_FOLDER "rbp2.xml") && !Initialize(SETTINGS_XML_FOLDER "rbp2.xml"))
+  if (g_RBP.RaspberryPiVersion() > 1 && CFile::Exists(SETTINGS_XML_FOLDER "rbp2.xml") && !Initialize(SETTINGS_XML_FOLDER "rbp2.xml"))
     CLog::Log(LOGFATAL, "Unable to load rbp2-specific settings definitions");
 #elif defined(TARGET_FREEBSD)
   if (CFile::Exists(SETTINGS_XML_FOLDER "freebsd.xml") && !Initialize(SETTINGS_XML_FOLDER "freebsd.xml"))
