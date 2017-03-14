@@ -70,6 +70,8 @@ CPeripheralAddon::CPeripheralAddon(ADDON::AddonProps props, bool bProvidesJoysti
   CAddonDll(std::move(props)),
   m_apiVersion("0.0.0"),
   m_bProvidesJoysticks(bProvidesJoysticks),
+  m_bSupportsJoystickRumble(false),
+  m_bSupportsJoystickPowerOff(false),
   m_bProvidesButtonMaps(bProvidesButtonMaps)
 {
   ResetProperties();
@@ -176,6 +178,10 @@ bool CPeripheralAddon::GetAddonProperties(void)
     return false;
   }
 
+  // Read properties that depend on underlying driver
+  m_bSupportsJoystickRumble = addonCapabilities.provides_joystick_rumble;
+  m_bSupportsJoystickPowerOff = addonCapabilities.provides_joystick_power_off;
+
   return true;
 }
 
@@ -227,20 +233,22 @@ bool CPeripheralAddon::Register(unsigned int peripheralIndex, const PeripheralPt
 
 void CPeripheralAddon::UnregisterRemovedDevices(const PeripheralScanResults &results, PeripheralVector& removedPeripherals)
 {
-  CSingleLock lock(m_critSection);
   std::vector<unsigned int> removedIndexes;
-  for (auto& it : m_peripherals)
+
   {
-    const PeripheralPtr& peripheral = it.second;
-    PeripheralScanResult updatedDevice(PERIPHERAL_BUS_ADDON);
-    if (!results.GetDeviceOnLocation(peripheral->Location(), &updatedDevice) ||
-      *peripheral != updatedDevice)
+    CSingleLock lock(m_critSection);
+    for (auto& it : m_peripherals)
     {
-      // Device removed
-      removedIndexes.push_back(it.first);
+      const PeripheralPtr& peripheral = it.second;
+      PeripheralScanResult updatedDevice(PERIPHERAL_BUS_ADDON);
+      if (!results.GetDeviceOnLocation(peripheral->Location(), &updatedDevice) ||
+        *peripheral != updatedDevice)
+      {
+        // Device removed
+        removedIndexes.push_back(it.first);
+      }
     }
   }
-  lock.Leave();
 
   for (auto index : removedIndexes)
   {
@@ -293,6 +301,21 @@ PeripheralPtr CPeripheralAddon::GetByPath(const std::string &strPath) const
   }
 
   return result;
+}
+
+bool CPeripheralAddon::SupportsFeature(PeripheralFeature feature) const
+{
+  switch (feature)
+  {
+    case FEATURE_RUMBLE:
+      return m_bSupportsJoystickRumble;
+    case FEATURE_POWER_OFF:
+      return m_bSupportsJoystickPowerOff;
+    default:
+      break;
+  }
+
+  return false;
 }
 
 int CPeripheralAddon::GetPeripheralsWithFeature(PeripheralVector &results, const PeripheralFeature feature) const
@@ -525,6 +548,9 @@ bool CPeripheralAddon::GetFeatures(const CPeripheral* device,
 
   LogError(retVal = m_struct.GetFeatures(&joystickStruct, strControllerId.c_str(),
                                            &featureCount, &pFeatures), "GetFeatures()");
+
+  ADDON::Joystick::FreeStruct(joystickStruct);
+
   if (retVal == PERIPHERAL_NO_ERROR)
   {
     for (unsigned int i = 0; i < featureCount; i++)
@@ -562,6 +588,10 @@ bool CPeripheralAddon::MapFeature(const CPeripheral* device,
 
   LogError(retVal = m_struct.MapFeatures(&joystickStruct, strControllerId.c_str(),
                                                  1, &addonFeature), "MapFeatures()");
+
+  ADDON::Joystick::FreeStruct(joystickStruct);
+  ADDON::JoystickFeature::FreeStruct(addonFeature);
+
   return retVal == PERIPHERAL_NO_ERROR;
 }
 
@@ -583,6 +613,9 @@ bool CPeripheralAddon::GetIgnoredPrimitives(const CPeripheral* device, Primitive
 
   LogError(retVal = m_struct.GetIgnoredPrimitives(&joystickStruct, &primitiveCount,
                                                       &pPrimitives), "GetIgnoredPrimitives()");
+
+  ADDON::Joystick::FreeStruct(joystickStruct);
+
   if (retVal == PERIPHERAL_NO_ERROR)
   {
     for (unsigned int i = 0; i < primitiveCount; i++)
@@ -616,6 +649,7 @@ bool CPeripheralAddon::SetIgnoredPrimitives(const CPeripheral* device, const Pri
   LogError(retVal = m_struct.SetIgnoredPrimitives(&joystickStruct,
         primitives.size(), addonPrimitives), "SetIgnoredPrimitives()");
 
+  ADDON::Joystick::FreeStruct(joystickStruct);
   ADDON::DriverPrimitives::FreeStructs(primitives.size(), addonPrimitives);
 
   return retVal == PERIPHERAL_NO_ERROR;
@@ -634,6 +668,8 @@ void CPeripheralAddon::SaveButtonMap(const CPeripheral* device)
 
   m_struct.SaveButtonMap(&joystickStruct);
 
+  ADDON::Joystick::FreeStruct(joystickStruct);
+
   // Notify observing button maps
   RefreshButtonMaps(device->DeviceName());
 }
@@ -650,6 +686,8 @@ void CPeripheralAddon::RevertButtonMap(const CPeripheral* device)
   joystickInfo.ToStruct(joystickStruct);
 
   m_struct.RevertButtonMap(&joystickStruct);
+
+  ADDON::Joystick::FreeStruct(joystickStruct);
 }
 
 void CPeripheralAddon::ResetButtonMap(const CPeripheral* device, const std::string& strControllerId)
@@ -664,6 +702,8 @@ void CPeripheralAddon::ResetButtonMap(const CPeripheral* device, const std::stri
   joystickInfo.ToStruct(joystickStruct);
 
   m_struct.ResetButtonMap(&joystickStruct, strControllerId.c_str());
+
+  ADDON::Joystick::FreeStruct(joystickStruct);
 
   // Notify observing button maps
   RefreshButtonMaps(device->DeviceName());
@@ -746,8 +786,8 @@ void CPeripheralAddon::GetJoystickInfo(const CPeripheral* device, ADDON::Joystic
   else if (device->Type() == PERIPHERAL_JOYSTICK_EMULATION)
   {
     const CPeripheralJoystickEmulation* joystick = static_cast<const CPeripheralJoystickEmulation*>(device);
-    joystickInfo.SetName(JOYSTICK_EMULATION_BUTTON_MAP_NAME); // Override name with non-localized version
-    joystickInfo.SetProvider(JOYSTICK_EMULATION_PROVIDER);
+    joystickInfo.SetName(GetDeviceName(PERIPHERAL_JOYSTICK_EMULATION)); // Override name with non-localized version
+    joystickInfo.SetProvider(GetProvider(PERIPHERAL_JOYSTICK_EMULATION));
     joystickInfo.SetIndex(joystick->ControllerNumber());
   }
 }
@@ -772,4 +812,30 @@ bool CPeripheralAddon::LogError(const PERIPHERAL_ERROR error, const char *strMet
     return false;
   }
   return true;
+}
+
+std::string CPeripheralAddon::GetDeviceName(PeripheralType type)
+{
+  switch (type)
+  {
+  case PERIPHERAL_JOYSTICK_EMULATION:
+    return JOYSTICK_EMULATION_BUTTON_MAP_NAME;
+  default:
+    break;
+  }
+
+  return "";
+}
+
+std::string CPeripheralAddon::GetProvider(PeripheralType type)
+{
+  switch (type)
+  {
+  case PERIPHERAL_JOYSTICK_EMULATION:
+    return JOYSTICK_EMULATION_PROVIDER;
+  default:
+    break;
+  }
+
+  return "";
 }

@@ -31,6 +31,8 @@
 #define CONTROL_BTNSHOWHIDDEN             6
 #define CONTROL_BTNSHOWDELETED            7
 #define CONTROL_BTNHIDEDISABLEDTIMERS     8
+#define CONTROL_BTNSHOWMODE               10
+
 #define CONTROL_BTNCHANNELGROUPS          28
 #define CONTROL_BTNFILTERCHANNELS         31
 
@@ -48,6 +50,7 @@ namespace PVR
     EPG_SELECT_ACTION_INFO           = 2,
     EPG_SELECT_ACTION_RECORD         = 3,
     EPG_SELECT_ACTION_PLAY_RECORDING = 4,
+    EPG_SELECT_ACTION_SMART_SELECT   = 5
   };
 
   class CGUIWindowPVRBase : public CGUIMediaWindow, public Observer

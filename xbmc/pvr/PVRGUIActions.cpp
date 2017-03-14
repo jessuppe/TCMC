@@ -38,6 +38,7 @@
 #include "pvr/addons/PVRClients.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"
 #include "pvr/dialogs/GUIDialogPVRGuideInfo.h"
+#include "pvr/dialogs/GUIDialogPVRChannelGuide.h"
 #include "pvr/dialogs/GUIDialogPVRRecordingInfo.h"
 #include "pvr/dialogs/GUIDialogPVRTimerSettings.h"
 #include "pvr/PVRDatabase.h"
@@ -97,6 +98,25 @@ namespace PVR
     pDlgInfo->Open();
     return true;
   }
+
+
+  bool CPVRGUIActions::ShowChannelEPG(const CFileItemPtr &item) const
+  {
+    const CPVRChannelPtr channel(CPVRItem(item).GetChannel());
+    if (channel && !CheckParentalLock(channel))
+      return false;
+
+    CGUIDialogPVRChannelGuide* pDlgInfo = dynamic_cast<CGUIDialogPVRChannelGuide*>(g_windowManager.GetWindow(WINDOW_DIALOG_PVR_CHANNEL_GUIDE));
+    if (!pDlgInfo)
+    {
+      CLog::Log(LOGERROR, "CPVRGUIActions - %s - unable to get WINDOW_DIALOG_PVR_CHANNEL_GUIDE!", __FUNCTION__);
+      return false;
+    }
+
+    pDlgInfo->Open(channel);
+    return true;
+  }
+
 
   bool CPVRGUIActions::ShowRecordingInfo(const CFileItemPtr &item) const
   {
@@ -551,7 +571,7 @@ namespace PVR
 
   bool CPVRGUIActions::EditTimerRule(const CFileItemPtr &item) const
   {
-    CFileItemPtr parentTimer(g_PVRTimers->GetTimerRule(item.get()));
+    const CFileItemPtr parentTimer(g_PVRTimers->GetTimerRule(item));
     if (parentTimer)
       return EditTimer(parentTimer);
 
@@ -1203,35 +1223,38 @@ namespace PVR
     int iClientID = -1;
     PVR_MENUHOOK_CAT menuCategory = PVR_MENUHOOK_SETTING;
 
-    if (item->IsEPG())
+    if (item)
     {
-      if (item->GetEPGInfoTag()->HasPVRChannel())
+      if (item->IsEPG())
       {
-        iClientID = item->GetEPGInfoTag()->ChannelTag()->ClientID();
-        menuCategory = PVR_MENUHOOK_EPG;
+        if (item->GetEPGInfoTag()->HasPVRChannel())
+        {
+          iClientID = item->GetEPGInfoTag()->ChannelTag()->ClientID();
+          menuCategory = PVR_MENUHOOK_EPG;
+        }
+        else
+          return false;
       }
-      else
-        return false;
-    }
-    else if (item->IsPVRChannel())
-    {
-      iClientID = item->GetPVRChannelInfoTag()->ClientID();
-      menuCategory = PVR_MENUHOOK_CHANNEL;
-    }
-    else if (item->IsDeletedPVRRecording())
-    {
-      iClientID = item->GetPVRRecordingInfoTag()->m_iClientId;
-      menuCategory = PVR_MENUHOOK_DELETED_RECORDING;
-    }
-    else if (item->IsUsablePVRRecording())
-    {
-      iClientID = item->GetPVRRecordingInfoTag()->m_iClientId;
-      menuCategory = PVR_MENUHOOK_RECORDING;
-    }
-    else if (item->IsPVRTimer())
-    {
-      iClientID = item->GetPVRTimerInfoTag()->m_iClientId;
-      menuCategory = PVR_MENUHOOK_TIMER;
+      else if (item->IsPVRChannel())
+      {
+        iClientID = item->GetPVRChannelInfoTag()->ClientID();
+        menuCategory = PVR_MENUHOOK_CHANNEL;
+      }
+      else if (item->IsDeletedPVRRecording())
+      {
+        iClientID = item->GetPVRRecordingInfoTag()->m_iClientId;
+        menuCategory = PVR_MENUHOOK_DELETED_RECORDING;
+      }
+      else if (item->IsUsablePVRRecording())
+      {
+        iClientID = item->GetPVRRecordingInfoTag()->m_iClientId;
+        menuCategory = PVR_MENUHOOK_RECORDING;
+      }
+      else if (item->IsPVRTimer())
+      {
+        iClientID = item->GetPVRTimerInfoTag()->m_iClientId;
+        menuCategory = PVR_MENUHOOK_TIMER;
+      }
     }
 
     // get client id
