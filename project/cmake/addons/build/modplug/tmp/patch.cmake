@@ -1,0 +1,7 @@
+file(COPY D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/audiodecoder.modplug/depends/windows/modplug/CMakeLists.txt
+                     DESTINATION D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/modplug/src/modplug)
+execute_process(COMMAND "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/bin/patch.exe" --binary -p1 -i "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/audiodecoder.modplug/depends/windows/modplug/0001-remove-unistd-h.patch")
+execute_process(COMMAND "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/bin/patch.exe" --binary -p1 -i "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/audiodecoder.modplug/depends/windows/modplug/0002-update-stdafx-h.patch")
+execute_process(COMMAND "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/bin/patch.exe" --binary -p1 -i "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/audiodecoder.modplug/depends/windows/modplug/0003-fix-pow.patch")
+execute_process(COMMAND "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/bin/patch.exe" --binary -p1 -i "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/audiodecoder.modplug/depends/windows/modplug/0004-fix-rand.patch")
+execute_process(COMMAND "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/bin/patch.exe" --binary -p1 -i "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/audiodecoder.modplug/depends/windows/modplug/0005-fix-_mm_free.patch")

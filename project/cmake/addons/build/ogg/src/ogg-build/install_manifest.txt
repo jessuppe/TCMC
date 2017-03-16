@@ -1,0 +1,3 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/ogg/ogg.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/ogg/os_types.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/lib/ogg.lib

@@ -1,0 +1,22 @@
+Source: kodi-audioencoder-wav
+Priority: extra
+Maintainer: wsnipex <wsnipex@kodi.org>
+Build-Depends: debhelper (>= 8.0.0), cmake, kodi-addon-dev, kodi-audio-dev
+Standards-Version: 3.9.6
+Section: libs
+Homepage: http://kodi.org
+
+Package: kodi-audioencoder-wav
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: WAV audio encoder for Kodi
+ WAV audio encoder for Kodi
+
+Package: kodi-audioencoder-wav-dbg
+Section: debug
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: debug symbols for WAV audio encoder for Kodi
+ debug symbols for WAV audio encoder for Kodi
+

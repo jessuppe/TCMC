@@ -1,0 +1,5 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/libmodplug/modplug.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/libmodplug/it_defs.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/libmodplug/sndfile.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/libmodplug/stdafx.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/lib/modplug.lib

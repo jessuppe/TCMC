@@ -1,0 +1,3 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/lib/mpghip.lib
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/lame/lame.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/lib/mp3lame.lib

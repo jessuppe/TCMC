@@ -1,0 +1,9 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/lib/jsoncpp.lib
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/jsoncpp/json/autolink.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/jsoncpp/json/config.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/jsoncpp/json/features.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/jsoncpp/json/forwards.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/jsoncpp/json/json.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/jsoncpp/json/reader.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/jsoncpp/json/value.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/jsoncpp/json/writer.h

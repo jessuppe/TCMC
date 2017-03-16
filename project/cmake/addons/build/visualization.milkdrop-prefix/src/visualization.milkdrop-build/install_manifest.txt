@@ -1,0 +1,61 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/addon.xml
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/icon.png
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/presets/WA51-presets(265).zip
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/presets/Winamp-presets(436).zip
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Afrikaans/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Albanian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Amharic/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Arabic/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Belarusian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Bulgarian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Burmese/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Catalan/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Chinese (Simple)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Chinese (Traditional)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Croatian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Czech/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Danish/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Dutch/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/English/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/English (Australia)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/English (New Zealand)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/English (US)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Estonian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Finnish/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/French/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/French (Canada)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Galician/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/German/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Greek/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Hebrew/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Hungarian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Icelandic/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Indonesian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Italian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Japanese/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Korean/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Latvian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Lithuanian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Macedonian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Norwegian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Polish/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Portuguese/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Portuguese (Brazil)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Romanian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Russian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Serbian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Slovak/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Slovenian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Spanish/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Spanish (Argentina)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Spanish (Mexico)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Swedish/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Tajik/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Tamil (India)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Thai/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Turkish/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Ukrainian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Vietnamese/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/language/Welsh/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop/resources/settings.xml
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/visualization.milkdrop/visualization.milkdrop.dll

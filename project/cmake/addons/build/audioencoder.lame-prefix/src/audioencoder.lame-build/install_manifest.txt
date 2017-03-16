@@ -1,0 +1,5 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//audioencoder.lame/addon.xml
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//audioencoder.lame/icon.png
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//audioencoder.lame/resources/language/English/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//audioencoder.lame/resources/settings.xml
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/audioencoder.lame/audioencoder.lame.dll

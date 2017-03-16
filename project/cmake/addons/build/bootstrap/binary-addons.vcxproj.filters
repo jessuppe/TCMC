@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\bootstrap\CMakeLists.txt" />
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\a12326f79f6925e61401af7451b153ea\binary-addons-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\f8692618a34158f630193fa1c07a88f3\binary-addons.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\binary-addons" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{E4732109-590F-30C3-AA55-7CA5C7E41B03}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

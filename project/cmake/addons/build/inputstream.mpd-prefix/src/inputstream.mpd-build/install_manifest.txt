@@ -1,0 +1,5 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//inputstream.mpd/addon.xml
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//inputstream.mpd/changelog.txt
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//inputstream.mpd/resources/language/resource.language.en_gb/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//inputstream.mpd/resources/settings.xml
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/inputstream.mpd/inputstream.mpd.dll

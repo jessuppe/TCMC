@@ -1,0 +1,3 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/lib/tinyxml2.lib
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/tinyxml2.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/lib/pkgconfig/tinyxml2.pc

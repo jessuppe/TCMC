@@ -1,0 +1,1 @@
+execute_process(COMMAND "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/bin/patch.exe" --binary -p1 -i "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/peripheral.joystick/depends/common/pcre/strtoq.patch")

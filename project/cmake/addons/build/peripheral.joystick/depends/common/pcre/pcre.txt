@@ -1,0 +1,1 @@
+pcre http://mirrors.kodi.tv/build-deps/sources/pcre-8.36.tar.gz

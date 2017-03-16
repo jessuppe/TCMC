@@ -1,0 +1,613 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/addon.xml
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/icon.png
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/LICENSE.txt
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/data/blur1_ps.fx
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/data/blur2_ps.fx
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/data/blur_vs.fx
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/data/comp_ps.fx
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/data/comp_vs.fx
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/data/include.fx
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/data/warp_ps.fx
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/data/warp_vs.fx
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/docs/LICENSE.txt
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/docs/milkdrop.html
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/docs/milkdrop_preset_authoring.html
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/docs/q_vars.gif
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/docs/t_vars.gif
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/3dRaGoNs & Unchained - Dragon Science.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi + Flexi - Airhandler (Last Breath - Calm) [moebius morbid vision edit].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi + Geiss - Airhandler (Kali Mix) - Painterly Kaleidoscope 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Airhandler (Principle of Sharing).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Bitterfeld (Crystal Border Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Bow To Gravity.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Brakefreak-bitcore tweak.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Contortion (Escher's Tunnel Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Ert (Wary Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Ghast Entity.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Halls Of Centrifuge.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Hard Drink (Half-Infinitea).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Kevlar Abyss.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Party Mutant.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Potion of Spirits.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - See.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Songflower (Hybrid Plant).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Songflower (Moss Posy).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - The Lurker (Twin Mix) - Bitcore Tweak.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - Visitor.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Aderrasi - What Cannot Be Undone.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/baked - Chinese Fingerbang (cao ni ma =]) - PieturP colors - Bitcore speed tweak.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/baked - mushroom rainbows[acid Storm].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/baked - River of Illusion (InfecteD acid mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/baked - River of Illusion Dillusion [Bubble].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/bdrv - ultramix2 #43.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Benski - Atom Smasher.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Bmelgren & Krash - Rainbow Orb Peacock (Lonely Signal Gone Mad Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Bmelgren - Pentultimate Nerual Slipstream (Tweak 2).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/BrainStain-Blackwidow.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/BrainStain-re entry.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Che - Escape.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Che - Terracarbon Stream.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/cope - digital sea.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/cope - ferrofluid [Flexis minor remix].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/cope - the drain to heaven.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/EMPR - Random - They're so cute, Dad can I keep one!.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.s and PieturP - AlienSpaceshipInvasion 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + flexi - glowsticks+proton lights(Krash's) _Phat_+illumination(Stahl's).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + Geiss - glowsticks v2 02 (Relief Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + Geiss - glowsticks v2 03 music shifter edit b (water mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + Geiss - sarc c_Phats Zoom Mix Reflecto.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + Phat - CAT Scan (Nirvana flux).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + Phat - chasers 11 sentinel C_poltergeist_mix response daemon.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + Phat - chasers 14 sentinel 616.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + Phat - chasers 18 hallway.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + Phat - chasers 19 Portal.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + Phat - cubetrace - v2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + Phat - Emergent factors.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + Phat - vacuum deity watching you.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + Phat - zen prophetmind WTF is it_v2 - Bitcore Tweak.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. + Zylot - skylight (Stained Glass Majesty mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - angels of decay.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - dark side of the moon (plus a few more hits and a pill).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - ddg_phat_mix - Bitcore Tweak.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - glowsticks & proton lights (Krash's) _Phat_ recursive demons.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - glowsticks music shifter (Stahl's Reactive - feat. flexi + phat).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - glowsticks v2 03 music shifter edit b.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - glowsticks v2 03 music.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - glowsticks v2 04 music minimal.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - glowsticks v2 05 and proton lights (+Krash's beat code) _Phat_remix03 madhatter_v2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - heater core C_Phat's_class + sparks_mix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - multisphere 01 B_Phat_Ra_mix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - nematodes E daemon.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - pointfield 04 arcs demon_phat edit_v3.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - pointfield 09 the gases beyond 85c.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - repeater 15 - kaleidoscope b.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S. - tumbler demon mix high fps Phat_edit.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S.+Phat - Arm_upgrades - transformer.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S.+Phat - detached centerpoint.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S.+Phat - Flare_dig_mix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S.+Phat - spectrum bubble new colors_v2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S.+Phat Cool Bug v2 + (Krash's beat detection).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S.+Phat Cool Bug.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S.+Phat Emergent factors - Bitcore Tweak.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S.+Phat Fractical_dancer_v2d.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S.+Phat Speak with the orb_rotation_mix_time_mod.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Eo.S.+Phat trail_of_darkness.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Esotic & Rozzer - Hippie Hypnotizer.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Esotic & Rozzer - Now And Later.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Esotic & Rozzer - The Dark Side Of My Moon.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Esotic & Rozzor - Pixie Party Light ((No Wave Invasion) Mandala Chill Red Yellow Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fed - slowfast 1.1.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN + Eo.S. + Phat - starburst totem pole.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN + Flexi - stitchcraft.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN + Flexi - witchcraft 2.0.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN + Flexi - witchcraft unleashed.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN + Flexi - witchcraft [graffitti attack].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN + geiss - witchcraft (Stahl's Mirror Crossfire Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN - a quiet death.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN - breakfast cruiser.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN - crystal glasses.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN - jade nicotine.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN - lost in the bottle.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN - one step beyond (jelly remix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN - psychotic meltdown.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN - soft porn.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN - the dark side of the moon.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN - toffee cream and icing sugar.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN - when robots take over the world.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN - white scream firefly.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN - witchcraft.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/fiShbRaiN, geiss + flexi - witchcraft (Grow Mix) (moebius remix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + bdrv - va ultramix #148 [fucking infinity mix].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + bdrv - what to do [Phat edit].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + fiShbRaiN - operation fatcap I.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + fiShbRaiN - operation fatcap II.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + fiShbRaiN - witchcraft [complex terraforming - fiddling twists in the fabric of space].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + fiShbRaiN - witchcraft [complex terraforming].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + Geiss - antagonizing beat detection codes.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + Geiss - Bipolar vs. Reaction Diffusion mix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + Geiss - pogo-cubes on tokamak matter [mind over matter remix].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + Geiss - pogo-cubes on tokamak matter.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + Martin - astral projection.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + Martin - dive.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + Rovastar - landing on Fractopia.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + Rovastar - postcard from Fractopia.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi + Shifter - sublimal spaceship.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - 100% shader fractal [origami edit].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - age of shading chaos.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/flexi - bouncing icecubes [good morning edit].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - braggadocio.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - cell tissue.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/flexi - color strike.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - dawn has broken.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - fractal descent.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - fractal jellyfish [moebius mix].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - fractal remix weed.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/flexi - fractal seafood.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - fractals with a twist.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - gold plated maelstrom of chaos [mirrorized].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - gold plated maelstrom of chaos.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - hue burst.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - infused with the spiral.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - intensive shader fractal [suksma comp shader mix].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - intensive shader fractal.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - intention focus.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - jellyfish jam.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - Julia fractal.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - julian affairs [remix].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - kaleidoscope template [commented composite shader].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - lorenz attractor.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - meta4free.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - Milkcore [Martin's ripple on water insertion].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - Milkcore.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - mindblob 2.0 [stahlregens glass texture garden mix].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - mindblob 2.0.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - mindblob [shiny mix].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/flexi - moebius transformation [random texture mix].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - molten neon fire spirit.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - oldschool tree.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - predator-prey-spirals [geiss' laplacian finish].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - predator-prey-spirals [stahlregens gelatine finish].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - predator-prey-spirals.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - psychenapping.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - reality tunnel.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - science-fraction.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - smashing fractals [acid etching mix].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - smashing fractals [Geiss' bas relief finish].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/flexi - smouldering.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - strangely dynamic world.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - supersonic.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - the distant point between.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - the early bird.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - when monopolies were the future [simple warp + non-reactive moebius].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi - working with infinity.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi, fishbrain + Martin - witchery.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi, fishbrain, Geiss + Martin - tokamak witchery.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi, martin + geiss - dedicated to the sherwin maxawow.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi, Phat, Zylot + Eo.S - work with lines of code.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi, Rovastar + Geiss - Fractopia vs bas relief.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Flexi, Stahlregen, Nitorami + Shifter - shader authoring motivation set.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Forum collaboration thread - second try #4 [Goody(2), Stahlregen (2)].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Forum collaboration thread - second try #6 [Goody(2), Stahlregen (3), fed (1)].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Forum collaboration thread - second try #6c1.5 [Goody(2), Stahlregen (3.5), fed (1)].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Fvese - Rebirth (Progression Rot Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Fvese - Rebirth.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Fvese - Snowflake Like 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Fvese - The Tunnel (Final Stage Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Fvese - Zoom Effects (Remix 3).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss + Flexi + Martin - disconnected.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss + Stahlregen - Reaction Diffusion 3 [Rippling Islands].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Blur Mix 3.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Cauldron - painterly 5.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Confetti (Kaleidoscope Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Cosmic Dust 2 - Tiny Reaction Diffusion Mix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Cosmic Dust 2 - Trails 5b.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Cosmic Dust 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Drop Shadow 1.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Explosion 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Explosion 3.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Fog Tunnel.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Inkblot.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Liquid Beats (janky ripple warp reflecto).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Motion Blur 2 (Stahl's Neon Jelly 2 RMX).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Myriad Mosaics.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Myriad Spirals.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Reaction Diffusion 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Reaction Diffusion 3 (Lichen Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Skin Dots Multi-layer 3.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Spiral Artifact.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Swirlie 4.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss - Tokamak Plus 4.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss and Zylot - Reaction Diffusion 3 (Overload Mix 2).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Geiss, Flexi + Stahlregen - Thumbdrum Tokamak [crossfiring aftermath jelly mashup].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody + martin - crystal palace - Aqua Lumens.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody + martin - crystal palace - Ocular Anima.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - Acid Angel - Fallen Angel.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - Acid Angel - REvisitation.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - Aurora Totalis.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - Blame Hoffman.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - Clouded Reason - revisited.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - Ego Decontructor.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - Lights in the Sky.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - LSD Zoomtunnel.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - Need - Desire remix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - Need - Transcendance remix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - Need.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - The Shakes.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - The Thing That Lives Between.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - The Wild Vort.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - Unstable Sonic Reactor - Final.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - Vertigo - revisited.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Goody - Vertigo.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Hexcollie + Flexi - Faceless Frog [rmx].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Hexcollie - Personal Mashup3 [Flexi's portal mix].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Hexcollie, Aderassi, BDRV, AdamFX n Flexi - It's a start.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Hexcollie, Flexi + Adam - Julian Sploosh.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Hexcollie, Flexi, ORB, Eo.S. n DaNOnE - Pineal Massage [5 minute composite quickshot].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Idiot - 9-7-02 (Remix 2).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Idiot - 9-7-02.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Idiot - Marphets Surreal Dream (Hypnotic Spiral Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Idiot - Star Of Annon.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Idiot - Subnormal Trance (Remix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Idiot - Tentacle Dreams.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Idiot - What Is.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Idiot24-7 - Ascending to heaven 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Illusion & Boz - Hot Air Balloon.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Illusion & Rovastar - Clouded Bottle.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Illusion & Unchained - New Strategy.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Illusion - Dance Of The Planets.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Krash & Rovastar - A Million Miles from Earth (Ripple Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Krash & Rovastar - Cerebral Demons - Phat + Eo.S. Killer Death Bunny Remix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Krash & Rovastar - Cerebral Demons - Phat + Eo.S. Moire Remix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Krash & Rovastar - Cerebral Demons - Phat + Eo.S. Stars Remix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Krash & Rovastar - The Devil Is In The Details.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Krash + Geiss + martin - War Machine (Stahl's ultimate Mash Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Krash - interwoven (nightmare weft)_Phats_Maybe_Ill_Go_To_A_Party.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Krash - Snowflake Halo.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin + suksma + fed + goody and others - blarfff [Zebra puke mash-up by Stahlregen].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - axon3.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - butterflies.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - crystal palace.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - dark galaxy.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - deep blue.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - disco mix 1.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - disco mix 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - disco mix 4.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - dont drink and drive (police mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - electric pool.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - first try.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - foggy notion.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - fruit machine.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - funky illusions.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - gate to moria.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - Geiss - Psychotic Roulette.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - gentle happiness.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - ghost city.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - girlie affairs.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - glass corridor.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - golden mirror.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - hardcore mix 1.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - hardcore mix 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - jellyfish dance.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - lightning [Goody tunnel artifact tweak].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Martin - liquid arrows.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - liquid gold.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - ludicrous speed.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - moonlight splash.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - move this body.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - mucus cervix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - musicogenic epilepsy.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - neon space ps2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - neon space ps3.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - night cathedral.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - night in the forest.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - no religion.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - organic light.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - pendulum in brass ps3.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - purple pulsator.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - reflections on black tiles.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - satellite view.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - shiny tunnel.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - silversmith.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - soma in pink.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - sparky caleidoscope.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - starfield sectors.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - sunset over the river.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - the beast.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - the Dome ps2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - the Dome ps3.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - the forge of Isengard.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - Thinking about you.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - this beautiful planet.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - tiling the tube.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - tunnel race.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - unholy amulet.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - violet flash.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/martin - volcano.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Martin - wire dance.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Mstress & Juppy - Dancer.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Mstress & Zylot - Acid UFO.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Mstress - Acoustic Nerve Impulses.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/nil - Disco Comet.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/nil - Vortex of Vortices.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Acid Cycle Gas Giant.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Acid Cycle [flexi composite].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Acid Cycle.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Acid Lamp.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Acid Sunrise.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Blue Emotion.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Crysal Storm .milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Dark Omen.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/orb - fireworks - fusion.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Fireworks Sparkle.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Inferno.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Kalidescope.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Lava Lamp.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Magma Pool.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Mega Spectrum.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Nova Sunrise.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Pastel Primer.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Planetary Alignment Acid Burn.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Planetary Alignment.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Quicksand Lab.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Quicksand.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Sandblade.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Saturns Rings.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Solar Radiation.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Solar Sail.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Starfish.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Supernova Meltdown.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Temporal Rift.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/ORB - Waaa.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/phat + Eo.S. - 2ct2V5.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/phat + Eo.S. - 2ct2V6.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/phat + Eo.S. - Bass_responce_Red_Movements_Disorienting nebula3.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/phat + Eo.S. - PeopleWhoEatAcid_phatColoursV2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/phat + Eo.S. - TesellatingFractal_Mix3.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat+fiShbRaiN+Eo.S_Mandala_Chasers_remix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/phat_2C-B6.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Eo.S. - Just more trash.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Eo.S. - our own personal demon.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Eo.S. Eyes_spiral_mix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Eo.S. rainbow bubble_mid3-fuck me dood.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/phat_It'sJustNumbers_remix3.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_remix_Eo.S. - zion square_mix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Rovastar_Eo.S. square_faces_v2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Zylot_Eo.S. rainbow bubble_mid3-fuck me dood-flash.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Zylot_Eo.S. rainbow bubble_mid3-starpoints_spirals_VE - Bitcore Tweak.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Zylot_Eo.S. spiral_faces_v2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Zylot_Eo.S. spiral_Movements_Beatle.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Zylot_Eo.S. square_faces_v2_alt_colours.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Zylot_Eo.S. Trippy_rotation_v2_sector_mix_alt_colours.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Zylot_Eo.S. Trippy_rotation_weird_boxs mix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Zylot_Eo.S. work with lines.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Phat_Zylot_Eo.S._Krash I_hope_someone_will_see_this_triping_v2b.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/PieturP - IT_MIGHT_BE_EVIL_phat_remix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/PieturP - triptrap_(getting_concrete_visions_through_a_diafragma_version).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/PieturP - triptrap_(ultimate-trip-mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/raron + flexi - milkdrop fibers on fire.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/raron - fourth state of Milkdrop 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Redi Jedi - i dont think those were portabello mushrooms.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Redi Jedi - off the fadar.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Reenen & Telek - Slow Shift Matrix (bb4.5 (Dynamic Beat) Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Reenen - phoenix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Reenen Geiss - Soft Triple Feedback.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Reenen Geiss - Triple Feedback_phat_edit.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rocke - Cold Love (Tei Zwaa).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar & Aderrasi - Airs Of Change.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar & Che - Definitly Not For The Epileptic (Inner Perspective Of Life Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar & Idiot24-7 - Balk Acid.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar & Idiot24-7 - Marphet's Shrine.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar & Krash - Cerebral Demons (Beat Pulse Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar & Krash - Rainbow Deflection.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar & Loadus + Zylot - FractalDrop (Spark Machine v2.0).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar & Loadus - FractalDrop (Active Sparks Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar & Rocke - Sugar Spun Sister.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar & Unchained - Ambrosia Mystic (Dark Heart Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar & Unchained - Demonology (Vampire Soul Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar & Unchained - Unified Drag 2 (Ghostly Vision Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar & Zylot - Crystal Ball (Many Visions Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar + Flexi + Loadus + Geiss - Tone-mapped FractalDrop 4 [moebius edit].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar + Flexi - Hurricane Nightmare (Moebius Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar + Geiss - Snapshot Of Space (LSB mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar + Loadus + Geiss - FractalDrop (Spinning Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar + Loadus + Geiss - FractalDrop (Triple Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar + Loadus + Geiss - Tone-mapped FractalDrop 7c.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - 3am Somewhere.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - A Million Miles From Earth (Wormhole Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Alpha Conflict.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Altars Of Harlequin's Madness (Dark Disorder Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Cerebral Parasites (Attack Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Dark Ritual (Star Of Destiny Denied Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Dark Ritual (Star Of Destiny Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Destiny Star (Starbrust Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - eclectic interface (despair mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Explosive Minds.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Fractopia (Fantic Dancing Lights Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Fractopia (Galaxy Swirl Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Fractopia (Upspoken Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Fractopia (Upspoken Mix)_Phat_Speak_When_Spoken_2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Hallucinogenic Pyramids (Beat Time Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Harlequin's & Jester's Dual Delight (Chaotic Nightmare Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Harlequin's Dynamic Fractal 3.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Harlequin's Fractal Encounter.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Harlequin's Liquid Dragon.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Inner Thoughts (Frantic Thoughts Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Jester's Calling 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Jester's Surreal Tornado.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Mosaics Of Ages.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Parallel Universe.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Ritual Halostar.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Solarized Space.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Sunflower Passion (Simple Mix)_phat+Eo.S. werid_angle_mix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Sunflower Passion.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Torrid Tales.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Tripmaker (Space Trip Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Tripmaker.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - VooV's Light Pattern.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - VooV's Movement (After Dark Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - VooV's Organic Light.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rovastar - Xtal.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rozzor & Aderrasi - Canon.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rozzor & Che - Inside The House Of Nil.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rozzor & Esotic - Pixie Party Light (With Liquid Refreshment Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rozzor & Esotic - PPL (NWI) Mandala Chill Color Reactive Texture Tweaked.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rozzor & Neuro - Starover (Semicolon Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rozzor & Rovastar - Shame Turns inTo Change.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rozzor & StudioMusic - Vertigyny (Geiss Shape Mod).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rozzor & Unchained - Crescat Scientia, Vita Excolatur.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rozzor & Unchained - Painful Plasma (Multi-Wave Mirrored Rage (Triangle Tweak)).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rozzor & Unchained - Scientifically Shapely.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Rozzor - Learning Curve (Invert Tweak).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Shifter & Eo.S+Phat - Fractical dancer (inside the neural net).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter & fiShbRaiN - witchcraft (i'm melting).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter + geiss - neon pulse (glow mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - a thousand monkeys_phat_edit (subliminal mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - brain coral (left brained).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - brain coral.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - dark tides (eo.s+phat_whisps of doom mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - digi.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - escape the worm - Eo.S. + Phat - Before_It_Eats_Your_Brain_Mix_v2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - feathers (angel wings).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - fractal grinder.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - lazerspecs_phat_edit.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - liquid circuitry.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - robotopia.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - spincycle c.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - swarm.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - tadpole evolution (static mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - tumbling cubes (endless) radial blur.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - tumbling cubes (ripples) Eo.S. remix1.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - tumbling cubes (ripples) Phat_parallel_planes_mix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - tumbling cubes (ripples).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - tumbling cubes.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/shifter - urchin mod.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Shreyas - Carnival.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & AdamFx + Eo.S + Flexi + Geiss + Phat + Rovastar + Zylot - Fractopia Kaleidoscope.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & Aderrasi + Flexi + Rovastar - Fractal Twist (A feat. hexcollie).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & aderrasi + martin + rocke + rovastar - Charmed Spun Sugar.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & baked + Geiss + Krash - Washing Machine (V2).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & bdrv + fiSHbRAiN + flexi + Geiss + shifter - Starcraft (Hyperion RMX V3).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & Boz + Eo.S + Geiss + Phat + Rovastar + Zylot - Machine Code (Relief Block Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & Boz + Eo.S + Geiss + Phat + Rovastar + Zylot - Machine Code [Jelly].milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & Eo.S + Geiss + ORB + Phat - Fruitsticks (Flexi-Tex Shader).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & fiSHbRaiN + flexi + Geiss + shifter - Stonecraft (Beetle Relief mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & fishbrain + flexi + geiss - The Machine that conquered the Aether.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & fishbrain + geiss + martin  - Flowercraft.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & flexi + Geiss + Rovastar + Shifter - Even More Fractals for Hexcollie.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & flexi + Geiss + Rovastar + Shifter - Fractal Feedback (for Hexcollie).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & Flexi + Geiss + Rovastar + Unchained - Blurred Echoes (reflecto fucukp).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & Flexi + Geiss - Liquidity (Dynamic Swirls).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & Flexi + Geiss - Tiger No.5 (Random texture flow).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & Geiss + Rovastar + Illusion + Krash + Rozzor - Cyclopean Shift (Eyeless Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen & Geiss + TobiasWolfBoi - Space Gelatin (Color Xplosion).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen + Flexi - dots (layered).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen + Flexi - gimme color (Bubble Spinner Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen + Flexi - psychotic flower gelatine burst.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/stahlregen + flexi - what's on a moebius beasts mind.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen + Geiss + Martin - Ouboros (Metal Finish 2).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/stahlregen + geiss + shifter - babylon.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen + martin + others - Psychedelic Metal Flower.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen + Unchained - Psychedelic Flower Kung Fu (Corrupt).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Stahlregen - Spiral Beats (Fluctuating Flowers).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Studio Music and Unchained - Rapid Alteration.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TEcHNO & SandStorm - Psychodelic Highway.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Tokyo corridor (shifter tumbling cubes remix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - 4th of July.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - Bass Bumping.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - Blur.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - Bowels.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - Flowers.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - I Like Cartoon.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - Light Year.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - Lights.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - Origin of the Earth.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - Our Breakfast.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - Past the Black.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - RGB.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - Town In Future.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - Venus.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - Wh@tever I Can Do.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - Where Monalisa is.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - World Gone Wild.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/TonyMilkdrop - X-Ray.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained & Rovastar - Luckless.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained & Rovastar - Rainbow Obscura.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained & Rovastar - Wormhole Pillars (Hall of Shadows mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained & Rovastar - Xen Traffic.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Beat Demo (Demonology Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Beat Demo 1.0.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Beat Demo 2.4.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Beat Demo 2.5.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Beyond The Strife Nexus.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Demonology.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Free to Feel (Valium Remix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Fuzzy Sciences.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Goofy Beat Detection.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Hard Science.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Housed In A Childish Mind.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - In Memory Of Peg.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Jaded Emotion.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Making a Science of It 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Making a Science of It 3.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Making a Science of It 4.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Making a Science of It 7.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Making a Science of It.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Not As Fun As It Looks.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Picture Of Exile.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Picture Of Poison.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Quine.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - ReAwoke.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Rewop.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Ribald Ballad.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Scientific Shapes 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Spinal Mixdown 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Those Who Doubted.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Unclaimed Wreckage 2 (Hemi-Sync).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Unclaimed Wreckage 2 (Sub-Spinal Daemon).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Unified Drag 2.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained - Unified Drag.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained vs Rovastar vs Zylot - Tripmaker (Trip Machine v3).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Unchained vs Rovastar vs Zylot - Tripmaker (Trip machine).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/yin - 051 - Van Gogh's nightmare (in depth) - bitcore tweak.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/yin - 100 - Through the ether - Bitcore Tweak.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/yin - 140 - Ohm to the stars.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/yin - 160 - Controversial.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/yin - 191 - Temporal singularities.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/yin - 250 - Artificial poles of the continuum_Phat's_Orbit_mix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/yin - 290 - Sonic brainstorm.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/yin - 300 - Daydreamer.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/yin - 315 - Ocean of Light (yo im peakin yo Eo.S.-Phat).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Zylot & Idiot - Face BDRV et  AL  rmx ketama mix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Zylot & Idiot24-7 - Unknown Power Source.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Zylot & Krash - Snowflake Halo (Ice Cube mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Zylot & Rovastar - A Million Miles From Earth (Fog Of Time Mix (Vessel reMix) ).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Zylot & Rovastar - Sully's Trip (The Worstest Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Zylot - Building Block of color - Bitcore Tweak.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Zylot - Crosshair Dimension (Light of Ages).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Zylot - Funnels.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Zylot - In death there is life (Geiss Layered Mix).milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Zylot - Rush.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Zylot - Spiral (Hypnotic)_Phat_Double_Spiral_Mix.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/presets/Zylot - Star Ornament.milk
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/cells.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/clouds.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/clouds2.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/facade01.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/heart.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/Image415.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/kaite.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/lichen.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/manyfish.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/onefish.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/paper.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/prayerwheel.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/ruin.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/seaweed.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/sky.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/smalltiled_colors3.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/smalltiled_electric_nebula.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/smalltiled_ensign_meat.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/smalltiled_lizard_scales.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/sunrise.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.milkdrop2/resources/Milkdrop2/textures/wrenches.jpg
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/visualization.milkdrop2/visualization.milkdrop2.dll

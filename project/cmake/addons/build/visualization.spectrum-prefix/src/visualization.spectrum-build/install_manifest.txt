@@ -1,0 +1,71 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/addon.xml
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/icon.png
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Afrikaans/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Albanian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Amharic/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Arabic/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Azerbaijani/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Basque/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Belarusian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Bosnian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Bulgarian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Burmese/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Catalan/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Chinese (Simple)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Chinese (Traditional)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Croatian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Czech/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Danish/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Dutch/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/English/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/English (US)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Esperanto/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Estonian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Faroese/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Finnish/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/French/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/French (Canada)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Galician/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/German/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Greek/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Haitian (Haitian Creole)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Hebrew/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Hindi (Devanagiri)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Hungarian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Icelandic/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Indonesian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Italian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Japanese/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Korean/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Latvian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Lithuanian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Macedonian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Malay/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Maltese/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Norwegian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Persian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Persian (Iran)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Polish/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Portuguese/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Portuguese (Brazil)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Romanian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Russian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Serbian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Serbian (Cyrillic)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Slovak/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Slovenian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Spanish/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Spanish (Argentina)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Spanish (Mexico)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Swedish/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Tajik/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Tamil (India)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Thai/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Turkish/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Ukrainian/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Uzbek/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Vietnamese/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Vietnamese (Viet Nam)/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/language/Welsh/strings.po
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//visualization.spectrum/resources/settings.xml
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/visualization.spectrum/visualization.spectrum.dll

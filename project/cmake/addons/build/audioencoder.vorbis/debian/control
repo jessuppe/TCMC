@@ -1,0 +1,22 @@
+Source: kodi-audioencoder-vorbis
+Priority: extra
+Maintainer: Arne Morten Kvarving <spiff@xbmc.org>
+Build-Depends: debhelper (>= 8.0.0), cmake, kodi-addon-dev, kodi-audio-dev, make, libtool, libvorbis-dev
+Standards-Version: 3.9.6
+Section: libs
+Homepage: http://kodi.org
+
+Package: kodi-audioencoder-vorbis
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Vorbis audio encoder for Kodi
+ Vorbis audio encoder for Kodi
+
+Package: kodi-audioencoder-vorbis-dbg
+Section: debug
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: debug symbols for Vorbis audio encoder for Kodi
+ debug symbols for Vorbis audio encoder for Kodi
+

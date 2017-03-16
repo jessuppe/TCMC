@@ -1,0 +1,6 @@
+file(COPY D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/audiodecoder.sidplay/depends/windows/sidplay2/CMakeLists.txt
+                     DESTINATION D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/sidplay2/src/sidplay2)
+execute_process(COMMAND "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/bin/patch.exe" --binary -p1 -i "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/audiodecoder.sidplay/depends/windows/sidplay2/0001-resid-builder-buildsystem.patch")
+execute_process(COMMAND "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/bin/patch.exe" --binary -p1 -i "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/audiodecoder.sidplay/depends/windows/sidplay2/0002-resid-buildsystem.patch")
+execute_process(COMMAND "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/bin/patch.exe" --binary -p1 -i "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/audiodecoder.sidplay/depends/windows/sidplay2/0003-libsidplay-buildsystem.patch")
+execute_process(COMMAND "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/bin/patch.exe" --binary -p1 -i "D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/audiodecoder.sidplay/depends/windows/sidplay2/0004-fix-log.patch")

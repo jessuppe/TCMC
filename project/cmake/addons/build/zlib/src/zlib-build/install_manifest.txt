@@ -1,0 +1,5 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/lib/zlib.lib
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/zconf.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/zlib.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/share/man/man3/zlib.3
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/share/pkgconfig/zlib.pc

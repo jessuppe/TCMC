@@ -1,0 +1,15 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun_channels.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun_channelscan.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun_control.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun_debug.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun_device.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun_device_selector.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun_discover.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun_pkt.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun_sock.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun_types.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun_os.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun_video.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/hdhomerun/hdhomerun_os_windows.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/lib/hdhomerun.lib

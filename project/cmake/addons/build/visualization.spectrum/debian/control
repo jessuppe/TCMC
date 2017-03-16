@@ -1,0 +1,23 @@
+Source: kodi-visualization-spectrum
+Priority: extra
+Maintainer: Arne Morten Kvarving <spiff@xbmc.org>
+Build-Depends: debhelper (>= 8.0.0), cmake, kodi-addon-dev,
+               kodi-visualization-dev, libgl1-mesa-dev, libglew-dev
+Standards-Version: 3.9.5
+Section: libs
+Homepage: http://xbmc.org
+
+Package: kodi-visualization-spectrum
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Spectrum visualizer for Kodi
+ Spectrum visualizer for Kodi
+
+Package: kodi-visualization-spectrum-dbg
+Section: debug
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: debug symbols for Spectrum visualizer for Kodi
+ debug symbols for Spectrum visualizer for Kodi
+

@@ -1,0 +1,4 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/vorbis/codec.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/vorbis/vorbisenc.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/vorbis/vorbisfile.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/lib/vorbis.lib

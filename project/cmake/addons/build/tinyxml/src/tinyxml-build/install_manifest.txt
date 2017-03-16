@@ -1,0 +1,3 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/tinystr.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/tinyxml.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/lib/tinyxml.lib

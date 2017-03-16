@@ -1,0 +1,3 @@
+repository='external project URL'
+module='http://download.silicondust.com/hdhomerun/libhdhomerun_20150826.tgz'
+tag=''

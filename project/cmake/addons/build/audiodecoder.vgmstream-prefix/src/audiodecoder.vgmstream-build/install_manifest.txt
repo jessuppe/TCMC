@@ -1,0 +1,2 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/.//audiodecoder.vgmstream/addon.xml
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/Win32BuildSetup/BUILD_WIN32/addons/audiodecoder.vgmstream/audiodecoder.vgmstream.dll

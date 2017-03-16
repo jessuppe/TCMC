@@ -1,0 +1,3 @@
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/lib/kodiplatform.lib
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/include/kodi/util/XMLUtils.h
+D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/output/lib/kodiplatform/kodiplatform-config.cmake

@@ -1,0 +1,854 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{4AA23B17-4131-35DB-A88E-AD3C6B77CD27}</ProjectGUID>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>binary-addons</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\bootstrap\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -HD:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap -BD:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap --check-stamp-file D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap/CMakeLists.txt;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\bootstrap\CMakeLists.txt;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeSystem.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeSystem.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GNU-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-CXX.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GNU-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeRCCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-CXX-FeatureTests.cmake;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\feature_tests.cxx;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\ExternalProject.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\RepositoryInfo.txt.in;C:\Program Files\CMake\share\cmake-3.6\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\tmp\binary-addons-cfgcmd.txt.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\bootstrap\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -HD:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap -BD:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap --check-stamp-file D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap/CMakeLists.txt;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\bootstrap\CMakeLists.txt;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeSystem.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeSystem.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GNU-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-CXX.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GNU-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeRCCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-CXX-FeatureTests.cmake;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\feature_tests.cxx;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\ExternalProject.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\RepositoryInfo.txt.in;C:\Program Files\CMake\share\cmake-3.6\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\tmp\binary-addons-cfgcmd.txt.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\bootstrap\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -HD:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap -BD:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap --check-stamp-file D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap/CMakeLists.txt;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\bootstrap\CMakeLists.txt;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeSystem.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeSystem.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GNU-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-CXX.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GNU-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeRCCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-CXX-FeatureTests.cmake;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\feature_tests.cxx;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\ExternalProject.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\RepositoryInfo.txt.in;C:\Program Files\CMake\share\cmake-3.6\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\tmp\binary-addons-cfgcmd.txt.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\bootstrap\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -HD:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap -BD:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap --check-stamp-file D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap/CMakeLists.txt;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\bootstrap\CMakeLists.txt;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeSystem.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeSystem.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GNU-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-CXX.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\GNU-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeRCCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\Compiler\MSVC-CXX-FeatureTests.cmake;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\feature_tests.cxx;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeCXXCompiler.cmake.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\3.6.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\ExternalProject.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\RepositoryInfo.txt.in;C:\Program Files\CMake\share\cmake-3.6\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.6\Modules\CMakeParseArguments.cmake;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\tmp\binary-addons-cfgcmd.txt.in;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\bootstrap\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-mkdir.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Creating directories for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/tmp
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-mkdir
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-mkdir.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-mkdir</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Creating directories for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/tmp
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-mkdir
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-mkdir.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-mkdir</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Creating directories for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/tmp
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-mkdir
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-mkdir.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-mkdir</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Creating directories for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/tmp
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-mkdir
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-mkdir.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-mkdir</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-download.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing download step (git clone) for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/tmp/binary-addons-gitclone.cmake
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-download
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-download.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\binary-addons-gitinfo.txt;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-mkdir;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing download step (git clone) for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/tmp/binary-addons-gitclone.cmake
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-download
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-download.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\binary-addons-gitinfo.txt;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-mkdir;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Performing download step (git clone) for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/tmp/binary-addons-gitclone.cmake
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-download
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-download.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\binary-addons-gitinfo.txt;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-mkdir;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Performing download step (git clone) for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/tmp/binary-addons-gitclone.cmake
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-download
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-download.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\binary-addons-gitinfo.txt;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-mkdir;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-update.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing update step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/tmp/binary-addons-gitupdate.cmake
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-update.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-update</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing update step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/tmp/binary-addons-gitupdate.cmake
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-update.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-update</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Performing update step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/tmp/binary-addons-gitupdate.cmake
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-update.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-update</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Performing update step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/tmp/binary-addons-gitupdate.cmake
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-update.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-update</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-patch.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">No patch step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-patch
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-patch.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-patch</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">No patch step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-patch
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-patch.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-patch</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">No patch step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-patch
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-patch.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-patch</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">No patch step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-patch
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-patch.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-patch</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-configure.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">No configure step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-configure
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-configure.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\tmp\binary-addons-cfgcmd.txt;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-update;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-patch;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-configure</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">No configure step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-configure
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-configure.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\tmp\binary-addons-cfgcmd.txt;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-update;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-patch;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-configure</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">No configure step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-configure
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-configure.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\tmp\binary-addons-cfgcmd.txt;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-update;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-patch;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-configure</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">No configure step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-configure
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-configure.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\tmp\binary-addons-cfgcmd.txt;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-update;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-patch;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-configure</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-build.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">No build step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-build.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-configure;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-build</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">No build step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-build.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-configure;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-build</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">No build step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-build.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-configure;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-build</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">No build step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-build.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-configure;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-build</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\5930d651b76beec062b38e7a4c6dd355\binary-addons-install.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing install step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_PREFIX_PATH=D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/addons -DPROJECT_SOURCE_DIR=D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons -DCMAKE_INSTALL_PREFIX=D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/addons -DADDONS_TO_BUILD=all -P D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap/Bootstrap.cmake
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-install
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-install.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-build;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-install</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing install step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_PREFIX_PATH=D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/addons -DPROJECT_SOURCE_DIR=D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons -DCMAKE_INSTALL_PREFIX=D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/addons -DADDONS_TO_BUILD=all -P D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap/Bootstrap.cmake
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-install
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-install.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-build;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-install</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Performing install step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_PREFIX_PATH=D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/addons -DPROJECT_SOURCE_DIR=D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons -DCMAKE_INSTALL_PREFIX=D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/addons -DADDONS_TO_BUILD=all -P D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap/Bootstrap.cmake
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-install
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-install.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-build;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-install</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Performing install step for 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+cd D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_PREFIX_PATH=D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/addons -DPROJECT_SOURCE_DIR=D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons -DCMAKE_INSTALL_PREFIX=D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/addons -DADDONS_TO_BUILD=all -P D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/bootstrap/Bootstrap.cmake
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-install
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/5930d651b76beec062b38e7a4c6dd355/binary-addons-install.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-build;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-install</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\a12326f79f6925e61401af7451b153ea\binary-addons-complete.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Completed 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/$(Configuration)
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/$(Configuration)/binary-addons-complete
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-done
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/a12326f79f6925e61401af7451b153ea/binary-addons-complete.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-install;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-mkdir;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-update;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-patch;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-configure;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-build;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-install;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\$(Configuration)\binary-addons-complete</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Completed 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/$(Configuration)
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/$(Configuration)/binary-addons-complete
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-done
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/a12326f79f6925e61401af7451b153ea/binary-addons-complete.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-install;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-mkdir;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-update;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-patch;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-configure;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-build;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-install;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\$(Configuration)\binary-addons-complete</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Completed 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/$(Configuration)
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/$(Configuration)/binary-addons-complete
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-done
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/a12326f79f6925e61401af7451b153ea/binary-addons-complete.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-install;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-mkdir;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-update;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-patch;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-configure;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-build;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-install;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\$(Configuration)\binary-addons-complete</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Completed 'binary-addons'</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/$(Configuration)
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/$(Configuration)/binary-addons-complete
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/binary-addons/src/binary-addons-stamp/$(Configuration)/binary-addons-done
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/a12326f79f6925e61401af7451b153ea/binary-addons-complete.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-install;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-mkdir;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-download;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-update;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-patch;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-configure;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-build;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\binary-addons\src\binary-addons-stamp\$(Configuration)\binary-addons-install;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\$(Configuration)\binary-addons-complete</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\f8692618a34158f630193fa1c07a88f3\binary-addons.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/f8692618a34158f630193fa1c07a88f3/binary-addons.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\$(Configuration)\binary-addons-complete;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\binary-addons</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/f8692618a34158f630193fa1c07a88f3/binary-addons.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\$(Configuration)\binary-addons-complete;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\binary-addons</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/f8692618a34158f630193fa1c07a88f3/binary-addons.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\$(Configuration)\binary-addons-complete;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\binary-addons</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/CMakeFiles/f8692618a34158f630193fa1c07a88f3/binary-addons.rule;D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\$(Configuration)\binary-addons-complete;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\binary-addons</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\Projects\Viqsoft\XBMC\arcko-xbmc\project\cmake\addons\build\bootstrap\CMakeFiles\binary-addons" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="D:/Projects/Viqsoft/XBMC/arcko-xbmc/project/cmake/addons/build/bootstrap/ZERO_CHECK.vcxproj">
+      <Project>80B6406C-3D6F-35F2-B437-FAB15502CCE1</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
