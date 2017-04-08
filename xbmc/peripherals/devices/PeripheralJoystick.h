@@ -1,5 +1,5 @@
 /*
- *      Copyright (C) 2014-2016 Team Kodi
+ *      Copyright (C) 2014-2017 Team Kodi
  *      http://kodi.tv
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -44,11 +44,13 @@ namespace JOYSTICK
 
 namespace PERIPHERALS
 {
+  class CPeripherals;
+
   class CPeripheralJoystick : public CPeripheral, //! @todo extend CPeripheralHID
                               public KODI::JOYSTICK::IDriverReceiver
   {
   public:
-    CPeripheralJoystick(const PeripheralScanResult& scanResult, CPeripheralBus* bus);
+    CPeripheralJoystick(CPeripherals& manager, const PeripheralScanResult& scanResult, CPeripheralBus* bus);
 
     virtual ~CPeripheralJoystick(void);
 
@@ -107,6 +109,8 @@ namespace PERIPHERALS
 
   protected:
     void InitializeDeadzoneFiltering();
+
+    void PowerOff();
 
     struct DriverHandler
     {

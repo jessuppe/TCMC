@@ -48,9 +48,9 @@ PVR::CPVRManager &CServiceBroker::GetPVRManager()
   return g_application.m_ServiceManager->GetPVRManager();
 }
 
-ActiveAE::CActiveAEDSP &CServiceBroker::GetADSP()
+IAE& CServiceBroker::GetActiveAE()
 {
-  return g_application.m_ServiceManager->GetADSPManager();
+  return g_application.m_ServiceManager->GetActiveAE();
 }
 
 CContextMenuManager& CServiceBroker::GetContextMenuManager()
@@ -76,6 +76,11 @@ CSettings& CServiceBroker::GetSettings()
 GAME::CGameServices& CServiceBroker::GetGameServices()
 {
   return g_application.m_ServiceManager->GetGameServices();
+}
+
+PERIPHERALS::CPeripherals& CServiceBroker::GetPeripherals()
+{
+  return g_application.m_ServiceManager->GetPeripherals();
 }
 
 bool CServiceBroker::IsBinaryAddonCacheUp()

@@ -22,6 +22,7 @@
 #include "epg/Epg.h"
 #include "guilib/GUIWindowManager.h"
 #include "input/Key.h"
+#include "ServiceBroker.h"
 #include "view/ViewState.h"
 
 #include "pvr/PVRGUIActions.h"
@@ -79,7 +80,7 @@ void CGUIDialogPVRChannelGuide::OnInitWindow()
 {
   // no user-specific channel is set use current playing channel
   if (!m_channel)
-    m_channel = g_PVRManager.GetCurrentChannel();
+    m_channel = CServiceBroker::GetPVRManager().GetCurrentChannel();
 
   // no channel at all, close the dialog
   if (!m_channel)
@@ -135,7 +136,7 @@ void CGUIDialogPVRChannelGuide::ShowInfo(int item)
   if (item < 0 || item >= (int)m_vecItems->Size())
     return;
 
-  CPVRGUIActions::GetInstance().ShowEPGInfo(m_vecItems->Get(item));
+  CServiceBroker::GetPVRManager().GUIActions()->ShowEPGInfo(m_vecItems->Get(item));
 }
 
 void CGUIDialogPVRChannelGuide::OnWindowLoaded()

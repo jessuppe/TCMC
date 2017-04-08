@@ -1,5 +1,5 @@
 /*
- *      Copyright (C) 2014-2016 Team Kodi
+ *      Copyright (C) 2014-2017 Team Kodi
  *      http://kodi.tv
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -25,6 +25,7 @@
 #include "input/joysticks/JoystickTypes.h"
 #include "peripherals/PeripheralTypes.h"
 #include "threads/CriticalSection.h"
+#include "threads/SharedSection.h"
 
 #include <map>
 #include <memory>
@@ -63,6 +64,11 @@ namespace PERIPHERALS
      * @brief Initialise the instance of this add-on
      */
     ADDON_STATUS CreateAddon(void);
+
+    /*!
+     * \brief Deinitialize the instance of this add-on
+     */
+    void DestroyAddon();
 
     bool         Register(unsigned int peripheralIndex, const PeripheralPtr& peripheral);
     void         UnregisterRemovedDevices(const PeripheralScanResults &results, PeripheralVector& removedPeripherals);
@@ -166,5 +172,7 @@ namespace PERIPHERALS
     
     PERIPHERAL_PROPERTIES m_info;
     KodiToAddonFuncTable_Peripheral m_struct;
+
+    CSharedSection      m_dllSection;
   };
 }

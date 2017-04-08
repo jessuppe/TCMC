@@ -1,5 +1,5 @@
 /*
- *      Copyright (C) 2012-2016 Team Kodi
+ *      Copyright (C) 2012-2017 Team Kodi
  *      http://kodi.tv
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -18,9 +18,10 @@
  *
  */
 
+#include "ServiceBroker.h"
 #include "RetroPlayerAudio.h"
 #include "RetroPlayerDefines.h"
-#include "cores/AudioEngine/AEFactory.h"
+#include "cores/AudioEngine/Interfaces/AE.h"
 #include "cores/AudioEngine/Interfaces/AEStream.h"
 #include "cores/AudioEngine/Utils/AEChannelInfo.h"
 #include "cores/AudioEngine/Utils/AEUtil.h"
@@ -44,7 +45,7 @@ CRetroPlayerAudio::CRetroPlayerAudio(CProcessInfo& processInfo) :
 
 CRetroPlayerAudio::~CRetroPlayerAudio()
 {
-  CloseStream(); 
+  CloseStream();
 }
 
 unsigned int CRetroPlayerAudio::NormalizeSamplerate(unsigned int samplerate) const
@@ -91,7 +92,7 @@ bool CRetroPlayerAudio::OpenPCMStream(AEDataFormat format, unsigned int samplera
   audioFormat.m_dataFormat = format;
   audioFormat.m_sampleRate = samplerate;
   audioFormat.m_channelLayout = channelLayout;
-  m_pAudioStream = CAEFactory::MakeStream(audioFormat);
+  m_pAudioStream = CServiceBroker::GetActiveAE().MakeStream(audioFormat);
 
   if (!m_pAudioStream)
   {
@@ -178,7 +179,7 @@ void CRetroPlayerAudio::CloseStream()
   }
   if (m_pAudioStream)
   {
-    CAEFactory::FreeStream(m_pAudioStream);
+    CServiceBroker::GetActiveAE().FreeStream(m_pAudioStream);
     m_pAudioStream = nullptr;
   }
 }

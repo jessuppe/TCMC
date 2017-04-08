@@ -18,6 +18,7 @@
  *
  */
 
+#include "ServiceBroker.h"
 #include "dialogs/GUIDialogOK.h"
 #include "dialogs/GUIDialogProgress.h"
 #include "epg/EpgContainer.h"
@@ -94,7 +95,7 @@ void CGUIWindowPVRSearch::OnPrepareFileItems(CFileItemList &items)
     bAddSpecialSearchItem = true;
 
     items.Clear();
-    CGUIDialogProgress* dlgProgress = (CGUIDialogProgress*)g_windowManager.GetWindow(WINDOW_DIALOG_PROGRESS);
+    CGUIDialogProgress* dlgProgress = g_windowManager.GetWindow<CGUIDialogProgress>();
     if (dlgProgress)
     {
       dlgProgress->SetHeading(CVariant{194}); // "Searching..."
@@ -145,7 +146,7 @@ bool CGUIWindowPVRSearch::OnMessage(CGUIMessage &message)
             if (URIUtils::PathEquals(pItem->GetPath(), "pvr://guide/searchresults/search/"))
               OpenDialogSearch();
             else
-               CPVRGUIActions::GetInstance().ShowEPGInfo(pItem);
+               CServiceBroker::GetPVRManager().GUIActions()->ShowEPGInfo(pItem);
             return true;
           }
 
@@ -155,7 +156,7 @@ bool CGUIWindowPVRSearch::OnMessage(CGUIMessage &message)
             return true;
 
           case ACTION_RECORD:
-            CPVRGUIActions::GetInstance().ToggleTimer(pItem);
+            CServiceBroker::GetPVRManager().GUIActions()->ToggleTimer(pItem);
             return true;
         }
       }
@@ -184,7 +185,7 @@ bool CGUIWindowPVRSearch::OnContextButtonClear(CFileItem *item, CONTEXT_BUTTON b
 
 void CGUIWindowPVRSearch::OpenDialogSearch()
 {
-  CGUIDialogPVRGuideSearch* dlgSearch = (CGUIDialogPVRGuideSearch*)g_windowManager.GetWindow(WINDOW_DIALOG_PVR_GUIDE_SEARCH);
+  CGUIDialogPVRGuideSearch* dlgSearch = g_windowManager.GetWindow<CGUIDialogPVRGuideSearch>();
 
   if (!dlgSearch)
     return;

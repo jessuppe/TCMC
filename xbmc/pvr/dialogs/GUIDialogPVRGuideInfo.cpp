@@ -25,6 +25,7 @@
 #include "guilib/GUIWindowManager.h"
 #include "guilib/LocalizeStrings.h"
 #include "messaging/ApplicationMessenger.h"
+#include "ServiceBroker.h"
 #include "utils/StringUtils.h"
 #include "utils/Variant.h"
 
@@ -87,7 +88,7 @@ bool CGUIDialogPVRGuideInfo::OnClickButtonChannelGuide(CGUIMessage &message)
       return bReturn;
     }
 
-    bReturn = CPVRGUIActions::GetInstance().ShowChannelEPG(CFileItemPtr(new CFileItem(m_progItem)));
+    bReturn = CServiceBroker::GetPVRManager().GUIActions()->ShowChannelEPG(CFileItemPtr(new CFileItem(m_progItem)));
   }
 
   return bReturn;
@@ -114,14 +115,14 @@ bool CGUIDialogPVRGuideInfo::OnClickButtonRecord(CGUIMessage &message)
     {
       const CFileItemPtr item(new CFileItem(timerTag));
       if (timerTag->IsRecording())
-        bReturn = CPVRGUIActions::GetInstance().StopRecording(item);
+        bReturn = CServiceBroker::GetPVRManager().GUIActions()->StopRecording(item);
       else
-        bReturn = CPVRGUIActions::GetInstance().DeleteTimer(item);
+        bReturn = CServiceBroker::GetPVRManager().GUIActions()->DeleteTimer(item);
     }
     else
     {
       const CFileItemPtr item(new CFileItem(m_progItem));
-      bReturn = CPVRGUIActions::GetInstance().AddTimer(item, false);
+      bReturn = CServiceBroker::GetPVRManager().GUIActions()->AddTimer(item, false);
     }
   }
 
@@ -140,7 +141,7 @@ bool CGUIDialogPVRGuideInfo::OnClickButtonAddTimer(CGUIMessage &message)
     if (m_progItem && !m_progItem->Timer())
     {
       const CFileItemPtr item(new CFileItem(m_progItem));
-      bReturn = CPVRGUIActions::GetInstance().AddTimerRule(item, true);
+      bReturn = CServiceBroker::GetPVRManager().GUIActions()->AddTimerRule(item, true);
     }
   }
 
@@ -160,9 +161,9 @@ bool CGUIDialogPVRGuideInfo::OnClickButtonPlay(CGUIMessage &message)
 
     const CFileItemPtr item(new CFileItem(m_progItem));
     if (message.GetSenderId() == CONTROL_BTN_PLAY_RECORDING)
-      CPVRGUIActions::GetInstance().PlayRecording(item, true /* bCheckResume */);
+      CServiceBroker::GetPVRManager().GUIActions()->PlayRecording(item, true /* bCheckResume */);
     else
-      CPVRGUIActions::GetInstance().SwitchToChannel(item, true /* bCheckResume */);
+      CServiceBroker::GetPVRManager().GUIActions()->SwitchToChannel(item, true /* bCheckResume */);
 
     bReturn = true;
   }
@@ -175,7 +176,7 @@ bool CGUIDialogPVRGuideInfo::OnClickButtonFind(CGUIMessage &message)
   bool bReturn = false;
 
   if (message.GetSenderId() == CONTROL_BTN_FIND)
-    return CPVRGUIActions::GetInstance().FindSimilar(CFileItemPtr(new CFileItem(m_progItem)), this);
+    return CServiceBroker::GetPVRManager().GUIActions()->FindSimilar(CFileItemPtr(new CFileItem(m_progItem)), this);
 
   return bReturn;
 }
@@ -244,7 +245,7 @@ void CGUIDialogPVRGuideInfo::OnInitWindow()
       bHideRecord = false;
     }
   }
-  else if (g_PVRClients->SupportsTimers() && m_progItem->EndAsLocalTime() > CDateTime::GetCurrentDateTime())
+  else if (CServiceBroker::GetPVRManager().Clients()->SupportsTimers() && m_progItem->EndAsLocalTime() > CDateTime::GetCurrentDateTime())
   {
     SET_CONTROL_LABEL(CONTROL_BTN_RECORD, 264);     /* Record */
     bHideRecord = false;

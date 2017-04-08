@@ -1,5 +1,5 @@
 /*
- *      Copyright (C) 2014-2016 Team Kodi
+ *      Copyright (C) 2014-2017 Team Kodi
  *      http://kodi.tv
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -143,7 +143,7 @@ void CGUIControllerList::ResetController(void)
     if (!CGUIDialogYesNo::ShowAndGetInput(35060, 35061))
       return;
 
-    PERIPHERALS::g_peripherals.ResetButtonMaps(strControllerId);
+    CServiceBroker::GetPeripherals().ResetButtonMaps(strControllerId);
   }
 }
 

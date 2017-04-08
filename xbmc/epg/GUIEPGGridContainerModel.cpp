@@ -272,6 +272,9 @@ void CGUIEPGGridContainerModel::FindChannelAndBlockIndex(int channelUid, unsigne
   const CDateTimeSpan blockDuration(0, 0, MINSPERBLOCK, 0);
   bool bFoundPrevChannel = false;
 
+  newChannelIndex = INVALID_INDEX;
+  newBlockIndex = INVALID_INDEX;
+
   for (size_t channel = 0; channel < m_channelItems.size(); ++channel)
   {
     CDateTime gridCursor(m_gridStart); //reset cursor for new channel
@@ -318,7 +321,7 @@ void CGUIEPGGridContainerModel::FindChannelAndBlockIndex(int channelUid, unsigne
 
 unsigned int CGUIEPGGridContainerModel::GetGridStartPadding() const
 {
-  int iEpgLingerTime = g_advancedSettings.m_iEpgLingerTime;
+  unsigned int iEpgLingerTime = g_advancedSettings.m_iEpgLingerTime;
 
   if (iEpgLingerTime < GRID_START_PADDING)
     return iEpgLingerTime;

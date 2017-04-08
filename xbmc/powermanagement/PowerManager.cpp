@@ -25,7 +25,7 @@
 
 #include "Application.h"
 #include "ServiceBroker.h"
-#include "cores/AudioEngine/AEFactory.h"
+#include "cores/AudioEngine/Interfaces/AE.h"
 #include "dialogs/GUIDialogBusy.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "guilib/GUIWindowManager.h"
@@ -86,7 +86,7 @@ void CPowerManager::Initialize()
   std::unique_ptr<IPowerSyscall> currPowerManager;
   int bestCount = -1;
   int currCount = -1;
-  
+
   std::list< std::pair< std::function<bool()>,
                         std::function<IPowerSyscall*()> > > powerManagers =
   {
@@ -175,7 +175,7 @@ bool CPowerManager::Powerdown()
 {
   if (CanPowerdown() && m_instance->Powerdown())
   {
-    CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
+    CGUIDialogBusy* dialog = g_windowManager.GetWindow<CGUIDialogBusy>();
     if (dialog)
       dialog->Open();
 
@@ -203,7 +203,7 @@ bool CPowerManager::Reboot()
   {
     CAnnouncementManager::GetInstance().Announce(System, "xbmc", "OnRestart");
 
-    CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
+    CGUIDialogBusy* dialog = g_windowManager.GetWindow<CGUIDialogBusy>();
     if (dialog)
       dialog->Open();
   }
@@ -245,7 +245,7 @@ void CPowerManager::OnSleep()
 {
   CAnnouncementManager::GetInstance().Announce(System, "xbmc", "OnSleep");
 
-  CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
+  CGUIDialogBusy* dialog = g_windowManager.GetWindow<CGUIDialogBusy>();
   if (dialog)
     dialog->Open();
 
@@ -257,14 +257,13 @@ void CPowerManager::OnSleep()
   CBuiltins::GetInstance().Execute("LIRC.Stop");
 #endif
 
-  PVR::CPVRManager::GetInstance().SetWakeupCommand();
-  PVR::CPVRManager::GetInstance().OnSleep();
+  CServiceBroker::GetPVRManager().OnSleep();
   g_application.SaveFileState(true);
   g_application.StopPlaying();
   g_application.StopShutdownTimer();
   g_application.StopScreenSaverTimer();
   g_application.CloseNetworkShares();
-  CAEFactory::Suspend();
+  CServiceBroker::GetActiveAE().Suspend();
 }
 
 void CPowerManager::OnWake()
@@ -276,7 +275,7 @@ void CPowerManager::OnWake()
   // reset out timers
   g_application.ResetShutdownTimers();
 
-  CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
+  CGUIDialogBusy* dialog = g_windowManager.GetWindow<CGUIDialogBusy>();
   if (dialog)
     dialog->Close(true); // force close. no closing animation, sound etc at this early stage
 
@@ -297,11 +296,11 @@ void CPowerManager::OnWake()
   CBuiltins::GetInstance().Execute("LIRC.Start");
 #endif
 
-  CAEFactory::Resume();
+  CServiceBroker::GetActiveAE().Resume();
   g_application.UpdateLibraries();
   g_weatherManager.Refresh();
 
-  PVR::CPVRManager::GetInstance().OnWake();
+  CServiceBroker::GetPVRManager().OnWake();
   CAnnouncementManager::GetInstance().Announce(System, "xbmc", "OnWake");
 }
 

@@ -1,5 +1,5 @@
 /*
- *      Copyright (C) 2014-2016 Team Kodi
+ *      Copyright (C) 2014-2017 Team Kodi
  *      http://kodi.tv
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -66,7 +66,7 @@ CPeripheralAddon* CAddonCallbacksPeripheral::GetPeripheralAddon(void* addonData,
 
 void CAddonCallbacksPeripheral::TriggerScan(void* addonData)
 {
-  g_peripherals.TriggerDeviceScan(PERIPHERAL_BUS_ADDON);
+  CServiceBroker::GetPeripherals().TriggerDeviceScan(PERIPHERAL_BUS_ADDON);
 }
 
 void CAddonCallbacksPeripheral::RefreshButtonMaps(void* addonData, const char* deviceName, const char* controllerId)

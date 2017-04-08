@@ -1,5 +1,5 @@
 /*
- *      Copyright (C) 2012-2016 Team Kodi
+ *      Copyright (C) 2012-2017 Team Kodi
  *      http://kodi.tv
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -321,7 +321,7 @@ bool CGameClient::InitializeGameplay(const std::string& gamePath, IGameAudioCall
     m_serializeSize   = GetSerializeSize();
     m_audio           = audio;
     m_video           = video;
-    m_inputRateHandle = PERIPHERALS::g_peripherals.SetEventScanRate(INPUT_SCAN_RATE);
+    m_inputRateHandle = CServiceBroker::GetPeripherals().SetEventScanRate(INPUT_SCAN_RATE);
 
     if (m_bSupportsKeyboard)
       OpenKeyboard();
