@@ -404,6 +404,14 @@ bool CGUIWindowPVRGuide::OnMessage(CGUIMessage& message)
     {
       // let's set the view mode first before update
       CGUIWindowPVRBase::OnMessage(message);
+
+      // force data update for the new view control
+      {
+        CSingleLock lock(m_critSection);
+        m_bRefreshTimelineItems = true;
+      }
+      Init();
+
       Refresh(true);
       bReturn = true;
       break;
@@ -574,6 +582,14 @@ CPVRRefreshTimelineItemsThread::CPVRRefreshTimelineItemsThread(CGUIWindowPVRGuid
   m_ready(true),
   m_done(false)
 {
+}
+
+CPVRRefreshTimelineItemsThread::~CPVRRefreshTimelineItemsThread()
+{
+  // Note: CThread dtor will also call StopThread(true), but if thread worker function exits that
+  //       late, it might access member variables of this which are already destroyed. Thus, stop
+  //       the thread worker here and synchronously, while all members of this are still alive.
+  StopThread(true);
 }
 
 void CPVRRefreshTimelineItemsThread::Stop()

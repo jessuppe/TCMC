@@ -79,9 +79,6 @@
 #include "GUILargeTextureManager.h"
 #include "TextureCache.h"
 #include "playlists/SmartPlayList.h"
-#ifdef HAS_FILESYSTEM_RAR
-#include "filesystem/RarManager.h"
-#endif
 #include "playlists/PlayList.h"
 #include "profiles/ProfilesManager.h"
 #include "windowing/WindowingFactory.h"
@@ -652,6 +649,7 @@ bool CApplication::Create()
   m_replayGainSettings.iType = m_ServiceManager->GetSettings().GetInt(CSettings::SETTING_MUSICPLAYER_REPLAYGAINTYPE);
   m_replayGainSettings.iPreAmp = m_ServiceManager->GetSettings().GetInt(CSettings::SETTING_MUSICPLAYER_REPLAYGAINPREAMP);
   m_replayGainSettings.iNoGainPreAmp = m_ServiceManager->GetSettings().GetInt(CSettings::SETTING_MUSICPLAYER_REPLAYGAINNOGAINPREAMP);
+  m_replayGainSettings.bAvoidClipping = m_ServiceManager->GetSettings().GetBool(CSettings::SETTING_MUSICPLAYER_REPLAYGAINAVOIDCLIPPING);
 
   // Create the Mouse, Keyboard and Remote
   CInputManager::GetInstance().InitializeInputs();
@@ -1432,6 +1430,8 @@ void CApplication::OnSettingChanged(const CSetting *setting)
     m_replayGainSettings.iPreAmp = ((CSettingInt*)setting)->GetValue();
   else if (StringUtils::EqualsNoCase(settingId, CSettings::SETTING_MUSICPLAYER_REPLAYGAINNOGAINPREAMP))
     m_replayGainSettings.iNoGainPreAmp = ((CSettingInt*)setting)->GetValue();
+  else if (StringUtils::EqualsNoCase(settingId, CSettings::SETTING_MUSICPLAYER_REPLAYGAINAVOIDCLIPPING))
+    m_replayGainSettings.bAvoidClipping = ((CSettingBool*)setting)->GetValue();
 }
 
 void CApplication::OnSettingAction(const CSetting *setting)
@@ -1643,7 +1643,7 @@ bool CApplication::LoadSkin(const std::string& skinID)
     return false;
   }
 
-  CLog::Log(LOGINFO, "  load skin from: %s (version: %s)", skin->Path().c_str(), skin->Version().asString().c_str());
+  CLog::Log(LOGNOTICE, "  load skin from: %s (version: %s)", skin->Path().c_str(), skin->Version().asString().c_str());
   g_SkinInfo = skin;
 
   CLog::Log(LOGINFO, "  load fonts for skin...");
@@ -1652,6 +1652,8 @@ bool CApplication::LoadSkin(const std::string& skinID)
 
   g_colorManager.Load(m_ServiceManager->GetSettings().GetString(CSettings::SETTING_LOOKANDFEEL_SKINCOLORS));
 
+  g_SkinInfo->LoadIncludes();
+  
   g_fontManager.LoadFonts(m_ServiceManager->GetSettings().GetString(CSettings::SETTING_LOOKANDFEEL_FONT));
 
   // load in the skin strings
@@ -1660,7 +1662,6 @@ bool CApplication::LoadSkin(const std::string& skinID)
 
   g_localizeStrings.LoadSkinStrings(langPath, m_ServiceManager->GetSettings().GetString(CSettings::SETTING_LOCALE_LANGUAGE));
 
-  g_SkinInfo->LoadIncludes();
 
   int64_t start;
   start = CurrentHostCounter();
@@ -2899,11 +2900,6 @@ void CApplication::Stop(int exitCode)
       CZeroconfBrowser::GetInstance()->Stop();
       CZeroconfBrowser::ReleaseInstance();
     }
-#endif
-
-    CLog::Log(LOGNOTICE, "clean cached files!");
-#ifdef HAS_FILESYSTEM_RAR
-    g_RarManager.ClearCache(true);
 #endif
 
 #ifdef HAS_FILESYSTEM_SFTP

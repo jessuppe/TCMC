@@ -2911,7 +2911,10 @@ msgctxt "#642"
 msgid "Files without ReplayGain information"
 msgstr ""
 
-#empty string with id 643
+#: system/settings/settings.xml
+msgctxt "#643"
+msgid "Avoid clipping protection on ReplayGained files"
+msgstr ""
 
 #: system/settings/settings.xml
 msgctxt "#644"
@@ -10677,7 +10680,19 @@ msgctxt "#19296"
 msgid "No PVR add-on enabled"
 msgstr ""
 
-#empty strings from id 19297 to 19498
+#. 'timeline' label used in pvr guide window
+#: addons/skin.estuary/xml/MyPVRGuide.xml
+msgctxt "#19297"
+msgid "Vertical"
+msgstr ""
+
+#. 'timeline' label used in pvr guide window
+#: addons/skin.estuary/xml/MyPVRGuide.xml
+msgctxt "#19298"
+msgid "Horizontal"
+msgstr ""
+
+#empty strings from id 19299 to 19498
 
 #. label for epg genre value
 #: xbmc/epg/Epg.cpp
@@ -12863,7 +12878,7 @@ msgstr ""
 
 #: system/settings/settings.xml
 msgctxt "#20433"
-msgid "Extract thumbnails and video information"
+msgid "Extract video information from files"
 msgstr ""
 
 #: xbmc/dialogs/GUIDialogSmartPlaylistRule.cpp
@@ -17694,7 +17709,7 @@ msgstr ""
 #. Description of setting with label #20433 "Extract thumbnails and video information"
 #: system/settings/settings.xml
 msgctxt "#36178"
-msgid "Extract thumbnails and metadata information such as codec and aspect ratio from videos."
+msgid "Extract metadata information such as codec and aspect ratio from videos."
 msgstr ""
 
 #. Description of setting with label #20419 "Replace file names with library titles"
@@ -17706,7 +17721,7 @@ msgstr ""
 #. Description of setting with label #20433 "Extract thumbnails and video information"
 #: system/settings/settings.xml
 msgctxt "#36180"
-msgid "Extract thumbnails and information, such as codecs and aspect ratio, to display in library mode."
+msgid "Extract thumbnails to display in library mode."
 msgstr ""
 
 #: system/settings/settings.xml
@@ -18171,7 +18186,11 @@ msgctxt "#36269"
 msgid "Reference volume (PreAmp level) to use for files without encoded ReplayGain information. Default is 89dB as per standard. Change with caution."
 msgstr ""
 
-#empty string with id 36270
+#. Description of setting with label #643 "Avoid clipping protection on ReplayGained files"
+#: system/settings/settings.xml
+msgctxt "#36270"
+msgid "Play file at lower volume, if necessary, to avoid audio limiting clipping protection. Otherwise clipping protection will be provided by the audioengine in those parts that need it."
+msgstr ""
 
 #. Description of setting with label #13314 "Crossfade between songs"
 #: system/settings/settings.xml
@@ -20433,4 +20452,8 @@ msgstr ""
 #: xbmc/music/windows/GUIWindowMusicBase.cpp
 msgctxt "#39016"
 msgid "Resume audiobook"
+msgstr ""
+
+msgctxt "#38190"
+msgid "Extract thumbnails from video files"
 msgstr ""

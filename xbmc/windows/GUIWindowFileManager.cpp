@@ -41,7 +41,7 @@
 #include "dialogs/GUIDialogYesNo.h"
 #include "guilib/GUIKeyboardFactory.h"
 #include "dialogs/GUIDialogProgress.h"
-#include "filesystem/FavouritesDirectory.h"
+#include "favourites/FavouritesService.h"
 #include "PlayListPlayer.h"
 #include "playlists/PlayList.h"
 #include "cores/playercorefactory/PlayerCoreFactory.h"
@@ -622,7 +622,12 @@ void CGUIWindowFileManager::OnStart(CFileItem *pItem, const std::string &player)
     g_application.ProcessAndStartPlaylist(strPlayList, *pPlayList, PLAYLIST_MUSIC);
     return;
   }
-  if (pItem->IsAudio() || pItem->IsVideo() || pItem->IsGame())
+  if (pItem->IsAudio() || pItem->IsVideo())
+  {
+    g_playlistPlayer.Play(std::make_shared<CFileItem>(*pItem), player);
+    return;
+  }
+  if (pItem->IsGame())
   {
     g_application.PlayFile(*pItem, player);
     return ;
@@ -1010,7 +1015,7 @@ void CGUIWindowFileManager::OnPopupMenu(int list, int item, bool bContextDriven 
     if (NumSelected(list) <  m_vecItems[list]->Size() - notSelectable)
       choices.Add(CONTROL_BTNSELECTALL, 188); // SelectAll
     if (!pItem->IsParentFolder())
-      choices.Add(CONTROL_BTNFAVOURITES,  XFILE::CFavouritesDirectory::IsFavourite(pItem.get(), GetID()) ? 14077 : 14076); // Add/Remove Favourite
+      choices.Add(CONTROL_BTNFAVOURITES, CServiceBroker::GetFavouritesService().IsFavourited(*pItem.get(), GetID()) ? 14077 : 14076); // Add/Remove Favourite
     if (players.size() > 1)
       choices.Add(CONTROL_BTNPLAYWITH, 15213);
     if (CanRename(list) && !pItem->IsParentFolder())
@@ -1038,7 +1043,7 @@ void CGUIWindowFileManager::OnPopupMenu(int list, int item, bool bContextDriven 
   }
   if (btnid == CONTROL_BTNFAVOURITES)
   {
-    XFILE::CFavouritesDirectory::AddOrRemove(pItem.get(), GetID());
+    CServiceBroker::GetFavouritesService().AddOrRemove(*pItem.get(), GetID());
     return;
   }
   if (btnid == CONTROL_BTNPLAYWITH)

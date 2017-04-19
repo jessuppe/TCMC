@@ -21,7 +21,6 @@
 #include "ContextMenus.h"
 #include "Application.h"
 #include "Autorun.h"
-#include "playlists/PlayList.h"
 #include "Util.h"
 #include "video/dialogs/GUIDialogVideoInfo.h"
 #include "video/windows/GUIWindowVideoBase.h"
@@ -121,16 +120,10 @@ static void SetPathAndPlay(CFileItem& item)
   }
   item.SetProperty("check_resume", false);
 
-  CFileItemPtr movieItem((std::make_shared<CFileItem>(item)));
-
-  g_playlistPlayer.Reset();
-  g_playlistPlayer.SetCurrentPlaylist(PLAYLIST_VIDEO);
-  PLAYLIST::CPlayList& playlist = g_playlistPlayer.GetPlaylist(PLAYLIST_VIDEO);
-  playlist.Clear();
-  playlist.Add(movieItem);
-
-  // play movie...
-  g_playlistPlayer.Play(0, "");
+  if (item.IsLiveTV()) // pvr tv or pvr radio?
+    g_application.PlayMedia(item, "", PLAYLIST_NONE);
+  else
+    g_playlistPlayer.Play(std::make_shared<CFileItem>(item), "");
 }
 
 bool CResume::Execute(const CFileItemPtr& itemIn) const
