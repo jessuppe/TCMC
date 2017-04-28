@@ -48,8 +48,15 @@ void CPVREpgSearchFilter::Reset()
   m_iGenreSubType            = EPG_SEARCH_UNSET;
   m_iMinimumDuration         = EPG_SEARCH_UNSET;
   m_iMaximumDuration         = EPG_SEARCH_UNSET;
+
   m_startDateTime.SetFromUTCDateTime(CServiceBroker::GetPVRManager().EpgContainer().GetFirstEPGDate());
+  if (!m_startDateTime.IsValid())
+    m_startDateTime.SetFromUTCDateTime(CDateTime::GetUTCDateTime()); // default to 'now'
+
   m_endDateTime.SetFromUTCDateTime(CServiceBroker::GetPVRManager().EpgContainer().GetLastEPGDate());
+  if (!m_endDateTime.IsValid())
+    m_endDateTime.SetFromUTCDateTime(m_startDateTime + CDateTimeSpan(10, 0, 0, 0)); // default to start + 10 days
+
   m_bIncludeUnknownGenres    = false;
   m_bRemoveDuplicates        = false;
 
