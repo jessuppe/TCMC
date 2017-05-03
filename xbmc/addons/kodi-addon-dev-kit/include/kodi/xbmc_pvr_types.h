@@ -34,7 +34,6 @@
 
 #include "xbmc_addon_types.h"
 #include "xbmc_epg_types.h"
-#include "xbmc_codec_types.h"
 
 /*! @note Define "USE_DEMUX" at compile time if demuxing in the PVR add-on is used.
  *        Also XBMC's "DVDDemuxPacket.h" file must be in the include path of the add-on,
@@ -72,18 +71,40 @@ struct DemuxPacket;
 #define PVR_ADDON_TIMERTYPE_VALUES_ARRAY_SIZE_SMALL 128
 #define PVR_ADDON_TIMERTYPE_STRING_LENGTH     64
 
+#define XBMC_INVALID_CODEC_ID   0
+#define XBMC_INVALID_CODEC      { XBMC_CODEC_TYPE_UNKNOWN, XBMC_INVALID_CODEC_ID }
+
 /* using the default avformat's MAX_STREAMS value to be safe */
 #define PVR_STREAM_MAX_STREAMS 20
 
 /* current PVR API version */
-#define XBMC_PVR_API_VERSION "5.2.1"
+#define XBMC_PVR_API_VERSION ADDON_INSTANCE_VERSION_PVR
 
 /* min. PVR API version */
-#define XBMC_PVR_MIN_API_VERSION "5.2.1"
+#define XBMC_PVR_MIN_API_VERSION ADDON_INSTANCE_VERSION_PVR
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+  typedef unsigned int xbmc_codec_id_t;
+
+  typedef enum
+  {
+      XBMC_CODEC_TYPE_UNKNOWN = -1,
+      XBMC_CODEC_TYPE_VIDEO,
+      XBMC_CODEC_TYPE_AUDIO,
+      XBMC_CODEC_TYPE_DATA,
+      XBMC_CODEC_TYPE_SUBTITLE,
+      XBMC_CODEC_TYPE_RDS,
+      XBMC_CODEC_TYPE_NB
+  } xbmc_codec_type_t;
+
+  typedef struct
+  {
+    xbmc_codec_type_t codec_type;
+    xbmc_codec_id_t   codec_id;
+  } xbmc_codec_t;
 
   /*!
    * @brief numeric PVR timer type definitions (PVR_TIMER.iTimerType values)

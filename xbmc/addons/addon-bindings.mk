@@ -25,14 +25,11 @@ xbmc/addons/kodi-addon-dev-kit/include/kodi/libKODI_guilib.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/libKODI_inputstream.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/libKODI_peripheral.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/libXBMC_addon.h
-xbmc/addons/kodi-addon-dev-kit/include/kodi/libXBMC_codec.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/libXBMC_pvr.h
-xbmc/addons/kodi-addon-dev-kit/include/kodi/xbmc_addon_cpp_dll.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/xbmc_addon_dll.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/xbmc_addon_types.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/xbmc_audioenc_dll.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/xbmc_audioenc_types.h
-xbmc/addons/kodi-addon-dev-kit/include/kodi/xbmc_codec_types.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/xbmc_epg_types.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/xbmc_pvr_dll.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/xbmc_pvr_types.h
@@ -40,6 +37,7 @@ xbmc/addons/kodi-addon-dev-kit/include/kodi/xbmc_scr_dll.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/xbmc_scr_types.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/xbmc_vis_dll.h
 xbmc/addons/kodi-addon-dev-kit/include/kodi/xbmc_vis_types.h
+xbmc/addons/kodi-addon-dev-kit/include/kodi/versions.h
 xbmc/cores/AudioEngine/Utils/AEChannelData.h
 xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxPacket.h
 xbmc/filesystem/IFileTypes.h
