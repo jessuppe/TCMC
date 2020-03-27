@@ -1,11 +1,11 @@
 # Kodi Media Center language file
 # Addon Name: Estuary
 # Addon id: skin.estuary
-# Addon Provider: phil65, Piers
+# Addon Provider: phil65, Ichabod Fletchman
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
-"Report-Msgid-Bugs-To: http://trac.kodi.tv/\n"
+"Report-Msgid-Bugs-To: https://github.com/xbmc/xbmc/issues/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
@@ -48,6 +48,10 @@ msgctxt "#31007"
 msgid "Unwatched movies"
 msgstr "還沒看過的電影"
 
+msgctxt "#31008"
+msgid "Enable category widgets"
+msgstr "啟用類別小工具"
+
 msgctxt "#31009"
 msgid "Download icons"
 msgstr "下載圖示"
@@ -78,7 +82,7 @@ msgstr "最近的錄影"
 
 msgctxt "#31016"
 msgid "Recently played channels"
-msgstr "最近收聽的頻道"
+msgstr "最近收看的頻道"
 
 msgctxt "#31017"
 msgid "Rated"
@@ -108,9 +112,17 @@ msgctxt "#31023"
 msgid "Viewtype"
 msgstr "檢視模式"
 
+msgctxt "#31024"
+msgid "Choose rating to display for media items"
+msgstr "選擇欲顯示的評等類型"
+
 msgctxt "#31025"
 msgid "No favourites found. You can add any item from media views to this list by using the context menu."
 msgstr "沒有找到最愛項目。你可以使用快捷選單來將媒體檔檢視器中的物件加入此列表。"
+
+msgctxt "#31026"
+msgid "Timeshift"
+msgstr "時間平移"
 
 msgctxt "#31028"
 msgid "Show fanart"
@@ -119,6 +131,10 @@ msgstr "顯示劇照"
 msgctxt "#31029"
 msgid "Last logged in"
 msgstr "上次登入在"
+
+msgctxt "#31030"
+msgid "System memory usage"
+msgstr "系統記憶體用量"
 
 msgctxt "#31031"
 msgid "Version info"
@@ -131,10 +147,6 @@ msgstr "排序"
 msgctxt "#31033"
 msgid "Your rating"
 msgstr "你的評分"
-
-msgctxt "#31034"
-msgid "Extended info"
-msgstr "延伸資訊"
 
 msgctxt "#31035"
 msgid "Pages"
@@ -183,10 +195,6 @@ msgstr "可用"
 msgctxt "#31050"
 msgid "Press [B]OK[/B] to stop"
 msgstr "按[B]OK[/B]停止"
-
-msgctxt "#31051"
-msgid "Toggle language"
-msgstr "切換語系"
 
 msgctxt "#31052"
 msgid "filtered"
@@ -252,6 +260,10 @@ msgctxt "#31072"
 msgid "Power Options"
 msgstr "電源選項"
 
+msgctxt "#31074"
+msgid "Total duration"
+msgstr "總計時間"
+
 msgctxt "#31075"
 msgid "Movie sets"
 msgstr "電影集"
@@ -280,10 +292,6 @@ msgctxt "#31089"
 msgid "Available groups"
 msgstr "可用的群組"
 
-msgctxt "#31090"
-msgid "Search trailer"
-msgstr "搜尋預告片"
-
 msgctxt "#31092"
 msgid "Video menu"
 msgstr "視訊選單"
@@ -308,9 +316,13 @@ msgctxt "#31098"
 msgid "Select your Kodi user profile[CR]to login and continue"
 msgstr "選擇您的 Kodi 使用者設定檔[CR]登入並繼續"
 
+msgctxt "#31099"
+msgid "IconWall"
+msgstr "圖示牆"
+
 msgctxt "#31100"
 msgid "Shift"
-msgstr "轉換"
+msgstr "橫列海報"
 
 msgctxt "#31101"
 msgid "InfoWall"
@@ -318,7 +330,7 @@ msgstr "資訊牆"
 
 msgctxt "#31102"
 msgid "Wall"
-msgstr "牆"
+msgstr "海報牆"
 
 msgctxt "#31103"
 msgid "Enter text here..."
@@ -360,10 +372,6 @@ msgctxt "#31114"
 msgid "Search YouTube"
 msgstr "搜尋YouTube"
 
-msgctxt "#31115"
-msgid "Search TheMovieDB"
-msgstr "搜尋TheMovieDB"
-
 msgctxt "#31116"
 msgid "Remove this main menu item"
 msgstr "移除這個主選單項目"
@@ -396,10 +404,6 @@ msgctxt "#31123"
 msgid "Same director"
 msgstr "同一個導演的作品"
 
-msgctxt "#31124"
-msgid "Show images on map"
-msgstr "在地圖上顯示影像"
-
 msgctxt "#31125"
 msgid "Press up for actor info"
 msgstr "按上鍵查看演員資料"
@@ -424,9 +428,17 @@ msgctxt "#31130"
 msgid "Main menu-related settings: Configure the home screen to your likings."
 msgstr "主選單相關設定：將首頁依照您的喜好做規劃"
 
+msgctxt "#31131"
+msgid "Choose skin fanart pack"
+msgstr "選擇佈景主題粉絲自製圖集"
+
 msgctxt "#31132"
-msgid "min"
-msgstr "分"
+msgid "Select Program"
+msgstr "選擇程式"
+
+msgctxt "#31133"
+msgid "Select Resolution"
+msgstr "選擇解析度"
 
 msgctxt "#31134"
 msgid "Remaining"
@@ -471,3 +483,83 @@ msgstr "進入附加元件瀏覽器"
 msgctxt "#31145"
 msgid "Search add-ons"
 msgstr "搜尋附加元件"
+
+msgctxt "#31148"
+msgid "Categories"
+msgstr "分類"
+
+msgctxt "#31149"
+msgid "Select genre fanart pack"
+msgstr "選擇影音類型的粉絲自製圖集"
+
+msgctxt "#31150"
+msgid "Repository"
+msgstr "來源處"
+
+msgctxt "#31151"
+msgid "Unwatched music videos"
+msgstr "還沒看過的音樂影片"
+
+msgctxt "#31152"
+msgid "Random music videos"
+msgstr "隨機音樂影片"
+
+msgctxt "#31153"
+msgid "You do not have any add-ons of this type installed. Enter the add-on browser to download add-ons created by our community."
+msgstr "您尚未安裝本類型的任何附加元件。請到附加元件區下載本社群所製作的附加元件。"
+
+msgctxt "#31154"
+msgid "Press OK to switch between locations"
+msgstr "按下OK以切換地區"
+
+msgctxt "#31155"
+msgid "No bookmarks created yet."
+msgstr "尚未建立任何書籤。"
+
+msgctxt "#31156"
+msgid "Choose background pattern"
+msgstr "選擇背景貼圖樣式"
+
+msgctxt "#31157"
+msgid "Edit categories"
+msgstr "編輯分類"
+
+msgctxt "#31158"
+msgid "Touch mode"
+msgstr "觸控模式"
+
+msgctxt "#31159"
+msgid "Artwork"
+msgstr "美術作品"
+
+msgctxt "#31160"
+msgid "Show media flags"
+msgstr "顯示媒體內容標籤"
+
+msgctxt "#31161"
+msgid "Numeric pad"
+msgstr "數字鍵盤"
+
+msgctxt "#31162"
+msgid "Play your personal games or download one of the many game add-ons from the official repository."
+msgstr "執行您收藏的遊戲，或下載官方的眾多遊戲附加元件"
+
+msgctxt "#31163"
+msgid "Show Fanart background"
+msgstr "顯示劇照背景"
+
+msgctxt "#31164"
+msgid "Choose kind of profile identification"
+msgstr "選擇設定檔案的標識類型"
+
+msgctxt "#31165"
+msgid "Profile name"
+msgstr "設定檔名稱"
+
+msgctxt "#31166"
+msgid "Profile avatar"
+msgstr "個人資料圖像"
+
+msgctxt "#31167"
+msgid "Animate background"
+msgstr "動畫背景"

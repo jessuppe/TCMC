@@ -1,23 +1,12 @@
-#pragma once
 /*
- *      Copyright (C) 2005-2013 Team XBMC
- *      http://xbmc.org
+ *  Copyright (C) 2005-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
+
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,11 +32,6 @@ typedef intptr_t      ssize_t;
 #define _SSIZE_T_DEFINED
 #endif // !_SSIZE_T_DEFINED
 
-#if defined(BUILD_KODI_ADDON)
-#include "p8-platform/windows/dlfcn-win32.h"
-#endif
-#else // windows
-#include <dlfcn.h>              // linux+osx
 #endif
 
 #ifdef LOG_DEBUG
@@ -63,9 +47,6 @@ typedef intptr_t      ssize_t;
 #undef LOG_ERROR
 #endif
 
-/* current addon API version */
-#define KODI_ADDON_API_VERSION ADDON_GLOBAL_VERSION_MAIN
-
 typedef void* (*KODIAddOnLib_RegisterMe)(void *addonData);
 typedef void (*KODIAddOnLib_UnRegisterMe)(void *addonData, void *cbTable);
 typedef void* (*KODIAudioEngineLib_RegisterMe)(void *addonData);
@@ -74,8 +55,6 @@ typedef void* (*KODIGUILib_RegisterMe)(void *addonData);
 typedef void (*KODIGUILib_UnRegisterMe)(void *addonData, void *cbTable);
 typedef void* (*KODIPVRLib_RegisterMe)(void *addonData);
 typedef void (*KODIPVRLib_UnRegisterMe)(void *addonData, void *cbTable);
-typedef void* (*KODIADSPLib_RegisterMe)(void *addonData);
-typedef void (*KODIADSPLib_UnRegisterMe)(void *addonData, void *cbTable);
 typedef void* (*KODICodecLib_RegisterMe)(void *addonData);
 typedef void (*KODICodecLib_UnRegisterMe)(void *addonData, void *cbTable);
 typedef void* (*KODIINPUTSTREAMLib_RegisterMe)(void *addonData);
@@ -99,8 +78,6 @@ typedef struct AddonCB
   KODIGUILib_UnRegisterMe           GUILib_UnRegisterMe;
   KODIPVRLib_RegisterMe             PVRLib_RegisterMe;
   KODIPVRLib_UnRegisterMe           PVRLib_UnRegisterMe;
-  KODIADSPLib_RegisterMe            ADSPLib_RegisterMe;
-  KODIADSPLib_UnRegisterMe          ADSPLib_UnRegisterMe;
   KODIINPUTSTREAMLib_RegisterMe     INPUTSTREAMLib_RegisterMe;
   KODIINPUTSTREAMLib_UnRegisterMe   INPUTSTREAMLib_UnRegisterMe;
   KODIPeripheralLib_RegisterMe      PeripheralLib_RegisterMe;
@@ -142,6 +119,7 @@ typedef struct CB_AddOn
   char* (*GetLocalizedString)(const void* addonData, long dwCode);
   char* (*GetDVDMenuLanguage)(const void* addonData);
   void (*FreeString)(const void* addonData, char* str);
+  void (*FreeStringArray)(const void* addonData, char** arr, int numElements);
 
   void* (*OpenFile)(const void* addonData, const char* strFileName, unsigned int flags);
   void* (*OpenFileForWrite)(const void* addonData, const char* strFileName, bool bOverWrite);
@@ -158,6 +136,8 @@ typedef struct CB_AddOn
   int (*GetFileChunkSize)(const void* addonData, void* file);
   bool (*FileExists)(const void* addonData, const char *strFileName, bool bUseCache);
   int (*StatFile)(const void* addonData, const char *strFileName, struct __stat64* buffer);
+  char *(*GetFilePropertyValue)(const void* addonData, void* file, XFILE::FileProperty type, const char *name);
+  char **(*GetFilePropertyValues)(const void* addonData, void* file, XFILE::FileProperty type, const char *name, int *numPorperties);
   bool (*DeleteFile)(const void* addonData, const char *strFileName);
   bool (*CanOpenDirectory)(const void* addonData, const char* strURL);
   bool (*CreateDirectory)(const void* addonData, const char *strPath);
@@ -199,7 +179,7 @@ namespace ADDON
         m_Callbacks = (KodiAPI::AddOn::CB_AddOnLib*)m_Handle->AddOnLib_RegisterMe(m_Handle->addonData);
       if (!m_Callbacks)
         fprintf(stderr, "libXBMC_addon-ERROR: AddOnLib_RegisterMe can't get callback table from Kodi !!!\n");
-    
+
       return m_Callbacks != nullptr;
     }
 
@@ -207,14 +187,18 @@ namespace ADDON
      * @brief Add a message to XBMC's log.
      * @param loglevel The log level of the message.
      * @param format The format of the message to pass to XBMC.
+     * @note This method uses limited buffer (16k) for the formatted output.
+     * So data, which will not fit into it, will be silently discarded.
      */
     void Log(const addon_log_t loglevel, const char *format, ... )
     {
       char buffer[16384];
+      static constexpr size_t len = sizeof (buffer) - 1;
       va_list args;
       va_start (args, format);
-      vsprintf (buffer, format, args);
+      vsnprintf (buffer, len, format, args);
       va_end (args);
+      buffer[len] = '\0'; // to be sure it's null-terminated
       m_Callbacks->Log(m_Handle->addonData, loglevel, buffer);
     }
 
@@ -300,6 +284,16 @@ namespace ADDON
     void FreeString(char* str)
     {
       m_Callbacks->FreeString(m_Handle->addonData, str);
+    }
+
+    /*!
+     * @brief Free the memory used by arr including its elements
+     * @param arr The string array to free
+     * @param numElements The length of the array
+     */
+    void FreeStringArray(char** arr, int numElements)
+    {
+      m_Callbacks->FreeStringArray(m_Handle->addonData, arr, numElements);
     }
 
     /*!
@@ -465,6 +459,31 @@ namespace ADDON
     int StatFile(const char *strFileName, struct __stat64* buffer)
     {
       return m_Callbacks->StatFile(m_Handle->addonData, strFileName, buffer);
+    }
+
+    /*!
+    * @brief Get a property from an open file.
+    * @param file The file to get an property for
+    * @param type Type of the requested property.
+    * @param name Name of the requested property / can be null.
+    * @return The value of the requested property, must be FreeString'ed.
+    */
+    char *GetFilePropertyValue(void* file, XFILE::FileProperty type, const char *name)
+    {
+      return m_Callbacks->GetFilePropertyValue(m_Handle->addonData, file, type, name);
+    }
+
+    /*!
+    * @brief Get multiple property values from an open file.
+    * @param file The file to get the property values for
+    * @param type Type of the requested property.
+    * @param name Name of the requested property / can be null.
+    * @param numValues Number of property values returned.
+    * @return List of values of the requested property, must be FreeStringArray'ed.
+    */
+    char **GetFilePropertyValues(void* file, XFILE::FileProperty type, const char *name, int *numValues)
+    {
+      return m_Callbacks->GetFilePropertyValues(m_Handle->addonData, file, type, name, numValues);
     }
 
     /*!

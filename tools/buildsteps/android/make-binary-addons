@@ -2,7 +2,7 @@ WORKSPACE=${WORKSPACE:-$( cd $(dirname $0)/../../.. ; pwd -P )}
 XBMC_PLATFORM_DIR=android
 . $WORKSPACE/tools/buildsteps/defaultenv
 
-. $WORKSPACE/tools/buildsteps/$XBMC_PLATFORM_DIR/make-native-depends 
+. $WORKSPACE/tools/buildsteps/$XBMC_PLATFORM_DIR/make-native-depends
 
 #clear the build failed file
 rm -f $WORKSPACE/cmake/$FAILED_BUILD_FILENAME
@@ -16,9 +16,7 @@ then
     echo "building $addon"
     git clean -xffd $WORKSPACE/$BINARY_ADDONS_ROOT/$addon
 
-    # Must match prefix in android/PathSetup.cmake
-    INSTALL_PREFIX="../../../../../build/install"
-    cd $WORKSPACE/$BINARY_ADDONS_ROOT/$addon;make -j $BUILDTHREADS V=99 VERBOSE=1 INSTALL_PREFIX="$INSTALL_PREFIX"  || ALL_BINARY_ADDONS_BUILT="0"
+    cd $WORKSPACE/$BINARY_ADDONS_ROOT/$addon;make -j $BUILDTHREADS V=99 VERBOSE=1 || ALL_BINARY_ADDONS_BUILT="0"
   done
 fi
 

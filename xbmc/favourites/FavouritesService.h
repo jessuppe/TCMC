@@ -1,29 +1,19 @@
 /*
- *      Copyright (C) 2005-2017 Team Kodi
- *      http://kodi.tv
+ *  Copyright (C) 2005-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with Kodi; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
+
 #pragma once
 
-#include <string>
-#include <vector>
 #include "FileItem.h"
 #include "threads/CriticalSection.h"
 #include "utils/EventStream.h"
+
+#include <string>
+#include <vector>
 
 
 class CFavouritesService
@@ -31,6 +21,9 @@ class CFavouritesService
 public:
   explicit CFavouritesService(std::string userDataFolder);
   virtual ~CFavouritesService() = default;
+
+  /** For profiles*/
+  void ReInit(std::string userDataFolder);
 
   bool IsFavourited(const CFileItem& item, int contextWindow) const;
   void GetAll(CFileItemList& items) const;
@@ -54,9 +47,9 @@ private:
   bool Persist();
   std::string GetFavouritesUrl(const CFileItem &item, int contextWindow) const;
 
-  const std::string m_userDataFolder;
+  std::string m_userDataFolder;
   CFileItemList m_favourites;
   CEventSource<FavouritesUpdated> m_events;
-  CCriticalSection m_criticalSection;
+  mutable CCriticalSection m_criticalSection;
 };
 

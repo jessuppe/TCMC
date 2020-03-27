@@ -1,38 +1,27 @@
+/*
+ *  Copyright (C) 2005-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
+ */
+
+#pragma once
+
 /*!
  \file Key.h
  \brief
  */
-#pragma once
-
-/*
- *      Copyright (C) 2005-2013 Team XBMC
- *      http://xbmc.org
- *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
- */
 
 //! @todo Remove dependence on CAction
-#include "Action.h"
-#include "ActionIDs.h"
+#include "input/actions/Action.h"
+#include "input/actions/ActionIDs.h"
 
-#include <string>
 #include <stdint.h>
+#include <string>
 
 // Reserved 0 - 255
-//  XBIRRemote.h
+//  IRRemote.h
 //  XINPUT_IR_REMOTE-*
 
 /*
@@ -76,35 +65,6 @@
 #define KEY_BUTTON_LEFT_THUMB_STICK_LEFT    282
 #define KEY_BUTTON_LEFT_THUMB_STICK_RIGHT   283
 
-/*
- * joystick.xml keys based on Xbox 360 controller
- */
-#define KEY_JOYSTICK_BUTTON_A                        284
-#define KEY_JOYSTICK_BUTTON_B                        285
-#define KEY_JOYSTICK_BUTTON_X                        286
-#define KEY_JOYSTICK_BUTTON_Y                        287
-#define KEY_JOYSTICK_BUTTON_LEFT_SHOULDER            288
-#define KEY_JOYSTICK_BUTTON_RIGHT_SHOULDER           289
-#define KEY_JOYSTICK_BUTTON_LEFT_TRIGGER             290
-#define KEY_JOYSTICK_BUTTON_RIGHT_TRIGGER            291
-#define KEY_JOYSTICK_BUTTON_LEFT_STICK_BUTTON        292
-#define KEY_JOYSTICK_BUTTON_RIGHT_STICK_BUTTON       293
-#define KEY_JOYSTICK_BUTTON_RIGHT_THUMB_STICK_UP     294
-#define KEY_JOYSTICK_BUTTON_RIGHT_THUMB_STICK_DOWN   295
-#define KEY_JOYSTICK_BUTTON_RIGHT_THUMB_STICK_LEFT   296
-#define KEY_JOYSTICK_BUTTON_RIGHT_THUMB_STICK_RIGHT  297
-#define KEY_JOYSTICK_BUTTON_DPAD_UP                  298
-#define KEY_JOYSTICK_BUTTON_DPAD_DOWN                299
-#define KEY_JOYSTICK_BUTTON_DPAD_LEFT                300
-#define KEY_JOYSTICK_BUTTON_DPAD_RIGHT               301
-#define KEY_JOYSTICK_BUTTON_START                    302
-#define KEY_JOYSTICK_BUTTON_BACK                     303
-#define KEY_JOYSTICK_BUTTON_LEFT_THUMB_STICK_UP      304
-#define KEY_JOYSTICK_BUTTON_LEFT_THUMB_STICK_DOWN    305
-#define KEY_JOYSTICK_BUTTON_LEFT_THUMB_STICK_LEFT    306
-#define KEY_JOYSTICK_BUTTON_LEFT_THUMB_STICK_RIGHT   307
-#define KEY_JOYSTICK_BUTTON_GUIDE                    308
-
 // 0xF000 -> 0xF200 is reserved for the keyboard; a keyboard press is either
 #define KEY_VKEY            0xF000 // a virtual key/functional key e.g. cursor left
 #define KEY_ASCII           0xF100 // a printable character in the range of TRUE ASCII (from 0 to 127) // FIXME make it clean and pure unicode! remove the need for KEY_ASCII
@@ -133,9 +93,6 @@
 
 // 0xD000 -> 0xD0FF is reserved for WM_APPCOMMAND messages
 #define KEY_APPCOMMAND      0xD000
-
-// 0xF000 -> 0xF0FF is reserved for mouse actions
-#define KEY_TOUCH           0xF000
 
 #define KEY_INVALID         0xFFFF
 
@@ -181,7 +138,7 @@ public:
   CKey(void);
   CKey(uint32_t buttonCode, uint8_t leftTrigger = 0, uint8_t rightTrigger = 0, float leftThumbX = 0.0f, float leftThumbY = 0.0f, float rightThumbX = 0.0f, float rightThumbY = 0.0f, float repeat = 0.0f);
   CKey(uint32_t buttonCode, unsigned int held);
-  CKey(uint8_t vkey, wchar_t unicode, char ascii, uint32_t modifiers, unsigned int held);
+  CKey(uint32_t keycode, uint8_t vkey, wchar_t unicode, char ascii, uint32_t modifiers, uint32_t lockingModifiers, unsigned int held);
   CKey(const CKey& key);
   void Reset();
 
@@ -201,10 +158,12 @@ public:
   bool GetFromService() const { return m_fromService; }
 
   inline uint32_t GetButtonCode() const { return m_buttonCode; }
+  inline uint32_t GetKeycode() const    { return m_keycode; } // XBMCKey enum in XBMC_keysym.h
   inline uint8_t  GetVKey() const       { return m_vkey; }
   inline wchar_t  GetUnicode() const    { return m_unicode; }
   inline char     GetAscii() const      { return m_ascii; }
   inline uint32_t GetModifiers() const  { return m_modifiers; };
+  inline uint32_t GetLockingModifiers() const { return m_lockingModifiers; };
   inline unsigned int GetHeld() const   { return m_held; }
 
   enum Modifier {
@@ -214,15 +173,20 @@ public:
     MODIFIER_RALT  = 0x00080000,
     MODIFIER_SUPER = 0x00100000,
     MODIFIER_META  = 0X00200000,
-    MODIFIER_LONG  = 0X01000000
+    MODIFIER_LONG  = 0X01000000,
+    MODIFIER_NUMLOCK = 0X02000000,
+    MODIFIER_CAPSLOCK = 0X04000000,
+    MODIFIER_SCROLLLOCK = 0X08000000,
   };
 
 private:
   uint32_t m_buttonCode;
+  uint32_t m_keycode;
   uint8_t  m_vkey;
   wchar_t  m_unicode;
   char     m_ascii;
   uint32_t m_modifiers;
+  uint32_t m_lockingModifiers;
   unsigned int m_held;
 
   uint8_t m_leftTrigger;

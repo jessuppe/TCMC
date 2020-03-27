@@ -1,29 +1,16 @@
 /*
- *      Copyright (C) 2014-2017 Team Kodi
- *      http://kodi.tv
+ *  Copyright (C) 2014-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this Program; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
+
 #pragma once
 
 #include "Peripheral.h"
-#include "input/joysticks/DefaultJoystick.h"
-#include "input/joysticks/IDriverReceiver.h"
-#include "input/joysticks/JoystickMonitor.h"
 #include "input/joysticks/JoystickTypes.h"
+#include "input/joysticks/interfaces/IDriverReceiver.h"
 #include "threads/CriticalSection.h"
 
 #include <memory>
@@ -37,8 +24,11 @@ namespace KODI
 namespace JOYSTICK
 {
   class CDeadzoneFilter;
+  class CKeymapHandling;
+  class CRumbleGenerator;
   class IButtonMap;
   class IDriverHandler;
+  class IInputHandler;
 }
 }
 
@@ -52,16 +42,17 @@ namespace PERIPHERALS
   public:
     CPeripheralJoystick(CPeripherals& manager, const PeripheralScanResult& scanResult, CPeripheralBus* bus);
 
-    virtual ~CPeripheralJoystick(void);
+    ~CPeripheralJoystick(void) override;
 
     // implementation of CPeripheral
-    virtual bool InitialiseFeature(const PeripheralFeature feature) override;
-    virtual void OnUserNotification() override;
-    virtual bool TestFeature(PeripheralFeature feature) override;
-    virtual void RegisterJoystickDriverHandler(KODI::JOYSTICK::IDriverHandler* handler, bool bPromiscuous) override;
-    virtual void UnregisterJoystickDriverHandler(KODI::JOYSTICK::IDriverHandler* handler) override;
-    virtual KODI::JOYSTICK::IDriverReceiver* GetDriverReceiver() override { return this; }
-    virtual KODI::JOYSTICK::IActionMap* GetActionMap() override { return &m_defaultInputHandler; }
+    bool InitialiseFeature(const PeripheralFeature feature) override;
+    void OnUserNotification() override;
+    bool TestFeature(PeripheralFeature feature) override;
+    void RegisterJoystickDriverHandler(KODI::JOYSTICK::IDriverHandler* handler, bool bPromiscuous) override;
+    void UnregisterJoystickDriverHandler(KODI::JOYSTICK::IDriverHandler* handler) override;
+    KODI::JOYSTICK::IDriverReceiver* GetDriverReceiver() override { return this; }
+    IKeymap *GetKeymap(const std::string &controllerId) override;
+    CDateTime LastActive() override { return m_lastActive; }
 
     bool OnButtonMotion(unsigned int buttonIndex, bool bPressed);
     bool OnHatMotion(unsigned int hatIndex, KODI::JOYSTICK::HAT_STATE state);
@@ -69,7 +60,7 @@ namespace PERIPHERALS
     void ProcessAxisMotions(void);
 
     // implementation of IDriverReceiver
-    virtual bool SetMotorState(unsigned int motorIndex, float magnitude) override;
+    bool SetMotorState(unsigned int motorIndex, float magnitude) override;
 
     /*!
      * \brief Get the name of the driver or API providing this joystick
@@ -125,11 +116,13 @@ namespace PERIPHERALS
     unsigned int                        m_axisCount;
     unsigned int                        m_motorCount;
     bool                                m_supportsPowerOff;
-    KODI::JOYSTICK::CDefaultJoystick          m_defaultInputHandler;
-    KODI::JOYSTICK::CJoystickMonitor          m_joystickMonitor;
+    std::unique_ptr<KODI::JOYSTICK::CKeymapHandling> m_appInput;
+    std::unique_ptr<KODI::JOYSTICK::CRumbleGenerator> m_rumbleGenerator;
+    std::unique_ptr<KODI::JOYSTICK::IInputHandler> m_joystickMonitor;
     std::unique_ptr<KODI::JOYSTICK::IButtonMap>      m_buttonMap;
     std::unique_ptr<KODI::JOYSTICK::CDeadzoneFilter> m_deadzoneFilter;
     std::vector<DriverHandler>          m_driverHandlers;
     CCriticalSection                    m_handlerMutex;
+    CDateTime m_lastActive;
   };
 }

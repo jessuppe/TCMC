@@ -1,27 +1,16 @@
 /*
- *      Copyright (C) 2016 Team Kodi
- *      http://kodi.tv
+ *  Copyright (C) 2016-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
 
 #include "ContextMenus.h"
+
 #include "Application.h"
 #include "Autorun.h"
-#include "Util.h"
+#include "utils/URIUtils.h"
 #include "video/dialogs/GUIDialogVideoInfo.h"
 #include "video/windows/GUIWindowVideoBase.h"
 
@@ -49,17 +38,34 @@ bool CVideoInfo::Execute(const CFileItemPtr& item) const
   return true;
 }
 
+bool CRemoveResumePoint::IsVisible(const CFileItem& itemIn) const
+{
+  CFileItem item(itemIn.GetItemToPlay());
+  if (item.IsDeleted()) // e.g. trashed pvr recording
+    return false;
+
+  return CGUIWindowVideoBase::HasResumeItemOffset(&item);
+}
+
+bool CRemoveResumePoint::Execute(const CFileItemPtr& item) const
+{
+  CVideoLibraryQueue::GetInstance().ResetResumePoint(item);
+  return true;
+}
+
 bool CMarkWatched::IsVisible(const CFileItem& item) const
 {
   if (item.IsDeleted()) // e.g. trashed pvr recording
     return false;
 
-  if (item.m_bIsFolder) //Only allow db content and recording folders to be updated recursively
+  if (item.m_bIsFolder) // Only allow video db content, video and recording folders to be updated recursively
   {
     if (item.HasVideoInfoTag())
       return item.IsVideoDb();
+    else if (item.GetProperty("IsVideoFolder").asBoolean())
+      return true;
     else
-      return CUtil::IsTVRecording(item.GetPath());
+      return URIUtils::IsPVRRecordingFileOrFolder(item.GetPath());
   }
   else if (!item.HasVideoInfoTag())
     return false;
@@ -78,12 +84,14 @@ bool CMarkUnWatched::IsVisible(const CFileItem& item) const
   if (item.IsDeleted()) // e.g. trashed pvr recording
     return false;
 
-  if (item.m_bIsFolder) //Only allow db content and recording folders to be updated recursively
+  if (item.m_bIsFolder) // Only allow video db content, video and recording folders to be updated recursively
   {
     if (item.HasVideoInfoTag())
       return item.IsVideoDb();
+    else if (item.GetProperty("IsVideoFolder").asBoolean())
+      return true;
     else
-      return CUtil::IsTVRecording(item.GetPath());
+      return URIUtils::IsPVRRecordingFileOrFolder(item.GetPath());
   }
   else if (!item.HasVideoInfoTag())
     return false;
@@ -123,7 +131,7 @@ static void SetPathAndPlay(CFileItem& item)
   if (item.IsLiveTV()) // pvr tv or pvr radio?
     g_application.PlayMedia(item, "", PLAYLIST_NONE);
   else
-    g_playlistPlayer.Play(std::make_shared<CFileItem>(item), "");
+    CServiceBroker::GetPlaylistPlayer().Play(std::make_shared<CFileItem>(item), "");
 }
 
 bool CResume::Execute(const CFileItemPtr& itemIn) const

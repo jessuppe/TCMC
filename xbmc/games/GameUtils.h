@@ -1,22 +1,11 @@
 /*
- *      Copyright (C) 2012-2017 Team Kodi
- *      http://kodi.tv
+ *  Copyright (C) 2012-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this Program; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
+
 #pragma once
 
 #include "GameTypes.h"
@@ -29,6 +18,8 @@
 class CFileItem;
 class CURL;
 
+namespace KODI
+{
 namespace GAME
 {
   /*!
@@ -39,13 +30,14 @@ namespace GAME
   {
   public:
     /*!
-     * \brief Select a game client, possibly via prompt, for the given game
+     * \brief Set the game client property, possibly via prompt, for the given item
      *
-     * \param file The game being played
+     * \param item The item with or without a game client in its info tag
+     * \param prompt If true and no game client was resolved, prompt the user for one
      *
-     * \return A game client ready to be initialized for playback
+     * \return True if the item has a valid game client ID in its info tag
      */
-    static GameClientPtr OpenGameClient(const CFileItem& file);
+    static bool FillInGameClient(CFileItem &item, bool bPrompt);
 
     /*!
      * \brief Check if the file extension is supported by an add-on in
@@ -57,6 +49,9 @@ namespace GAME
      */
     static bool HasGameExtension(const std::string& path);
 
+    /*!
+     * \brief Get all game extensions
+     */
     static std::set<std::string> GetGameExtensions();
 
     /*!
@@ -71,3 +66,4 @@ namespace GAME
     static void GetGameClients(const ADDON::VECADDONS& addons, const CURL& translatedUrl, GameClientVector& candidates, bool& bHasVfsGameClient);
   };
 } // namespace GAME
+}

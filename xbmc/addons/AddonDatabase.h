@@ -1,38 +1,27 @@
-#pragma once
 /*
- *      Copyright (C) 2005-2013 Team XBMC
- *      http://xbmc.org
+ *  Copyright (C) 2005-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
+
+#pragma once
+
+#include "AddonBuilder.h"
+#include "FileItem.h"
+#include "addons/Addon.h"
+#include "dbwrappers/Database.h"
 
 #include <string>
 #include <vector>
-
-#include "addons/Addon.h"
-#include "dbwrappers/Database.h"
-#include "FileItem.h"
-#include "AddonBuilder.h"
 
 class CAddonDatabase : public CDatabase
 {
 public:
   CAddonDatabase();
-  virtual ~CAddonDatabase();
-  virtual bool Open();
+  ~CAddonDatabase() override;
+  bool Open() override;
 
   /*! @deprecated: use CAddonMgr::FindInstallableById */
   bool GetAddon(const std::string& addonID, ADDON::AddonPtr& addon);
@@ -68,7 +57,12 @@ public:
   /*! Get addons across all repositories */
   bool GetRepositoryContent(ADDON::VECADDONS& addons);
 
-  bool SetLastChecked(const std::string& id, const ADDON::AddonVersion& version, const std::string& timestamp);
+  /*!
+   \brief Set repo last checked date, and create the repo if needed
+   \param id id of the repository
+   \returns id of the repository, or -1 on error.
+   */
+  int SetLastChecked(const std::string& id, const ADDON::AddonVersion& version, const std::string& timestamp);
 
   /*!
    \brief Retrieve the time a repository was last checked and the version it was for
@@ -138,20 +132,19 @@ public:
                      const std::set<std::string>& system,
                      const std::set<std::string>& optional);
 
-  void GetInstalled(std::vector<ADDON::CAddonBuilder>& addons);
-
   bool SetLastUpdated(const std::string& addonId, const CDateTime& dateTime);
   bool SetOrigin(const std::string& addonId, const std::string& origin);
   bool SetLastUsed(const std::string& addonId, const CDateTime& dateTime);
 
+  void GetInstallData(const ADDON::AddonInfoPtr& addon);
 
 protected:
-  virtual void CreateTables();
-  virtual void CreateAnalytics();
-  virtual void UpdateTables(int version);
-  virtual int GetMinSchemaVersion() const;
-  virtual int GetSchemaVersion() const;
-  const char *GetBaseDBName() const { return "Addons"; }
+  void CreateTables() override;
+  void CreateAnalytics() override;
+  void UpdateTables(int version) override;
+  int GetMinSchemaVersion() const override;
+  int GetSchemaVersion() const override;
+  const char *GetBaseDBName() const override { return "Addons"; }
 
   bool GetAddon(int id, ADDON::AddonPtr& addon);
   void DeleteRepository(const std::string& id);

@@ -17,10 +17,10 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
- 
+
 #pragma once
 
-#include "gif_lib.h"
+#include <gif_lib.h>
 #ifndef CONTINUE_EXT_FUNC_CODE
 #define CONTINUE_EXT_FUNC_CODE 0
 #endif
@@ -60,24 +60,22 @@ class GifFrame
   friend class GifHelper;
 public:
 
-  GifFrame();
+  GifFrame() = default;
   virtual ~GifFrame();
 
-  unsigned char*  m_pImage;
-  unsigned int    m_delay;
+  unsigned char* m_pImage = nullptr;
+  unsigned int m_delay = 0;
 
 private:
   GifFrame(const GifFrame& src);
 
-  unsigned int    m_top;
-  unsigned int    m_left;
-  unsigned int    m_disposal;
-  unsigned int    m_height;
-  unsigned int    m_width;
-  unsigned int    m_pitch;
-  unsigned int    m_imageSize;
+  unsigned int m_top = 0;
+  unsigned int m_left = 0;
+  unsigned int m_disposal = 0;
+  unsigned int m_height = 0;
+  unsigned int m_width = 0;
+  unsigned int m_imageSize = 0;
   std::vector<GifColor>   m_palette;
-  int m_transparent;
 };
 
 
@@ -103,26 +101,19 @@ public:
 
 private:
   std::vector<FramePtr> m_frames;
-  unsigned int    m_imageSize;
-  unsigned int    m_pitch;
-  unsigned int    m_loops;
-  unsigned int    m_numFrames;
+  unsigned int m_imageSize = 0;
+  unsigned int m_pitch = 0;
+  unsigned int m_loops = 0;
+  unsigned int m_numFrames = 0;
 
   std::string     m_filename;
-  GifFileType*    m_gif;
-  bool            m_hasBackground;
-  GifColor*       m_backColor;
+  GifFileType* m_gif = nullptr;
   std::vector<GifColor> m_globalPalette;
-  unsigned char*  m_pTemplate;
-  int             m_isAnimated;
+  unsigned char* m_pTemplate = nullptr;
   CFile*          m_gifFile;
 
   unsigned int m_width;
   unsigned int m_height;
-  unsigned int m_originalWidth;   ///< original image width before scaling or cropping
-  unsigned int m_originalHeight;  ///< original image height before scaling or cropping
-  unsigned int m_orientation;
-  bool m_hasAlpha;
 
   bool Open(GifFileType *& gif, void * dataPtr, InputFunc readFunc);
   void Close(GifFileType * gif);

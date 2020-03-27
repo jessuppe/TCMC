@@ -3,7 +3,7 @@
 # -------
 # Finds the EGL library
 #
-# This will will define the following variables::
+# This will define the following variables::
 #
 # EGL_FOUND - system has EGL
 # EGL_INCLUDE_DIRS - the EGL include directory
@@ -14,14 +14,18 @@
 #
 #   EGL::EGL   - The EGL library
 
+if(CORE_PLATFORM_NAME_LC STREQUAL rbpi)
+    set(_brcmprefix brcm)
+endif()
+
 if(PKG_CONFIG_FOUND)
-  pkg_check_modules(PC_EGL egl QUIET)
+  pkg_check_modules(PC_EGL ${_brcmprefix}egl QUIET)
 endif()
 
 find_path(EGL_INCLUDE_DIR EGL/egl.h
                           PATHS ${PC_EGL_INCLUDEDIR})
 
-find_library(EGL_LIBRARY NAMES EGL egl
+find_library(EGL_LIBRARY NAMES ${_brcmprefix}EGL egl
                          PATHS ${PC_EGL_LIBDIR})
 
 set(EGL_VERSION ${PC_EGL_VERSION})
@@ -34,14 +38,14 @@ find_package_handle_standard_args(EGL
 if(EGL_FOUND)
   set(EGL_LIBRARIES ${EGL_LIBRARY})
   set(EGL_INCLUDE_DIRS ${EGL_INCLUDE_DIR})
-  set(EGL_DEFINITIONS -DHAVE_LIBEGL=1)
+  set(EGL_DEFINITIONS -DHAS_EGL=1)
 
   if(NOT TARGET EGL::EGL)
     add_library(EGL::EGL UNKNOWN IMPORTED)
     set_target_properties(EGL::EGL PROPERTIES
                                    IMPORTED_LOCATION "${EGL_LIBRARY}"
                                    INTERFACE_INCLUDE_DIRECTORIES "${EGL_INCLUDE_DIR}"
-                                   INTERFACE_COMPILE_DEFINITIONS HAVE_LIBEGL=1)
+                                   INTERFACE_COMPILE_DEFINITIONS HAS_EGL=1)
   endif()
 endif()
 

@@ -1,11 +1,11 @@
 # Kodi Media Center language file
 # Addon Name: Estuary
 # Addon id: skin.estuary
-# Addon Provider: phil65, Piers
+# Addon Provider: phil65, Ichabod Fletchman
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
-"Report-Msgid-Bugs-To: http://trac.kodi.tv/\n"
+"Report-Msgid-Bugs-To: https://github.com/xbmc/xbmc/issues/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
@@ -47,6 +47,10 @@ msgstr "Pel·lícules aleatòries"
 msgctxt "#31007"
 msgid "Unwatched movies"
 msgstr "Pel·lícules no vistes"
+
+msgctxt "#31008"
+msgid "Enable category widgets"
+msgstr "Habilita els ginys de categoria"
 
 msgctxt "#31009"
 msgid "Download icons"
@@ -112,13 +116,17 @@ msgctxt "#31025"
 msgid "No favourites found. You can add any item from media views to this list by using the context menu."
 msgstr "No s'ha trobat cap preferit. Podeu afegir qualsevol element des de les vistes dels mitjans a aquesta llista mitjançant el menú contextual."
 
+msgctxt "#31026"
+msgid "Timeshift"
+msgstr "Salts en el temps"
+
 msgctxt "#31028"
 msgid "Show fanart"
-msgstr "Mostr el fanart"
+msgstr "Mostra el fanart"
 
 msgctxt "#31029"
 msgid "Last logged in"
-msgstr "Última entrada"
+msgstr "Última autenticació"
 
 msgctxt "#31030"
 msgid "System memory usage"
@@ -135,10 +143,6 @@ msgstr "Ordre"
 msgctxt "#31033"
 msgid "Your rating"
 msgstr "La vostra valoració"
-
-msgctxt "#31034"
-msgid "Extended info"
-msgstr "Info estesa"
 
 msgctxt "#31035"
 msgid "Pages"
@@ -186,11 +190,7 @@ msgstr "Disponible"
 
 msgctxt "#31050"
 msgid "Press [B]OK[/B] to stop"
-msgstr "Preu [B]D'ACORD[/B] per aturar"
-
-msgctxt "#31051"
-msgid "Toggle language"
-msgstr "Commuta l'idioma"
+msgstr "Premeu [B]D'ACORD[/B] per aturar"
 
 msgctxt "#31052"
 msgid "filtered"
@@ -210,11 +210,11 @@ msgstr "Vés a la llista de reproducció"
 
 msgctxt "#31057"
 msgid "Show login screen on startup"
-msgstr "Mostra la pantalla d'inici de sessió a l'inici"
+msgstr "Mostra la pantalla d'autenticació a l'inici"
 
 msgctxt "#31058"
 msgid "Automatic Login on startup"
-msgstr "Inici de sessió automàtic a l'inici"
+msgstr "Autenticació automàtica a l'inici"
 
 msgctxt "#31061"
 msgid "Main menu items"
@@ -256,6 +256,10 @@ msgctxt "#31072"
 msgid "Power Options"
 msgstr "Opcions d'energia"
 
+msgctxt "#31074"
+msgid "Total duration"
+msgstr "Duració total"
+
 msgctxt "#31075"
 msgid "Movie sets"
 msgstr "Col·leccions de pel·lícules"
@@ -274,19 +278,15 @@ msgstr "Complement de lletres"
 
 msgctxt "#31083"
 msgid "Lyrics add-on settings"
-msgstr "Ajust del complement de lletres"
+msgstr "Opcions del complement de lletres"
 
 msgctxt "#31084"
 msgid "Visualisation settings"
-msgstr "Ajusts de la visualització"
+msgstr "Opcions de la visualització"
 
 msgctxt "#31089"
 msgid "Available groups"
 msgstr "Grups disponibles"
-
-msgctxt "#31090"
-msgid "Search trailer"
-msgstr "Cerca el tràiler"
 
 msgctxt "#31092"
 msgid "Video menu"
@@ -310,7 +310,11 @@ msgstr "Opcions del canal"
 
 msgctxt "#31098"
 msgid "Select your Kodi user profile[CR]to login and continue"
-msgstr "Seleccioneu el vostre perfil d'usuari de Kodi[CR]per entrar i continuar"
+msgstr "Seleccioneu el vostre perfil d'usuari de Kodi[CR]per autenticar-vos i continuar"
+
+msgctxt "#31099"
+msgid "IconWall"
+msgstr "Mur d'icones"
 
 msgctxt "#31100"
 msgid "Shift"
@@ -364,10 +368,6 @@ msgctxt "#31114"
 msgid "Search YouTube"
 msgstr "Cerca de YouTube"
 
-msgctxt "#31115"
-msgid "Search TheMovieDB"
-msgstr "Cerca de TheMovieDB"
-
 msgctxt "#31116"
 msgid "Remove this main menu item"
 msgstr "Suprimeix aquest element de menú principal"
@@ -400,10 +400,6 @@ msgctxt "#31123"
 msgid "Same director"
 msgstr "Mateix director"
 
-msgctxt "#31124"
-msgid "Show images on map"
-msgstr "Mostra les imatges al mapa"
-
 msgctxt "#31125"
 msgid "Press up for actor info"
 msgstr "Premeu amunt per a la informació de l'actor"
@@ -422,19 +418,15 @@ msgstr "Contribuïdors"
 
 msgctxt "#31129"
 msgid "General settings applying to all areas of the skin."
-msgstr "Els ajusts generals que s'apliquen a totes les àrees de l'aparença."
+msgstr "Les opcions generals que s'apliquen a totes les àrees de l'aparença."
 
 msgctxt "#31130"
 msgid "Main menu-related settings: Configure the home screen to your likings."
-msgstr "Principals ajusts relacionats amb el menú principal: Configureu la pantalla d'inici segons els vostres gustos."
+msgstr "Opcions que estan relacionades amb el menú principal: Configureu la pantalla d'inici segons els vostres gustos."
 
 msgctxt "#31131"
 msgid "Choose skin fanart pack"
 msgstr "Tria el paquet de fanart de l'aparença"
-
-msgctxt "#31132"
-msgid "min"
-msgstr "min"
 
 msgctxt "#31134"
 msgid "Remaining"
@@ -470,7 +462,7 @@ msgstr "Velocitat de reproducció"
 
 msgctxt "#31143"
 msgid "You did not set up PVR yet. In order to use PVR, choose a PVR client addon and configure it. Please visit http://kodi.wiki/view/PVR to learn more."
-msgstr "Encara no heu configurat el PVR. Per utilitzar el PVR, trieu un complement  de client PVR i configureu-lo. Consulteu http://kodi.wiki/view/PVR per a més detalls."
+msgstr "Encara no heu configurat el PVR. Per utilitzar el PVR, trieu un complement de client PVR i configureu-lo. Consulteu http://kodi.wiki/view/PVR per a més detalls."
 
 msgctxt "#31144"
 msgid "Enter add-on browser"
@@ -496,6 +488,10 @@ msgctxt "#31152"
 msgid "Random music videos"
 msgstr "Vídeos musicals aleatoris"
 
+msgctxt "#31153"
+msgid "You do not have any add-ons of this type installed. Enter the add-on browser to download add-ons created by our community."
+msgstr "No teniu cap complement d'aquest tipus instal·lat. Entreu al navegador de complements per baixar complements creats per la nostra comunitat."
+
 msgctxt "#31154"
 msgid "Press OK to switch between locations"
 msgstr "Premeu d'acord per canviar entre ubicacions"
@@ -516,6 +512,10 @@ msgctxt "#31158"
 msgid "Touch mode"
 msgstr "Mode tàctil"
 
+msgctxt "#31159"
+msgid "Artwork"
+msgstr "Artwork"
+
 msgctxt "#31160"
 msgid "Show media flags"
 msgstr "Mostra els indicadors multimèdia"
@@ -523,3 +523,7 @@ msgstr "Mostra els indicadors multimèdia"
 msgctxt "#31161"
 msgid "Numeric pad"
 msgstr "Teclat numèric"
+
+msgctxt "#31165"
+msgid "Profile name"
+msgstr "Nom del perfil"

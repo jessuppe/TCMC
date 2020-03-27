@@ -1,11 +1,11 @@
 # Kodi Media Center language file
 # Addon Name: Estuary
 # Addon id: skin.estuary
-# Addon Provider: phil65, Piers
+# Addon Provider: phil65, Ichabod Fletchman
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
-"Report-Msgid-Bugs-To: http://trac.kodi.tv/\n"
+"Report-Msgid-Bugs-To: https://github.com/xbmc/xbmc/issues/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
@@ -47,6 +47,10 @@ msgstr "Náhodné filmy"
 msgctxt "#31007"
 msgid "Unwatched movies"
 msgstr "Nepozreté filmy"
+
+msgctxt "#31008"
+msgid "Enable category widgets"
+msgstr "Povoliť widgety kategórií"
 
 msgctxt "#31009"
 msgid "Download icons"
@@ -106,11 +110,19 @@ msgstr "Zoradiť podľa"
 
 msgctxt "#31023"
 msgid "Viewtype"
-msgstr "TypZobrazenia"
+msgstr "Typ zobrazenia"
+
+msgctxt "#31024"
+msgid "Choose rating to display for media items"
+msgstr "Zvoľte si typ hodnotenia, ktorý sa zobrazí pre položky médií"
 
 msgctxt "#31025"
 msgid "No favourites found. You can add any item from media views to this list by using the context menu."
 msgstr "Nenašli sa žiadne obľúbené položky. Akúkoľvek položku z prehľadov médií môžete pridať do tohto zoznamu použitím kontextovej ponuky."
+
+msgctxt "#31026"
+msgid "Timeshift"
+msgstr "Časový posun"
 
 msgctxt "#31028"
 msgid "Show fanart"
@@ -119,6 +131,10 @@ msgstr "Zobraziť fanart"
 msgctxt "#31029"
 msgid "Last logged in"
 msgstr "Posledné prihlásenie"
+
+msgctxt "#31030"
+msgid "System memory usage"
+msgstr "Využitie systémovej pamäte"
 
 msgctxt "#31031"
 msgid "Version info"
@@ -131,10 +147,6 @@ msgstr "Poradie"
 msgctxt "#31033"
 msgid "Your rating"
 msgstr "Vaše hodnotenie"
-
-msgctxt "#31034"
-msgid "Extended info"
-msgstr "Rozšírené informácie"
 
 msgctxt "#31035"
 msgid "Pages"
@@ -183,10 +195,6 @@ msgstr "K dispozícii"
 msgctxt "#31050"
 msgid "Press [B]OK[/B] to stop"
 msgstr "Stlačte [B]OK[/B] pre zastavenie"
-
-msgctxt "#31051"
-msgid "Toggle language"
-msgstr "Prepnúť jazyk"
 
 msgctxt "#31052"
 msgid "filtered"
@@ -252,6 +260,10 @@ msgctxt "#31072"
 msgid "Power Options"
 msgstr "Možnosti napájania"
 
+msgctxt "#31074"
+msgid "Total duration"
+msgstr "Celkové trvanie"
+
 msgctxt "#31075"
 msgid "Movie sets"
 msgstr "Filmové kolekcie"
@@ -280,10 +292,6 @@ msgctxt "#31089"
 msgid "Available groups"
 msgstr "Dostupné skupiny"
 
-msgctxt "#31090"
-msgid "Search trailer"
-msgstr "Hľadať upútavku"
-
 msgctxt "#31092"
 msgid "Video menu"
 msgstr "Ponuka videa"
@@ -307,6 +315,10 @@ msgstr "Možnosti kanálu"
 msgctxt "#31098"
 msgid "Select your Kodi user profile[CR]to login and continue"
 msgstr "Zvoľte si profil používateľa Kodi[CR]pre prihlásenie a pokračovanie"
+
+msgctxt "#31099"
+msgid "IconWall"
+msgstr "Stena ikôn"
 
 msgctxt "#31100"
 msgid "Shift"
@@ -360,10 +372,6 @@ msgctxt "#31114"
 msgid "Search YouTube"
 msgstr "Hľadať na YouTube"
 
-msgctxt "#31115"
-msgid "Search TheMovieDB"
-msgstr "Hľadať na TheMovieDB"
-
 msgctxt "#31116"
 msgid "Remove this main menu item"
 msgstr "Odobrať túto položku hlavnej ponuky"
@@ -396,10 +404,6 @@ msgctxt "#31123"
 msgid "Same director"
 msgstr "Rovnaký režisér"
 
-msgctxt "#31124"
-msgid "Show images on map"
-msgstr "Zobraziť obrázky na mape"
-
 msgctxt "#31125"
 msgid "Press up for actor info"
 msgstr "Stlačte nahor pre zobrazenie informácií o hercovi"
@@ -429,8 +433,12 @@ msgid "Choose skin fanart pack"
 msgstr "Vyberte fanart balík pre vzhľad"
 
 msgctxt "#31132"
-msgid "min"
-msgstr "min"
+msgid "Select Program"
+msgstr "Vybrať program"
+
+msgctxt "#31133"
+msgid "Select Resolution"
+msgstr "Vyberte rozlíšenie"
 
 msgctxt "#31134"
 msgid "Remaining"
@@ -475,3 +483,83 @@ msgstr "Vstúpiť do prehliadača doplnkov"
 msgctxt "#31145"
 msgid "Search add-ons"
 msgstr "Prehľadávať doplnky"
+
+msgctxt "#31148"
+msgid "Categories"
+msgstr "Kategórie"
+
+msgctxt "#31149"
+msgid "Select genre fanart pack"
+msgstr "Vyberte fanart balík pre žánre"
+
+msgctxt "#31150"
+msgid "Repository"
+msgstr "Repozitár"
+
+msgctxt "#31151"
+msgid "Unwatched music videos"
+msgstr "Nepozreté hudobné videá"
+
+msgctxt "#31152"
+msgid "Random music videos"
+msgstr "Náhodné hudobné videá"
+
+msgctxt "#31153"
+msgid "You do not have any add-ons of this type installed. Enter the add-on browser to download add-ons created by our community."
+msgstr "Nemáte nainštalované žiadne doplnky tohoto typu. Vstúpte do prehliadača doplnkov a nainštalujte si doplnky vytvorené našou komunitou."
+
+msgctxt "#31154"
+msgid "Press OK to switch between locations"
+msgstr "Stlačte OK pre prepnutie medzi lokáciami"
+
+msgctxt "#31155"
+msgid "No bookmarks created yet."
+msgstr "Neboli vytvorené žiadne záložky."
+
+msgctxt "#31156"
+msgid "Choose background pattern"
+msgstr "Vyberte vzor pozadia"
+
+msgctxt "#31157"
+msgid "Edit categories"
+msgstr "Upraviť kategórie"
+
+msgctxt "#31158"
+msgid "Touch mode"
+msgstr "Dotykový mód"
+
+msgctxt "#31159"
+msgid "Artwork"
+msgstr "Artwork"
+
+msgctxt "#31160"
+msgid "Show media flags"
+msgstr "Zobraziť indikátory medií"
+
+msgctxt "#31161"
+msgid "Numeric pad"
+msgstr "Numerická klávesnica"
+
+msgctxt "#31162"
+msgid "Play your personal games or download one of the many game add-ons from the official repository."
+msgstr "Zahrajte si vaše osobné hry alebo si prevezmite jeden z mnohých herných doplnkov z oficiálneho repozitára."
+
+msgctxt "#31163"
+msgid "Show Fanart background"
+msgstr "Zobraziť Fanart pozadie"
+
+msgctxt "#31164"
+msgid "Choose kind of profile identification"
+msgstr "Vyberte si spôsob identifikácie profilu"
+
+msgctxt "#31165"
+msgid "Profile name"
+msgstr "Názov profilu"
+
+msgctxt "#31166"
+msgid "Profile avatar"
+msgstr "Profilový avatar"
+
+msgctxt "#31167"
+msgid "Animate background"
+msgstr "Animovať pozadie"

@@ -1,7 +1,7 @@
-set(SOURCES PortManager.cpp
-            PortMapper.cpp)
+set(SOURCES InputSink.cpp
+            Port.cpp)
 
-set(HEADERS PortManager.h
-            PortMapper.h)
+set(HEADERS InputSink.h
+            Port.h)
 
 core_add_library(gameports)

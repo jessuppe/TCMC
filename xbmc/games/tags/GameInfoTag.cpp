@@ -1,29 +1,19 @@
 /*
- *      Copyright (C) 2012-2017 Team Kodi
- *      http://kodi.tv
+ *  Copyright (C) 2012-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this Program; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
 
 #include "GameInfoTag.h"
+
 #include "utils/Archive.h"
 #include "utils/Variant.h"
 
 #include <string>
 
+using namespace KODI;
 using namespace GAME;
 
 void CGameInfoTag::Reset()
@@ -41,7 +31,6 @@ void CGameInfoTag::Reset()
   m_strPublisher.clear();
   m_strFormat.clear();
   m_strCartridgeType.clear();
-  m_strSavestate.clear();
   m_strGameClient.clear();
 }
 
@@ -62,7 +51,6 @@ CGameInfoTag& CGameInfoTag::operator=(const CGameInfoTag& tag)
     m_strPublisher     = tag.m_strPublisher;
     m_strFormat        = tag.m_strFormat;
     m_strCartridgeType = tag.m_strCartridgeType;
-    m_strSavestate     = tag.m_strSavestate;
     m_strGameClient    = tag.m_strGameClient;
   }
   return *this;
@@ -89,7 +77,6 @@ bool CGameInfoTag::operator==(const CGameInfoTag& tag) const
       if (m_strPublisher     != tag.m_strPublisher)     return false;
       if (m_strFormat        != tag.m_strFormat)        return false;
       if (m_strCartridgeType != tag.m_strCartridgeType) return false;
-      if (m_strSavestate     != tag.m_strSavestate)     return false;
       if (m_strGameClient    != tag.m_strGameClient)    return false;
     }
   }
@@ -113,7 +100,6 @@ void CGameInfoTag::Archive(CArchive& ar)
     ar << m_strPublisher;
     ar << m_strFormat;
     ar << m_strCartridgeType;
-    ar << m_strSavestate;
     ar << m_strGameClient;
   }
   else
@@ -131,7 +117,6 @@ void CGameInfoTag::Archive(CArchive& ar)
     ar >> m_strPublisher;
     ar >> m_strFormat;
     ar >> m_strCartridgeType;
-    ar >> m_strSavestate;
     ar >> m_strGameClient;
   }
 }
@@ -151,7 +136,6 @@ void CGameInfoTag::Serialize(CVariant& value) const
   value["publisher"]     = m_strPublisher;
   value["format"]        = m_strFormat;
   value["cartridgetype"] = m_strCartridgeType;
-  value["savestate"]     = m_strSavestate;
   value["gameclient"]    = m_strGameClient;
 }
 

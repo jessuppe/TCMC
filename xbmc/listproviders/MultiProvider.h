@@ -1,29 +1,18 @@
 /*
- *      Copyright (C) 2013-2017 Team Kodi
- *      http://kodi.tv
+ *  Copyright (C) 2013-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
 
 #pragma once
 
-#include <vector>
-#include <map>
 #include "IListProvider.h"
 #include "threads/CriticalSection.h"
+
+#include <map>
+#include <vector>
 
 typedef std::shared_ptr<IListProvider> IListProviderPtr;
 
@@ -35,15 +24,15 @@ class CMultiProvider : public IListProvider
 {
 public:
   CMultiProvider(const TiXmlNode *first, int parentID);
-  
-  virtual bool Update(bool forceRefresh) override;
-  virtual void Fetch(std::vector<CGUIListItemPtr> &items) override;
-  virtual bool IsUpdating() const override;
-  virtual void Reset() override;
-  virtual bool OnClick(const CGUIListItemPtr &item) override;
-  virtual bool OnInfo(const CGUIListItemPtr &item) override;
-  virtual bool OnContextMenu(const CGUIListItemPtr &item) override;
-  
+
+  bool Update(bool forceRefresh) override;
+  void Fetch(std::vector<CGUIListItemPtr> &items) override;
+  bool IsUpdating() const override;
+  void Reset() override;
+  bool OnClick(const CGUIListItemPtr &item) override;
+  bool OnInfo(const CGUIListItemPtr &item) override;
+  bool OnContextMenu(const CGUIListItemPtr &item) override;
+
 protected:
   typedef size_t item_key_type;
   static item_key_type GetItemKey(CGUIListItemPtr const &item);

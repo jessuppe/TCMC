@@ -1,78 +1,75 @@
 /*
- *      Copyright (C) 2010 Team Boxee
+ *  Copyright (C) 2010 Team Boxee
  *      http://www.boxee.tv
  *
- *      Copyright (C) 2010-2013 Team XBMC
- *      http://xbmc.org
+ *  Copyright (C) 2010-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
+
 #include "UDFDirectory.h"
-#include "udf25.h"
-#include "Util.h"
-#include "URL.h"
+
 #include "FileItem.h"
+#include "URL.h"
+#include "Util.h"
 #include "utils/URIUtils.h"
+
+#include <cdio/udf.h>
 
 using namespace XFILE;
 
-CUDFDirectory::CUDFDirectory(void)
+bool CUDFDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
-}
-
-CUDFDirectory::~CUDFDirectory(void)
-{
-}
-
-bool CUDFDirectory::GetDirectory(const CURL& url,
-                                 CFileItemList &items)
-{
-  std::string strRoot, strSub;
   CURL url2(url);
   if (!url2.IsProtocol("udf"))
-  { // path to an image
+  {
     url2.Reset();
     url2.SetProtocol("udf");
     url2.SetHostName(url.Get());
   }
-  strRoot  = url2.Get();
-  strSub   = url2.GetFileName();
+
+  std::string strRoot(url2.Get());
+  std::string strSub(url2.GetFileName());
 
   URIUtils::AddSlashAtEnd(strRoot);
   URIUtils::AddSlashAtEnd(strSub);
 
-  udf25 udfIsoReader;
-  if(!udfIsoReader.Open(url2.GetHostName().c_str()))
-     return false;
+  udf_t* udf = udf_open(url2.GetHostName().c_str());
 
-  udf_dir_t *dirp = udfIsoReader.OpenDir(strSub.c_str());
-
-  if (dirp == NULL)
+  if (!udf)
     return false;
 
-  udf_dirent_t *dp = NULL;
-  while ((dp = udfIsoReader.ReadDir(dirp)) != NULL)
+  udf_dirent_t* root = udf_get_root(udf, true, 0);
+
+  if (!root)
   {
-    if (dp->d_type == DVD_DT_DIR)
+    udf_close(udf);
+    return false;
+  }
+
+  udf_dirent_t* path = udf_fopen(root, strSub.c_str());
+
+  if (!path)
+  {
+    udf_dirent_free(root);
+    udf_close(udf);
+    return false;
+  }
+
+  while (udf_readdir(path))
+  {
+    if (path->b_parent)
+      continue;
+
+    if (udf_is_dir(path))
     {
-      std::string strDir = (char*)dp->d_name;
-      if (strDir != "." && strDir != "..")
+      std::string filename = udf_get_filename(path);
+      if (filename != "." && filename != "..")
       {
-        CFileItemPtr pItem(new CFileItem((char*)dp->d_name));
-        strDir = strRoot + (char*)dp->d_name;
+        CFileItemPtr pItem(new CFileItem(filename));
+        std::string strDir(strRoot + filename);
         URIUtils::AddSlashAtEnd(strDir);
         pItem->SetPath(strDir);
         pItem->m_bIsFolder = true;
@@ -82,16 +79,18 @@ bool CUDFDirectory::GetDirectory(const CURL& url,
     }
     else
     {
-      CFileItemPtr pItem(new CFileItem((char*)dp->d_name));
-      pItem->SetPath(strRoot + (char*)dp->d_name);
+      std::string filename = udf_get_filename(path);
+      CFileItemPtr pItem(new CFileItem(filename));
+      pItem->SetPath(strRoot + filename);
       pItem->m_bIsFolder = false;
-      pItem->m_dwSize = dp->d_filesize;
+      pItem->m_dwSize = udf_get_file_length(path);
 
       items.Add(pItem);
-    }	
+    }
   }
 
-  udfIsoReader.CloseDir(dirp);
+  udf_dirent_free(root);
+  udf_close(udf);
 
   return true;
 }
@@ -99,8 +98,5 @@ bool CUDFDirectory::GetDirectory(const CURL& url,
 bool CUDFDirectory::Exists(const CURL& url)
 {
   CFileItemList items;
-  if (GetDirectory(url, items))
-    return true;
-
-  return false;
+  return GetDirectory(url, items);
 }

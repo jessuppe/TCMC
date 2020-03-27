@@ -1,32 +1,20 @@
 /*
- *      Copyright (C) 2005-2013 Team XBMC
- *      http://xbmc.org
+ *  Copyright (C) 2005-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
 
 #pragma once
-#include <limits.h>
-#include <vector>
 
 #include "AddonCallback.h"
-#include "Control.h"
 #include "AddonString.h"
-
+#include "Control.h"
 #include "swighelper.h"
+
+#include <limits.h>
+#include <vector>
 
 namespace XBMCAddon
 {
@@ -54,20 +42,18 @@ namespace XBMCAddon
     class Action : public AddonClass
     {
     public:
-      Action() : id(-1), fAmount1(0.0f), fAmount2(0.0f),
-                 fRepeat(0.0f), buttonCode(0), strAction("")
-      { }
+      Action() = default;
 
 #ifndef SWIG
-      Action(const CAction& caction) { setFromCAction(caction); }
+      explicit Action(const CAction& caction) { setFromCAction(caction); }
 
       void setFromCAction(const CAction& caction);
 
-      long id;
-      float fAmount1;
-      float fAmount2;
-      float fRepeat;
-      unsigned long buttonCode;
+      long id = -1;
+      float fAmount1 = 0.0f;
+      float fAmount2 = 0.0f;
+      float fRepeat = 0.0f;
+      unsigned long buttonCode = 0;
       std::string strAction;
 
       // Not sure if this is correct but it's here for now.
@@ -203,7 +189,7 @@ namespace XBMCAddon
     class Window : public AddonCallback
     {
       friend class WindowDialogMixin;
-      bool isDisposed;
+      bool isDisposed = false;
 
       void doAddControl(Control* pControl, CCriticalSection* gcontext, bool wait);
       void doRemoveControl(Control* pControl, CCriticalSection* gcontext, bool wait);
@@ -211,19 +197,19 @@ namespace XBMCAddon
     protected:
 #ifndef SWIG
       InterceptorBase* window;
-      int iWindowId;
+      int iWindowId = -1;
 
       std::vector<AddonClass::Ref<Control> > vecControls;
-      int iOldWindowId;
-      int iCurrentControlId;
-      bool bModal;
+      int iOldWindowId = 0;
+      int iCurrentControlId = 3000;
+      bool bModal = false;
       CEvent m_actionEvent;
 
-      bool canPulse;
+      bool canPulse = false;
 
       // I REALLY hate this ... but it's the simplest fix right now.
-      bool existingWindow;
-      bool destroyAfterDeInit;
+      bool existingWindow = true;
+      bool destroyAfterDeInit = false;
 
       /**
        * This only takes a boolean to allow subclasses to explicitly use it. A
@@ -231,9 +217,9 @@ namespace XBMCAddon
        * the difference.
        * subclasses should use this constructor and not the other.
        */
-      Window(bool discrim);
+      explicit Window(bool discrim);
 
-      virtual void deallocating();
+      void deallocating() override;
 
       /**
        * This helper retrieves the next available id. It is assumed that the
@@ -265,9 +251,9 @@ namespace XBMCAddon
 #endif
 
     public:
-      Window(int existingWindowId = -1);
+      explicit Window(int existingWindowId = -1);
 
-      virtual ~Window();
+      ~Window() override;
 
 #ifndef SWIG
       SWIGHIDDENVIRTUAL bool    OnMessage(CGUIMessage& message);
@@ -640,9 +626,12 @@ namespace XBMCAddon
       /// \ingroup python_xbmcgui_window
       /// @brief \python_func{ getHeight() }
       ///-----------------------------------------------------------------------
-      /// Returns the height of this screen.
+      /// Returns the height of this Window instance.
       ///
-      /// @return                       Screen height
+      /// @return                       Window height in pixels
+      ///
+      ///-----------------------------------------------------------------------
+      /// @python_v18 Function changed
       ///
       getHeight();
 #else
@@ -654,82 +643,16 @@ namespace XBMCAddon
       /// \ingroup python_xbmcgui_window
       /// @brief \python_func{ getWidth() }
       ///-----------------------------------------------------------------------
-      /// Returns the width of this screen.
+      /// Returns the width of this Window instance.
       ///
-      /// @return                       Screen width
+      /// @return                       Window width in pixels
+      ///
+      ///-----------------------------------------------------------------------
+      /// @python_v18 Function changed
       ///
       getWidth();
 #else
       SWIGHIDDENVIRTUAL long getWidth();
-#endif
-
-#ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// \ingroup python_xbmcgui_window
-      /// @brief \python_func{ getResolution() }
-      ///-----------------------------------------------------------------------
-      /// Returns The resolution of the screen
-      ///
-      /// @return                       Used Resolution
-      ///  The returned value is one of the following:
-      ///  | value | Resolution                |
-      ///  |:-----:|:--------------------------|
-      ///  |   0   | 1080i      (1920x1080)
-      ///  |   1   | 720p       (1280x720)
-      ///  |   2   | 480p 4:3   (720x480)
-      ///  |   3   | 480p 16:9  (720x480)
-      ///  |   4   | NTSC 4:3   (720x480)
-      ///  |   5   | NTSC 16:9  (720x480)
-      ///  |   6   | PAL 4:3    (720x576)
-      ///  |   7   | PAL 16:9   (720x576)
-      ///  |   8   | PAL60 4:3  (720x480)
-      ///  |   9   | PAL60 16:9 (720x480)
-      ///
-      getResolution();
-#else
-      SWIGHIDDENVIRTUAL long getResolution();
-#endif
-
-#ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// \ingroup python_xbmcgui_window
-      /// @brief \python_func{ setCoordinateResolution(int resolution) }
-      ///-----------------------------------------------------------------------
-      /// Sets the resolution
-      ///
-      /// That the coordinates of all controls are defined in.  Allows Kodi
-      /// to scale control positions and width/heights to whatever resolution
-      /// Kodi is currently using.
-      ///
-      /// @param res                Coordinate resolution to set
-      ///  Resolution is one of the following:
-      ///  | value | Resolution                |
-      ///  |:-----:|:--------------------------|
-      ///  |   0   | 1080i      (1920x1080)
-      ///  |   1   | 720p       (1280x720)
-      ///  |   2   | 480p 4:3   (720x480)
-      ///  |   3   | 480p 16:9  (720x480)
-      ///  |   4   | NTSC 4:3   (720x480)
-      ///  |   5   | NTSC 16:9  (720x480)
-      ///  |   6   | PAL 4:3    (720x576)
-      ///  |   7   | PAL 16:9   (720x576)
-      ///  |   8   | PAL60 4:3  (720x480)
-      ///  |   9   | PAL60 16:9 (720x480)
-      ///
-      ///
-      ///
-      ///-----------------------------------------------------------------------
-      ///
-      /// **Example:**
-      /// ~~~~~~~~~~~~~{.py}
-      /// ..
-      /// win = xbmcgui.Window(xbmcgui.getCurrentWindowId())
-      /// win.setCoordinateResolution(0)
-      /// ..
-      /// ~~~~~~~~~~~~~
-      setCoordinateResolution(...);
-#else
-      SWIGHIDDENVIRTUAL void setCoordinateResolution(long res);
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS

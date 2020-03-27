@@ -1,23 +1,12 @@
-#pragma once
 /*
- *      Copyright (C) 2005-2013 Team XBMC
- *      http://xbmc.org
+ *  Copyright (C) 2005-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
+
+#pragma once
 
 #include <string.h>
 #include <time.h>
@@ -27,10 +16,8 @@
 #undef PRAGMA_PACK_END
 
 #if defined(__GNUC__)
-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95)
 #define ATTRIBUTE_PACKED __attribute__ ((packed))
 #define PRAGMA_PACK 0
-#endif
 #endif
 
 #if !defined(ATTRIBUTE_PACKED)
@@ -58,16 +45,23 @@
 #define EPG_EVENT_CONTENTMASK_USERDEFINED              0xF0
 //@}
 
-/* Set EPGTAG.iGenreType to EPG_GENRE_USE_STRING to transfer genre strings to XBMC */
+/* Set EPGTAG.iGenreType or EPGTAG.iGenreSubType to EPG_GENRE_USE_STRING to transfer genre strings to Kodi */
 #define EPG_GENRE_USE_STRING                           0x100
+
+/* Separator to use in strings containing different tokens, for example writers, directors, actors of an event. */
+#define EPG_STRING_TOKEN_SEPARATOR ","
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
   /* EPG_TAG.iFlags values */
-  const unsigned int EPG_TAG_FLAG_UNDEFINED = 0x00000000; /*!< @brief nothing special to say about this entry */
-  const unsigned int EPG_TAG_FLAG_IS_SERIES = 0x00000001; /*!< @brief this EPG entry is part of a series */
+  const unsigned int EPG_TAG_FLAG_UNDEFINED   = 0x00000000; /*!< @brief nothing special to say about this entry */
+  const unsigned int EPG_TAG_FLAG_IS_SERIES   = 0x00000001; /*!< @brief this EPG entry is part of a series */
+  const unsigned int EPG_TAG_FLAG_IS_NEW      = 0x00000002; /*!< @brief this EPG entry will be flagged as new */
+  const unsigned int EPG_TAG_FLAG_IS_PREMIERE = 0x00000004; /*!< @brief this EPG entry will be flagged as a premiere */
+  const unsigned int EPG_TAG_FLAG_IS_FINALE   = 0x00000008; /*!< @brief this EPG entry will be flagged as a finale */
+  const unsigned int EPG_TAG_FLAG_IS_LIVE     = 0x00000010; /*!< @brief this EPG entry will be flagged as live */
 
   /* Special EPG_TAG.iUniqueBroadcastId value */
 
@@ -75,6 +69,11 @@ extern "C" {
    * @brief special EPG_TAG.iUniqueBroadcastId value to indicate that a tag has not a valid EPG event uid.
    */
   const unsigned int EPG_TAG_INVALID_UID = 0;
+
+  /*!
+   * @brief special EPG_TAG.iSeriesNumber, EPG_TAG.iEpisodeNumber and EPG_TAG.iEpisodePartNumber value to indicate it is not to be used
+   */
+  const int EPG_TAG_INVALID_SERIES_EPISODE = -1;
 
   /*!
    * @brief EPG event states. Used with EpgEventStateChange callback.
@@ -91,31 +90,31 @@ extern "C" {
    */
   typedef struct EPG_TAG {
     unsigned int  iUniqueBroadcastId;  /*!< @brief (required) identifier for this event. Event uids must be unique for a channel. Valid uids must be greater than EPG_TAG_INVALID_UID. */
+    unsigned int  iUniqueChannelId;    /*!< @brief (required) unique identifier of the channel this event belongs to. */
     const char *  strTitle;            /*!< @brief (required) this event's title */
-    unsigned int  iChannelNumber;      /*!< @brief (required) the number of the channel this event occurs on */
     time_t        startTime;           /*!< @brief (required) start time in UTC */
     time_t        endTime;             /*!< @brief (required) end time in UTC */
     const char *  strPlotOutline;      /*!< @brief (optional) plot outline */
     const char *  strPlot;             /*!< @brief (optional) plot */
     const char *  strOriginalTitle;    /*!< @brief (optional) originaltitle */
-    const char *  strCast;             /*!< @brief (optional) cast */
-    const char *  strDirector;         /*!< @brief (optional) director */
-    const char *  strWriter;           /*!< @brief (optional) writer */
+    const char *  strCast;             /*!< @brief (optional) cast. Use EPG_STRING_TOKEN_SEPARATOR to separate different persons. */
+    const char *  strDirector;         /*!< @brief (optional) director(s). Use EPG_STRING_TOKEN_SEPARATOR to separate different persons. */
+    const char *  strWriter;           /*!< @brief (optional) writer(s). Use EPG_STRING_TOKEN_SEPARATOR to separate different persons. */
     int           iYear;               /*!< @brief (optional) year */
     const char *  strIMDBNumber;       /*!< @brief (optional) IMDBNumber */
     const char *  strIconPath;         /*!< @brief (optional) icon path */
     int           iGenreType;          /*!< @brief (optional) genre type */
     int           iGenreSubType;       /*!< @brief (optional) genre sub type */
-    const char *  strGenreDescription; /*!< @brief (optional) genre. Will be used only when iGenreType = EPG_GENRE_USE_STRING */
-    time_t        firstAired;          /*!< @brief (optional) first aired in UTC */
+    const char *  strGenreDescription; /*!< @brief (optional) genre. Will be used only when iGenreType == EPG_GENRE_USE_STRING or iGenreSubType == EPG_GENRE_USE_STRING. Use EPG_STRING_TOKEN_SEPARATOR to separate different genres. */
+    const char *  strFirstAired;       /*!< @brief (optional) first aired date of the event. Used only for display purposes. Specify in W3C date format "YYYY-MM-DD". */
     int           iParentalRating;     /*!< @brief (optional) parental rating */
     int           iStarRating;         /*!< @brief (optional) star rating */
-    bool          bNotify;             /*!< @brief (optional) notify the user when this event starts */
-    int           iSeriesNumber;       /*!< @brief (optional) series number */
-    int           iEpisodeNumber;      /*!< @brief (optional) episode number */
-    int           iEpisodePartNumber;  /*!< @brief (optional) episode part number */
+    int           iSeriesNumber;       /*!< @brief (optional) series number. Set to "0" for specials/pilot. For 'invalid' set to EPG_TAG_INVALID_SERIES_EPISODE */
+    int           iEpisodeNumber;      /*!< @brief (optional) episode number. For 'invalid' set to EPG_TAG_INVALID_SERIES_EPISODE */
+    int           iEpisodePartNumber;  /*!< @brief (optional) episode part number. For 'invalid' set to EPG_TAG_INVALID_SERIES_EPISODE */
     const char *  strEpisodeName;      /*!< @brief (optional) episode name */
     unsigned int  iFlags;              /*!< @brief (optional) bit field of independent flags associated with the EPG entry */
+    const char *  strSeriesLink;       /*!< @brief (optional) series link for this event */
   } ATTRIBUTE_PACKED EPG_TAG;
 
 #ifdef __cplusplus

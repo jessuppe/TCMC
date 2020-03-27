@@ -1,27 +1,15 @@
 /*
- *      Copyright (C) 2005-2013 Team XBMC
- *      http://xbmc.org
+ *  Copyright (C) 2005-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
 
-#include "music/tags/MusicInfoTag.h"
-#include "AddonClass.h"
-
 #pragma once
+
+#include "AddonClass.h"
+#include "music/tags/MusicInfoTag.h"
 
 namespace XBMCAddon
 {
@@ -59,10 +47,10 @@ namespace XBMCAddon
 
     public:
 #ifndef SWIG
-      InfoTagMusic(const MUSIC_INFO::CMusicInfoTag& tag);
+      explicit InfoTagMusic(const MUSIC_INFO::CMusicInfoTag& tag);
 #endif
       InfoTagMusic();
-      virtual ~InfoTagMusic();
+      ~InfoTagMusic() override;
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
       ///
@@ -75,7 +63,7 @@ namespace XBMCAddon
       ///
       ///
       ///-----------------------------------------------------------------------
-      /// @python_v17 New function added.
+      /// @python_v18 New function added.
       ///
       getDbId();
 #else
@@ -417,6 +405,96 @@ namespace XBMCAddon
       getLyrics();
 #else
       String getLyrics();
+#endif
+
+#ifdef DOXYGEN_SHOULD_USE_THIS
+      ///
+      /// \ingroup python_InfoTagMusic
+      /// @brief \python_func{ getMusicBrainzTrackID() }
+      ///-----------------------------------------------------------------------
+      /// Returns the MusicBrainz Recording ID from music info tag (if present).
+      ///
+      /// @return [string] MusicBrainz Recording ID
+      ///
+      ///
+      ///-----------------------------------------------------------------------
+      /// @python_v19 New function added.
+      ///
+      getMusicBrainzTrackID();
+#else
+      String getMusicBrainzTrackID();
+#endif
+
+#ifdef DOXYGEN_SHOULD_USE_THIS
+      ///
+      /// \ingroup python_InfoTagMusic
+      /// @brief \python_func{ getMusicBrainzArtistID() }
+      ///-----------------------------------------------------------------------
+      /// Returns the MusicBrainz Artist IDs from music info tag (if present).
+      ///
+      /// @return [list] MusicBrainz Artist IDs
+      ///
+      ///
+      ///-----------------------------------------------------------------------
+      /// @python_v19 New function added.
+      ///
+      getMusicBrainzArtistID();
+#else
+      std::vector<String> getMusicBrainzArtistID();
+#endif
+
+#ifdef DOXYGEN_SHOULD_USE_THIS
+      ///
+      /// \ingroup python_InfoTagMusic
+      /// @brief \python_func{ getMusicBrainzAlbumID() }
+      ///-----------------------------------------------------------------------
+      /// Returns the MusicBrainz Release ID from music info tag (if present).
+      ///
+      /// @return [string] MusicBrainz Release ID
+      ///
+      ///
+      ///-----------------------------------------------------------------------
+      /// @python_v19 New function added.
+      ///
+      getMusicBrainzAlbumID();
+#else
+      String getMusicBrainzAlbumID();
+#endif
+
+#ifdef DOXYGEN_SHOULD_USE_THIS
+      ///
+      /// \ingroup python_InfoTagMusic
+      /// @brief \python_func{ getMusicBrainzReleaseGroupID() }
+      ///-----------------------------------------------------------------------
+      /// Returns the MusicBrainz Release Group ID from music info tag (if present).
+      ///
+      /// @return [string] MusicBrainz Release Group ID
+      ///
+      ///
+      ///-----------------------------------------------------------------------
+      /// @python_v19 New function added.
+      ///
+      getMusicBrainzReleaseGroupID();
+#else
+      String getMusicBrainzReleaseGroupID();
+#endif
+
+#ifdef DOXYGEN_SHOULD_USE_THIS
+      ///
+      /// \ingroup python_InfoTagMusic
+      /// @brief \python_func{ getMusicBrainzAlbumArtistID() }
+      ///-----------------------------------------------------------------------
+      /// Returns the MusicBrainz Release Artist IDs from music info tag (if present).
+      ///
+      /// @return [list] MusicBrainz Release Artist IDs
+      ///
+      ///
+      ///-----------------------------------------------------------------------
+      /// @python_v19 New function added.
+      ///
+      getMusicBrainzAlbumArtistID();
+#else
+      std::vector<String> getMusicBrainzAlbumArtistID();
 #endif
     };
     //@}

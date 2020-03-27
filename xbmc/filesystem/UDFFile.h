@@ -1,30 +1,17 @@
-#pragma once
-
 /*
- *      Copyright (C) 2010 Team Boxee
- *      http://www.boxee.tv
+ *  Copyright (C) 2005-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *      Copyright (C) 2010-2013 Team Kodi
- *      http://kodi.tv
- *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with Kodi; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
 
+#pragma once
+
 #include "IFile.h"
-#include "udf25.h"
+
+typedef struct udf_s udf_t;
+typedef struct udf_dirent_s udf_dirent_t;
 
 namespace XFILE
 {
@@ -32,20 +19,29 @@ namespace XFILE
 class CUDFFile : public IFile
 {
 public:
-  CUDFFile();
-  virtual ~CUDFFile();
-  virtual int64_t GetPosition();
-  virtual int64_t GetLength();
-  virtual bool Open(const CURL& url);
-  virtual bool Exists(const CURL& url);
-  virtual int Stat(const CURL& url, struct __stat64* buffer);
-  virtual ssize_t Read(void* lpBuf, size_t uiBufSize);
-  virtual int64_t Seek(int64_t iFilePosition, int iWhence = SEEK_SET);
-  virtual void Close();
-protected:
-  bool m_bOpened;
-  HANDLE m_hFile;
-  udf25 m_udfIsoReaderLocal;
-};
-}
+  CUDFFile() = default;
+  ~CUDFFile() override = default;
 
+  bool Open(const CURL& url) override;
+  void Close() override;
+
+  int Stat(const CURL& url, struct __stat64* buffer) override;
+
+  ssize_t Read(void* buffer, size_t size) override;
+  int64_t Seek(int64_t filePosition, int whence) override;
+
+  int64_t GetLength() override;
+  int64_t GetPosition() override;
+
+  bool Exists(const CURL& url) override;
+
+  int GetChunkSize() override;
+
+private:
+  udf_t* m_udf{nullptr};
+  udf_dirent_t* m_path{nullptr};
+
+  uint32_t m_current;
+};
+
+} // namespace XFILE

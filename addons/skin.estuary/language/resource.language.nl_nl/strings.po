@@ -1,11 +1,11 @@
 # Kodi Media Center language file
 # Addon Name: Estuary
 # Addon id: skin.estuary
-# Addon Provider: phil65, Piers
+# Addon Provider: phil65, Ichabod Fletchman
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
-"Report-Msgid-Bugs-To: http://trac.kodi.tv/\n"
+"Report-Msgid-Bugs-To: https://github.com/xbmc/xbmc/issues/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
@@ -48,6 +48,10 @@ msgctxt "#31007"
 msgid "Unwatched movies"
 msgstr "Niet-bekeken films"
 
+msgctxt "#31008"
+msgid "Enable category widgets"
+msgstr "Activeer categoriewidgets"
+
 msgctxt "#31009"
 msgid "Download icons"
 msgstr "Download pictogrammen"
@@ -82,7 +86,7 @@ msgstr "Onlangs afgespeelde kanalen"
 
 msgctxt "#31017"
 msgid "Rated"
-msgstr "Rated"
+msgstr "Waardering"
 
 msgctxt "#31018"
 msgid "Recently played channels"
@@ -108,9 +112,17 @@ msgctxt "#31023"
 msgid "Viewtype"
 msgstr "Viewtype"
 
+msgctxt "#31024"
+msgid "Choose rating to display for media items"
+msgstr "Kies waardering voor mediabestanden"
+
 msgctxt "#31025"
 msgid "No favourites found. You can add any item from media views to this list by using the context menu."
 msgstr "Geen favorieten gevonden. U kunt elk item uit media-weergaven toevoegen aan deze lijst met het contextmenu."
+
+msgctxt "#31026"
+msgid "Timeshift"
+msgstr "Timeshift"
 
 msgctxt "#31028"
 msgid "Show fanart"
@@ -120,9 +132,13 @@ msgctxt "#31029"
 msgid "Last logged in"
 msgstr "Laatst ingelogd op"
 
+msgctxt "#31030"
+msgid "System memory usage"
+msgstr "Systeemgeheugengebruik"
+
 msgctxt "#31031"
 msgid "Version info"
-msgstr "Versie info"
+msgstr "Versie-info"
 
 msgctxt "#31032"
 msgid "Order"
@@ -131,10 +147,6 @@ msgstr "Volgorde"
 msgctxt "#31033"
 msgid "Your rating"
 msgstr "Uw waardering"
-
-msgctxt "#31034"
-msgid "Extended info"
-msgstr "Uitgebreide info"
 
 msgctxt "#31035"
 msgid "Pages"
@@ -154,15 +166,15 @@ msgstr "Vooruitspoelen"
 
 msgctxt "#31041"
 msgid "Camera manufacturer"
-msgstr "Camera fabrikant"
+msgstr "Camerafabrikant"
 
 msgctxt "#31042"
 msgid "Playlist options"
-msgstr "Afspeellijst opties"
+msgstr "Afspeellijstopties"
 
 msgctxt "#31043"
 msgid "Set the type and add rules to create a smart playlist. These playlists are dynamic and include all media items from your database which apply to your chosen rules."
-msgstr "Stel het type in en voeg regels toe om een slimme afspeellijst te maken. Deze afspeellijsten zijn dynamisch en bevatten alle media items vanuit uw database die voldoen aan uw gekozen regels."
+msgstr "Stel het type in en voeg regels toe om een slimme afspeellijst te maken. Deze afspeellijsten zijn dynamisch en bevatten alle media-items vanuit uw database die voldoen aan uw gekozen regels."
 
 msgctxt "#31044"
 msgid "Add group"
@@ -183,10 +195,6 @@ msgstr "Beschikbaar"
 msgctxt "#31050"
 msgid "Press [B]OK[/B] to stop"
 msgstr "Druk [B]Ok[/B] om te stoppen"
-
-msgctxt "#31051"
-msgid "Toggle language"
-msgstr "Verander taal"
 
 msgctxt "#31052"
 msgid "filtered"
@@ -214,7 +222,7 @@ msgstr "Automatisch inloggen tijdens opstarten"
 
 msgctxt "#31061"
 msgid "Main menu items"
-msgstr "Hoofdmenu items"
+msgstr "Hoofdmenu-items"
 
 msgctxt "#31062"
 msgid "Choose weather fanart pack"
@@ -252,6 +260,10 @@ msgctxt "#31072"
 msgid "Power Options"
 msgstr "Energiebeheer"
 
+msgctxt "#31074"
+msgid "Total duration"
+msgstr "Totale duur"
+
 msgctxt "#31075"
 msgid "Movie sets"
 msgstr "Filmsets"
@@ -280,10 +292,6 @@ msgctxt "#31089"
 msgid "Available groups"
 msgstr "Beschikbare groepen"
 
-msgctxt "#31090"
-msgid "Search trailer"
-msgstr "Zoek trailer"
-
 msgctxt "#31092"
 msgid "Video menu"
 msgstr "Videomenu"
@@ -298,7 +306,7 @@ msgstr "Gebruik schuifanimaties"
 
 msgctxt "#31096"
 msgid "Local subtitle available"
-msgstr "Lokale ondertitel beschikbaar"
+msgstr "Lokale ondertitel aanwezig"
 
 msgctxt "#31097"
 msgid "Channel options"
@@ -306,7 +314,11 @@ msgstr "Kanaalopties"
 
 msgctxt "#31098"
 msgid "Select your Kodi user profile[CR]to login and continue"
-msgstr "Selecteer jouw Kodi Gebruikersprofiel[CR]om in te loggen en door te gaan"
+msgstr "Selecteer je Kodi-gebruikersprofiel[CR]om in te loggen en door te gaan"
+
+msgctxt "#31099"
+msgid "IconWall"
+msgstr "iconenmuur"
 
 msgctxt "#31100"
 msgid "Shift"
@@ -326,7 +338,7 @@ msgstr "Voor hier tekst in..."
 
 msgctxt "#31104"
 msgid "Your library is currently empty. In order to populate it with your personal media, enter \"Files\" section, add a media source and configure it. After the source has been added and indexed you will be able to browse your library."
-msgstr "Uw bibliotheek is momenteel leeg. Om deze te vullen met uw eigen media, ga naar \"Bestanden\" sectie, voeg een medialocatie toe en configureer deze. Nadat de bron is toegevoegd en geïndexeerd, kunt u uw bibliotheek bekijken."
+msgstr "Uw bibliotheek is momenteel leeg. Om deze te vullen met uw eigen media, ga naar de \"Bestanden\" sectie, voeg een medialocatie toe en configureer deze. Nadat de bron is toegevoegd en geïndexeerd, kunt u uw bibliotheek bekijken."
 
 msgctxt "#31105"
 msgid "Add video sources and set the appropriate content type in order to populate your video libraries."
@@ -342,7 +354,7 @@ msgstr "Brede lijst"
 
 msgctxt "#31110"
 msgid "Enter files section"
-msgstr "Geef bestandensectie"
+msgstr "Ga naar bestandensectie"
 
 msgctxt "#31111"
 msgid "View your personal pictures or download one of the many image add-ons from the official repository."
@@ -359,10 +371,6 @@ msgstr "Zoek in lokale bibliotheek"
 msgctxt "#31114"
 msgid "Search YouTube"
 msgstr "Zoek in YouTube"
-
-msgctxt "#31115"
-msgid "Search TheMovieDB"
-msgstr "Zoek in TheMovieDB"
 
 msgctxt "#31116"
 msgid "Remove this main menu item"
@@ -396,10 +404,6 @@ msgctxt "#31123"
 msgid "Same director"
 msgstr "Zelfde regisseur"
 
-msgctxt "#31124"
-msgid "Show images on map"
-msgstr "Toon afbeeldingen op kaart"
-
 msgctxt "#31125"
 msgid "Press up for actor info"
 msgstr "Kies 'Omhoog' voor acteursinformatie"
@@ -426,11 +430,15 @@ msgstr "Hoofdmenu gerelateerde instellingen: Configureer het homescreen naar wen
 
 msgctxt "#31131"
 msgid "Choose skin fanart pack"
-msgstr "Kies skin fanartpakket"
+msgstr "Kies skinfanartpakket"
 
 msgctxt "#31132"
-msgid "min"
-msgstr "min"
+msgid "Select Program"
+msgstr "Selecteer programma"
+
+msgctxt "#31133"
+msgid "Select Resolution"
+msgstr "Kies resolutie"
 
 msgctxt "#31134"
 msgid "Remaining"
@@ -475,3 +483,83 @@ msgstr "Ga naar add-on verkenner"
 msgctxt "#31145"
 msgid "Search add-ons"
 msgstr "Zoek add-ons"
+
+msgctxt "#31148"
+msgid "Categories"
+msgstr "Categoriëen"
+
+msgctxt "#31149"
+msgid "Select genre fanart pack"
+msgstr "Selecteer genre fanartpakket"
+
+msgctxt "#31150"
+msgid "Repository"
+msgstr "Repository"
+
+msgctxt "#31151"
+msgid "Unwatched music videos"
+msgstr "Niet bekeken muziekvideo`s"
+
+msgctxt "#31152"
+msgid "Random music videos"
+msgstr "Willekeurige muziekvideo`s"
+
+msgctxt "#31153"
+msgid "You do not have any add-ons of this type installed. Enter the add-on browser to download add-ons created by our community."
+msgstr "U heeft nog geen enkele add-on van dit type geïnstalleerd. Bezoek de add-onverkenner om add-ons te downloaden gecreëerd door onze community."
+
+msgctxt "#31154"
+msgid "Press OK to switch between locations"
+msgstr "Druk OK om de schakelen tussen locaties"
+
+msgctxt "#31155"
+msgid "No bookmarks created yet."
+msgstr "Nog geen bladwijzer gecreëerd "
+
+msgctxt "#31156"
+msgid "Choose background pattern"
+msgstr "Kies achtergrondpatroon"
+
+msgctxt "#31157"
+msgid "Edit categories"
+msgstr "Aanpassen categoriëen "
+
+msgctxt "#31158"
+msgid "Touch mode"
+msgstr "Aanraakmodus"
+
+msgctxt "#31159"
+msgid "Artwork"
+msgstr "Artwork"
+
+msgctxt "#31160"
+msgid "Show media flags"
+msgstr "Toon media-informatie"
+
+msgctxt "#31161"
+msgid "Numeric pad"
+msgstr "Numeriek pad"
+
+msgctxt "#31162"
+msgid "Play your personal games or download one of the many game add-ons from the official repository."
+msgstr "Speel uw persoonlijke spellen, of download één van de vele speladd-ons uit de officiële repository."
+
+msgctxt "#31163"
+msgid "Show Fanart background"
+msgstr "Toon fanartachtergrond"
+
+msgctxt "#31164"
+msgid "Choose kind of profile identification"
+msgstr "Kies het type profielidentificatie"
+
+msgctxt "#31165"
+msgid "Profile name"
+msgstr "Profielnaam"
+
+msgctxt "#31166"
+msgid "Profile avatar"
+msgstr "Profielafbeelding"
+
+msgctxt "#31167"
+msgid "Animate background"
+msgstr "Achtergrondanimatie"

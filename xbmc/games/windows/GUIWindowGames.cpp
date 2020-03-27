@@ -1,47 +1,38 @@
 /*
- *      Copyright (C) 2012-2017 Team Kodi
- *      http://kodi.tv
+ *  Copyright (C) 2012-2020 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this Program; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
 
 #include "GUIWindowGames.h"
-#include "addons/GUIDialogAddonInfo.h"
+
 #include "Application.h"
+#include "FileItem.h"
+#include "GUIPassword.h"
+#include "PlayListPlayer.h"
+#include "ServiceBroker.h"
+#include "URL.h"
+#include "Util.h"
+#include "addons/GUIDialogAddonInfo.h"
 #include "dialogs/GUIDialogContextMenu.h"
 #include "dialogs/GUIDialogMediaSource.h"
 #include "dialogs/GUIDialogProgress.h"
-#include "FileItem.h"
-#include "games/tags/GameInfoTag.h"
 #include "games/addons/GameClient.h"
-#include "games/addons/savestates/SavestateDatabase.h"
+#include "guilib/GUIComponent.h"
 #include "guilib/GUIWindowManager.h"
 #include "guilib/WindowIDs.h"
-#include "GUIPassword.h"
-#include "input/Key.h"
-#include "ServiceBroker.h"
+#include "media/MediaLockState.h"
 #include "settings/MediaSourceSettings.h"
 #include "settings/Settings.h"
-#include "URL.h"
-#include "Util.h"
+#include "settings/SettingsComponent.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
 #include <algorithm>
 
+using namespace KODI;
 using namespace GAME;
 
 #define CONTROL_BTNVIEWASICONS      2
@@ -49,8 +40,7 @@ using namespace GAME;
 #define CONTROL_BTNSORTASC          4
 
 CGUIWindowGames::CGUIWindowGames() :
-  CGUIMediaWindow(WINDOW_GAMES, "MyGames.xml"),
-  m_dlgProgress(nullptr)
+  CGUIMediaWindow(WINDOW_GAMES, "MyGames.xml")
 {
 }
 
@@ -67,7 +57,7 @@ bool CGUIWindowGames::OnMessage(CGUIMessage& message)
         message.SetStringParam(CMediaSourceSettings::GetInstance().GetDefaultSource("games"));
 
       //! @todo
-      m_dlgProgress = g_windowManager.GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
+      m_dlgProgress = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
 
       break;
     }
@@ -99,7 +89,7 @@ bool CGUIWindowGames::OnClickMsg(int controlId, int actionId)
   case ACTION_DELETE_ITEM:
   {
     // Is delete allowed?
-    if (CServiceBroker::GetSettings().GetBool(CSettings::SETTING_FILELISTS_ALLOWFILEDELETION))
+    if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_FILELISTS_ALLOWFILEDELETION))
     {
       OnDeleteItem(iItem);
       return true;
@@ -185,7 +175,7 @@ void CGUIWindowGames::GetContextButtons(int itemNumber, CContextButtons &buttons
   {
     if (m_vecItems->IsVirtualDirectoryRoot() || m_vecItems->IsSourcesPath())
     {
-      // Context buttons for a sources path, like "Add source", "Remove Source", etc.
+      // Context buttons for a sources path, like "Add Source", "Remove Source", etc.
       CGUIDialogContextMenu::GetContextButtons("games", item, buttons);
     }
     else
@@ -195,7 +185,7 @@ void CGUIWindowGames::GetContextButtons(int itemNumber, CContextButtons &buttons
         buttons.Add(CONTEXT_BUTTON_PLAY_ITEM, 208); // Play
       }
 
-      if (CServiceBroker::GetSettings().GetBool(CSettings::SETTING_FILELISTS_ALLOWFILEDELETION) && !item->IsReadOnly())
+      if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_FILELISTS_ALLOWFILEDELETION) && !item->IsReadOnly())
       {
         buttons.Add(CONTEXT_BUTTON_DELETE, 117);
         buttons.Add(CONTEXT_BUTTON_RENAME, 118);
@@ -276,6 +266,13 @@ bool CGUIWindowGames::GetDirectory(const std::string &strDirectory, CFileItemLis
   if (!content.empty())
     items.SetContent(content);
 
+  // Ensure a game info tag is created so that files are recognized as games
+  for (const CFileItemPtr& item : items)
+  {
+    if (!item->m_bIsFolder)
+      item->GetGameInfoTag();
+  }
+
   return true;
 }
 
@@ -296,7 +293,7 @@ std::string CGUIWindowGames::GetStartFolder(const std::string &dir)
   int iIndex = CUtil::GetMatchingSource(dir, shares, bIsSourceName);
   if (iIndex >= 0)
   {
-    if (iIndex < (int)shares.size() && shares[iIndex].m_iHasLock == 2)
+    if (iIndex < static_cast<int>(shares.size()) && shares[iIndex].m_iHasLock == LOCK_STATE_LOCKED)
     {
       CFileItem item(shares[iIndex]);
       if (!g_passwordManager.IsItemUnlocked(&item, "games"))
@@ -323,7 +320,7 @@ void CGUIWindowGames::OnItemInfo(int itemNumber)
 
   //! @todo
   /*
-  CGUIDialogGameInfo* gameInfo = g_windowManager.GetWindow<CGUIDialogGameInfo>(WINDOW_DIALOG_PICTURE_INFO);
+  CGUIDialogGameInfo* gameInfo = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogGameInfo>(WINDOW_DIALOG_PICTURE_INFO);
   if (gameInfo)
   {
     gameInfo->SetGame(item);
@@ -334,5 +331,6 @@ void CGUIWindowGames::OnItemInfo(int itemNumber)
 
 bool CGUIWindowGames::PlayGame(const CFileItem &item)
 {
-  return g_application.PlayFile(item, "") == PLAYBACK_OK;
+  CFileItem itemCopy(item);
+  return g_application.PlayMedia(itemCopy, "", PLAYLIST_NONE);
 }

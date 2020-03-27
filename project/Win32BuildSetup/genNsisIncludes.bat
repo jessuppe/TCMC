@@ -76,22 +76,6 @@ IF EXIST BUILD_WIN32\addons\audioencoder.* (
 )
 
 SET Counter=1
-IF EXIST BUILD_WIN32\addons\adsp.* (
-  ECHO SectionGroup "Audio DSP Add-ons" SecAudioDSPAddons >> audiodsp-addons.nsi
-  FOR /F "tokens=*" %%P IN ('dir /B /AD BUILD_WIN32\addons\adsp.*') DO (
-    FOR /f "delims=<" %%N in ('powershell.exe -noprofile -ExecutionPolicy Unrestricted -command "& {[xml]$a = get-content BUILD_WIN32\addons\%%P\addon.xml;$a.addon.name}"') do (
-      ECHO Section "%%N" SecAudioDSPAddons!Counter! >> audiodsp-addons.nsi
-      ECHO SectionIn 1 2 >> audiodsp-addons.nsi
-      ECHO SetOutPath "$INSTDIR\addons\%%P" >> audiodsp-addons.nsi
-      ECHO File /r "${app_root}\addons\%%P\*.*" >> audiodsp-addons.nsi
-      ECHO SectionEnd >> audiodsp-addons.nsi
-      SET /A Counter = !Counter! + 1
-      )
-    )
-  ECHO SectionGroupEnd >> audiodsp-addons.nsi
-)
-
-SET Counter=1
 IF EXIST BUILD_WIN32\addons\screensaver.* (
   ECHO SectionGroup "Screensaver Add-ons" SecScreensaverAddons >> screensaver-addons.nsi
   FOR /F "tokens=*" %%P IN ('dir /B /AD BUILD_WIN32\addons\screensaver.*') DO (
@@ -105,6 +89,38 @@ IF EXIST BUILD_WIN32\addons\screensaver.* (
       )
     )
   ECHO SectionGroupEnd >> screensaver-addons.nsi
+)
+
+SET Counter=1
+IF EXIST BUILD_WIN32\addons\imagedecoder.* (
+  ECHO SectionGroup "Image decoder Add-ons" SecImageDecoderAddons >> imagedecoder-addons.nsi
+  FOR /F "tokens=*" %%P IN ('dir /B /AD BUILD_WIN32\addons\imagedecoder.*') DO (
+    FOR /f "delims=<" %%N in ('powershell.exe -noprofile -ExecutionPolicy Unrestricted -command "& {[xml]$a = get-content BUILD_WIN32\addons\%%P\addon.xml;$a.addon.name}"') do (
+      ECHO Section "%%N" SecImageDecoderAddons!Counter! >> imagedecoder-addons.nsi
+      ECHO SectionIn 1 2 3 >> imagedecoder-addons.nsi
+      ECHO SetOutPath "$INSTDIR\addons\%%P" >> imagedecoder-addons.nsi
+      ECHO File /r "${app_root}\addons\%%P\*.*" >> imagedecoder-addons.nsi
+      ECHO SectionEnd >> imagedecoder-addons.nsi
+      SET /A Counter = !Counter! + 1
+      )
+    )
+  ECHO SectionGroupEnd >> imagedecoder-addons.nsi
+)
+
+SET Counter=1
+IF EXIST BUILD_WIN32\addons\vfs.* (
+  ECHO SectionGroup "VFS Add-ons" SecVFSAddons >> vfs-addons.nsi
+  FOR /F "tokens=*" %%P IN ('dir /B /AD BUILD_WIN32\addons\vfs.*') DO (
+    FOR /f "delims=<" %%N in ('powershell.exe -noprofile -ExecutionPolicy Unrestricted -command "& {[xml]$a = get-content BUILD_WIN32\addons\%%P\addon.xml;$a.addon.name}"') do (
+      ECHO Section "%%N" SecVFSAddons!Counter! >> vfs-addons.nsi
+      ECHO SectionIn 1 2 3 >> vfs-addons.nsi
+      ECHO SetOutPath "$INSTDIR\addons\%%P" >> vfs-addons.nsi
+      ECHO File /r "${app_root}\addons\%%P\*.*" >> vfs-addons.nsi
+      ECHO SectionEnd >> vfs-addons.nsi
+      SET /A Counter = !Counter! + 1
+      )
+    )
+  ECHO SectionGroupEnd >> vfs-addons.nsi
 )
 
 SET Counter=1

@@ -1,11 +1,11 @@
 # Kodi Media Center language file
 # Addon Name: Estuary
 # Addon id: skin.estuary
-# Addon Provider: phil65, Piers
+# Addon Provider: phil65, Ichabod Fletchman
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
-"Report-Msgid-Bugs-To: http://trac.kodi.tv/\n"
+"Report-Msgid-Bugs-To: https://github.com/xbmc/xbmc/issues/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
@@ -47,6 +47,10 @@ msgstr "Películas al azar"
 msgctxt "#31007"
 msgid "Unwatched movies"
 msgstr "Películas sin mirar"
+
+msgctxt "#31008"
+msgid "Enable category widgets"
+msgstr "Habilitar categoría de widgets"
 
 msgctxt "#31009"
 msgid "Download icons"
@@ -108,9 +112,17 @@ msgctxt "#31023"
 msgid "Viewtype"
 msgstr "Tipo de vista"
 
+msgctxt "#31024"
+msgid "Choose rating to display for media items"
+msgstr "Escoger rating para mostrar para archivos multimedia"
+
 msgctxt "#31025"
 msgid "No favourites found. You can add any item from media views to this list by using the context menu."
 msgstr "No se han encontrado favoritos. Puede agregar cualquier elemento de las vistas de medios a esta lista mediante el menú contextual."
+
+msgctxt "#31026"
+msgid "Timeshift"
+msgstr "Cambio de hora"
 
 msgctxt "#31028"
 msgid "Show fanart"
@@ -119,6 +131,10 @@ msgstr "Mostrar fanart"
 msgctxt "#31029"
 msgid "Last logged in"
 msgstr "Último acceso"
+
+msgctxt "#31030"
+msgid "System memory usage"
+msgstr "Memoria del sistema usada"
 
 msgctxt "#31031"
 msgid "Version info"
@@ -131,10 +147,6 @@ msgstr "Orden"
 msgctxt "#31033"
 msgid "Your rating"
 msgstr "Tu votación"
-
-msgctxt "#31034"
-msgid "Extended info"
-msgstr "Información extendida"
 
 msgctxt "#31035"
 msgid "Pages"
@@ -183,10 +195,6 @@ msgstr "Disponible"
 msgctxt "#31050"
 msgid "Press [B]OK[/B] to stop"
 msgstr "Presione [B]OK[/B] para parar"
-
-msgctxt "#31051"
-msgid "Toggle language"
-msgstr "Alternar idioma"
 
 msgctxt "#31052"
 msgid "filtered"
@@ -252,6 +260,10 @@ msgctxt "#31072"
 msgid "Power Options"
 msgstr "Opciones de Energía"
 
+msgctxt "#31074"
+msgid "Total duration"
+msgstr "Duración total"
+
 msgctxt "#31075"
 msgid "Movie sets"
 msgstr "conjunto de películas"
@@ -280,10 +292,6 @@ msgctxt "#31089"
 msgid "Available groups"
 msgstr "Grupos disponibles"
 
-msgctxt "#31090"
-msgid "Search trailer"
-msgstr "Buscar tráiler"
-
 msgctxt "#31092"
 msgid "Video menu"
 msgstr "Menú de vídeo"
@@ -307,6 +315,10 @@ msgstr "Opciones de canal"
 msgctxt "#31098"
 msgid "Select your Kodi user profile[CR]to login and continue"
 msgstr "Selecciona tu perfil de usuario Kodi[CR]para acceder y continuar"
+
+msgctxt "#31099"
+msgid "IconWall"
+msgstr "IconWall"
 
 msgctxt "#31100"
 msgid "Shift"
@@ -360,10 +372,6 @@ msgctxt "#31114"
 msgid "Search YouTube"
 msgstr "Buscar en YouTube"
 
-msgctxt "#31115"
-msgid "Search TheMovieDB"
-msgstr "Buscar en TheMovieDB"
-
 msgctxt "#31116"
 msgid "Remove this main menu item"
 msgstr "Eliminar este elemento del menú principal"
@@ -396,10 +404,6 @@ msgctxt "#31123"
 msgid "Same director"
 msgstr "Mismo director"
 
-msgctxt "#31124"
-msgid "Show images on map"
-msgstr "Mostrar imágenes en el mapa"
-
 msgctxt "#31125"
 msgid "Press up for actor info"
 msgstr "Presione para arriba para información del actor"
@@ -429,8 +433,12 @@ msgid "Choose skin fanart pack"
 msgstr "Elegir paquete de skin fanart"
 
 msgctxt "#31132"
-msgid "min"
-msgstr "mínimo"
+msgid "Select Program"
+msgstr "Seleccionar programa"
+
+msgctxt "#31133"
+msgid "Select Resolution"
+msgstr "Seleccionar Resolución"
 
 msgctxt "#31134"
 msgid "Remaining"
@@ -475,3 +483,83 @@ msgstr "Ingresar al navegador de complementos"
 msgctxt "#31145"
 msgid "Search add-ons"
 msgstr "Buscar complementos"
+
+msgctxt "#31148"
+msgid "Categories"
+msgstr "Categorías"
+
+msgctxt "#31149"
+msgid "Select genre fanart pack"
+msgstr "Seleccionar paquete de género fanart "
+
+msgctxt "#31150"
+msgid "Repository"
+msgstr "Repositorio"
+
+msgctxt "#31151"
+msgid "Unwatched music videos"
+msgstr "Videos musicales no vistos"
+
+msgctxt "#31152"
+msgid "Random music videos"
+msgstr "Videos musicales al azar"
+
+msgctxt "#31153"
+msgid "You do not have any add-ons of this type installed. Enter the add-on browser to download add-ons created by our community."
+msgstr "No tiene ningún complemento de este tipo instalado. Introduzca el complemento para descargar complementos creados por nuestra comunidad."
+
+msgctxt "#31154"
+msgid "Press OK to switch between locations"
+msgstr "Pulse OK para cambiar entre ubicaciones"
+
+msgctxt "#31155"
+msgid "No bookmarks created yet."
+msgstr "Aún no se han creado marcadores."
+
+msgctxt "#31156"
+msgid "Choose background pattern"
+msgstr "Elegir patrón de fondo"
+
+msgctxt "#31157"
+msgid "Edit categories"
+msgstr "Editar categorías"
+
+msgctxt "#31158"
+msgid "Touch mode"
+msgstr "Modo táctil"
+
+msgctxt "#31159"
+msgid "Artwork"
+msgstr "Obra de arte"
+
+msgctxt "#31160"
+msgid "Show media flags"
+msgstr "Mostrar indicadores de medios"
+
+msgctxt "#31161"
+msgid "Numeric pad"
+msgstr "Teclado numérico"
+
+msgctxt "#31162"
+msgid "Play your personal games or download one of the many game add-ons from the official repository."
+msgstr "Jugar tu juego personal o descarga uno de los muchos complementos de juegos desde el repositorio oficial."
+
+msgctxt "#31163"
+msgid "Show Fanart background"
+msgstr "Mostrar Fanart de fondo"
+
+msgctxt "#31164"
+msgid "Choose kind of profile identification"
+msgstr "Escoja el tipo de identificación de perfil"
+
+msgctxt "#31165"
+msgid "Profile name"
+msgstr "Nombre de perfil"
+
+msgctxt "#31166"
+msgid "Profile avatar"
+msgstr "Avatar del perfil"
+
+msgctxt "#31167"
+msgid "Animate background"
+msgstr "Animar fondo"

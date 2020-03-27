@@ -1,33 +1,24 @@
 /*
- *      Copyright (C) 2005-2013 Team XBMC
- *      http://xbmc.org
+ *  Copyright (C) 2005-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
 
-
-#include "system.h"
-#include "utils/URIUtils.h"
 #include "FileDirectoryFactory.h"
-#ifdef HAS_FILESYSTEM
-#include "UDFDirectory.h"
-#include "RSSDirectory.h"
+
+#if defined(HAS_ISO9660PP)
+#include "ISO9660Directory.h"
 #endif
+#if defined(HAS_UDF)
+#include "UDFDirectory.h"
+#endif
+#include "RSSDirectory.h"
+#include "UDFDirectory.h"
+#include "utils/URIUtils.h"
 #if defined(TARGET_ANDROID)
-#include "APKDirectory.h"
+#include "platform/android/filesystem/APKDirectory.h"
 #endif
 #include "XbtDirectory.h"
 #include "ZipDirectory.h"
@@ -36,25 +27,22 @@
 #include "PlaylistFileDirectory.h"
 #include "playlists/PlayListFactory.h"
 #include "Directory.h"
-#include "File.h"
 #include "FileItem.h"
 #include "utils/StringUtils.h"
 #include "URL.h"
 #include "ServiceBroker.h"
 #include "addons/AudioDecoder.h"
 #include "addons/VFSEntry.h"
-#include "addons/BinaryAddonCache.h"
+#include "addons/binary-addons/BinaryAddonBase.h"
 #include "AudioBookFileDirectory.h"
 
 using namespace ADDON;
 using namespace XFILE;
 using namespace PLAYLIST;
 
-CFileDirectoryFactory::CFileDirectoryFactory(void)
-{}
+CFileDirectoryFactory::CFileDirectoryFactory(void) = default;
 
-CFileDirectoryFactory::~CFileDirectoryFactory(void)
-{}
+CFileDirectoryFactory::~CFileDirectoryFactory(void) = default;
 
 // return NULL + set pItem->m_bIsFolder to remove it completely from list.
 IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem, const std::string& strMask)
@@ -62,58 +50,68 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
   if (url.IsProtocol("stack")) // disqualify stack as we need to work with each of the parts instead
     return NULL;
 
-  std::string strExtension=URIUtils::GetExtension(url);
+  std::string strExtension = URIUtils::GetExtension(url);
   StringUtils::ToLower(strExtension);
-  if (!strExtension.empty())
+  if (!strExtension.empty() && CServiceBroker::IsBinaryAddonCacheUp())
   {
-    VECADDONS codecs;
-    CBinaryAddonCache &addonCache = CServiceBroker::GetBinaryAddonCache();
-    addonCache.GetAddons(codecs, ADDON_AUDIODECODER);
-    for (size_t i=0;i<codecs.size();++i)
+    BinaryAddonBaseList addonInfos;
+    CServiceBroker::GetBinaryAddonManager().GetAddonInfos(addonInfos, true, ADDON_AUDIODECODER);
+    for (const auto& addonInfo : addonInfos)
     {
-      std::shared_ptr<CAudioDecoder> dec(std::static_pointer_cast<CAudioDecoder>(codecs[i]));
-      if (dec->HasTracks() && dec->GetExtensions().find(strExtension) != std::string::npos)
+      if (CAudioDecoder::HasTracks(addonInfo))
       {
-        CAudioDecoder* result = new CAudioDecoder(*dec);
-        result->Create();
-        if (result->ContainsFiles(url))
+        auto exts = StringUtils::Split(CAudioDecoder::GetExtensions(addonInfo), "|");
+        if (std::find(exts.begin(), exts.end(), strExtension) != exts.end())
+        {
+          CAudioDecoder* result = new CAudioDecoder(addonInfo);
+          if (!result->CreateDecoder() || !result->ContainsFiles(url))
+          {
+            delete result;
+            return nullptr;
+          }
           return result;
-        delete result;
-        return NULL;
+        }
       }
     }
   }
 
-  if (CServiceBroker::IsBinaryAddonCacheUp())
+  if (!strExtension.empty() && CServiceBroker::IsBinaryAddonCacheUp())
   {
-    VECADDONS vfs;
-    CBinaryAddonCache &addonCache = CServiceBroker::GetBinaryAddonCache();
-    addonCache.GetAddons(vfs, ADDON_VFS);
-    for (size_t i=0;i<vfs.size();++i)
+    for (const auto& vfsAddon : CServiceBroker::GetVFSAddonCache().GetAddonInstances())
     {
-      std::shared_ptr<CVFSEntry> dec(std::static_pointer_cast<CVFSEntry>(vfs[i]));
-      if (!strExtension.empty() && dec->HasFileDirectories() &&
-          dec->GetExtensions().find(strExtension) != std::string::npos)
+      if (vfsAddon->HasFileDirectories())
       {
-        CVFSEntryIFileDirectoryWrapper* wrap = new CVFSEntryIFileDirectoryWrapper(dec);
-        if (wrap->ContainsFiles(url))
+        auto exts = StringUtils::Split(vfsAddon->GetExtensions(), "|");
+        if (std::find(exts.begin(), exts.end(), strExtension) != exts.end())
         {
-          if (wrap->m_items.Size() == 1)
+          CVFSEntryIFileDirectoryWrapper* wrap = new CVFSEntryIFileDirectoryWrapper(vfsAddon);
+          if (wrap->ContainsFiles(url))
           {
-            // one STORED file - collapse it down
-            *pItem = *wrap->m_items[0];
+            if (wrap->m_items.Size() == 1)
+            {
+              // one STORED file - collapse it down
+              *pItem = *wrap->m_items[0];
+            }
+            else
+            {
+              // compressed or more than one file -> create a dir
+              pItem->SetPath(wrap->m_items.GetPath());
+            }
+
+            // Check for folder, if yes return also wrap.
+            // Needed to fix for e.g. RAR files with only one file inside
+            pItem->m_bIsFolder = URIUtils::HasSlashAtEnd(pItem->GetPath());
+            if (pItem->m_bIsFolder)
+              return wrap;
           }
           else
-          { // compressed or more than one file -> create a dir
-            pItem->SetPath(wrap->m_items.GetPath());
-            return wrap;
+          {
+            pItem->m_bIsFolder = true;
           }
-        }
-        else
-          pItem->m_bIsFolder = true;
 
-        delete wrap;
-        return NULL;
+          delete wrap;
+          return nullptr;
+        }
       }
     }
   }
@@ -121,8 +119,23 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
   if (pItem->IsRSS())
     return new CRSSDirectory();
 
+
   if (pItem->IsDiscImage())
+  {
+#if defined(HAS_ISO9660PP)
+    CISO9660Directory* iso = new CISO9660Directory();
+    if (iso->Exists(pItem->GetURL()))
+      return iso;
+
+    delete iso;
+#endif
+
+#if defined(HAS_UDF)
     return new CUDFDirectory();
+#endif
+
+    return nullptr;
+  }
 
 #if defined(TARGET_ANDROID)
   if (url.IsFileType("apk"))
@@ -130,7 +143,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
     CURL zipURL = URIUtils::CreateArchivePath("apk", url);
 
     CFileItemList items;
-    CDirectory::GetDirectory(zipURL, items, strMask);
+    CDirectory::GetDirectory(zipURL, items, strMask, DIR_FLAG_DEFAULTS);
     if (items.Size() == 0) // no files
       pItem->m_bIsFolder = true;
     else if (items.Size() == 1 && items[0]->m_idepth == 0 && !items[0]->m_bIsFolder)
@@ -151,7 +164,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
     CURL zipURL = URIUtils::CreateArchivePath("zip", url);
 
     CFileItemList items;
-    CDirectory::GetDirectory(zipURL, items, strMask);
+    CDirectory::GetDirectory(zipURL, items, strMask, DIR_FLAG_DEFAULTS);
     if (items.Size() == 0) // no files
       pItem->m_bIsFolder = true;
     else if (items.Size() == 1 && items[0]->m_idepth == 0 && !items[0]->m_bIsFolder)

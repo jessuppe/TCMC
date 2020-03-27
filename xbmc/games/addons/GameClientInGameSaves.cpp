@@ -1,44 +1,35 @@
 /*
- *      Copyright (C) 2016-2017 Team Kodi
- *      http://kodi.tv
+ *  Copyright (C) 2016-2018 Team Kodi
+ *  This file is part of Kodi - https://kodi.tv
  *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this Program; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ *  See LICENSES/README.md for more information.
  */
 
 #include "GameClientInGameSaves.h"
 
 #include "GameClient.h"
 #include "GameClientTranslator.h"
-#include "filesystem/File.h"
+#include "ServiceBroker.h"
 #include "filesystem/Directory.h"
-#include "profiles/ProfilesManager.h"
+#include "filesystem/File.h"
+#include "games/GameServices.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"
 
 #include <assert.h>
 
+using namespace KODI;
 using namespace GAME;
 
 #define INGAME_SAVES_DIRECTORY          "InGameSaves"
 #define INGAME_SAVES_EXTENSION_SAVE_RAM ".sav"
 #define INGAME_SAVES_EXTENSION_RTC      ".rtc"
 
-CGameClientInGameSaves::CGameClientInGameSaves(CGameClient* addon, const KodiToAddonFuncTable_Game* dllStruct) :
-  m_gameClient(addon),
-  m_dllStruct(dllStruct)
+CGameClientInGameSaves::CGameClientInGameSaves(CGameClient* addon,
+                                               const AddonInstance_Game* dllStruct)
+  : m_gameClient(addon),
+    m_dllStruct(dllStruct)
 {
   assert(m_gameClient != nullptr);
   assert(m_dllStruct != nullptr);
@@ -58,7 +49,8 @@ void CGameClientInGameSaves::Save()
 
 std::string CGameClientInGameSaves::GetPath(GAME_MEMORY memoryType)
 {
-  std::string path = URIUtils::AddFileToFolder(CProfilesManager::GetInstance().GetSavestatesFolder(), INGAME_SAVES_DIRECTORY);
+  const CGameServices &gameServices = CServiceBroker::GetGameServices();
+  std::string path = URIUtils::AddFileToFolder(gameServices.GetSavestatesFolder(), INGAME_SAVES_DIRECTORY);
   if (!XFILE::CDirectory::Exists(path))
     XFILE::CDirectory::Create(path);
 
@@ -84,7 +76,7 @@ void CGameClientInGameSaves::Load(GAME_MEMORY memoryType)
 
   try
   {
-    m_dllStruct->GetMemory(memoryType, &gameMemory, &size);
+    m_dllStruct->toAddon.GetMemory(m_dllStruct, memoryType, &gameMemory, &size);
   }
   catch (...)
   {
@@ -125,7 +117,7 @@ void CGameClientInGameSaves::Save(GAME_MEMORY memoryType)
 
   try
   {
-    m_dllStruct->GetMemory(memoryType, &gameMemory, &size);
+    m_dllStruct->toAddon.GetMemory(m_dllStruct, memoryType, &gameMemory, &size);
   }
   catch (...)
   {

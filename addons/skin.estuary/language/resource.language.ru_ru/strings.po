@@ -1,11 +1,11 @@
 # Kodi Media Center language file
 # Addon Name: Estuary
 # Addon id: skin.estuary
-# Addon Provider: phil65, Piers
+# Addon Provider: phil65, Ichabod Fletchman
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
-"Report-Msgid-Bugs-To: http://trac.kodi.tv/\n"
+"Report-Msgid-Bugs-To: https://github.com/xbmc/xbmc/issues/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
@@ -47,6 +47,10 @@ msgstr "Случайные фильмы"
 msgctxt "#31007"
 msgid "Unwatched movies"
 msgstr "Непросмотреные фильмы"
+
+msgctxt "#31008"
+msgid "Enable category widgets"
+msgstr "Включить виджеты категорий"
 
 msgctxt "#31009"
 msgid "Download icons"
@@ -108,9 +112,17 @@ msgctxt "#31023"
 msgid "Viewtype"
 msgstr "Вид"
 
+msgctxt "#31024"
+msgid "Choose rating to display for media items"
+msgstr "Выбрать рейтинг для показа мультимедийных элементов"
+
 msgctxt "#31025"
 msgid "No favourites found. You can add any item from media views to this list by using the context menu."
 msgstr "Список избранного пуст. Вы можете добавить сюда любой медиаконтент с помощью контекстного меню."
+
+msgctxt "#31026"
+msgid "Timeshift"
+msgstr "Таймшифт"
 
 msgctxt "#31028"
 msgid "Show fanart"
@@ -119,6 +131,10 @@ msgstr "Показать фанарт"
 msgctxt "#31029"
 msgid "Last logged in"
 msgstr "Последний вход"
+
+msgctxt "#31030"
+msgid "System memory usage"
+msgstr "Использование памяти"
 
 msgctxt "#31031"
 msgid "Version info"
@@ -131,10 +147,6 @@ msgstr "Порядок"
 msgctxt "#31033"
 msgid "Your rating"
 msgstr "Ваш рейтинг"
-
-msgctxt "#31034"
-msgid "Extended info"
-msgstr "Дополнительная информация"
 
 msgctxt "#31035"
 msgid "Pages"
@@ -184,10 +196,6 @@ msgctxt "#31050"
 msgid "Press [B]OK[/B] to stop"
 msgstr "Нажмите [B]OK[/B] для остановки"
 
-msgctxt "#31051"
-msgid "Toggle language"
-msgstr "Переключить язык"
-
 msgctxt "#31052"
 msgid "filtered"
 msgstr "отфильтровано"
@@ -215,6 +223,10 @@ msgstr "Автоматическая авторизация при запуск�
 msgctxt "#31061"
 msgid "Main menu items"
 msgstr "Элементы главного меню"
+
+msgctxt "#31062"
+msgid "Choose weather fanart pack"
+msgstr "Выбрать набор фанарта погоды"
 
 msgctxt "#31063"
 msgid "Sections"
@@ -248,6 +260,10 @@ msgctxt "#31072"
 msgid "Power Options"
 msgstr "Настройки питания"
 
+msgctxt "#31074"
+msgid "Total duration"
+msgstr "Общая длительность"
+
 msgctxt "#31075"
 msgid "Movie sets"
 msgstr "Киноциклы"
@@ -276,10 +292,6 @@ msgctxt "#31089"
 msgid "Available groups"
 msgstr "Доступные группы"
 
-msgctxt "#31090"
-msgid "Search trailer"
-msgstr "Искать трейлер"
-
 msgctxt "#31092"
 msgid "Video menu"
 msgstr "Видео меню"
@@ -303,6 +315,10 @@ msgstr "Настройки канала"
 msgctxt "#31098"
 msgid "Select your Kodi user profile[CR]to login and continue"
 msgstr "Выберите профиль пользователя Kodi,[CR]чтобы войти и продолжить"
+
+msgctxt "#31099"
+msgid "IconWall"
+msgstr "Значки"
 
 msgctxt "#31100"
 msgid "Shift"
@@ -356,10 +372,6 @@ msgctxt "#31114"
 msgid "Search YouTube"
 msgstr "Искать в YouTube"
 
-msgctxt "#31115"
-msgid "Search TheMovieDB"
-msgstr "Искать в TheMovieDB"
-
 msgctxt "#31116"
 msgid "Remove this main menu item"
 msgstr "Убрать этот элемент главного меню"
@@ -392,10 +404,6 @@ msgctxt "#31123"
 msgid "Same director"
 msgstr "Тот же режиссер "
 
-msgctxt "#31124"
-msgid "Show images on map"
-msgstr "Показывать изображения на карте"
-
 msgctxt "#31125"
 msgid "Press up for actor info"
 msgstr "Нажмите вверх для получения информации об актере"
@@ -420,9 +428,17 @@ msgctxt "#31130"
 msgid "Main menu-related settings: Configure the home screen to your likings."
 msgstr "Основные настройки меню: Настройка главного экрана в соответствии с Вашими предпочтениями."
 
+msgctxt "#31131"
+msgid "Choose skin fanart pack"
+msgstr "Выбрать набор фанарта обложки"
+
 msgctxt "#31132"
-msgid "min"
-msgstr "мин"
+msgid "Select Program"
+msgstr "Выбрать программу"
+
+msgctxt "#31133"
+msgid "Select Resolution"
+msgstr "Выберите разрешение"
 
 msgctxt "#31134"
 msgid "Remaining"
@@ -435,6 +451,10 @@ msgstr "Нажмите сюда, чтобы увидеть последние и
 msgctxt "#31137"
 msgid "PVR info"
 msgstr "Сведения PVR"
+
+msgctxt "#31138"
+msgid "Player process info"
+msgstr "Сведения о проигрывателе"
 
 msgctxt "#31139"
 msgid "Video decoder"
@@ -452,6 +472,10 @@ msgctxt "#31142"
 msgid "Play speed"
 msgstr "Скорость воспроизведения"
 
+msgctxt "#31143"
+msgid "You did not set up PVR yet. In order to use PVR, choose a PVR client addon and configure it. Please visit http://kodi.wiki/view/PVR to learn more."
+msgstr "Функции PVR не настроены. Для использования PVR выберите соответствующий клиент и настройте его. Посетите http://kodi.wiki/view/PVR для получения дополнительной информации."
+
 msgctxt "#31144"
 msgid "Enter add-on browser"
 msgstr "Вход в браузер дополнений"
@@ -459,3 +483,83 @@ msgstr "Вход в браузер дополнений"
 msgctxt "#31145"
 msgid "Search add-ons"
 msgstr "Поиск дополнений"
+
+msgctxt "#31148"
+msgid "Categories"
+msgstr "Категории"
+
+msgctxt "#31149"
+msgid "Select genre fanart pack"
+msgstr "Выбрать набор фанарта жанров"
+
+msgctxt "#31150"
+msgid "Repository"
+msgstr "Репозиторий"
+
+msgctxt "#31151"
+msgid "Unwatched music videos"
+msgstr "Непросмотреные муз. видео"
+
+msgctxt "#31152"
+msgid "Random music videos"
+msgstr "Случайные муз. видео"
+
+msgctxt "#31153"
+msgid "You do not have any add-ons of this type installed. Enter the add-on browser to download add-ons created by our community."
+msgstr "У вас нет установленных дополнений этого типа. Откройте браузер дополнений, чтобы загрузить дополнения, созданные сообществом."
+
+msgctxt "#31154"
+msgid "Press OK to switch between locations"
+msgstr "Нажмите ОК для переключения местоположений"
+
+msgctxt "#31155"
+msgid "No bookmarks created yet."
+msgstr "Нет закладок"
+
+msgctxt "#31156"
+msgid "Choose background pattern"
+msgstr "Выберите фон"
+
+msgctxt "#31157"
+msgid "Edit categories"
+msgstr "Изменить категории"
+
+msgctxt "#31158"
+msgid "Touch mode"
+msgstr "Режим касания"
+
+msgctxt "#31159"
+msgid "Artwork"
+msgstr "Картинки"
+
+msgctxt "#31160"
+msgid "Show media flags"
+msgstr "Флаги сведений"
+
+msgctxt "#31161"
+msgid "Numeric pad"
+msgstr "Цифровая клавиатура"
+
+msgctxt "#31162"
+msgid "Play your personal games or download one of the many game add-ons from the official repository."
+msgstr "Играйте в свои личные игры или загрузить одну из многочисленных надстроек из официального репозитория."
+
+msgctxt "#31163"
+msgid "Show Fanart background"
+msgstr "Показать фанатный фон"
+
+msgctxt "#31164"
+msgid "Choose kind of profile identification"
+msgstr "Выбрать вид идентификации профиля"
+
+msgctxt "#31165"
+msgid "Profile name"
+msgstr "Название профиля"
+
+msgctxt "#31166"
+msgid "Profile avatar"
+msgstr "Аватар профиля"
+
+msgctxt "#31167"
+msgid "Animate background"
+msgstr "Анимированный фон"
