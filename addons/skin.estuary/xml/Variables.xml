@@ -78,11 +78,12 @@
 	<variable name="ListLabelVar">
 		<value condition="String.IsEqual(ListItem.DbType,episode) + Window.IsActive(videoplaylist)">$INFO[ListItem.TVShowtitle,,: ]$INFO[ListItem.Season,,x]$INFO[ListItem.Episode,,. ]$INFO[ListItem.Title]</value>
 		<value condition="String.IsEqual(ListItem.DbType,musicvideo) + Window.IsActive(videoplaylist)">$INFO[ListItem.Artist,, - ]$INFO[ListItem.Title]</value>
+		<value condition="[!String.IsEmpty(ListItem.Season) | !String.IsEmpty(ListItem.Episode) | !String.IsEmpty(ListItem.EpisodeName)] + Window.IsActive(videoplaylist)">$INFO[ListItem.Title,,: ]$VAR[SeasonEpisodeLabel]$INFO[ListItem.EpisodeName]</value>
 		<value>$INFO[ListItem.Label]</value>
 	</variable>
 	<variable name="ListLabel2Var">
-		<value condition="String.IsEmpty(Container.PluginName) + Container.Content(tvshows) + String.IsEqual(Container.SortMethod,$LOCALIZE[556])">$INFO[ListItem.Property(WatchedEpisodes)]$INFO[ListItem.Property(TotalEpisodes), / ,]</value>
-		<value condition="String.IsEqual(Container.SortMethod,$LOCALIZE[556])">$INFO[ListItem.Year]</value>
+		<value condition="String.IsEmpty(Container.PluginName) + Container.Content(tvshows) + Container.SortMethod(7)">$INFO[ListItem.Property(WatchedEpisodes)]$INFO[ListItem.Property(TotalEpisodes), / ,]</value>
+		<value condition="Container.SortMethod(7)">$INFO[ListItem.Year]</value>
 		<value condition="!String.isempty(ListItem.Appearances)">$LOCALIZE[38026]: $INFO[ListItem.Appearances]</value>
 		<value condition="Window.IsActive(musicplaylist) | Window.IsActive(videoplaylist)">$INFO[ListItem.Duration]</value>
 		<value>$INFO[ListItem.Label2]</value>
@@ -145,7 +146,7 @@
 	</variable>
 	<variable name="AddonsLabel2Var">
 		<value condition="ListItem.Property(addon.downloading)">$INFO[ListItem.Property(addon.status)]</value>
-		<value condition="!String.IsEqual(Container.SortMethod,$LOCALIZE[551])">$INFO[ListItem.Label2]</value>
+		<value condition="Container.SortMethod(1)">$INFO[ListItem.Label2]</value>
 		<value>$INFO[ListItem.AddonCreator,, - ]$INFO[ListItem.AddonVersion]</value>
 	</variable>
 	<variable name="RatingSettingLabel2Var">
@@ -487,6 +488,11 @@
 		<value condition="ListItem.IsLive">[B][COLOR button_focus]$LOCALIZE[839][/COLOR][/B] - </value>
 		<value condition="ListItem.IsNew + String.IsEmpty(ListItem.Season) + String.IsEmpty(ListItem.Episode) + String.IsEmpty(ListItem.EpisodeName)">[B][COLOR button_focus]$LOCALIZE[842][/COLOR][/B]</value>
 		<value condition="ListItem.IsNew">[B][COLOR button_focus]$LOCALIZE[842][/COLOR][/B] - </value>
+	</variable>
+	<variable name="DateDurationLabel">
+		<value condition="[Window.IsActive(tvrecordings) | Window.IsActive(radiorecordings)] + Container.SortMethod(3) + String.IsEmpty(ListItem.ExpirationDate)">$INFO[ListItem.Date,[COLOR grey]$LOCALIZE[552]:[/COLOR] ,[CR]]$INFO[ListItem.Duration,[COLOR grey]$LOCALIZE[180]:[/COLOR] ,[CR]]</value>
+		<value condition="[Window.IsActive(tvrecordings) | Window.IsActive(radiorecordings)] + [Container.SortMethod(3) | Container.SortMethod(9)]">$INFO[ListItem.Date,[COLOR grey]$LOCALIZE[552]:[/COLOR] ,[CR]]</value>
+		<value>$INFO[ListItem.Duration,[COLOR grey]$LOCALIZE[180]:[/COLOR] ,[CR]]</value>
 	</variable>
 	<variable name="RecordingSizeLabel">
 		<value condition="!String.IsEmpty(ListItem.Size) + !String.IsEqual(ListItem.Size,0 B)">$INFO[ListItem.Size,[COLOR grey]$LOCALIZE[22031]:[/COLOR] ,[CR]]</value>

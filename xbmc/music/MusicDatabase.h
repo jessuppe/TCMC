@@ -248,6 +248,7 @@ public:
    \param bBoxedSet if the album is a boxset
    \param strRecordLabel the recording label
    \param strType album type (Musicbrainz release type e.g. "Broadcast, Soundtrack, live"),
+   \param strReleaseStatus (see https://musicbrainz.org/doc/Release#Status)
    \param bCompilation if the album is a compilation
    \param releaseType "album" or "single"
    \return the id of the album
@@ -259,6 +260,7 @@ public:
                 const std::string& strReleaseDate, const std::string& strOrigReleaseDate,
                 bool bBoxedSet,
                 const std::string& strRecordLabel, const std::string& strType,
+                const std::string& strReleaseStatus,
                 bool bCompilation, CAlbum::ReleaseType releaseType);
 
   /*! \brief retrieve an album, optionally with all songs.
@@ -277,6 +279,7 @@ public:
                    const std::string& strThemes, const std::string& strReview,
                    const std::string& strImage, const std::string& strLabel,
                    const std::string& strType,
+                   const std::string& strReleaseStatus,
                    float fRating, int iUserrating, int iVotes,
                    const std::string& strReleaseDate, const std::string& strOrigReleaseDate,
                    bool bBoxedSet,
@@ -692,6 +695,7 @@ private:
   /*! \brief (Re)Create the generic database views for songs and albums
    */
   virtual void CreateViews();
+  void CreateNativeDBFunctions();
 
   void SplitPath(const std::string& strFileNameAndPath, std::string& strPath, std::string& strFileName);
 
@@ -797,6 +801,7 @@ private:
     song_idAlbum,
     song_strAlbum,
     song_strPath,
+    song_strReleaseStatus,
     song_bCompilation,
     song_bBoxedSet,
     song_strAlbumArtists,
@@ -832,6 +837,7 @@ private:
     album_strReview,
     album_strLabel,
     album_strType,
+    album_strReleaseStatus,
     album_strThumbURL,
     album_fRating,
     album_iUserrating,
@@ -920,8 +926,6 @@ private:
     joinToAlbum_idArtist = 0,
     joinToAlbum_strArtist,
     joinToAlbum_strArtistMBID,
-    joinToAlbum_idSongGenre,
-    joinToAlbum_strSongGenre,
     joinToAlbum_enumCount // end of the enum, do not add past here
   } JoinToAlbumFields;
 

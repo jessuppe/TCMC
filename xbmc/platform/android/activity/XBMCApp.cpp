@@ -128,6 +128,7 @@ IInputDeviceCallbacks* CXBMCApp::m_inputDeviceCallbacks = nullptr;
 IInputDeviceEventHandler* CXBMCApp::m_inputDeviceEventHandler = nullptr;
 bool CXBMCApp::m_hasReqVisible = false;
 CCriticalSection CXBMCApp::m_applicationsMutex;
+CCriticalSection CXBMCApp::m_activityResultMutex;
 std::vector<androidPackage> CXBMCApp::m_applications;
 CVideoSyncAndroid* CXBMCApp::m_syncImpl = NULL;
 CEvent CXBMCApp::m_vsyncEvent;
@@ -251,8 +252,11 @@ void CXBMCApp::onResume()
     RequestVisibleBehind(true);
 
   if (g_application.IsInitialized())
-    dynamic_cast<CAndroidPowerSyscall*>(CServiceBroker::GetPowerManager().GetPowerSyscall())
-        ->SetOnResume();
+  {
+    IPowerSyscall* syscall = CServiceBroker::GetPowerManager().GetPowerSyscall();
+    if (syscall)
+      static_cast<CAndroidPowerSyscall*>(syscall)->SetOnResume();
+  }
 }
 
 void CXBMCApp::onPause()
@@ -274,8 +278,12 @@ void CXBMCApp::onPause()
   EnableWakeLock(false);
   m_hasReqVisible = false;
 
-  dynamic_cast<CAndroidPowerSyscall*>(CServiceBroker::GetPowerManager().GetPowerSyscall())
-      ->SetOnPause();
+  if (!g_application.IsStopping())
+  {
+    IPowerSyscall* syscall = CServiceBroker::GetPowerManager().GetPowerSyscall();
+    if (syscall)
+      static_cast<CAndroidPowerSyscall*>(syscall)->SetOnPause();
+  }
 }
 
 void CXBMCApp::onStop()
@@ -1000,6 +1008,9 @@ void CXBMCApp::SetSystemVolume(float percent)
 
 void CXBMCApp::onReceive(CJNIIntent intent)
 {
+  if (!g_application.IsInitialized())
+    return;
+
   std::string action = intent.getAction();
   CLog::Log(LOGDEBUG, "CXBMCApp::onReceive - Got intent. Action: %s", action.c_str());
   if (action == "android.intent.action.BATTERY_CHANGED")
@@ -1097,7 +1108,7 @@ void CXBMCApp::onNewIntent(CJNIIntent intent)
 {
   if (!intent)
   {
-    CLog::Log(LOGNOTICE, "CXBMCApp::onNewIntent - Got invalid intent.");
+    CLog::Log(LOGINFO, "CXBMCApp::onNewIntent - Got invalid intent.");
     return;
   }
 
@@ -1156,6 +1167,7 @@ void CXBMCApp::onNewIntent(CJNIIntent intent)
 
 void CXBMCApp::onActivityResult(int requestCode, int resultCode, CJNIIntent resultData)
 {
+  CSingleLock lock(m_activityResultMutex);
   for (auto it = m_activityResultEvents.begin(); it != m_activityResultEvents.end(); ++it)
   {
     if ((*it)->GetRequestCode() == requestCode)
@@ -1188,7 +1200,10 @@ int CXBMCApp::WaitForActivityResult(const CJNIIntent &intent, int requestCode, C
 {
   int ret = 0;
   CActivityResultEvent* event = new CActivityResultEvent(requestCode);
-  m_activityResultEvents.push_back(event);
+  {
+    CSingleLock lock(m_activityResultMutex);
+    m_activityResultEvents.push_back(event);
+  }
   startActivityForResult(intent, requestCode);
   if (event->Wait())
   {

@@ -143,11 +143,13 @@ namespace kodi
   namespace addon
   {
 
-    class CInstanceVideoCodec : public IAddonInstance
+    class ATTRIBUTE_HIDDEN CInstanceVideoCodec : public IAddonInstance
     {
     public:
-      explicit CInstanceVideoCodec(KODI_HANDLE instance)
-        : IAddonInstance(ADDON_INSTANCE_VIDEOCODEC)
+      explicit CInstanceVideoCodec(KODI_HANDLE instance, const std::string& kodiVersion = "")
+        : IAddonInstance(ADDON_INSTANCE_VIDEOCODEC,
+                         !kodiVersion.empty() ? kodiVersion
+                                              : GetKodiTypeVersion(ADDON_INSTANCE_VIDEOCODEC))
       {
         if (CAddonBase::m_interface->globalSingleInstance != nullptr)
           throw std::logic_error("kodi::addon::CInstanceVideoCodec: Creation of multiple together with single instance way is not allowed!");

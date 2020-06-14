@@ -14,6 +14,8 @@
 #include "threads/CriticalSection.h"
 #include "utils/EventStream.h"
 
+#include <mutex>
+
 namespace ADDON
 {
   typedef std::map<TYPE, VECADDONS> MAPADDONS;
@@ -76,7 +78,10 @@ namespace ADDON
      \param enabledOnly whether we only want enabled addons - set to false to allow both enabled and disabled addons - defaults to true.
      \return true if an addon matching the id of the given type is available and is enabled (if enabledOnly is true).
      */
-    bool GetAddon(const std::string &id, AddonPtr &addon, const TYPE &type = ADDON_UNKNOWN, bool enabledOnly = true);
+    bool GetAddon(const std::string& id,
+                  AddonPtr& addon,
+                  const TYPE& type = ADDON_UNKNOWN,
+                  bool enabledOnly = true) const;
 
     bool HasType(const std::string &id, const TYPE &type);
 
@@ -85,7 +90,7 @@ namespace ADDON
     bool HasInstalledAddons(const TYPE &type);
 
     /*! Returns all installed, enabled add-ons. */
-    bool GetAddons(VECADDONS& addons);
+    bool GetAddons(VECADDONS& addons) const;
 
     /*! Returns enabled add-ons with given type. */
     bool GetAddons(VECADDONS& addons, const TYPE& type);
@@ -137,7 +142,7 @@ namespace ADDON
     bool ReloadSettings(const std::string &id);
 
     /*! Get addons with available updates */
-    VECADDONS GetAvailableUpdates();
+    VECADDONS GetAvailableUpdates() const;
 
     /*! Returns true if there is any addon with available updates, otherwise false */
     bool HasAvailableUpdates();
@@ -148,6 +153,27 @@ namespace ADDON
      \return True if everything went ok, false otherwise
      */
     bool FindAddons();
+
+    /*!
+     * Fills the the provided vector with the list of incompatible addons and returns if there's any.
+     *
+     * @return true if there are incompatible addons
+     */
+    bool GetIncompatibleAddons(VECADDONS& incompatible) const;
+
+    /*!
+     * Migrate all the addons (updates all addons that have an update pending and disables those
+     * that got incompatible)
+     *
+     * @return list of all addons that were modified.
+     */
+    std::vector<std::string> MigrateAddons();
+
+    /*!
+     * Install available addon updates, if any.
+     * @param wait If kodi should wait for all updates to download and install before returning
+     */
+    void CheckAndInstallAddonUpdates(bool wait) const;
 
     /*!
      * @note: should only be called by AddonInstaller
@@ -180,7 +206,7 @@ namespace ADDON
      \param ID id of the addon
      \sa DisableAddon
      */
-    bool IsAddonDisabled(const std::string& ID);
+    bool IsAddonDisabled(const std::string& ID) const;
 
     /* \brief Checks whether an addon can be disabled via DisableAddon.
      \param ID id of the addon
@@ -229,14 +255,14 @@ namespace ADDON
 
     bool ServicesHasStarted() const;
 
-    bool IsCompatible(const IAddon& addon);
+    bool IsCompatible(const IAddon& addon) const;
 
     /*! \brief Recursively get dependencies for an add-on
      */
     std::vector<DependencyInfo> GetDepsRecursive(const std::string& id);
 
-    bool GetAddonInfos(AddonInfos& addonInfos, TYPE type);
-    const AddonInfoPtr GetAddonInfo(const std::string& id, TYPE type = ADDON_UNKNOWN);
+    bool GetAddonInfos(AddonInfos& addonInfos, TYPE type) const;
+    const AddonInfoPtr GetAddonInfo(const std::string& id, TYPE type = ADDON_UNKNOWN) const;
 
     /*!
      * @brief Get the path where temporary add-on files are stored
@@ -252,10 +278,37 @@ namespace ADDON
 
     VECADDONS m_updateableAddons;
 
-    bool GetAddonsInternal(const TYPE &type, VECADDONS &addons, bool enabledOnly);
+    bool GetAddonsInternal(const TYPE& type, VECADDONS& addons, bool enabledOnly) const;
     bool EnableSingle(const std::string& id);
 
     void FindAddons(ADDON_INFO_LIST& addonmap, const std::string& path);
+
+    /*!
+     * Get the list of of available updates
+     * \param[in,out] updates the vector of addons to be filled with addons that need to be updated (not blacklisted)
+     * \return if there are any addons needing updates
+     */
+    bool GetAddonUpdateCandidates(VECADDONS& updates) const;
+
+    /*!\brief Sort a list of addons for installation, i.e., defines the order of installation depending
+     * of each addon dependencies.
+     * \param[in,out] updates the vector of addons to sort
+     */
+    void SortByDependencies(VECADDONS& updates) const;
+
+    /*!
+     * Install the list of addon updates via AddonInstaller
+     * \param[in,out] updates the vector of addons to install (will be sorted)
+     * \param wait if the process should wait for all addons to install
+     */
+    void InstallAddonUpdates(VECADDONS& updates, bool wait) const;
+
+    // This guards the addon installation process to make sure
+    // addon updates are not installed concurrently
+    // while the migration is running. Addon updates can be triggered
+    // as a result of a repository update event.
+    // (migration will install any available update anyway)
+    mutable std::mutex m_installAddonsMutex;
 
     std::set<std::string> m_disabled;
     std::set<std::string> m_updateBlacklist;

@@ -53,8 +53,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_Dialog
       /// \python_func{ xbmcgui.Dialog().yesno(heading, message, nolabel, yeslabel, customlabel, autoclose]) }
-      ///------------------------------------------------------------------------
-      ///
       /// **Yes / no dialog**
       ///
       /// The Yes / No dialog can be used to inform the user about questions and
@@ -98,8 +96,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_Dialog
       /// \python_func{ xbmcgui.Dialog().info(listitem) }
-      ///------------------------------------------------------------------------
-      ///
       /// **Info dialog**
       ///
       /// Show the corresponding info dialog for a given listitem
@@ -128,8 +124,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_Dialog
       /// \python_func{ xbmcgui.Dialog().select(heading, list[, autoclose, preselect, useDetails]) }
-      ///------------------------------------------------------------------------
-      ///
       /// **Select dialog**
       ///
       /// Show of a dialog to select of an entry as a key
@@ -164,8 +158,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_Dialog
       /// \python_func{ xbmcgui.Dialog().contextmenu(list) }
-      ///------------------------------------------------------------------------
-      ///
       /// Show a context menu.
       ///
       /// @param list           string list - list of items.
@@ -193,8 +185,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_Dialog
       /// \python_func{ xbmcgui.Dialog().multiselect(heading, options[, autoclose, preselect, useDetails]) }
-      ///------------------------------------------------------------------------
-      ///
       /// Show a multi-select dialog.
       ///
       /// @param heading        string or unicode - dialog heading.
@@ -231,8 +221,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_Dialog
       /// \python_func{ xbmcgui.Dialog().ok(heading, message) }
-      ///------------------------------------------------------------------------
-      ///
       /// **OK dialog**
       ///
       /// The functions permit the call of a dialog of information, a
@@ -265,8 +253,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_Dialog
       /// \python_func{ xbmcgui.Dialog().textviewer(heading, text, usemono) }
-      ///------------------------------------------------------------------------
-      ///
       /// **TextViewer dialog**
       ///
       /// The text viewer dialog can be used to display descriptions, help texts
@@ -298,8 +284,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_Dialog
       /// \python_func{ xbmcgui.Dialog().browse(type, heading, shares[, mask, useThumbs, treatAsFolder, defaultt, enableMultiple]) }
-      ///------------------------------------------------------------------------
-      ///
       /// **Browser dialog**
       ///
       /// The function offer the possibility to select a file by the user of
@@ -364,8 +348,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_Dialog
       /// \python_func{ xbmcgui.Dialog().browseSingle(type, heading, shares[, mask, useThumbs, treatAsFolder, defaultt]) }
-      ///------------------------------------------------------------------------
-      ///
       /// **Browse single dialog**
       ///
       /// The function offer the possibility to select a file by the user of
@@ -426,8 +408,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_Dialog
       /// \python_func{ xbmcgui.Dialog().browseMultiple(type, heading, shares[, mask, useThumbs, treatAsFolder, defaultt]) }
-      ///------------------------------------------------------------------------
-      ///
       /// **Browser dialog**
       ///
       /// The function offer the possibility to select multiple files by the
@@ -483,28 +463,30 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
 #ifdef DOXYGEN_SHOULD_USE_THIS
       ///
       /// \ingroup python_Dialog
-      /// \python_func{ xbmcgui.Dialog().numeric(type, heading[, defaultt]) }
-      ///------------------------------------------------------------------------
-      ///
+      /// \python_func{ xbmcgui.Dialog().numeric(type, heading[, defaultt, bHiddenInput]) }
       /// **Numeric dialog**
       ///
       /// The function have to be permitted by the user for the representation
       /// of a numeric keyboard around an input.
       ///
       /// @param type           integer - the type of numeric dialog.
-      /// | Param | Name                | Format                       |
-      /// |:-----:|:--------------------|:-----------------------------|
-      /// |  0    | ShowAndGetNumber    | (default format: #)
-      /// |  1    | ShowAndGetDate      | (default format: DD/MM/YYYY)
-      /// |  2    | ShowAndGetTime      | (default format: HH:MM)
-      /// |  3    | ShowAndGetIPAddress | (default format: #.#.#.#)
-      /// @param heading        string or unicode - dialog heading.
+      /// | Param | Name                     | Format                       |
+      /// |:-----:|:-------------------------|:-----------------------------|
+      /// |  0    | ShowAndGetNumber         | (default format: #)
+      /// |  1    | ShowAndGetDate           | (default format: DD/MM/YYYY)
+      /// |  2    | ShowAndGetTime           | (default format: HH:MM)
+      /// |  3    | ShowAndGetIPAddress      | (default format: #.#.#.#)
+      /// |  4    | ShowAndVerifyNewPassword | (default format: *)
+      /// @param heading        string or unicode - dialog heading (will be ignored for type 4).
       /// @param defaultt       [opt] string - default value.
+      /// @param bHiddenInput   [opt] bool - mask input (available for type 0).
       /// @return Returns the entered data as a string.
       ///         Returns the default value if dialog was canceled.
       ///
       ///
       ///------------------------------------------------------------------------
+      /// @python_v19 New option added ShowAndVerifyNewPassword.
+      /// @python_v19 Added new option **bHiddenInput**.
       ///
       /// **Example:**
       /// ~~~~~~~~~~~~~{.py}
@@ -516,15 +498,13 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       numeric(...);
 #else
-      String numeric(int type, const String& heading, const String& defaultt = emptyString);
+      String numeric(int type, const String& heading, const String& defaultt = emptyString, bool bHiddenInput = false);
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
       ///
       /// \ingroup python_Dialog
       /// \python_func{ xbmcgui.Dialog().notification(heading, message[, icon, time, sound]) }
-      ///------------------------------------------------------------------------
-      ///
       /// Show a Notification alert.
       ///
       /// @param heading        string - dialog heading.
@@ -559,8 +539,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_Dialog
       /// \python_func{ xbmcgui.Dialog().input(heading[, defaultt, type, option, autoclose]) }
-      ///------------------------------------------------------------------------
-      ///
       /// Show an Input dialog.
       ///
       /// @param heading        string - dialog heading.
@@ -631,8 +609,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_DialogProgress
       /// \python_func{ xbmcgui.DialogProgress().create(heading[, message]) }
-      ///------------------------------------------------------------------------
-      ///
       /// Create and show a progress dialog.
       ///
       /// @param heading        string or unicode - dialog heading.
@@ -663,8 +639,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_DialogProgress
       /// \python_func{ xbmcgui.DialogProgress().update(percent[, message]) }
-      ///------------------------------------------------------------------------
-      ///
       /// Updates the progress dialog.
       ///
       /// @param percent        integer - percent complete. (0:100)
@@ -693,8 +667,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_DialogProgress
       /// \python_func{ xbmcgui.DialogProgress().close() }
-      ///------------------------------------------------------------------------
-      ///
       /// Close the progress dialog.
       ///
       ///
@@ -716,8 +688,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_DialogProgress
       /// \python_func{ xbmcgui.DialogProgress().iscanceled() }
-      ///------------------------------------------------------------------------
-      ///
       /// Checks progress is canceled.
       ///
       /// @return True if the user pressed cancel.
@@ -765,8 +735,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_DialogProgressBG
       /// \python_func{ xbmcgui.DialogProgressBG().create(heading[, message]) }
-      ///------------------------------------------------------------------------
-      ///
       /// Create and show a background progress dialog.
       ///
       /// @param heading     string or unicode - dialog heading.
@@ -795,8 +763,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_DialogProgressBG
       /// \python_func{ xbmcgui.DialogProgressBG().update([percent, heading, message]) }
-      ///------------------------------------------------------------------------
-      ///
       /// Updates the background progress dialog.
       ///
       /// @param percent     [opt] integer - percent complete. (0:100)
@@ -824,8 +790,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_DialogProgressBG
       /// \python_func{ xbmcgui.DialogProgressBG().close() }
-      ///------------------------------------------------------------------------
-      ///
       /// Close the background progress dialog
       ///
       ///
@@ -847,8 +811,6 @@ constexpr int ALPHANUM_HIDE_INPUT{2};
       ///
       /// \ingroup python_DialogProgressBG
       /// \python_func{ xbmcgui.DialogProgressBG().isFinished() }
-      ///------------------------------------------------------------------------
-      ///
       /// Checks progress is finished
       ///
       /// @return True if the background dialog is active.

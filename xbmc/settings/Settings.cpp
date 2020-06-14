@@ -188,6 +188,7 @@ const std::string CSettings::SETTING_PVRMANAGER_PRESELECTPLAYINGCHANNEL = "pvrma
 const std::string CSettings::SETTING_PVRMANAGER_SYNCCHANNELGROUPS = "pvrmanager.syncchannelgroups";
 const std::string CSettings::SETTING_PVRMANAGER_BACKENDCHANNELORDER = "pvrmanager.backendchannelorder";
 const std::string CSettings::SETTING_PVRMANAGER_USEBACKENDCHANNELNUMBERS = "pvrmanager.usebackendchannelnumbers";
+const std::string CSettings::SETTING_PVRMANAGER_USEBACKENDCHANNELNUMBERSALWAYS = "pvrmanager.usebackendchannelnumbersalways";
 const std::string CSettings::SETTING_PVRMANAGER_STARTGROUPCHANNELNUMBERSFROMONE = "pvrmanager.startgroupchannelnumbersfromone";
 const std::string CSettings::SETTING_PVRMANAGER_CLIENTPRIORITIES = "pvrmanager.clientpriorities";
 const std::string CSettings::SETTING_PVRMANAGER_CHANNELMANAGER = "pvrmanager.channelmanager";
@@ -205,7 +206,7 @@ const std::string CSettings::SETTING_EPG_HIDENOINFOAVAILABLE = "epg.hidenoinfoav
 const std::string CSettings::SETTING_EPG_EPGUPDATE = "epg.epgupdate";
 const std::string CSettings::SETTING_EPG_PREVENTUPDATESWHILEPLAYINGTV = "epg.preventupdateswhileplayingtv";
 const std::string CSettings::SETTING_EPG_RESETEPG = "epg.resetepg";
-const std::string CSettings::SETTING_PVRPLAYBACK_SWITCHTOFULLSCREEN = "pvrplayback.switchtofullscreen";
+const std::string CSettings::SETTING_PVRPLAYBACK_SWITCHTOFULLSCREENCHANNELTYPES = "pvrplayback.switchtofullscreenchanneltypes";
 const std::string CSettings::SETTING_PVRPLAYBACK_SIGNALQUALITY = "pvrplayback.signalquality";
 const std::string CSettings::SETTING_PVRPLAYBACK_CONFIRMCHANNELSWITCH = "pvrplayback.confirmchannelswitch";
 const std::string CSettings::SETTING_PVRPLAYBACK_CHANNELENTRYTIMEOUT = "pvrplayback.channelentrytimeout";
@@ -300,6 +301,8 @@ const std::string CSettings::SETTING_SERVICES_UPNPCONTROLLER = "services.upnpcon
 const std::string CSettings::SETTING_SERVICES_UPNPRENDERER = "services.upnprenderer";
 const std::string CSettings::SETTING_SERVICES_WEBSERVER = "services.webserver";
 const std::string CSettings::SETTING_SERVICES_WEBSERVERPORT = "services.webserverport";
+const std::string CSettings::SETTING_SERVICES_WEBSERVERAUTHENTICATION =
+    "services.webserverauthentication";
 const std::string CSettings::SETTING_SERVICES_WEBSERVERUSERNAME = "services.webserverusername";
 const std::string CSettings::SETTING_SERVICES_WEBSERVERPASSWORD = "services.webserverpassword";
 const std::string CSettings::SETTING_SERVICES_WEBSERVERSSL = "services.webserverssl";
@@ -480,7 +483,7 @@ bool CSettings::Load(const std::string &file)
   CXBMCTinyXML xmlDoc;
   bool updated = false;
   if (!XFILE::CFile::Exists(file) || !xmlDoc.LoadFile(file) ||
-      !Load(xmlDoc.RootElement(), updated) || !Load(xmlDoc.RootElement()))
+      !Load(xmlDoc.RootElement(), updated))
   {
     CLog::Log(LOGERROR, "CSettings: unable to load settings from %s, creating new default settings", file.c_str());
     if (!Reset())

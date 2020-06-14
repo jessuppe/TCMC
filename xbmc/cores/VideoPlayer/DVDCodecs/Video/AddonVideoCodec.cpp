@@ -9,11 +9,11 @@
 #include "AddonVideoCodec.h"
 
 #include "addons/binary-addons/BinaryAddonBase.h"
+#include "cores/VideoPlayer/Buffers/VideoBuffer.h"
 #include "cores/VideoPlayer/DVDCodecs/DVDCodecs.h"
 #include "cores/VideoPlayer/DVDStreamInfo.h"
 #include "cores/VideoPlayer/Interface/Addon/DemuxCrypto.h"
 #include "cores/VideoPlayer/Interface/Addon/TimingConstants.h"
-#include "cores/VideoPlayer/Process/VideoBuffer.h"
 #include "utils/log.h"
 
 using namespace kodi::addon;
@@ -124,6 +124,9 @@ bool CAddonVideoCodec::CopyToInitData(VIDEOCODEC_INITDATA &initData, CDVDStreamI
       break;
     case CRYPTO_SESSION_SYSTEM_PLAYREADY:
       initData.cryptoInfo.m_CryptoKeySystem = CRYPTO_INFO::CRYPTO_KEY_SYSTEM_PLAYREADY;
+      break;
+    case CRYPTO_SESSION_SYSTEM_WISEPLAY:
+      initData.cryptoInfo.m_CryptoKeySystem = CRYPTO_INFO::CRYPTO_KEY_SYSTEM_WISEPLAY;
       break;
     default:
       return false;
@@ -257,8 +260,14 @@ CDVDVideoCodec::VCReturn CAddonVideoCodec::GetPicture(VideoPicture* pVideoPictur
       }
     }
 
-    CLog::Log(LOGDEBUG, LOGVIDEO, "CAddonVideoCodec: GetPicture::VC_PICTURE with pts %llu %dx%d (%dx%d) %f %p:%d offset:%d,%d,%d, stride:%d,%d,%d", picture.pts, pVideoPicture->iWidth, pVideoPicture->iHeight, pVideoPicture->iDisplayWidth, pVideoPicture->iDisplayHeight, m_displayAspect,
-          picture.decodedData, picture.decodedDataSize, picture.planeOffsets[0], picture.planeOffsets[1], picture.planeOffsets[2], picture.stride[0], picture.stride[1], picture.stride[2]);
+    CLog::Log(LOGDEBUG, LOGVIDEO,
+              "CAddonVideoCodec: GetPicture::VC_PICTURE with pts {} {}x{} ({}x{}) {} {}:{} "
+              "offset:{},{},{}, stride:{},{},{}",
+              picture.pts, pVideoPicture->iWidth, pVideoPicture->iHeight,
+              pVideoPicture->iDisplayWidth, pVideoPicture->iDisplayHeight, m_displayAspect,
+              fmt::ptr(picture.decodedData), picture.decodedDataSize, picture.planeOffsets[0],
+              picture.planeOffsets[1], picture.planeOffsets[2], picture.stride[0],
+              picture.stride[1], picture.stride[2]);
 
     if (picture.width != m_width || picture.height != m_height)
     {

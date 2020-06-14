@@ -584,7 +584,7 @@ bool SorterIndirectIgnoreFoldersDescending(const SortItemPtr &left, const SortIt
   return SorterIgnoreFoldersDescending(*left, *right);
 }
 
-//clang format off
+// clang-format off
 std::map<SortBy, SortUtils::SortPreparator> fillPreparators()
 {
   std::map<SortBy, SortUtils::SortPreparator> preparators;
@@ -649,7 +649,7 @@ std::map<SortBy, SortUtils::SortPreparator> fillPreparators()
 
   return preparators;
 }
-//clang format on
+// clang-format on
 
 std::map<SortBy, Fields> fillSortingFields()
 {
@@ -831,8 +831,6 @@ void SortUtils::GetFieldsForSQLSort(const MediaType& mediaType,
   else if (mediaType == MediaTypeSong)
   {
     if (sortMethod == SortByLabel || sortMethod == SortByTrackNumber)
-      fields.emplace_back(FieldTrackNumber);
-    else if (sortMethod == SortByTrackNumber)
       fields.emplace_back(FieldTrackNumber);
     else if (sortMethod == SortByTitle)
       fields.emplace_back(FieldTitle);
@@ -1095,7 +1093,7 @@ typedef struct
   int           label;
 } sort_map;
 
-//clang format off
+// clang-format off
 const sort_map table[] = {
   { SortByLabel,                    SORT_METHOD_LABEL,                        SortAttributeNone,          551 },
   { SortByLabel,                    SORT_METHOD_LABEL_IGNORE_THE,             SortAttributeIgnoreArticle, 551 },
@@ -1166,7 +1164,7 @@ const sort_map table[] = {
   { SortBySubtitleLanguage,         SORT_METHOD_NONE,                         SortAttributeNone,          21448 },
   { SortByRandom,                   SORT_METHOD_NONE,                         SortAttributeNone,          590 }
 };
-//clang format on
+// clang-format on
 
 SORT_METHOD SortUtils::TranslateOldSortMethod(SortBy sortBy, bool ignoreArticle)
 {

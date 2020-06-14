@@ -153,6 +153,7 @@ void CMusicDatabase::CreateTables()
               " lastScraped varchar(20) default NULL, "
               " bScrapedMBID INTEGER NOT NULL DEFAULT 0, "
               " strReleaseType text, "
+              " strReleaseStatus TEXT, "
               " iDiscTotal INTEGER NOT NULL DEFAULT 0, "
               " idInfoSetting INTEGER NOT NULL DEFAULT 0)");
 
@@ -191,7 +192,8 @@ void CMusicDatabase::CreateTables()
               " lastplayed varchar(20) default NULL, "
               " rating FLOAT NOT NULL DEFAULT 0, votes INTEGER NOT NULL DEFAULT 0, "
               " userrating INTEGER NOT NULL DEFAULT 0, "
-              " comment text, mood text, iBPM integer, iBitRate INTEGER NOT NULL DEFAULT 0, "
+              " comment text, mood text, iBPM INTEGER NOT NULL DEFAULT 0, "
+              " iBitRate INTEGER NOT NULL DEFAULT 0, "
               " iSampleRate INTEGER NOT NULL DEFAULT 0, iChannels INTEGER NOT NULL DEFAULT 0, "
               " strReplayGain text, dateAdded text)");
   CLog::Log(LOGINFO, "create song_artist table");
@@ -288,7 +290,10 @@ void CMusicDatabase::CreateAnalytics()
               "  DELETE FROM source_path WHERE source_path.idSource = old.idSource;"
               "  DELETE FROM album_source WHERE album_source.idSource = old.idSource;"
               " END");
-  
+
+  // Create native functions stored in DB (MySQL/MariaDB only)
+  CreateNativeDBFunctions();
+
   // we create views last to ensure all indexes are rolled in
   CreateViews();
 
@@ -318,6 +323,7 @@ void CMusicDatabase::CreateViews()
               "        song.idAlbum AS idAlbum, "
               "        strAlbum, "
               "        strPath, "
+              "        album.strReleaseStatus as strReleaseStatus,"
               "        album.bCompilation AS bCompilation,"
               "        album.bBoxedSet AS bBoxedSet, "
               "        album.strArtistDisp AS strAlbumArtists,"
@@ -354,6 +360,7 @@ void CMusicDatabase::CreateViews()
               "        strReview, "
               "        strLabel, "
               "        strType, "
+              "        strReleaseStatus, "
               "        album.strImage as strImage, "
               "        album.fRating, "
               "        album.iUserrating, "
@@ -414,6 +421,120 @@ void CMusicDatabase::CreateViews()
               "     song_artist.idRole = role.idRole");
 }
 
+void CMusicDatabase::CreateNativeDBFunctions()
+{
+  // Create native functions in MySQL/MariaDB database only
+  if (!StringUtils::EqualsNoCase(
+          CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_databaseMusic.type,
+          "mysql"))
+    return;
+  CLog::Log(LOGINFO, "Create native MySQL/MariaDB functions");
+  /* Functions to do the natural number sorting and all ascii symbol char at top adjustments to
+     default utf8_general_ci collation that SQLite does via a collation sequence callback
+     function to StringUtils::AlphaNumericCompare
+     !@todo: the video needs these defined too for sorting in DB, then creation can be made common
+  */
+  // clang-format off
+  // udfFirstNumberPos finds the position of the first digit in a string
+  m_pDS->exec("DROP FUNCTION IF EXISTS udfFirstNumberPos");
+  m_pDS->exec("CREATE FUNCTION udfFirstNumberPos (instring VARCHAR(256))\n"
+    "RETURNS int \n"
+    "LANGUAGE SQL \n"
+    "DETERMINISTIC \n"
+    "NO SQL \n"
+    "SQL SECURITY INVOKER \n"
+    "BEGIN \n"
+    "  DECLARE position int; \n"
+    "  DECLARE tmppos int; \n"
+    "  SET position = 1000; \n"
+    "  SET tmppos = LOCATE('0', instring); IF(tmppos > 0 AND tmppos < position) THEN SET position = tmppos; END IF;\n"
+    "  SET tmppos = LOCATE('1', instring); IF(tmppos > 0 AND tmppos < position) THEN SET position = tmppos; END IF;\n"
+    "  SET tmppos = LOCATE('2', instring); IF(tmppos > 0 AND tmppos < position) THEN SET position = tmppos; END IF;\n"
+    "  SET tmppos = LOCATE('3', instring); IF(tmppos > 0 AND tmppos < position) THEN SET position = tmppos; END IF;\n"
+    "  SET tmppos = LOCATE('4', instring); IF(tmppos > 0 AND tmppos < position) THEN SET position = tmppos; END IF;\n"
+    "  SET tmppos = LOCATE('5', instring); IF(tmppos > 0 AND tmppos < position) THEN SET position = tmppos; END IF;\n"
+    "  SET tmppos = LOCATE('6', instring); IF(tmppos > 0 AND tmppos < position) THEN SET position = tmppos; END IF;\n"
+    "  SET tmppos = LOCATE('7', instring); IF(tmppos > 0 AND tmppos < position) THEN SET position = tmppos; END IF;\n"
+    "  SET tmppos = LOCATE('8', instring); IF(tmppos > 0 AND tmppos < position) THEN SET position = tmppos; END IF;\n"
+    "  SET tmppos = LOCATE('9', instring); IF(tmppos > 0 AND tmppos < position) THEN SET position = tmppos; END IF;\n"
+    "  IF(position = 1000) THEN RETURN 0; END IF;\n"
+    "  RETURN position; \n"
+    "END\n");
+
+  // udfSymbolShift adds "/" (the  last symbol before "0"), in front any of the chars input
+  m_pDS->exec("DROP FUNCTION IF EXISTS udfSymbolShift");
+  m_pDS->exec("CREATE FUNCTION udfSymbolShift(instring varchar(256), symbolChars char(25))\n"
+    "RETURNS varchar(256)\n"
+    "LANGUAGE SQL\n"
+    "DETERMINISTIC\n"
+    "NO SQL\n"
+    "SQL SECURITY INVOKER\n"
+    "BEGIN\n"
+    "  DECLARE sortString varchar(256);\n"
+    "  DECLARE i int;\n"
+    "  DECLARE symbolCharsLen int;\n"
+    "  DECLARE symbol char(1);\n"
+    "  SET sortString = instring;\n"
+    "  SET i = 1;\n"
+    "  SET symbolCharsLen = CHAR_LENGTH(symbolChars);\n"
+    "  WHILE(i <= symbolCharsLen) DO\n"
+    "    SET symbol = SUBSTRING(symbolChars, i, 1);\n"
+    "    SET sortString = REPLACE(sortString, symbol, CONCAT('/', symbol));\n"
+    "    SET i = i + 1;\n"
+    "  END WHILE;\n"
+    "  RETURN sortString;\n"
+    "END\n");
+
+  // udfNaturalSortFormat - provide natural number sorting and ascii symbols above numbers
+  m_pDS->exec("DROP FUNCTION IF EXISTS udfNaturalSortFormat");
+  m_pDS->exec("CREATE FUNCTION udfNaturalSortFormat(instring varchar(256), numberLength int, "
+    "sameOrderChars char(25))\n"
+    "RETURNS varchar(256)\n"
+    "LANGUAGE SQL\n"
+    "DETERMINISTIC\n"
+    "NO SQL\n"
+    "SQL SECURITY INVOKER\n"
+    "BEGIN\n"
+    "  DECLARE sortString varchar(256);\n"
+    "  DECLARE numStartIndex int; \n"
+    "  DECLARE numEndIndex int; \n"
+    "  DECLARE padLength int; \n"
+    "  DECLARE totalPadLength int; \n"
+    "  DECLARE i int; \n"
+    "  DECLARE sameOrderCharsLen int;\n"
+    "  SET totalPadLength = 0; \n"
+    "  SET instring = TRIM(instring); \n"
+    "  SET sortString = instring; \n"
+    "  SET numStartIndex = udfFirstNumberPos(instring); \n"
+    "  SET numEndIndex = 0; \n"
+    "  SET i = 1; \n"
+    "  SET sameOrderCharsLen = CHAR_LENGTH(sameOrderChars); \n"
+    "  WHILE(i <= sameOrderCharsLen) DO \n"
+    "    SET sortString = REPLACE(sortString, SUBSTRING(sameOrderChars, i, 1), ' '); \n"
+    "    SET i = i + 1; \n"
+    "  END WHILE; \n"
+    "  WHILE(numStartIndex <> 0) DO \n"
+    "    SET numStartIndex = numStartIndex + numEndIndex; \n"
+    "    SET numEndIndex = numStartIndex; \n"
+    "    WHILE(udfFirstNumberPos(SUBSTRING(instring, numEndIndex, 1)) = 1) DO \n"
+    "      SET numEndIndex = numEndIndex + 1; \n"
+    "    END WHILE; \n"
+    "    SET numEndIndex = numEndIndex - 1; \n"
+    "    SET padLength = numberLength - (numEndIndex + 1 - numStartIndex); \n"
+    "    IF padLength < 0 THEN \n"
+    "      SET padLength = 0; \n"
+    "    END IF; \n"
+    "    SET sortString = INSERT(sortString, numStartIndex + totalPadLength, 0, REPEAT('0', padLength)); \n"
+    "    SET totalPadLength = totalPadLength + padLength; \n"
+    "    SET numStartIndex = udfFirstNumberPos(RIGHT(instring, CHAR_LENGTH(instring) - numEndIndex)); \n"
+    "  END WHILE; \n"
+    // Shift ascii symbols :;<=>?@[\]^_ `{|}~ above 0, note "\" needs escaping
+    "  SET sortString = udfSymbolShift(sortString, ':;<=>?@[\\]^_`{|}~'); \n"
+    "  RETURN sortString; \n"
+    "END\n");
+  // clang-format on
+}
+
 void CMusicDatabase::SplitPath(const std::string& strFileNameAndPath, std::string& strPath, std::string& strFileName)
 {
   URIUtils::Split(strFileNameAndPath, strPath, strFileName);
@@ -439,7 +560,7 @@ bool CMusicDatabase::AddAlbum(CAlbum& album, int idSource)
                            album.GetGenreString(),
                            album.strReleaseDate, album.strOrigReleaseDate,
                            album.bBoxedSet,
-                           album.strLabel, album.strType,
+                           album.strLabel, album.strType, album.strReleaseStatus,
                            album.bCompilation, album.releaseType);
 
   // Add the album artists
@@ -577,7 +698,7 @@ bool CMusicDatabase::UpdateAlbum(CAlbum& album)
       }
       if (!canBeBoxset && album.bBoxedSet)
       {
-        CLog::Log(LOGNOTICE, "%s : Album with id [%i] does not meet the requirements for a boxset.",
+        CLog::Log(LOGINFO, "%s : Album with id [%i] does not meet the requirements for a boxset.",
                   __FUNCTION__, album.idAlbum);
         album.bBoxedSet = false;
       }
@@ -592,8 +713,8 @@ bool CMusicDatabase::UpdateAlbum(CAlbum& album)
               StringUtils::Join(album.styles, itemSeparator),
               StringUtils::Join(album.themes, itemSeparator),
               album.strReview,
-              album.thumbURL.m_xml.c_str(),
-              album.strLabel, album.strType,
+              album.thumbURL.GetData(),
+              album.strLabel, album.strType, album.strReleaseStatus,
               album.fRating, album.iUserrating, album.iVotes, 
               album.strReleaseDate, album.strOrigReleaseDate,
               album.bBoxedSet,
@@ -965,6 +1086,7 @@ int CMusicDatabase::AddAlbum(const std::string& strAlbum, const std::string& str
                              const std::string& strReleaseDate, const std::string& strOrigReleaseDate,
                              bool bBoxedSet,
                              const std::string& strRecordLabel, const std::string& strType,
+                             const std::string& strReleaseStatus,
                              bool bCompilation, CAlbum::ReleaseType releaseType)
 {
   std::string strSQL;
@@ -994,13 +1116,13 @@ int CMusicDatabase::AddAlbum(const std::string& strAlbum, const std::string& str
       strSQL = PrepareSQL(
           "INSERT INTO album (idAlbum, strAlbum, strArtistDisp, strGenres, "
           "strReleaseDate, strOrigReleaseDate, bBoxedSet, "
-          "strLabel, strType, bCompilation, strReleaseType, strMusicBrainzAlbumID, "
-          "strReleaseGroupMBID, strArtistSort) "
-          "values(NULL, '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, '%s'",
+          "strLabel, strType, bCompilation, strReleaseType, strReleaseStatus, "
+          "strMusicBrainzAlbumID, strReleaseGroupMBID, strArtistSort) "
+          "values(NULL, '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, '%s', '%s'",
           strAlbum.c_str(), strArtist.c_str(), strGenre.c_str(), 
           strReleaseDate.c_str(), strOrigReleaseDate.c_str(), bBoxedSet,
           strRecordLabel.c_str(), strType.c_str(), bCompilation,
-          CAlbum::ReleaseTypeToString(releaseType).c_str());
+          CAlbum::ReleaseTypeToString(releaseType).c_str(), strReleaseStatus.c_str());
 
       if (strMusicBrainzAlbumID.empty())
         strSQL += PrepareSQL(", NULL");
@@ -1048,11 +1170,13 @@ int CMusicDatabase::AddAlbum(const std::string& strAlbum, const std::string& str
       strSQL +=
           PrepareSQL(", strGenres = '%s', strReleaseDate= '%s', strOrigReleaseDate= '%s', "
                      "bBoxedSet=%i, strLabel = '%s', strType = '%s', "
-                     "bCompilation=%i, strReleaseType = '%s', lastScraped = NULL "
+                     "bCompilation=%i, strReleaseType = '%s',"
+                     "strReleaseStatus = '%s', lastScraped = NULL "
                      "WHERE idAlbum=%i",
                      strGenre.c_str(), strReleaseDate.c_str(), strOrigReleaseDate.c_str(), 
                      bBoxedSet, strRecordLabel.c_str(), strType.c_str(),
-                     bCompilation, CAlbum::ReleaseTypeToString(releaseType).c_str(), idAlbum);
+                     bCompilation, CAlbum::ReleaseTypeToString(releaseType).c_str(),
+                     strReleaseStatus.c_str(), idAlbum);
       m_pDS->exec(strSQL);
       DeleteAlbumArtistsByAlbum(idAlbum);
       DeleteAlbumSources(idAlbum);
@@ -1081,6 +1205,7 @@ int CMusicDatabase::UpdateAlbum(int idAlbum,
                                 const std::string& strImage,
                                 const std::string& strLabel,
                                 const std::string& strType,
+                                const std::string& strReleaseStatus,
                                 float fRating,
                                 int iUserrating,
                                 int iVotes,
@@ -1102,7 +1227,7 @@ int CMusicDatabase::UpdateAlbum(int idAlbum,
                       " strType = '%s', fRating = %f, iUserrating = %i, iVotes = %i,"
                       " strReleaseDate= '%s', strOrigReleaseDate= '%s', "
                       " bBoxedSet = %i, bCompilation = %i,"
-                      " strReleaseType = '%s',"
+                      " strReleaseType = '%s', strReleaseStatus = '%s', "
                       " lastScraped = '%s', bScrapedMBID = %i",
                       strAlbum.c_str(), strArtist.c_str(), strGenre.c_str(),
                       strMoods.c_str(), strStyles.c_str(), strThemes.c_str(),
@@ -1111,6 +1236,7 @@ int CMusicDatabase::UpdateAlbum(int idAlbum,
                       strReleaseDate.c_str(), strOrigReleaseDate.c_str(),
                       bBoxedSet, bCompilation,
                       CAlbum::ReleaseTypeToString(releaseType).c_str(),
+                      strReleaseStatus.c_str(),
                       CDateTime::GetCurrentDateTime().GetAsDBDateTime().c_str(),
                       bScrapedMBID);
   if (strMusicBrainzAlbumID.empty())
@@ -1311,7 +1437,7 @@ bool CMusicDatabase::UpdateArtist(const CArtist& artist)
                artist.strBiography, artist.strDied,
                artist.strDisbanded,
                StringUtils::Join(artist.yearsActive, itemSeparator).c_str(),
-               artist.thumbURL.m_xml.c_str(),
+               artist.thumbURL.GetData(),
                artist.fanart.m_xml.c_str());
 
   DeleteArtistDiscography(artist.idArtist);
@@ -2468,7 +2594,7 @@ CAlbum CMusicDatabase::GetAlbumFromDataset(const dbiplus::sql_record* const reco
   album.strOrigReleaseDate = record->at(offset + album_strOrigReleaseDate).get_asString();
   album.bBoxedSet = record->at(offset + album_bBoxedSet).get_asInt() == 1;
   if (imageURL)
-    album.thumbURL.ParseString(record->at(offset + album_strThumbURL).get_asString());
+    album.thumbURL.ParseFromData(record->at(offset + album_strThumbURL).get_asString());
   album.fRating = record->at(offset + album_fRating).get_asFloat();
   album.iUserrating = record->at(offset + album_iUserrating).get_asInt();
   album.iVotes = record->at(offset + album_iVotes).get_asInt();
@@ -2478,6 +2604,7 @@ CAlbum CMusicDatabase::GetAlbumFromDataset(const dbiplus::sql_record* const reco
   album.themes = StringUtils::Split(record->at(offset + album_strThemes).get_asString(), itemSeparator);
   album.strLabel = record->at(offset + album_strLabel).get_asString();
   album.strType = record->at(offset + album_strType).get_asString();
+  album.strReleaseStatus = record->at(offset + album_strReleaseStatus).get_asString();
   album.bCompilation = record->at(offset + album_bCompilation).get_asInt() == 1;
   album.bScrapedMBID = record->at(offset + album_bScrapedMBID).get_asInt() == 1;
   album.strLastScraped = record->at(offset + album_lastScraped).get_asString();
@@ -2550,7 +2677,7 @@ CArtist CMusicDatabase::GetArtistFromDataset(const dbiplus::sql_record* const re
   {
     artist.fanart.m_xml = record->at(artist_strFanart).get_asString();
     artist.fanart.Unpack();
-    artist.thumbURL.ParseString(record->at(artist_strImage).get_asString());
+    artist.thumbURL.ParseFromData(record->at(artist_strImage).get_asString());
   }
 
   return artist;
@@ -3619,7 +3746,7 @@ int CMusicDatabase::Cleanup(CGUIDialogProgress* progressDialog /*= nullptr*/)
 
   int ret = ERROR_OK;
   unsigned int time = XbmcThreads::SystemClockMillis();
-  CLog::Log(LOGNOTICE, "%s: Starting musicdatabase cleanup ..", __FUNCTION__);
+  CLog::Log(LOGINFO, "%s: Starting musicdatabase cleanup ..", __FUNCTION__);
   CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::AudioLibrary, "xbmc", "OnCleanStarted");
 
   // first cleanup any songs with invalid paths
@@ -3738,7 +3865,8 @@ int CMusicDatabase::Cleanup(CGUIDialogProgress* progressDialog /*= nullptr*/)
     progressDialog->Close();
   }
   time = XbmcThreads::SystemClockMillis() - time;
-  CLog::Log(LOGNOTICE, "%s: Cleaning musicdatabase done. Operation took %s", __FUNCTION__, StringUtils::SecondsToTimeString(time / 1000).c_str());
+  CLog::Log(LOGINFO, "%s: Cleaning musicdatabase done. Operation took %s", __FUNCTION__,
+            StringUtils::SecondsToTimeString(time / 1000).c_str());
   CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::AudioLibrary, "xbmc", "OnCleanFinished");
 
   if (!Compress(false))
@@ -4492,7 +4620,7 @@ bool CMusicDatabase::GetArtistsByWhere(const std::string& strBaseDir, const Filt
 
     bool extended = false;
     bool limitedInSQL =
-      extFilter.limit.empty() && (sortDescription.limitStart > 0 || sortDescription.limitEnd > 0);
+      extFilter.limit.empty() && (sorting.limitStart > 0 || sorting.limitEnd > 0);
 
     // if there are extra WHERE conditions (from media filter dialog) we might
     // need access to songview or albumview for these conditions
@@ -4549,18 +4677,21 @@ bool CMusicDatabase::GetArtistsByWhere(const std::string& strBaseDir, const Filt
     // Apply any limiting directly in SQL and so sort as well
     if (limitedInSQL)
     {
-      extFilter.limit =
-          DatabaseUtils::BuildLimitClauseOnly(sortDescription.limitEnd, sortDescription.limitStart);
-      const std::shared_ptr<CSettings> settings =
-          CServiceBroker::GetSettingsComponent()->GetSettings();
-      if (settings->GetBool(CSettings::SETTING_MUSICLIBRARY_USEARTISTSORTNAME))
-        sorting.sortAttributes =
-            static_cast<SortAttribute>(sorting.sortAttributes | SortAttributeUseArtistSortName);
-      // Set Orderby and add any extra fields needed for sort e.g. "artistname" scalar query
-      GetOrderFilter(MediaTypeArtist, sorting, extFilter);
-      strSQLExtra.clear();
-      BuildSQL(strSQLExtra, extFilter, strSQLExtra);
+      extFilter.limit = DatabaseUtils::BuildLimitClauseOnly(sorting.limitEnd, sorting.limitStart);
     }
+
+    // Apply sort in SQL
+    const std::shared_ptr<CSettings> settings =
+        CServiceBroker::GetSettingsComponent()->GetSettings();
+    if (settings->GetBool(CSettings::SETTING_MUSICLIBRARY_USEARTISTSORTNAME))
+      sorting.sortAttributes =
+          static_cast<SortAttribute>(sorting.sortAttributes | SortAttributeUseArtistSortName);
+    // Set Orderby and add any extra fields needed for sort e.g. "artistname" scalar query
+    GetOrderFilter(MediaTypeArtist, sorting, extFilter);
+
+    strSQLExtra.clear();
+    if (!BuildSQL(strSQLExtra, extFilter, strSQLExtra))
+      return false;
 
     std::string strSQL;
     std::string strFields = "artistview.*";
@@ -4588,12 +4719,13 @@ bool CMusicDatabase::GetArtistsByWhere(const std::string& strBaseDir, const Filt
 
     DatabaseResults results;
     results.reserve(iRowsFound);
-    // Avoid sorting when populating results when have limits so already sorted in SQL
-    sorting = sortDescription;
-    if (limitedInSQL)
-      sorting.sortBy = SortByNone;
-    if (!SortUtils::SortFromDataset(sorting, MediaTypeArtist, m_pDS, results))
+    // Populate results field vector from dataset
+    FieldList fields;
+    if (!DatabaseUtils::GetDatabaseResults(MediaTypeArtist, fields, m_pDS, results))
       return false;
+    // Store item list sort order
+    items.SetSortMethod(sortDescription.sortBy);
+    items.SetSortOrder(sortDescription.sortOrder);
 
     // Get Artists from returned rows
     items.Reserve(results.size());
@@ -4614,6 +4746,8 @@ bool CMusicDatabase::GetArtistsByWhere(const std::string& strBaseDir, const Filt
         pItem->SetPath(itemUrl.ToString());
 
         pItem->GetMusicInfoTag()->SetDatabaseId(artist.idArtist, MediaTypeArtist);
+        // Set icon now to avoid slow per item processing in FillInDefaultIcon later
+        pItem->SetProperty("icon_never_overlay", true);
         pItem->SetArt("icon", "DefaultArtist.png");
 
         SetPropertiesFromArtist(*pItem, artist);
@@ -4625,7 +4759,6 @@ bool CMusicDatabase::GetArtistsByWhere(const std::string& strBaseDir, const Filt
         CLog::Log(LOGERROR, "%s - out of memory getting listing (got %i)", __FUNCTION__, items.Size());
       }
     }
-
     // cleanup
     m_pDS->close();
 
@@ -4707,7 +4840,7 @@ bool CMusicDatabase::GetAlbumsByWhere(const std::string &baseDir, const Filter &
 
     bool extended = false;
     bool limitedInSQL =
-      extFilter.limit.empty() && (sortDescription.limitStart > 0 || sortDescription.limitEnd > 0);
+      extFilter.limit.empty() && (sorting.limitStart > 0 || sorting.limitEnd > 0);
 
     // If there are extra WHERE conditions (from media filter dialog) we might
     // need access to songview for these conditions
@@ -4752,21 +4885,31 @@ bool CMusicDatabase::GetAlbumsByWhere(const std::string &baseDir, const Filter &
       return true;
     }
 
-    // Apply any limiting directly in SQL and so sort as well
+    // Apply any limiting directly in SQL
     if (limitedInSQL)
     {
       extFilter.limit =
-          DatabaseUtils::BuildLimitClauseOnly(sortDescription.limitEnd, sortDescription.limitStart);
-      const std::shared_ptr<CSettings> settings =
-          CServiceBroker::GetSettingsComponent()->GetSettings();
-      if (settings->GetBool(CSettings::SETTING_MUSICLIBRARY_USEARTISTSORTNAME))
-        sorting.sortAttributes =
-            static_cast<SortAttribute>(sorting.sortAttributes | SortAttributeUseArtistSortName);
-      // Set Orderby and add any extra fields needed for sort e.g. "artistname" scalar query
-      GetOrderFilter(MediaTypeAlbum, sorting, extFilter);
-      strSQLExtra.clear();
-      BuildSQL(strSQLExtra, extFilter, strSQLExtra);
+          DatabaseUtils::BuildLimitClauseOnly(sorting.limitEnd, sorting.limitStart);
     }
+
+    // Apply sort in SQL
+    const std::shared_ptr<CSettings> settings =
+        CServiceBroker::GetSettingsComponent()->GetSettings();
+    if (settings->GetBool(CSettings::SETTING_MUSICLIBRARY_USEARTISTSORTNAME))
+      sorting.sortAttributes =
+          static_cast<SortAttribute>(sorting.sortAttributes | SortAttributeUseArtistSortName);
+    // Set Orderby and add any extra fields needed for sort e.g. "artistname" scalar query
+    GetOrderFilter(MediaTypeAlbum, sorting, extFilter);
+    // Modify order to use correct calculated year field
+    if (!CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+            CSettings::SETTING_MUSICLIBRARY_USEORIGINALDATE))
+      StringUtils::Replace(extFilter.order, "iYear", "CAST(strReleaseDate AS INTEGER)");
+    else
+      StringUtils::Replace(extFilter.order, "iYear", "CAST(strOrigReleaseDate AS INTEGER)");
+
+    strSQLExtra.clear();
+    if (!BuildSQL(strSQLExtra, extFilter, strSQLExtra))
+      return false;
 
     std::string strSQL;
     std::string strFields = "albumview.*";
@@ -4794,15 +4937,16 @@ bool CMusicDatabase::GetAlbumsByWhere(const std::string &baseDir, const Filter &
 
     DatabaseResults results;
     results.reserve(iRowsFound);
-    // Avoid sorting when populating results when have limits as already sorted in SQL
-    sorting = sortDescription;
-    if (limitedInSQL)
-      sorting.sortBy = SortByNone;
-    if (!SortUtils::SortFromDataset(sorting, MediaTypeAlbum, m_pDS, results))
+    // Populate results field vector from dataset
+    FieldList fields;
+    if (!DatabaseUtils::GetDatabaseResults(MediaTypeAlbum, fields, m_pDS, results))
       return false;
+    // Store item list sort order
+    items.SetSortMethod(sorting.sortBy);
+    items.SetSortOrder(sorting.sortOrder);
 
     // Get albums from returned rows
-    items.Reserve(total);
+    items.Reserve(results.size());
     const dbiplus::query_data &data = m_pDS->get_result_set().records;
     for (const auto &i : results)
     {
@@ -4816,6 +4960,8 @@ bool CMusicDatabase::GetAlbumsByWhere(const std::string &baseDir, const Filter &
         itemUrl.AppendPath(path);
 
         CFileItemPtr pItem(new CFileItem(itemUrl.ToString(), GetAlbumFromDataset(record)));
+        // Set icon now to avoid slow per item processing in FillInDefaultIcon later
+        pItem->SetProperty("icon_never_overlay", true);
         pItem->SetArt("icon", "DefaultAlbumCover.png");
         items.Add(pItem);
       }
@@ -4905,8 +5051,8 @@ bool CMusicDatabase::GetDiscsByWhere(CMusicDbUrl& musicUrl,
     // Apply any limiting directly in SQL if there is either no special sorting or random sort
     // When limited, random sort is also applied in SQL
     bool limitedInSQL = extFilter.limit.empty() &&
-      (sortDescription.sortBy == SortByNone || sortDescription.sortBy == SortByRandom) &&
-      (sortDescription.limitStart > 0 || sortDescription.limitEnd > 0);
+      (sorting.sortBy == SortByNone || sorting.sortBy == SortByRandom) &&
+      (sorting.limitStart > 0 || sorting.limitEnd > 0);
 
     if (countOnly || limitedInSQL)
     {
@@ -4927,10 +5073,10 @@ bool CMusicDatabase::GetDiscsByWhere(CMusicDbUrl& musicUrl,
     // Apply limits and random sort order directly in SQL
     if (limitedInSQL)
     {
-      if (sortDescription.sortBy == SortByRandom)
+      if (sorting.sortBy == SortByRandom)
         strSQLExtra += PrepareSQL(" ORDER BY RANDOM()");
       strSQLExtra +=
-          DatabaseUtils::BuildLimitClause(sortDescription.limitEnd, sortDescription.limitStart);
+          DatabaseUtils::BuildLimitClause(sorting.limitEnd, sorting.limitStart);
     }
     else
       strSQLExtra += PrepareSQL(" ORDER BY albumview.idAlbum, iDisc");
@@ -4963,8 +5109,7 @@ bool CMusicDatabase::GetDiscsByWhere(CMusicDbUrl& musicUrl,
     // Limit when SortByNone already applied in SQL,
     // Need guaranteed ordering for dataset processing to group by disc title
     // so apply sort later to fileitems list rather than dataset
-    sorting = sortDescription;
-    if (sortDescription.sortBy != SortByNone)
+    if (sorting.sortBy != SortByNone)
       sorting.sortBy = SortByNone;
     if (!SortUtils::SortFromDataset(sorting, MediaTypeAlbum, m_pDS, results))
       return false;
@@ -5017,6 +5162,8 @@ bool CMusicDatabase::GetDiscsByWhere(CMusicDbUrl& musicUrl,
         pItem->GetMusicInfoTag()->SetDiscNumber(discnum);
         pItem->GetMusicInfoTag()->SetTitle(strDiscSubtitle);
         pItem->SetLabel(strDiscSubtitle);
+        // Set icon now to avoid slow per item processing in FillInDefaultIcon later
+        pItem->SetProperty("icon_never_overlay", true);
         pItem->SetArt("icon", "DefaultAlbumCover.png");
         items.Add(pItem);
       }
@@ -5033,9 +5180,9 @@ bool CMusicDatabase::GetDiscsByWhere(CMusicDbUrl& musicUrl,
 
     // Finally do any sorting in items list we have not been able to do before in SQL or dataset,
     // that is when have join with songartistview and sorting other than random with limit
-    if (sortDescription.sortBy != SortByNone &&
-        !(limitedInSQL && sortDescription.sortBy == SortByRandom))
-      items.Sort(sortDescription);
+    if (sorting.sortBy != SortByNone &&
+        !(limitedInSQL && sorting.sortBy == SortByRandom))
+      items.Sort(sorting);
 
     CLog::Log(LOGDEBUG, "{0}: Time to fill list with discs {1}ms query took {2}ms",
       __FUNCTION__, XbmcThreads::SystemClockMillis() - time, querytime);
@@ -5065,15 +5212,19 @@ bool CMusicDatabase::GetSongsFullByWhere(const std::string &baseDir, const Filte
 
   try
   {
+    unsigned int querytime = 0;
     unsigned int time = XbmcThreads::SystemClockMillis();
     int total = -1;
-    bool extended = false;
 
     Filter extFilter = filter;
     CMusicDbUrl musicUrl;
     SortDescription sorting = sortDescription;
     if (!musicUrl.FromString(baseDir) || !GetFilter(musicUrl, extFilter, sorting))
       return false;
+
+    bool extended = false;
+    bool limitedInSQL =
+        extFilter.limit.empty() && (sortDescription.limitStart > 0 || sortDescription.limitEnd > 0);
 
     // If there are extra WHERE conditions (from media filter dialog) we might
     // need access to albumview for these conditions
@@ -5083,69 +5234,110 @@ bool CMusicDatabase::GetSongsFullByWhere(const std::string &baseDir, const Filte
       extFilter.AppendJoin("JOIN albumview ON albumview.idAlbum = songview.idAlbum");
     }
 
+    // Build songview <where> for count
     std::string strSQLExtra;
     if (!BuildSQL(strSQLExtra, extFilter, strSQLExtra))
       return false;
 
     // Count (without group by) number of songs that satisfy selection criteria
+    // Much quicker to use song table, not songview, when filtering only on song fields
     std::string strValue;
-    strValue = GetSingleValue("SELECT COUNT(1) FROM songview " + strSQLExtra, m_pDS);
+    if (extended ||
+        (!extFilter.where.empty() && (extFilter.where.find("strAlbum") != std::string::npos ||
+                                      extFilter.where.find("strPath") != std::string::npos ||
+                                      extFilter.where.find("bCompilation") != std::string::npos ||
+                                      extFilter.where.find("bBoxedset") != std::string::npos)))
+      strValue = GetSingleValue("SELECT COUNT(1) FROM songview " + strSQLExtra, m_pDS);
+    else
+    {
+      std::string strSQLsong = strSQLExtra;
+      StringUtils::Replace(strSQLsong, "songview", "song");
+      strValue = GetSingleValue("SELECT COUNT(1) FROM song " + strSQLsong, m_pDS);
+    }
     total = static_cast<int>(strtol(strValue.c_str(), NULL, 10));
 
     if (extended)
       extFilter.AppendGroup("songview.idSong");
 
-    // Apply any limiting directly in SQL and so sort as well
-    bool limitedInSQL =
-        extFilter.limit.empty() && (sortDescription.limitStart > 0 || sortDescription.limitEnd > 0);
+    // Apply any limiting directly in SQL
     if (limitedInSQL)
     {
       extFilter.limit =
-          DatabaseUtils::BuildLimitClauseOnly(sortDescription.limitEnd, sortDescription.limitStart);
-      const std::shared_ptr<CSettings> settings =
-          CServiceBroker::GetSettingsComponent()->GetSettings();
-      if (settings->GetBool(CSettings::SETTING_MUSICLIBRARY_USEARTISTSORTNAME))
-        sorting.sortAttributes =
-            static_cast<SortAttribute>(sorting.sortAttributes | SortAttributeUseArtistSortName);
-      // Set Orderby and add any extra fields needed for sort e.g. "artistname" scalar query
-      GetOrderFilter(MediaTypeSong, sorting, extFilter);
+          DatabaseUtils::BuildLimitClauseOnly(sorting.limitEnd, sorting.limitStart);
     }
-    else if (artistData)
+
+    // Apply sort in SQL
+    const std::shared_ptr<CSettings> settings =
+        CServiceBroker::GetSettingsComponent()->GetSettings();
+    if (settings->GetBool(CSettings::SETTING_MUSICLIBRARY_USEARTISTSORTNAME))
+      sorting.sortAttributes =
+          static_cast<SortAttribute>(sorting.sortAttributes | SortAttributeUseArtistSortName);
+    // Set Orderby and add any extra fields needed for sort e.g. "artistname" scalar query
+    GetOrderFilter(MediaTypeSong, sorting, extFilter);
+    // Modify order to use correct calculated year field
+    if (!CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+            CSettings::SETTING_MUSICLIBRARY_USEORIGINALDATE))
+      StringUtils::Replace(extFilter.order, "iYear", "CAST(strReleaseDate AS INTEGER)");
+    else
+      StringUtils::Replace(extFilter.order, "iYear", "CAST(strOrigReleaseDate AS INTEGER)");
+
+    std::string strFields = "songview.*";
+    if (!artistData || limitedInSQL)
     {
-      extFilter.AppendOrder("songartistview.idSong");
-      extFilter.AppendOrder("songartistview.idRole");
-      extFilter.AppendOrder("songartistview.iOrder");
+      // Build songview <where> + <order by> + <limits>
+      strSQLExtra.clear();
+      if (!BuildSQL(strSQLExtra, extFilter, strSQLExtra))
+        return false;
     }
-    strSQLExtra.clear();
-    BuildSQL(strSQLExtra, extFilter, strSQLExtra);
+    else
+      strFields = "songview.*, songartistview.*";
+    if (!extFilter.fields.empty() && extFilter.fields.compare("*") != 0)
+      strFields = strFields + ", " + extFilter.fields;
 
     std::string strSQL;
     if (artistData)
     { // Get data from song and song_artist tables to fully populate songs with artists
       // All songs now have at least one artist so inner join sufficient
-      // Need guaranteed ordering for dataset processing to extract songs
+      // Build songartistview JOIN part of query
+      Filter joinFilter;
+      std::string strSQLJoin;
+      joinFilter.AppendJoin("JOIN songartistview ON songartistview.idSong = songview.idSong");
+      if (sortDescription.sortBy == SortByRandom)
+        joinFilter.AppendOrder("songartistview.idSong");
+      else
+        joinFilter.order = extFilter.order;
       if (limitedInSQL)
       {
-        // Apply where clause, limits and order to songview, then join as multiple
-        // records in result set per song in idSong order for dataset processing
-        // so item list will be in idSong order until sorted elsewhere
-        std::string strSVFields = "songview.*";
-        if (!extFilter.fields.empty() && extFilter.fields.compare("*") != 0)
-          strSVFields = "songview.*, " + extFilter.fields;
-        strSQL = "SELECT sv.*, songartistview.* "
-          "FROM (SELECT " + strSVFields + " FROM songview " + strSQLExtra + ") AS sv "
-          "JOIN songartistview ON songartistview.idSong = sv.idSong "
-          "ORDER BY songartistview.idSong, songartistview.idRole, songartistview.iOrder";
+        StringUtils::Replace(joinFilter.join, "songview.idSong", "sv.idSong");
+        StringUtils::Replace(joinFilter.order, "songview.", "sv.");
       }
       else
-        strSQL = "SELECT songview.*, songartistview.* "
-                 "FROM songview JOIN songartistview ON songartistview.idSong = songview.idSong " +
-                 strSQLExtra;
+        joinFilter.where = extFilter.where;
+      joinFilter.AppendOrder("songartistview.idRole");
+      joinFilter.AppendOrder("songartistview.iOrder");
+      if (!BuildSQL(strSQLJoin, joinFilter, strSQLJoin))
+        return false;
+
+      if (limitedInSQL)
+      {
+        // When have artist data (all roles) and LIMIT on songs use inline view
+        // SELECT sv.*, songartistview.* FROM
+        //   (SELECT songview.* FROM songview <where> + <order by> + <limits> ) AS sv
+        //   <order by sv fields>, songartistview.idRole, songartistview.iOrder
+        // Apply where clause, limits and order to songview, then join to songartistview this gives
+        // multiple records per song in result set
+        strSQL = "SELECT " + strFields + " FROM songview " + strSQLExtra;
+        strSQL = "(" + strSQL + ") AS sv ";
+        strSQL = "SELECT sv.*, songartistview.* FROM " + strSQL + strSQLJoin;
+      }
+      else
+        strSQL = "SELECT " + strFields + " FROM songview " + strSQLJoin;
     }
     else
-      strSQL = "SELECT songview.* FROM songview " + strSQLExtra;
+      strSQL = "SELECT " + strFields + " FROM songview " + strSQLExtra;
 
     CLog::Log(LOGDEBUG, "%s query = %s", __FUNCTION__, strSQL.c_str());
+    querytime = XbmcThreads::SystemClockMillis();
     // run query
     if (!m_pDS->query(strSQL))
       return false;
@@ -5156,20 +5348,20 @@ bool CMusicDatabase::GetSongsFullByWhere(const std::string &baseDir, const Filte
       m_pDS->close();
       return true;
     }
+    querytime = XbmcThreads::SystemClockMillis() - querytime;
 
     // Store the total number of songs as a property
     items.SetProperty("total", total);
 
     DatabaseResults results;
     results.reserve(iRowsFound);
-    // Avoid sorting when populating results when a) have join with songartistview
-    // or b) no join but have limits so already sorted in SQL
-    // Apply sort later to fileitems list rather than dataset
-    sorting = sortDescription;
-    if (artistData || limitedInSQL)
-      sorting.sortBy = SortByNone;
-    if (!SortUtils::SortFromDataset(sorting, MediaTypeSong, m_pDS, results))
+    // Populate results field vector from dataset
+    FieldList fields;
+    if (!DatabaseUtils::GetDatabaseResults(MediaTypeSong, fields, m_pDS, results))
       return false;
+    // Store item list sort order
+    items.SetSortMethod(sorting.sortBy);
+    items.SetSortOrder(sorting.sortOrder);
 
     // Get songs from returned rows. If join songartistview then there is a row for every artist
     items.Reserve(total);
@@ -5198,6 +5390,9 @@ bool CMusicDatabase::GetSongsFullByWhere(const std::string &baseDir, const Filte
           GetFileItemFromDataset(record, item.get(), musicUrl);
           // HACK for sorting by database returned order
           item->m_iprogramCount = ++count;
+          // Set icon now to avoid slow per item processing in FillInDefaultIcon later
+          item->SetProperty("icon_never_overlay", true);
+          item->SetArt("icon", "DefaultAudio.png");
           items.Add(item);
         }
         // Get song artist credits and contributors
@@ -5226,17 +5421,17 @@ bool CMusicDatabase::GetSongsFullByWhere(const std::string &baseDir, const Filte
     // cleanup
     m_pDS->close();
 
-    // Finally do any sorting in items list we have not been able to do before because have join
-    // so have idSong order for processing.
+    // Ensure random order of item list when results set sorted by idSong for artist processing
     // Note while smartplaylists and xml nodes provide sort order, sort is not passed in from node
     // navigation. Order is read later from view state and list sorting is then triggered by
     // CGUIMediaWindow::Update in both cases.
-    // Sorting here is probably redundant, but leave in place until certain
+    // So sorting here is currently redundant, but the consistent place to do it.
     // !@ todo: do sorting once, preferably in SQL
-    if (artistData)
-      items.Sort(sortDescription);
+    if (sorting.sortBy == SortByRandom && artistData)
+      items.Sort(sorting);
 
-    CLog::Log(LOGDEBUG, "%s(%s) - took %d ms", __FUNCTION__, filter.where.c_str(), XbmcThreads::SystemClockMillis() - time);
+    CLog::Log(LOGDEBUG, "{0}: Time to fill list with songs {1}ms query took {2}ms", __FUNCTION__,
+              XbmcThreads::SystemClockMillis() - time, querytime);
     return true;
   }
   catch (...)
@@ -5279,11 +5474,11 @@ bool CMusicDatabase::GetSongsByWhere(const std::string &baseDir, const Filter &f
 
     // Apply the limiting directly here if there's no special sorting but limiting
     if (extFilter.limit.empty() &&
-        sortDescription.sortBy == SortByNone &&
-       (sortDescription.limitStart > 0 || sortDescription.limitEnd > 0))
+        sorting.sortBy == SortByNone &&
+       (sorting.limitStart > 0 || sorting.limitEnd > 0))
     {
       total = (int)strtol(GetSingleValue(PrepareSQL(strSQL, "COUNT(1)") + strSQLExtra, m_pDS).c_str(), NULL, 10);
-      strSQLExtra += DatabaseUtils::BuildLimitClause(sortDescription.limitEnd, sortDescription.limitStart);
+      strSQLExtra += DatabaseUtils::BuildLimitClause(sorting.limitEnd, sorting.limitStart);
     }
 
     strSQL = PrepareSQL(strSQL, !filter.fields.empty() && filter.fields.compare("*") != 0 ? filter.fields.c_str() : "songview.*") + strSQLExtra;
@@ -5307,7 +5502,7 @@ bool CMusicDatabase::GetSongsByWhere(const std::string &baseDir, const Filter &f
 
     DatabaseResults results;
     results.reserve(iRowsFound);
-    if (!SortUtils::SortFromDataset(sortDescription, MediaTypeSong, m_pDS, results))
+    if (!SortUtils::SortFromDataset(sorting, MediaTypeSong, m_pDS, results))
       return false;
 
     // get data from returned rows
@@ -5379,6 +5574,7 @@ bool CMusicDatabase::GetSongsNav(const std::string& strBaseDir, CFileItemList& i
   return GetSongsFullByWhere(musicUrl.ToString(), filter, items, sortDescription, true);
 }
 
+// clang-format off
 typedef struct
 {
   std::string fieldJSON;  // Field name in JSON schema
@@ -5427,7 +5623,7 @@ static const translateJSONField JSONtoDBArtist[] = {
   { "isalbumartist",               "bool", false, "",                       "" },
   { "thumbnail",                 "string", false, "",                       "" },
   { "fanart",                    "string", false, "",                       "" }
-
+  // clang-format on
   /*
   Sources and genre are related via album, and so the dataset only contains source
   and genre pairs that exist, rather than all the genres being repeated for every
@@ -5451,6 +5647,7 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
   {
     total = -1;
 
+    size_t resultcount = 0;
     Filter extFilter;
     CMusicDbUrl musicUrl;
     SortDescription sorting = sortDescription;
@@ -5469,6 +5666,7 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
     // Count number of artists that satisfy selection criteria 
     //(includes xsp limits from filter, but not sort limits)
     total = static_cast<int>(strtol(GetSingleValue("SELECT COUNT(1) FROM artist " + strSQLExtra, m_pDS).c_str(), NULL, 10));
+    resultcount = static_cast<size_t>(total);
 
     // Process albumartistsonly option
     const CUrlOptions::UrlOptions& options = musicUrl.GetOptions();
@@ -5562,7 +5760,7 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
     // Append calculated artistsort field that may have been added to filter
     // Field used only for ORDER BY, not output to JSON
     extFilter.AppendField(artistsortSQL);
-    for (unsigned int i = 0; i < iAddedFields; i++)
+    for (int i = 0; i < iAddedFields; i++)
       dbfieldindex.emplace_back(-2); // columns in dataset
 
     // Build JOIN, WHERE, ORDER BY and LIMIT for inline view
@@ -5575,6 +5773,9 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
       (sortDescription.limitStart > 0 || sortDescription.limitEnd > 0))
     {
       strSQLExtra += DatabaseUtils::BuildLimitClause(sortDescription.limitEnd, sortDescription.limitStart);
+      resultcount = std::min(
+        DatabaseUtils::GetLimitCount(sortDescription.limitEnd, sortDescription.limitStart),
+        resultcount);
     }
 
     // Setup multivalue JOINs, GROUP BY and ORDER BY
@@ -5591,31 +5792,36 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
       joinFilter.AppendOrder("a1.idArtist");
     joinFilter.AppendGroup("a1.idArtist"); 
     // Album artists and song artists
-    if (joinLayout.GetFetch(joinToArtist_isalbumartist) ||
+    if ((joinLayout.GetFetch(joinToArtist_isalbumartist) && !albumArtistsOnly) ||
       joinLayout.GetFetch(joinToArtist_idSourceAlbum) ||
       joinLayout.GetFetch(joinToArtist_idSongGenreAlbum) ||
       joinLayout.GetFetch(joinToArtist_strRole))
     {
       bJoinAlbumArtist = true;
-      albumArtistFilter.AppendGroup("album_artist.idArtist");
       albumArtistFilter.AppendField("album_artist.idArtist AS id");
       if (!albumArtistsOnly || joinLayout.GetFetch(joinToArtist_strRole))
       {
         bJoinSongArtist = true;
-        songArtistFilter.AppendGroup("song_artist.idArtist");
         songArtistFilter.AppendField("song_artist.idArtist AS id");
         songArtistFilter.AppendField("1 AS isSong");
         albumArtistFilter.AppendField("0 AS isSong");
         joinLayout.SetField(joinToArtist_isSong, JSONtoDBArtist[index_firstjoin + joinToArtist_isSong].fieldDB);
+        joinFilter.AppendGroup(JSONtoDBArtist[index_firstjoin + joinToArtist_isSong].fieldDB);
         joinFilter.AppendOrder(JSONtoDBArtist[index_firstjoin + joinToArtist_isSong].fieldDB);
       }
+    }
+    else if (joinLayout.GetFetch(joinToArtist_isalbumartist))
+    {
+      // Filtering album artists only and isalbumartist requested but not source, songgenres or roles,
+      // so no need for join to album_artist table. Set fetching fetch false so that 
+      // joinLayout.HasFilterFields() is false 
+      joinLayout.SetFetch(joinToArtist_isalbumartist, false);
     }
 
     // Sources
     if (joinLayout.GetFetch(joinToArtist_idSourceAlbum))
     { // Left join as source may have been removed but leaving lib entries      
       albumArtistFilter.AppendJoin("LEFT JOIN album_source ON album_source.idAlbum = album_artist.idAlbum");
-      albumArtistFilter.AppendGroup("album_source.idSource");
       albumArtistFilter.AppendField(JSONtoDBArtist[index_firstjoin + joinToArtist_idSourceAlbum].SQL);
       joinFilter.AppendGroup(JSONtoDBArtist[index_firstjoin + joinToArtist_idSourceAlbum].fieldDB);
       joinFilter.AppendOrder(JSONtoDBArtist[index_firstjoin + joinToArtist_idSourceAlbum].fieldDB);
@@ -5623,7 +5829,6 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
       {
         songArtistFilter.AppendJoin("JOIN song ON song.idSong = song_artist.idSong");
         songArtistFilter.AppendJoin("LEFT JOIN album_source ON album_source.idAlbum = song.idAlbum");
-        songArtistFilter.AppendGroup("album_source.idSource");
         songArtistFilter.AppendField("-1 AS " + JSONtoDBArtist[index_firstjoin + joinToArtist_idSourceAlbum].fieldDB);
         songArtistFilter.AppendField(JSONtoDBArtist[index_firstjoin + joinToArtist_idSourceSong].SQL);
         albumArtistFilter.AppendField("-1 AS " + JSONtoDBArtist[index_firstjoin + joinToArtist_idSourceSong].fieldDB);
@@ -5643,7 +5848,6 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
       albumArtistFilter.AppendJoin("JOIN song ON song.idAlbum = album_artist.idAlbum");
       albumArtistFilter.AppendJoin("LEFT JOIN song_genre ON song_genre.idSong = song.idSong");
       albumArtistFilter.AppendJoin("LEFT JOIN genre ON genre.idGenre = song_genre.idGenre");
-      albumArtistFilter.AppendGroup("genre.idGenre");
       albumArtistFilter.AppendField(JSONtoDBArtist[index_firstjoin + joinToArtist_idSongGenreAlbum].SQL);
       albumArtistFilter.AppendField(JSONtoDBArtist[index_firstjoin + joinToArtist_strSongGenreAlbum].SQL);
       joinLayout.SetField(joinToArtist_strSongGenreAlbum, JSONtoDBArtist[index_firstjoin + joinToArtist_strSongGenreAlbum].fieldDB);
@@ -5653,7 +5857,6 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
       { // Left join genre as songs may not have genre
         songArtistFilter.AppendJoin("LEFT JOIN song_genre ON song_genre.idSong = song_artist.idSong");
         songArtistFilter.AppendJoin("LEFT JOIN genre ON genre.idGenre = song_genre.idGenre");
-        songArtistFilter.AppendGroup("genre.idGenre");
         songArtistFilter.AppendField("-1 AS " + JSONtoDBArtist[index_firstjoin + joinToArtist_idSongGenreAlbum].fieldDB);
         songArtistFilter.AppendField("'' AS " + JSONtoDBArtist[index_firstjoin + joinToArtist_strSongGenreAlbum].fieldDB);
         songArtistFilter.AppendField(JSONtoDBArtist[index_firstjoin + joinToArtist_idSongGenreSong].SQL);
@@ -5683,7 +5886,6 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
              joinLayout.GetFetch(joinToArtist_idSongGenreAlbum))))
     { // Rows from many roles so fetch roleid for "roles", source and genre processing
       songArtistFilter.AppendField(JSONtoDBArtist[index_firstjoin + joinToArtist_idRole].SQL);
-      songArtistFilter.AppendGroup(JSONtoDBArtist[index_firstjoin + joinToArtist_idRole].SQL);
       // Add fake column to album_artist query
       albumArtistFilter.AppendField("-1 AS " + JSONtoDBArtist[index_firstjoin + joinToArtist_idRole].fieldDB);
       joinLayout.SetField(joinToArtist_idRole, JSONtoDBArtist[index_firstjoin + joinToArtist_idRole].fieldDB);
@@ -5730,7 +5932,7 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
     if (bJoinArt)
     { // Left join as artist may not have any art
       joinFilter.AppendJoin("LEFT JOIN art ON art.media_id = a1.idArtist AND art.media_type = 'artist'");
-      joinLayout.SetField(joinToArtist_idArt, JSONtoDBArtist[index_firstjoin + joinToArtist_idArt].SQL, 
+      joinLayout.SetField(joinToArtist_idArt, JSONtoDBArtist[index_firstjoin + joinToArtist_idArt].SQL,
         joinLayout.GetOutput(joinToArtist_idArt));
       joinLayout.SetField(joinToArtist_artType, JSONtoDBArtist[index_firstjoin + joinToArtist_artType].SQL);
       joinLayout.SetField(joinToArtist_artURL, JSONtoDBArtist[index_firstjoin + joinToArtist_artURL].SQL);
@@ -5746,6 +5948,8 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
           joinFilter.AppendJoin("AND art.type = 'thumb'");
       }
     }
+    else if (bJoinSongArtist)
+      joinFilter.group.clear(); // UNION only so no GROUP BY needed
 
     // Build JOIN part of query (if we have one)
     std::string strSQLJoin;
@@ -5778,7 +5982,7 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
     if (!m_pDS->query(strSQL))
       return false;
     CLog::Log(LOGDEBUG, "%s - query took %i ms",
-      __FUNCTION__, XbmcThreads::SystemClockMillis() - time); time = XbmcThreads::SystemClockMillis();
+      __FUNCTION__, XbmcThreads::SystemClockMillis() - time);
 
     int iRowsFound = m_pDS->num_rows();
     if (iRowsFound <= 0)
@@ -5786,9 +5990,6 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
       m_pDS->close();
       return true;
     }
-
-    DatabaseResults dbResults;
-    dbResults.reserve(iRowsFound);
 
     // Get artists from returned rows. Joins means there can be many rows per artist
     int artistId = -1;
@@ -5804,6 +6005,7 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
     bool bIsAlbumArtist(true);
     bool bGenreFoundViaAlbum(false);
     CVariant artistObj;
+    result["artists"].reserve(resultcount);
     while (!m_pDS->eof() || bHaveArtist)
     {
       const dbiplus::sql_record* const record = m_pDS->get_sql_record();
@@ -5855,12 +6057,13 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
         artistObj["artistid"] = artistId;
         artistObj["label"] = record->at(1).get_asString();
         artistObj["artist"] = record->at(1).get_asString(); // Always have "artist"
-        bIsAlbumArtist = bJoinAlbumArtist;  //Album artist by default
-        if (bJoinSongArtist)
+        bIsAlbumArtist = true;  //Album artist by default
+        if (joinLayout.GetOutput(joinToArtist_isalbumartist))
         {
-          bIsAlbumArtist = !record->at(joinLayout.GetRecNo(joinToArtist_isSong)).get_asBool();
-          if (joinLayout.GetOutput(joinToArtist_isalbumartist))
-            artistObj["isalbumartist"] = bIsAlbumArtist;
+          // Not album artist when fetching song artists too and first row for artist isSong=true
+          if (bJoinSongArtist)
+            bIsAlbumArtist = !record->at(joinLayout.GetRecNo(joinToArtist_isSong)).get_asBool();
+          artistObj["isalbumartist"] = bIsAlbumArtist;
         }
         for (size_t i = 0; i < dbfieldindex.size(); i++)
           if (dbfieldindex[i] > -1)
@@ -6055,7 +6258,7 @@ bool CMusicDatabase::GetArtistsByWhereJSON(const std::set<std::string>& fields, 
   return false;
 }
 
-// clang format off
+// clang-format off
 static const translateJSONField JSONtoDBAlbum[] = {
   // albumview (inc scalar subquery fields use in filter rules)
   { "title",                     "string", true,  "strAlbum",               "" },  // Label field at top
@@ -6082,17 +6285,19 @@ static const translateJSONField JSONtoDBAlbum[] = {
   { "lastplayed",                "string", true,  "lastPlayed",             "" },  // Scalar subquery in view
   { "originaldate",              "string", true,  "strOrigReleaseDate",     "" },
   { "releasedate",               "string", true,  "strReleaseDate",         "" },
+  { "albumstatus",               "string", true,  "strReleaseStatus",       "" },
+
   // Scalar subquery fields
   { "year",                     "integer", true,  "iYear",                  "CAST(<datefield> AS INTEGER) AS iYear" }, //From strReleaseDate or strOrigReleaseDate
-  { "sourceid",                  "string", true,  "sourceid",               "(SELECT GROUP_CONCAT(album_source.idSource SEPARATOR '; ')  FROM album_source WHERE album_source.idAlbum = albumview.idAlbum) AS sources" },
+  { "sourceid",                  "string", true,  "sourceid",               "(SELECT GROUP_CONCAT(album_source.idSource SEPARATOR '; ') FROM album_source WHERE album_source.idAlbum = albumview.idAlbum) AS sources" },
+  { "songgenres",                 "array", true,  "songgenres",             "(SELECT GROUP_CONCAT(DISTINCT CONCAT(genre.idGenre, ',', REPLACE(genre.strGenre, ',', '-'))) FROM song "
+      "JOIN song_genre ON song.idSong = song_genre.idSong JOIN genre ON song_genre.idGenre = genre.idGenre WHERE song.idAlbum = albumview.idAlbum) AS songgenres" } ,
   // Single value JOIN fields
   { "thumbnail",                  "image", true,  "thumbnail",              "art.url AS thumbnail" }, // or (SELECT art.url FROM art WHERE art.media_id = album.idAlbum AND art.media_type = "album" AND art.type = "thumb") as url
   // JOIN fields (multivalue), same order as _JoinToAlbumFields
   { "artistid",                   "array", false, "idArtist",               "album_artist.idArtist AS idArtist" },
   { "artist",                     "array", false, "strArtist",              "artist.strArtist AS strArtist" },
   { "musicbrainzalbumartistid",   "array", false, "strArtistMBID",          "artist.strMusicBrainzArtistID AS strArtistMBID" },
-  { "songgenres",                 "array", false, "idSongGenre",            "song_genre.idGenre AS idSongGenre" },
-  { "",                                "", false, "strSongGenre",           "genre.strGenre AS strSongGenre" },
   /*
    Album "fanart" and "art" fields of JSON schema are fetched using thumbloader
    and separate queries to allow for fallback strategy.
@@ -6105,7 +6310,7 @@ static const translateJSONField JSONtoDBAlbum[] = {
    only calculated (slowing query) when field is in field list.
   */
 };
-//clang format on
+// clang-format on
 
 static const size_t NUM_ALBUM_FIELDS = sizeof(JSONtoDBAlbum) / sizeof(translateJSONField);
 
@@ -6122,8 +6327,11 @@ bool CMusicDatabase::GetAlbumsByWhereJSON(const std::set<std::string>& fields, c
   {
     total = -1;
 
+    size_t resultcount = 0;
     Filter extFilter;
     CMusicDbUrl musicUrl;
+    // sorting passed into GetFilter() but not used as we only want to use the Const sortDescription
+    // passed in at the start of the function
     SortDescription sorting = sortDescription;
     if (!musicUrl.FromString(baseDir) || !GetFilter(musicUrl, extFilter, sorting))
       return false;
@@ -6139,6 +6347,7 @@ bool CMusicDatabase::GetAlbumsByWhereJSON(const std::set<std::string>& fields, c
     // (includes xsp limits from filter, but not sort limits)
     // Use albumview as filter rules in where clause may use scalar query fields
     total = static_cast<int>(strtol(GetSingleValue("SELECT COUNT(1) FROM albumview " + strSQLExtra, m_pDS).c_str(), nullptr, 10));
+    resultcount = static_cast<size_t>(total);
 
     // Get order by (and any scalar query artist fields
     int iAddedFields = GetOrderFilter(MediaTypeAlbum, sortDescription, extFilter);
@@ -6207,7 +6416,7 @@ bool CMusicDatabase::GetAlbumsByWhereJSON(const std::set<std::string>& fields, c
     // Append calculated artist/title sort fields that may have been added to filter
     // Field used only for ORDER BY, not output to JSON
     extFilter.AppendField(calcsortfieldsSQL);
-    for (unsigned int i = 0; i < iAddedFields; i++)
+    for (int i = 0; i < iAddedFields; i++)
       dbfieldindex.emplace_back(-1); // columns in dataset
 
     // JOIN art tables if needed (fields output and/or in sort)
@@ -6227,6 +6436,9 @@ bool CMusicDatabase::GetAlbumsByWhereJSON(const std::set<std::string>& fields, c
       (sortDescription.limitStart > 0 || sortDescription.limitEnd > 0))
     {
       strSQLExtra += DatabaseUtils::BuildLimitClause(sortDescription.limitEnd, sortDescription.limitStart);
+      resultcount = std::min(
+          DatabaseUtils::GetLimitCount(sortDescription.limitEnd, sortDescription.limitStart),
+          resultcount);
     }
 
     // Setup multivalue JOINs, GROUP BY and ORDER BY
@@ -6258,17 +6470,6 @@ bool CMusicDatabase::GetAlbumsByWhereJSON(const std::set<std::string>& fields, c
     // (album_artist.strArtist can be an alias or spelling variation) 
     if (joinLayout.GetFetch(joinToAlbum_strArtist) || joinLayout.GetFetch(joinToAlbum_strArtistMBID))
       joinFilter.AppendJoin("JOIN artist ON artist.idArtist = album_artist.idArtist");
-
-    // Songgenres - id and genres always both
-    if (joinLayout.GetFetch(joinToAlbum_idSongGenre))
-    { // All albums have songs, but left join genre as songs may not have genre
-      joinFilter.AppendJoin("JOIN song ON song.idAlbum = a1.idAlbum");
-      joinFilter.AppendJoin("LEFT JOIN song_genre ON song.idSong = song_genre.idSong");
-      joinFilter.AppendJoin("LEFT JOIN genre ON song_genre.idGenre = genre.idGenre");
-      joinFilter.AppendGroup("genre.idGenre");
-      joinFilter.AppendOrder("song_genre.iOrder");
-      joinLayout.SetField(joinToAlbum_strSongGenre, JSONtoDBAlbum[index_idArtist + joinToAlbum_strSongGenre].SQL);
-    }
 
     // Build JOIN part of query (if we have one)
     std::string strSQLJoin;
@@ -6308,7 +6509,7 @@ bool CMusicDatabase::GetAlbumsByWhereJSON(const std::set<std::string>& fields, c
     if (!m_pDS->query(strSQL))
       return false;
     CLog::Log(LOGDEBUG, "%s - query took %i ms",
-      __FUNCTION__, XbmcThreads::SystemClockMillis() - time); time = XbmcThreads::SystemClockMillis();
+      __FUNCTION__, XbmcThreads::SystemClockMillis() - time);
 
     int iRowsFound = m_pDS->num_rows();
     if (iRowsFound <= 0)
@@ -6317,14 +6518,11 @@ bool CMusicDatabase::GetAlbumsByWhereJSON(const std::set<std::string>& fields, c
       return true;
     }
 
-    DatabaseResults dbResults;
-    dbResults.reserve(iRowsFound);
-
     // Get albums from returned rows. Joins means there can be many rows per album
     int albumId = -1;
     int artistId = -1;
-    bool bSongGenreDone(false);
     CVariant albumObj;
+    result["albums"].reserve(resultcount);
     while (!m_pDS->eof() || !albumObj.empty())
     {
       const dbiplus::sql_record* const record = m_pDS->get_sql_record();
@@ -6334,10 +6532,6 @@ bool CMusicDatabase::GetAlbumsByWhereJSON(const std::set<std::string>& fields, c
         // Store previous or last album
         if (!albumObj.empty())
         {
-          // Ensure albums with null songgenres get empty array
-          if (joinLayout.GetOutput(joinToAlbum_idSongGenre) && !albumObj.isMember("songgenres"))
-            albumObj["songgenres"] = CVariant(CVariant::VariantTypeArray);
-
           // Split sources string into int array
           if (albumObj.isMember("sourceid"))
           {
@@ -6346,12 +6540,9 @@ bool CMusicDatabase::GetAlbumsByWhereJSON(const std::set<std::string>& fields, c
             for (size_t i = 0; i < sources.size(); i++)
               albumObj["sourceid"].append(atoi(sources[i].c_str()));
           }
-
           result["albums"].append(albumObj);
-
           albumObj.clear();          
           artistId = -1;
-          bSongGenreDone = false;
         }
         if (m_pDS->eof())
           continue; // Having saved last album stop
@@ -6363,7 +6554,30 @@ bool CMusicDatabase::GetAlbumsByWhereJSON(const std::set<std::string>& fields, c
         for (size_t i = 0; i < dbfieldindex.size(); i++)
           if (dbfieldindex[i] > -1)
           {
-            if (JSONtoDBAlbum[dbfieldindex[i]].formatJSON == "integer")
+            if (JSONtoDBAlbum[dbfieldindex[i]].fieldDB == "songgenres")
+            {
+              // Convert "20,Jazz,54,New Age,65,Rock" into array of objects
+              std::vector<std::string> values =
+                  StringUtils::Split(record->at(1 + i).get_asString(), ",");
+              if (values.size() % 2 == 0) // Must contain an even number of entries
+              {
+                for (size_t i = 0; i + 1 < values.size(); i += 2)
+                {
+                  int idGenre = atoi(values[i].c_str());
+                  if (idGenre > 0)
+                  {
+                    CVariant genreObj;
+                    genreObj["genreid"] = idGenre;
+                    genreObj["title"] = values[i + 1];
+                    albumObj["songgenres"].append(genreObj);
+                  }
+                }
+              }
+              // Ensure albums with null songgenres get empty array
+              if (!albumObj.isMember("songgenres"))
+                albumObj["songgenres"] = CVariant(CVariant::VariantTypeArray);
+            }
+            else if (JSONtoDBAlbum[dbfieldindex[i]].formatJSON == "integer")
               albumObj[JSONtoDBAlbum[dbfieldindex[i]].fieldJSON] = record->at(1 + i).get_asInt();
             else if (JSONtoDBAlbum[dbfieldindex[i]].formatJSON == "unsigned")
               albumObj[JSONtoDBAlbum[dbfieldindex[i]].fieldJSON] = std::max(record->at(1 + i).get_asInt(), 0);
@@ -6389,7 +6603,6 @@ bool CMusicDatabase::GetAlbumsByWhereJSON(const std::set<std::string>& fields, c
       {
         if (artistId != record->at(joinLayout.GetRecNo(joinToAlbum_idArtist)).get_asInt())
         {
-          bSongGenreDone = (artistId > 0);  // Not first artist, skip genre
           artistId = record->at(joinLayout.GetRecNo(joinToAlbum_idArtist)).get_asInt();
           if (joinLayout.GetOutput(joinToAlbum_idArtist))
             albumObj["artistid"].append(artistId);
@@ -6409,15 +6622,6 @@ bool CMusicDatabase::GetAlbumsByWhereJSON(const std::set<std::string>& fields, c
           }
         }        
       }
-      if (!bSongGenreDone && joinLayout.GetRecNo(joinToAlbum_idSongGenre) > -1 &&
-          joinLayout.GetRecNo(joinToAlbum_strSongGenre) > -1 &&
-          !record->at(joinLayout.GetRecNo(joinToAlbum_idSongGenre)).get_isNull())
-      {
-        CVariant genreObj;
-        genreObj["genreid"] = record->at(joinLayout.GetRecNo(joinToAlbum_idSongGenre)).get_asInt();
-        genreObj["title"] = record->at(joinLayout.GetRecNo(joinToAlbum_strSongGenre)).get_asString();
-        albumObj["songgenres"].append(genreObj);
-      }
       m_pDS->next();
     }
     m_pDS->close(); // cleanup recordset data
@@ -6436,7 +6640,7 @@ bool CMusicDatabase::GetAlbumsByWhereJSON(const std::set<std::string>& fields, c
   return false;
 }
 
-// clang format off
+// clang-format off
 static const translateJSONField JSONtoDBSong[] = {
   // table and single value join fields
   { "title",                     "string", true,  "strTitle",               "" }, // Label field at top
@@ -6513,7 +6717,7 @@ static const translateJSONField JSONtoDBSong[] = {
 
   */
 };
-//clang format on
+// clang-format on
 
 static const size_t NUM_SONG_FIELDS = sizeof(JSONtoDBSong) / sizeof(translateJSONField);
 
@@ -6530,20 +6734,14 @@ bool CMusicDatabase::GetSongsByWhereJSON(const std::set<std::string>& fields, co
   {
     total = -1;
 
+    size_t resultcount = 0;
     Filter extFilter;
     CMusicDbUrl musicUrl;
+    // sorting passed into GetFilter() but not used as we only want to use the Const sortDescription
+    // passed into the function
     SortDescription sorting = sortDescription;
     if (!musicUrl.FromString(baseDir) || !GetFilter(musicUrl, extFilter, sorting))
       return false;
-
-    std::string strSQLExtra;
-    if (!BuildSQL(strSQLExtra, extFilter, strSQLExtra))
-      return false;
-
-    // Count number of songs that satisfy selection criteria 
-    // (includes xsp limits from filter, but not sort limits)
-    // Use songview as filter rules in where clause may use album and path JOIN fields
-    total = static_cast<int>(strtol(GetSingleValue("SELECT COUNT(1) FROM songview " + strSQLExtra, m_pDS).c_str(), nullptr, 10));
 
     // Replace view names in filter with table names
     StringUtils::Replace(extFilter.where, "artistview", "artist");
@@ -6563,6 +6761,17 @@ bool CMusicDatabase::GetSongsByWhereJSON(const std::set<std::string>& fields, co
     { // All songs have one path so inner join sufficient
       extFilter.AppendJoin("JOIN path ON path.idPath = song.idPath");
     }
+
+    // Build JOINs and WHERE needed by filter for counting songs
+    std::string strSQLExtra;
+    if (!BuildSQL(strSQLExtra, extFilter, strSQLExtra))
+      return false;
+
+    // Count number of songs that satisfy selection criteria 
+    // (includes xsp limits from filter, but not sort limits)
+    total = static_cast<int>(strtol(
+        GetSingleValue("SELECT COUNT(1) FROM song " + strSQLExtra, m_pDS).c_str(), nullptr, 10));
+    resultcount = static_cast<size_t>(total);
 
     int iAddedFields = GetOrderFilter(MediaTypeSong, sortDescription, extFilter);
     // Replace songview field names in order by with song, album path table field names
@@ -6653,17 +6862,20 @@ bool CMusicDatabase::GetSongsByWhereJSON(const std::set<std::string>& fields, co
     // Append calculated artist/title sort fields that may have been added to filter
     // Field used only for ORDER BY, not output to JSON
     extFilter.AppendField(calcsortfieldsSQL);
-    for (unsigned int i = 0; i < iAddedFields; i++)
+    for (int i = 0; i < iAddedFields; i++)
       dbfieldindex.emplace_back(-1); // columns in dataset
 
     // Build matching list of role id for "displaycomposer", "displayconductor", 
     // "displayorchestra", "displaylyricist"
-    for (const auto& name : rolefieldlist)
+    if (!rolefieldlist.empty())
     {
-      int idRole = -1;
-      if (StringUtils::StartsWith(name, "display"))
-        idRole = GetRoleByName(name.substr(7));
-      roleidlist.emplace_back(idRole);
+      for (const auto& name : rolefieldlist)
+      {
+        int idRole = -1;
+        if (StringUtils::StartsWith(name, "display"))
+          idRole = GetRoleByName(name.substr(7));
+        roleidlist.emplace_back(idRole);
+      }
     }
 
     // JOIN album and path tables needed for field output and/or in sort
@@ -6690,6 +6902,9 @@ bool CMusicDatabase::GetSongsByWhereJSON(const std::set<std::string>& fields, co
       (sortDescription.limitStart > 0 || sortDescription.limitEnd > 0))
     {
       strSQLExtra += DatabaseUtils::BuildLimitClause(sortDescription.limitEnd, sortDescription.limitStart);
+      resultcount = std::min(
+        DatabaseUtils::GetLimitCount(sortDescription.limitEnd, sortDescription.limitStart),
+        resultcount);
     }
     
     // Setup multivalue JOINs, GROUP BY and ORDER BY
@@ -6857,7 +7072,7 @@ bool CMusicDatabase::GetSongsByWhereJSON(const std::set<std::string>& fields, co
     if (!m_pDS->query(strSQL))
       return false;
     CLog::Log(LOGDEBUG, "%s - query took %i ms",
-      __FUNCTION__, XbmcThreads::SystemClockMillis() - time); time = XbmcThreads::SystemClockMillis();
+      __FUNCTION__, XbmcThreads::SystemClockMillis() - time);
 
     int iRowsFound = m_pDS->num_rows();
     if (iRowsFound <= 0)
@@ -6865,9 +7080,6 @@ bool CMusicDatabase::GetSongsByWhereJSON(const std::set<std::string>& fields, co
       m_pDS->close();
       return true;
     }
-
-    DatabaseResults dbResults;
-    dbResults.reserve(iRowsFound);
 
     // Get song from returned rows. Joins mean there can be many rows per song
     int songId = -1;
@@ -6878,6 +7090,7 @@ bool CMusicDatabase::GetSongsByWhereJSON(const std::set<std::string>& fields, co
     bool bSongArtistDone(false);
     bool bHaveSong(false);
     CVariant songObj;
+    result["songs"].reserve(resultcount);
     while (!m_pDS->eof() || bHaveSong)
     {
       const dbiplus::sql_record* const record = m_pDS->get_sql_record();
@@ -6888,30 +7101,34 @@ bool CMusicDatabase::GetSongsByWhereJSON(const std::set<std::string>& fields, co
         if (bHaveSong)
         {
           // Check empty role fields get returned, and format
-          for (const auto& displayXXX : rolefieldlist)
+          if (!rolefieldlist.empty())
           {
-            if (!StringUtils::StartsWith(displayXXX, "display"))
+            for (const auto& displayXXX : rolefieldlist)
             {
-              // "contributors"
-              if (!songObj.isMember(displayXXX))
-                songObj[displayXXX] = CVariant(CVariant::VariantTypeArray);
-            }
-            else if (songObj.isMember(displayXXX) && songObj[displayXXX].isArray())
-            {
-              // Convert "displaycomposer", "displayconductor", "displayorchestra",
-              // and "displaylyricist" arrays into strings
-              std::vector<std::string> names;
-              for (CVariant::const_iterator_array field = songObj[displayXXX].begin_array();
-                field != songObj[displayXXX].end_array(); field++)
-                names.emplace_back(field->asString());
+              if (!StringUtils::StartsWith(displayXXX, "display"))
+              {
+                // "contributors"
+                if (!songObj.isMember(displayXXX))
+                  songObj[displayXXX] = CVariant(CVariant::VariantTypeArray);
+              }
+              else if (songObj.isMember(displayXXX) && songObj[displayXXX].isArray())
+              {
+                // Convert "displaycomposer", "displayconductor", "displayorchestra",
+                // and "displaylyricist" arrays into strings
+                std::vector<std::string> names;
+                for (CVariant::const_iterator_array field = songObj[displayXXX].begin_array();
+                     field != songObj[displayXXX].end_array(); field++)
+                  names.emplace_back(field->asString());
 
-              std::string role = StringUtils::Join(names, CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_musicItemSeparator);
-              songObj[displayXXX] = role;
+                std::string role = StringUtils::Join(names, CServiceBroker::GetSettingsComponent()
+                                                                ->GetAdvancedSettings()
+                                                                ->m_musicItemSeparator);
+                songObj[displayXXX] = role;
+              }
+              else
+                songObj[displayXXX] = "";
             }
-            else
-              songObj[displayXXX] = "";
           }
-
           result["songs"].append(songObj);
           bHaveSong = false;
           songObj.clear();
@@ -7157,18 +7374,28 @@ std::string CMusicDatabase::SortnameBuildSQL(const std::string& strAlias,
 std::string CMusicDatabase::AlphanumericSortSQL(const std::string& strField, const SortOrder& sortOrder)
 {
   /*
-  Make sort of initial numbers natural, and case insensitive in SQLite.
-  Collation NOCASE ould be more efficient done in table create.
-  MySQL uses case insensitive utf8_general_ci collation defined for tables.
-  Use PrepareSQL to adjust syntax removing NOCASE and add AS UNSIGNED INTEGER
+  Use custom collation ALPHANUM in SQLite. This handles natural number order, case sensitivity
+  and locale UFT-8 order for accents using the same functionality as fileitem list sorting.
+  Natural number order is not significant for where clause comparison and use of calculated fields
+  means there is no advantage in defining as column defualt in table create than per query (which
+  also makes looking at the db with other tools difficult).
+
+  MySQL does not have callback collation, but all tables are defined with utf8_general_ci an
+  "ascii folding" case insensitive collation. Natural sorting is provided via native functions
+  stored in the db.
   */
   std::string DESC;
   if (sortOrder == SortOrderDescending)
     DESC = " DESC";
-  return PrepareSQL("CASE WHEN CAST(%s AS INTEGER) = 0 "
-    "THEN 100000000 ELSE CAST(%s AS INTEGER) END%s, "
-    "%s COLLATE NOCASE%s",
-    strField.c_str(), strField.c_str(), DESC.c_str(), strField.c_str(), DESC.c_str());
+  std::string strSort;
+
+  if (StringUtils::EqualsNoCase(
+          CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_databaseMusic.type,
+          "mysql"))
+    strSort = PrepareSQL("udfNaturalSortFormat(%s, 8, '.')%s", strField.c_str(), DESC.c_str());
+  else
+    strSort = PrepareSQL("%s COLLATE ALPHANUM%s", strField.c_str(), DESC.c_str());
+  return strSort;
 }
 
 void CMusicDatabase::UpdateTables(int version)
@@ -7922,6 +8149,8 @@ void CMusicDatabase::UpdateTables(int version)
     m_pDS->exec("ALTER TABLE song ADD iSampleRate INTEGER NOT NULL DEFAULT 0");
     m_pDS->exec("ALTER TABLE song ADD iChannels INTEGER NOT NULL DEFAULT 0");
   }
+  if (version < 77)
+    m_pDS->exec("ALTER TABLE album ADD strReleaseStatus TEXT");
 
   // Set the verion of tag scanning required.
   // Not every schema change requires the tags to be rescanned, set to the highest schema version
@@ -7943,7 +8172,7 @@ void CMusicDatabase::UpdateTables(int version)
 
 int CMusicDatabase::GetSchemaVersion() const
 {
-  return 75;
+  return 77; // Bumped for new tag processing (Musicbrainz album release status)
 }
 
 int CMusicDatabase::GetMusicNeedsTagScan()
@@ -11286,7 +11515,7 @@ std::vector<std::string> CMusicDatabase::GetAvailableArtTypesForItem(int mediaId
         result.emplace_back("fanart");
 
       // all other images
-      for (const auto& urlEntry : artist.thumbURL.m_url)
+      for (const auto& urlEntry : artist.thumbURL.GetUrls())
       {
         std::string artType = urlEntry.m_aspect;
         if (artType.empty())
@@ -11301,7 +11530,7 @@ std::vector<std::string> CMusicDatabase::GetAvailableArtTypesForItem(int mediaId
     CAlbum album;
     if (GetAlbum(mediaId, album))
     {
-      for (const auto& urlEntry : album.thumbURL.m_url)
+      for (const auto& urlEntry : album.thumbURL.GetUrls())
       {
         std::string artType = urlEntry.m_aspect;
         if (artType.empty())

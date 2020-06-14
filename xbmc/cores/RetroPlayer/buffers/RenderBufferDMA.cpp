@@ -11,19 +11,27 @@
 #include "ServiceBroker.h"
 #include "utils/BufferObject.h"
 #include "utils/EGLImage.h"
-#include "windowing/gbm/WinSystemGbmEGLContext.h"
+#include "utils/log.h"
+#include "windowing/WinSystem.h"
+#include "windowing/linux/WinSystemEGL.h"
 
-using namespace KODI::WINDOWING::GBM;
 using namespace KODI;
 using namespace RETRO;
 
 CRenderBufferDMA::CRenderBufferDMA(CRenderContext& context, int fourcc)
-  : m_context(context),
-    m_fourcc(fourcc),
-    m_egl(new CEGLImage(
-        static_cast<CWinSystemGbmEGLContext*>(CServiceBroker::GetWinSystem())->GetEGLDisplay())),
-    m_bo(CBufferObject::GetBufferObject())
+  : m_context(context), m_fourcc(fourcc), m_bo(CBufferObject::GetBufferObject(false))
 {
+  auto winSystemEGL =
+      dynamic_cast<KODI::WINDOWING::LINUX::CWinSystemEGL*>(CServiceBroker::GetWinSystem());
+
+  if (winSystemEGL == nullptr)
+    throw std::runtime_error("dynamic_cast failed to cast to CWinSystemEGL. This is likely due to "
+                             "a build misconfiguration as DMA can only be used with EGL and "
+                             "specifically platforms that implement CWinSystemEGL");
+
+  m_egl = std::make_unique<CEGLImage>(winSystemEGL->GetEGLDisplay());
+
+  CLog::Log(LOGDEBUG, "CRenderBufferDMA: using BufferObject type: {}", m_bo->GetName());
 }
 
 CRenderBufferDMA::~CRenderBufferDMA()
@@ -50,12 +58,14 @@ size_t CRenderBufferDMA::GetFrameSize() const
 
 uint8_t* CRenderBufferDMA::GetMemory()
 {
+  m_bo->SyncStart();
   return m_bo->GetMemory();
 }
 
 void CRenderBufferDMA::ReleaseMemory()
 {
   m_bo->ReleaseMemory();
+  m_bo->SyncEnd();
 }
 
 void CRenderBufferDMA::CreateTexture()

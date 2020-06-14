@@ -8,17 +8,32 @@
 
 #include "BufferObjectFactory.h"
 
-std::vector<std::function<std::unique_ptr<CBufferObject>()>> CBufferObjectFactory::m_bufferObjects;
+std::list<std::function<std::unique_ptr<CBufferObject>()>> CBufferObjectFactory::m_bufferObjects;
 
-std::unique_ptr<CBufferObject> CBufferObjectFactory::CreateBufferObject()
+std::unique_ptr<CBufferObject> CBufferObjectFactory::CreateBufferObject(bool needsCreateBySize)
 {
-  return m_bufferObjects.back()();
+  for (const auto bufferObject : m_bufferObjects)
+  {
+    auto bo = bufferObject();
+
+    if (needsCreateBySize)
+    {
+      if (!bo->CreateBufferObject(1))
+        continue;
+
+      bo->DestroyBufferObject();
+    }
+
+    return bo;
+  }
+
+  return nullptr;
 }
 
 void CBufferObjectFactory::RegisterBufferObject(
     std::function<std::unique_ptr<CBufferObject>()> createFunc)
 {
-  m_bufferObjects.emplace_back(createFunc);
+  m_bufferObjects.emplace_front(createFunc);
 }
 
 void CBufferObjectFactory::ClearBufferObjects()

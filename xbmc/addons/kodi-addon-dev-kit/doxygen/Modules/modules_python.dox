@@ -159,6 +159,11 @@ web applications or frameworks for the Python programming language.
       <b>xbmc.monitor().onDatabaseScanStarted()</b> function was removed completely.
 }
 \python_removed_function{
+      onAbortRequested,
+      "",
+      <b>xbmc.monitor().onAbortRequested()</b> function was removed completely.
+}
+\python_removed_function{
       create,
       "",
       <b>xbmcgui.DialogBusy().create()</b> function was removed completely.
@@ -212,6 +217,21 @@ web applications or frameworks for the Python programming language.
       setCoordinateResolution,
       "",
       <b>xbmcgui.Window().setCoordinateResolution()</b> function was removed completely.
+}
+\python_removed_function{
+      makeLegalFilename,
+      "",
+      <b>xbmc.makeLegalFilename()</b> function was moved to the xbmcvfs module.
+}
+\python_removed_function{
+      validatePath,
+      "",
+      <b>xbmc.validatePath()</b> function was moved to the xbmcvfs module.
+}
+\python_removed_function{
+      abortRequested,
+      "",
+      <b>xbmc.abortRequested</b> flag was removed completely. Use xbmc.Monitor().abortRequested().
 }
 */
 /*!

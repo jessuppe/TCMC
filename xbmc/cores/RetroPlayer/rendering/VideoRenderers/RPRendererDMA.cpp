@@ -12,6 +12,7 @@
 #include "cores/RetroPlayer/buffers/RenderBufferPoolDMA.h"
 #include "cores/RetroPlayer/rendering/RenderContext.h"
 #include "cores/RetroPlayer/rendering/RenderVideoSettings.h"
+#include "utils/BufferObjectFactory.h"
 #include "utils/GLUtils.h"
 
 #include <cassert>
@@ -34,6 +35,9 @@ CRPBaseRenderer* CRendererFactoryDMA::CreateRenderer(const CRenderSettings& sett
 
 RenderBufferPoolVector CRendererFactoryDMA::CreateBufferPools(CRenderContext& context)
 {
+  if (!CBufferObjectFactory::CreateBufferObject(false))
+    return {};
+
   return {std::make_shared<CRenderBufferPoolDMA>(context)};
 }
 
@@ -68,7 +72,7 @@ void CRPRendererDMA::Render(uint8_t alpha)
   glTexParameteri(m_textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(m_textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-  m_context.EnableGUIShader(GL_SHADER_METHOD::TEXTURE_NOALPHA);
+  m_context.EnableGUIShader(GL_SHADER_METHOD::TEXTURE);
 
   GLubyte colour[4];
   GLubyte idx[4] = {0, 1, 3, 2}; // Determines order of triangle strip
@@ -103,18 +107,21 @@ void CRPRendererDMA::Render(uint8_t alpha)
   vertex[2].v1 = vertex[3].v1 = rect.y2;
 
   glBindBuffer(GL_ARRAY_BUFFER, m_mainVertexVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(PackedVertex)*4, &vertex[0], GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(PackedVertex) * 4, &vertex[0], GL_STATIC_DRAW);
 
-  glVertexAttribPointer(vertLoc, 3, GL_FLOAT, 0, sizeof(PackedVertex), reinterpret_cast<const GLuint*>(offsetof(PackedVertex, x)));
-  glVertexAttribPointer(loc, 2, GL_FLOAT, 0, sizeof(PackedVertex), reinterpret_cast<const GLuint*>(offsetof(PackedVertex, u1)));
+  glVertexAttribPointer(vertLoc, 3, GL_FLOAT, 0, sizeof(PackedVertex),
+                        reinterpret_cast<const GLuint*>(offsetof(PackedVertex, x)));
+  glVertexAttribPointer(loc, 2, GL_FLOAT, 0, sizeof(PackedVertex),
+                        reinterpret_cast<const GLuint*>(offsetof(PackedVertex, u1)));
 
   glEnableVertexAttribArray(vertLoc);
   glEnableVertexAttribArray(loc);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_mainIndexVBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*4, idx, GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * 4, idx, GL_STATIC_DRAW);
 
-  glUniform4f(uniColLoc,(colour[0] / 255.0f), (colour[1] / 255.0f), (colour[2] / 255.0f), (colour[3] / 255.0f));
+  glUniform4f(uniColLoc, (colour[0] / 255.0f), (colour[1] / 255.0f), (colour[2] / 255.0f),
+              (colour[3] / 255.0f));
   glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, 0);
 
   glDisableVertexAttribArray(vertLoc);

@@ -266,7 +266,7 @@
               "canseek", "canchangespeed", "canmove", "canzoom", "canrotate",
               "canshuffle", "canrepeat", "currentaudiostream", "audiostreams",
               "subtitleenabled", "currentsubtitle", "subtitles", "live",
-              "currentvideostream", "videostreams" ]
+              "currentvideostream", "videostreams", "cachepercentage" ]
   },
   "Player.Property.Value": {
     "type": "object",
@@ -295,7 +295,8 @@
       "subtitleenabled": { "type": "boolean" },
       "currentsubtitle": { "$ref": "Player.Subtitle" },
       "subtitles": { "type": "array", "items": { "$ref": "Player.Subtitle" } },
-      "live": { "type": "boolean" }
+      "live": { "type": "boolean" },
+      "cachepercentage": { "$ref": "Player.Position.Percentage" }
     }
   },
   "Notifications.Item.Type": {
@@ -518,7 +519,7 @@
                 "compilation", "releasetype", "dateadded",
                 "sortartist", "musicbrainzreleasegroupid", "songgenres", "art",
                 "lastplayed", "sourceid","isboxset", "totaldiscs",
-                "releasedate", "originaldate"]
+                "releasedate", "originaldate", "albumstatus"]
     }
   },
   "Audio.Fields.Song": {
@@ -646,7 +647,8 @@
       "lastplayed": { "type": "string" },
       "sourceid": { "$ref": "Array.Integer" }, 
       "isboxset" : { "type": "boolean" },
-      "totaldiscs": { "type": "integer" }
+      "totaldiscs": { "type": "integer" },
+      "albumstatus": { "type": "string" }
     }
   },
   "Audio.Details.Song": {
@@ -1512,7 +1514,8 @@
       "bpm": { "type": "integer" },
       "bitrate": { "type": "integer" },
       "samplerate": { "type": "integer" },
-      "channels": { "type": "integer"}
+      "channels": { "type": "integer"},
+      "albumstatus": { "type": "string" }
     }
   },
   "List.Fields.All": {
@@ -1535,7 +1538,7 @@
                 "contributors", "displaycomposer", "displayconductor", "displayorchestra", "displaylyricist",
                 "userrating", "votes", "sortartist", "musicbrainzreleasegroupid", "mediapath", "dynpath",
                 "isboxset", "totaldiscs", "disctitle", "releasedate", "originaldate", "bpm",
-                "bitrate", "samplerate", "channels"]
+                "bitrate", "samplerate", "channels", "albumstatus"]
     }
   },
   "List.Item.All": {

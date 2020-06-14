@@ -19,6 +19,7 @@
 #include "filesystem/SpecialProtocol.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
+#include "utils/log.h"
 
 CInputStreamProvider::CInputStreamProvider(ADDON::BinaryAddonBasePtr addonBase,
                                            KODI_HANDLE parentInstance)
@@ -42,8 +43,11 @@ void CInputStreamProvider::getAddonInstance(INSTANCE_TYPE instance_type,
 using namespace ADDON;
 using namespace kodi::addon;
 
-CInputStreamAddon::CInputStreamAddon(BinaryAddonBasePtr& addonBase, IVideoPlayer* player, const CFileItem& fileitem)
-  : IAddonInstanceHandler(ADDON_INSTANCE_INPUTSTREAM, addonBase),
+CInputStreamAddon::CInputStreamAddon(BinaryAddonBasePtr& addonBase,
+                                     IVideoPlayer* player,
+                                     const CFileItem& fileitem,
+                                     const std::string& instanceId)
+  : IAddonInstanceHandler(ADDON_INSTANCE_INPUTSTREAM, addonBase, nullptr, instanceId),
     CDVDInputStream(DVDSTREAM_TYPE_ADDON, fileitem),
     m_player(player)
 {
@@ -67,13 +71,17 @@ CInputStreamAddon::~CInputStreamAddon()
 
 bool CInputStreamAddon::Supports(BinaryAddonBasePtr& addonBase, const CFileItem &fileitem)
 {
-  // check if a specific inputstream addon is requested
-  CVariant addon = fileitem.GetProperty(STREAM_PROPERTY_INPUTSTREAMCLASS);
-  if (!addon.isNull())
-    return (addon.asString() == addonBase->ID());
+  /// @todo Error for users to show deprecation, can be removed in Kodi 20
+  CVariant oldAddonProp = fileitem.GetProperty("inputstreamaddon");
+  if (!oldAddonProp.isNull())
+  {
+    CLog::Log(LOGERROR,
+              "CInputStreamAddon::%s - 'inputstreamaddon' has been deprecated, "
+              "please use `#KODIPROP:inputstream=%s` instead", __func__, oldAddonProp.asString());
+  }
 
-  // TODO: to be deprecated for the above - all addons must change
-  addon = fileitem.GetProperty("inputstreamaddon");
+  // check if a specific inputstream addon is requested
+  CVariant addon = fileitem.GetProperty(STREAM_PROPERTY_INPUTSTREAM);
   if (!addon.isNull())
     return (addon.asString() == addonBase->ID());
 
@@ -137,9 +145,21 @@ bool CInputStreamAddon::Open()
     props.m_ListItemProperties[props.m_nCountInfoValues].m_strKey = pair.first.c_str();
     props.m_ListItemProperties[props.m_nCountInfoValues].m_strValue = pair.second.c_str();
     props.m_nCountInfoValues++;
+
+    if (props.m_nCountInfoValues >= STREAM_MAX_PROPERTY_COUNT)
+    {
+      CLog::Log(LOGERROR,
+                "CInputStreamAddon::%s - Hit max count of stream properties, "
+                "have %d, actual count: %d",
+                __func__,
+                STREAM_MAX_PROPERTY_COUNT,
+                propsMap.size());
+      break;
+    }
   }
 
   props.m_strURL = m_item.GetDynPath().c_str();
+  props.m_mimeType = m_item.GetMimeType().c_str();
 
   std::string libFolder = URIUtils::GetDirectory(Addon()->Path());
   std::string profileFolder = CSpecialProtocol::TranslatePath(Addon()->Profile());
@@ -206,15 +226,6 @@ int CInputStreamAddon::GetBlockSize()
     return 0;
 
   return m_struct.toAddon.block_size_stream(&m_struct);
-}
-
-bool CInputStreamAddon::Pause(double time)
-{
-  if (!m_struct.toAddon.pause_stream)
-    return false;
-
-  m_struct.toAddon.pause_stream(&m_struct, time);
-  return true;
 }
 
 bool CInputStreamAddon::CanSeek()
@@ -458,11 +469,11 @@ CDemuxStream* CInputStreamAddon::GetStream(int streamId) const
   if (stream.m_cryptoInfo.m_CryptoKeySystem != CRYPTO_INFO::CRYPTO_KEY_SYSTEM_NONE &&
     stream.m_cryptoInfo.m_CryptoKeySystem < CRYPTO_INFO::CRYPTO_KEY_SYSTEM_COUNT)
   {
-    static const CryptoSessionSystem map[] =
-    {
-      CRYPTO_SESSION_SYSTEM_NONE,
-      CRYPTO_SESSION_SYSTEM_WIDEVINE,
-      CRYPTO_SESSION_SYSTEM_PLAYREADY
+    static const CryptoSessionSystem map[] = {
+        CRYPTO_SESSION_SYSTEM_NONE,
+        CRYPTO_SESSION_SYSTEM_WIDEVINE,
+        CRYPTO_SESSION_SYSTEM_PLAYREADY,
+        CRYPTO_SESSION_SYSTEM_WISEPLAY,
     };
     demuxStream->cryptoSession = std::shared_ptr<DemuxCryptoSession>(new DemuxCryptoSession(
       map[stream.m_cryptoInfo.m_CryptoKeySystem], stream.m_cryptoInfo.m_CryptoSessionIdSize, stream.m_cryptoInfo.m_CryptoSessionId, stream.m_cryptoInfo.flags));

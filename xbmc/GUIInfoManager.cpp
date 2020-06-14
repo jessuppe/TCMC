@@ -495,14 +495,20 @@ const infomap integer_bools[] =  {{ "isequal",          INTEGER_IS_EQUAL },
 ///   }
 ///   \table_row3{   <b>`Player.Progress`</b>,
 ///                  \anchor Player_Progress
-///                  _integer_,
+///                  _integer_ / _string_,
 ///     @return The progress position as percentage.
+///     <p><hr>
+///     @skinning_v19 \link Player_Progress `Player.Progress`\endlink infolabel
+///     also exposed as a string.
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`Player.ProgressCache`</b>,
 ///                  \anchor Player_ProgressCache
-///                  _integer_,
+///                  _integer_ / _string_,
 ///     @return How much of the file is cached above current play percentage
+///     <p><hr>
+///     @skinning_v19 \link Player_ProgressCache `Player.ProgressCache`\endlink
+///     infolabel also exposed as a string.
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`Player.Volume`</b>,
@@ -1045,10 +1051,11 @@ const infomap weather[] =        {{ "isfetched",        WEATHER_IS_FETCHED },
 ///   \table_row3{   <b>`System.HasMediaAudioCD`</b>,
 ///                  \anchor System_HasMediaAudioCD
 ///                  _boolean_,
-///     @return **True** if there is an audio CD in the optical drive. **False** if no drive available\, empty drive or other medium.
+///     @return **True** if there is an audio CD in the optical drive. **False** if no drive
+///     available\, empty drive or other medium.
 ///   <p><hr>
-///   @skinning_v18 **[New Boolean Condition]** \link System_HasMediaAudioCD `System.HasMediaAudioCD` \endlink
-///   <p>
+///   @skinning_v18 **[New Boolean Condition]** \link System_HasMediaAudioCD
+///   `System.HasMediaAudioCD` \endlink <p>
 ///   }
 ///   \table_row3{   <b>`System.DVDReady`</b>,
 ///                  \anchor System_DVDReady
@@ -1123,8 +1130,8 @@ const infomap weather[] =        {{ "isfetched",        WEATHER_IS_FETCHED },
 ///     @return **True** if at least one pvr client addon is installed and enabled.
 ///     @param id - addon id of the PVR addon
 ///     <p><hr>
-///     @skinning_v17 **[New Boolean Condition]** \link System_HasPVRAddon `System.HasPVRAddon`\endlink
-///     <p>
+///     @skinning_v17 **[New Boolean Condition]** \link System_HasPVRAddon
+///     `System.HasPVRAddon`\endlink <p>
 ///   }
 ///   \table_row3{   <b>`System.HasCMS`</b>,
 ///                  \anchor System_HasCMS
@@ -1140,16 +1147,16 @@ const infomap weather[] =        {{ "isfetched",        WEATHER_IS_FETCHED },
 ///                  _boolean_,
 ///     @return **True** if a modal dialog is active.
 ///     <p><hr>
-///     @skinning_v18 **[New Boolean Condition]** \link System_HasActiveModalDialog `System.HasActiveModalDialog`\endlink
-///     <p>
+///     @skinning_v18 **[New Boolean Condition]** \link System_HasActiveModalDialog
+///     `System.HasActiveModalDialog`\endlink <p>
 ///   }
 ///   \table_row3{   <b>`System.HasVisibleModalDialog`</b>,
 ///                  \anchor System_HasVisibleModalDialog
 ///                  _boolean_,
 ///     @return **True** if a modal dialog is visible.
 ///     <p><hr>
-///     @skinning_v18 **[New Boolean Condition]** \link System_HasVisibleModalDialog `System.HasVisibleModalDialog`\endlink
-///     <p>
+///     @skinning_v18 **[New Boolean Condition]** \link System_HasVisibleModalDialog
+///     `System.HasVisibleModalDialog`\endlink <p>
 ///   }
 ///   \table_row3{   <b>`System.Platform.Linux`</b>,
 ///                  \anchor System_PlatformLinux
@@ -1162,8 +1169,8 @@ const infomap weather[] =        {{ "isfetched",        WEATHER_IS_FETCHED },
 ///                  _boolean_,
 ///     @return **True** if Kodi is running on a Raspberry Pi.
 ///     <p><hr>
-///     @skinning_v13 **[New Boolean Condition]** \link System_PlatformLinuxRaspberryPi `System.Platform.Linux.RaspberryPi`\endlink
-///     <p>
+///     @skinning_v13 **[New Boolean Condition]** \link System_PlatformLinuxRaspberryPi
+///     `System.Platform.Linux.RaspberryPi`\endlink <p>
 ///   }
 ///   \table_row3{   <b>`System.Platform.Windows`</b>,
 ///                  \anchor System_PlatformWindows
@@ -1176,8 +1183,8 @@ const infomap weather[] =        {{ "isfetched",        WEATHER_IS_FETCHED },
 ///                  _boolean_,
 ///     @return **True** if Kodi is running on Universal Windows Platform (UWP).
 ///     <p><hr>
-///     @skinning_v18 **[New Boolean Condition]** \link System_PlatformUWP `System.Platform.UWP`\endlink
-///     <p>
+///     @skinning_v18 **[New Boolean Condition]** \link System_PlatformUWP
+///     `System.Platform.UWP`\endlink <p>
 ///   }
 ///   \table_row3{   <b>`System.Platform.OSX`</b>,
 ///                  \anchor System_PlatformOSX
@@ -1196,8 +1203,8 @@ const infomap weather[] =        {{ "isfetched",        WEATHER_IS_FETCHED },
 ///                  _boolean_,
 ///     @return **True** if Kodi is running on a tvOS device.
 ///     <p><hr>
-///     @skinning_v19 **[New Boolean Condition]** \link System_PlatformTVOS `System.Platform.TVOS`\endlink
-///     <p>
+///     @skinning_v19 **[New Boolean Condition]** \link System_PlatformTVOS
+///     `System.Platform.TVOS`\endlink <p>
 ///   }
 ///   \table_row3{   <b>`System.Platform.Darwin`</b>,
 ///                  \anchor System_PlatformDarwin
@@ -1235,8 +1242,8 @@ const infomap weather[] =        {{ "isfetched",        WEATHER_IS_FETCHED },
 ///     @return **True** when to osd keyboard/numeric dialog requests a
 ///     password/pincode.
 ///     <p><hr>
-///     @skinning_v16 **[New Boolean Condition]** \link System_HasHiddenInput `System.HasHiddenInput`\endlink
-///     <p>
+///     @skinning_v16 **[New Boolean Condition]** \link System_HasHiddenInput
+///     `System.HasHiddenInput`\endlink <p>
 ///   }
 ///   \table_row3{   <b>`System.CanReboot`</b>,
 ///                  \anchor System_CanReboot
@@ -1408,6 +1415,18 @@ const infomap weather[] =        {{ "isfetched",        WEATHER_IS_FETCHED },
 ///     @return The date of build.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`System.BuildVersionCode`</b>,
+///                  \anchor System_BuildVersionCode
+///                  _string_,
+///     @return The version code of build.
+///     <p>
+///   }
+///   \table_row3{   <b>`System.BuildVersionGit`</b>,
+///                  \anchor System_BuildVersionGit
+///                  _string_,
+///     @return The git version of build.
+///     <p>
+///   }
 ///   \table_row3{   <b>`System.FriendlyName`</b>,
 ///                  \anchor System_FriendlyName
 ///                  _string_,
@@ -1556,8 +1575,8 @@ const infomap weather[] =        {{ "isfetched",        WEATHER_IS_FETCHED },
 ///                  _string_,
 ///     @return The profile Kodi will auto login to.
 ///     <p><hr>
-///     @skinning_v13 **[New Infolabel]** \link System_ProfileAutoLogin `System.ProfileAutoLogin`\endlink
-///     <p>
+///     @skinning_v13 **[New Infolabel]** \link System_ProfileAutoLogin
+///     `System.ProfileAutoLogin`\endlink <p>
 ///   }
 ///   \table_row3{   <b>`System.StereoscopicMode`</b>,
 ///                  \anchor System_StereoscopicMode
@@ -1565,8 +1584,8 @@ const infomap weather[] =        {{ "isfetched",        WEATHER_IS_FETCHED },
 ///     @return The prefered stereoscopic mode.
 ///     @note Configured in settings > video > playback).
 ///     <p><hr>
-///     @skinning_v13 **[New Infolabel]** \link System_StereoscopicMode `System.StereoscopicMode`\endlink
-///     <p>
+///     @skinning_v13 **[New Infolabel]** \link System_StereoscopicMode
+///     `System.StereoscopicMode`\endlink <p>
 ///   }
 ///   \table_row3{   <b>`System.TemperatureUnits`</b>,
 ///                  \anchor System_TemperatureUnits
@@ -1612,8 +1631,8 @@ const infomap weather[] =        {{ "isfetched",        WEATHER_IS_FETCHED },
 ///     @return The version of the addon with the given id.
 ///     @param id - the addon id
 ///     <p><hr>
-///     @skinning_v13 **[New Infolabel]** \link System_AddonVersion `System.AddonVersion(id)`\endlink
-///     <p>
+///     @skinning_v13 **[New Infolabel]** \link System_AddonVersion
+///     `System.AddonVersion(id)`\endlink <p>
 ///   }
 ///   \table_row3{   <b>`System.AddonIcon(id)`</b>,
 ///                  \anchor System_AddonVersion
@@ -1642,78 +1661,80 @@ const infomap weather[] =        {{ "isfetched",        WEATHER_IS_FETCHED },
 ///                  _boolean_,
 ///     @return **True** if the system can provide CPU usage information.
 ///     <p><hr>
-///     @skinning_v19 **[New Boolean Condition]** \link  System_SupportsCPUUsage ` System.SupportsCPUUsage`\endlink
-///     <p>
+///     @skinning_v19 **[New Boolean Condition]** \link  System_SupportsCPUUsage `
+///     System.SupportsCPUUsage`\endlink <p>
 ///   }
-const infomap system_labels[] =  {{ "hasnetwork",       SYSTEM_ETHERNET_LINK_ACTIVE },
-                                  { "hasmediadvd",      SYSTEM_MEDIA_DVD },
-                                  { "hasmediaaudiocd",  SYSTEM_MEDIA_AUDIO_CD },
-                                  { "dvdready",         SYSTEM_DVDREADY },
-                                  { "trayopen",         SYSTEM_TRAYOPEN },
-                                  { "haslocks",         SYSTEM_HASLOCKS },
-                                  { "hashiddeninput",   SYSTEM_HAS_INPUT_HIDDEN },
-                                  { "hasloginscreen",   SYSTEM_HAS_LOGINSCREEN },
-                                  { "hasactivemodaldialog",   SYSTEM_HAS_ACTIVE_MODAL_DIALOG },
-                                  { "hasvisiblemodaldialog",   SYSTEM_HAS_VISIBLE_MODAL_DIALOG },
-                                  { "ismaster",         SYSTEM_ISMASTER },
-                                  { "isfullscreen",     SYSTEM_ISFULLSCREEN },
-                                  { "isstandalone",     SYSTEM_ISSTANDALONE },
-                                  { "loggedon",         SYSTEM_LOGGEDON },
-                                  { "showexitbutton",   SYSTEM_SHOW_EXIT_BUTTON },
-                                  { "canpowerdown",     SYSTEM_CAN_POWERDOWN },
-                                  { "cansuspend",       SYSTEM_CAN_SUSPEND },
-                                  { "canhibernate",     SYSTEM_CAN_HIBERNATE },
-                                  { "canreboot",        SYSTEM_CAN_REBOOT },
-                                  { "screensaveractive",SYSTEM_SCREENSAVER_ACTIVE },
-                                  { "dpmsactive",       SYSTEM_DPMS_ACTIVE },
-                                  { "cputemperature",   SYSTEM_CPU_TEMPERATURE },     // labels from here
-                                  { "cpuusage",         SYSTEM_CPU_USAGE },
-                                  { "gputemperature",   SYSTEM_GPU_TEMPERATURE },
-                                  { "fanspeed",         SYSTEM_FAN_SPEED },
-                                  { "freespace",        SYSTEM_FREE_SPACE },
-                                  { "usedspace",        SYSTEM_USED_SPACE },
-                                  { "totalspace",       SYSTEM_TOTAL_SPACE },
-                                  { "usedspacepercent", SYSTEM_USED_SPACE_PERCENT },
-                                  { "freespacepercent", SYSTEM_FREE_SPACE_PERCENT },
-                                  { "buildversion",     SYSTEM_BUILD_VERSION },
-                                  { "buildversionshort",SYSTEM_BUILD_VERSION_SHORT },
-                                  { "builddate",        SYSTEM_BUILD_DATE },
-                                  { "fps",              SYSTEM_FPS },
-                                  { "freememory",       SYSTEM_FREE_MEMORY },
-                                  { "language",         SYSTEM_LANGUAGE },
-                                  { "temperatureunits", SYSTEM_TEMPERATURE_UNITS },
-                                  { "screenmode",       SYSTEM_SCREEN_MODE },
-                                  { "screenwidth",      SYSTEM_SCREEN_WIDTH },
-                                  { "screenheight",     SYSTEM_SCREEN_HEIGHT },
-                                  { "currentwindow",    SYSTEM_CURRENT_WINDOW },
-                                  { "currentcontrol",   SYSTEM_CURRENT_CONTROL },
-                                  { "currentcontrolid", SYSTEM_CURRENT_CONTROL_ID },
-                                  { "dvdlabel",         SYSTEM_DVD_LABEL },
-                                  { "internetstate",    SYSTEM_INTERNET_STATE },
-                                  { "osversioninfo",    SYSTEM_OS_VERSION_INFO },
-                                  { "kernelversion",    SYSTEM_OS_VERSION_INFO }, // old, not correct name
-                                  { "uptime",           SYSTEM_UPTIME },
-                                  { "totaluptime",      SYSTEM_TOTALUPTIME },
-                                  { "cpufrequency",     SYSTEM_CPUFREQUENCY },
-                                  { "screenresolution", SYSTEM_SCREEN_RESOLUTION },
-                                  { "videoencoderinfo", SYSTEM_VIDEO_ENCODER_INFO },
-                                  { "profilename",      SYSTEM_PROFILENAME },
-                                  { "profilethumb",     SYSTEM_PROFILETHUMB },
-                                  { "profilecount",     SYSTEM_PROFILECOUNT },
-                                  { "profileautologin", SYSTEM_PROFILEAUTOLOGIN },
-                                  { "progressbar",      SYSTEM_PROGRESS_BAR },
-                                  { "batterylevel",     SYSTEM_BATTERY_LEVEL },
-                                  { "friendlyname",     SYSTEM_FRIENDLY_NAME },
-                                  { "alarmpos",         SYSTEM_ALARM_POS },
-                                  { "isinhibit",        SYSTEM_ISINHIBIT },
-                                  { "hasshutdown",      SYSTEM_HAS_SHUTDOWN },
-                                  { "haspvr",           SYSTEM_HAS_PVR },
-                                  { "startupwindow",    SYSTEM_STARTUP_WINDOW },
-                                  { "stereoscopicmode", SYSTEM_STEREOSCOPIC_MODE },
-                                  { "hascms",           SYSTEM_HAS_CMS },
-                                  { "privacypolicy",    SYSTEM_PRIVACY_POLICY },
-                                  { "haspvraddon",      SYSTEM_HAS_PVR_ADDON },
-                                  { "supportscpuusage", SYSTEM_SUPPORTS_CPU_USAGE }};
+const infomap system_labels[] = {{"hasnetwork", SYSTEM_ETHERNET_LINK_ACTIVE},
+                                 {"hasmediadvd", SYSTEM_MEDIA_DVD},
+                                 {"hasmediaaudiocd", SYSTEM_MEDIA_AUDIO_CD},
+                                 {"dvdready", SYSTEM_DVDREADY},
+                                 {"trayopen", SYSTEM_TRAYOPEN},
+                                 {"haslocks", SYSTEM_HASLOCKS},
+                                 {"hashiddeninput", SYSTEM_HAS_INPUT_HIDDEN},
+                                 {"hasloginscreen", SYSTEM_HAS_LOGINSCREEN},
+                                 {"hasactivemodaldialog", SYSTEM_HAS_ACTIVE_MODAL_DIALOG},
+                                 {"hasvisiblemodaldialog", SYSTEM_HAS_VISIBLE_MODAL_DIALOG},
+                                 {"ismaster", SYSTEM_ISMASTER},
+                                 {"isfullscreen", SYSTEM_ISFULLSCREEN},
+                                 {"isstandalone", SYSTEM_ISSTANDALONE},
+                                 {"loggedon", SYSTEM_LOGGEDON},
+                                 {"showexitbutton", SYSTEM_SHOW_EXIT_BUTTON},
+                                 {"canpowerdown", SYSTEM_CAN_POWERDOWN},
+                                 {"cansuspend", SYSTEM_CAN_SUSPEND},
+                                 {"canhibernate", SYSTEM_CAN_HIBERNATE},
+                                 {"canreboot", SYSTEM_CAN_REBOOT},
+                                 {"screensaveractive", SYSTEM_SCREENSAVER_ACTIVE},
+                                 {"dpmsactive", SYSTEM_DPMS_ACTIVE},
+                                 {"cputemperature", SYSTEM_CPU_TEMPERATURE}, // labels from here
+                                 {"cpuusage", SYSTEM_CPU_USAGE},
+                                 {"gputemperature", SYSTEM_GPU_TEMPERATURE},
+                                 {"fanspeed", SYSTEM_FAN_SPEED},
+                                 {"freespace", SYSTEM_FREE_SPACE},
+                                 {"usedspace", SYSTEM_USED_SPACE},
+                                 {"totalspace", SYSTEM_TOTAL_SPACE},
+                                 {"usedspacepercent", SYSTEM_USED_SPACE_PERCENT},
+                                 {"freespacepercent", SYSTEM_FREE_SPACE_PERCENT},
+                                 {"buildversion", SYSTEM_BUILD_VERSION},
+                                 {"buildversionshort", SYSTEM_BUILD_VERSION_SHORT},
+                                 {"buildversioncode", SYSTEM_BUILD_VERSION_CODE},
+                                 {"buildversiongit", SYSTEM_BUILD_VERSION_GIT},
+                                 {"builddate", SYSTEM_BUILD_DATE},
+                                 {"fps", SYSTEM_FPS},
+                                 {"freememory", SYSTEM_FREE_MEMORY},
+                                 {"language", SYSTEM_LANGUAGE},
+                                 {"temperatureunits", SYSTEM_TEMPERATURE_UNITS},
+                                 {"screenmode", SYSTEM_SCREEN_MODE},
+                                 {"screenwidth", SYSTEM_SCREEN_WIDTH},
+                                 {"screenheight", SYSTEM_SCREEN_HEIGHT},
+                                 {"currentwindow", SYSTEM_CURRENT_WINDOW},
+                                 {"currentcontrol", SYSTEM_CURRENT_CONTROL},
+                                 {"currentcontrolid", SYSTEM_CURRENT_CONTROL_ID},
+                                 {"dvdlabel", SYSTEM_DVD_LABEL},
+                                 {"internetstate", SYSTEM_INTERNET_STATE},
+                                 {"osversioninfo", SYSTEM_OS_VERSION_INFO},
+                                 {"kernelversion", SYSTEM_OS_VERSION_INFO}, // old, not correct name
+                                 {"uptime", SYSTEM_UPTIME},
+                                 {"totaluptime", SYSTEM_TOTALUPTIME},
+                                 {"cpufrequency", SYSTEM_CPUFREQUENCY},
+                                 {"screenresolution", SYSTEM_SCREEN_RESOLUTION},
+                                 {"videoencoderinfo", SYSTEM_VIDEO_ENCODER_INFO},
+                                 {"profilename", SYSTEM_PROFILENAME},
+                                 {"profilethumb", SYSTEM_PROFILETHUMB},
+                                 {"profilecount", SYSTEM_PROFILECOUNT},
+                                 {"profileautologin", SYSTEM_PROFILEAUTOLOGIN},
+                                 {"progressbar", SYSTEM_PROGRESS_BAR},
+                                 {"batterylevel", SYSTEM_BATTERY_LEVEL},
+                                 {"friendlyname", SYSTEM_FRIENDLY_NAME},
+                                 {"alarmpos", SYSTEM_ALARM_POS},
+                                 {"isinhibit", SYSTEM_ISINHIBIT},
+                                 {"hasshutdown", SYSTEM_HAS_SHUTDOWN},
+                                 {"haspvr", SYSTEM_HAS_PVR},
+                                 {"startupwindow", SYSTEM_STARTUP_WINDOW},
+                                 {"stereoscopicmode", SYSTEM_STEREOSCOPIC_MODE},
+                                 {"hascms", SYSTEM_HAS_CMS},
+                                 {"privacypolicy", SYSTEM_PRIVACY_POLICY},
+                                 {"haspvraddon", SYSTEM_HAS_PVR_ADDON},
+                                 {"supportscpuusage", SYSTEM_SUPPORTS_CPU_USAGE}};
 
 /// \page modules__infolabels_boolean_conditions
 ///   \table_row3{   <b>`System.HasAddon(id)`</b>,
@@ -2718,16 +2739,66 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     @note If it's in the database it will return the database title\, else the filename.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Title`</b>,
+///                  \anchor VideoPlayer_Offset_Title
+///                  _string_,
+///     @return The title of video which has an offset `number` with respect to the currently playing video.
+///     @note If it's in the database it will return the database title\, else the filename.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Title `VideoPlayer.offset(number).Title`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Title`</b>,
+///                  \anchor VideoPlayer_Position_Title
+///                  _string_,
+///     @return The title of the video which has an offset `number` with respect to the start of the playlist.
+///     @note If it's in the database it will return the database title\, else the filename.
+///     <p>><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Title `VideoPlayer.position(number).Title`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.OriginalTitle`</b>,
 ///                  \anchor VideoPlayer_OriginalTitle
 ///                  _string_,
 ///     @return The original title of currently playing video. If it's in the database.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).OriginalTitle`</b>,
+///                  \anchor VideoPlayer_Offset_OriginalTitle
+///                  _string_,
+///     @return The original title of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_OriginalTitle `VideoPlayer.offset(number).OriginalTitle`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).OriginalTitle`</b>,
+///                  \anchor VideoPlayer_Position_OriginalTitle
+///                  _string_,
+///     @return The original title of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_OriginalTitle `VideoPlayer.position(number).OriginalTitle`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.TVShowTitle`</b>,
 ///                  \anchor VideoPlayer_TVShowTitle
 ///                  _string_,
 ///     @return The title of currently playing episode's tvshow name.
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).TVShowTitle`</b>,
+///                  \anchor VideoPlayer_Offset_TVShowTitle
+///                  _string_,
+///     @return The title of the episode's tvshow name which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_TVShowTitle `VideoPlayer.offset(number).TVShowTitle`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).TVShowTitle`</b>,
+///                  \anchor VideoPlayer_Position_TVShowTitle
+///                  _string_,
+///     @return The title of the episode's tvshow name which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_TVShowTitle `VideoPlayer.position(number).TVShowTitle`\endlink
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`VideoPlayer.Season`</b>,
@@ -2739,6 +2810,22 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     also supports EPG.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Season`</b>,
+///                  \anchor VideoPlayer_Offset_Season
+///                  _string_,
+///     @return The season number of the episode which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Season `VideoPlayer.offset(number).Season`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Season`</b>,
+///                  \anchor VideoPlayer_Position_Season
+///                  _string_,
+///     @return The season number of the episode which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Season `VideoPlayer.position(number).Season`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.Episode`</b>,
 ///                  \anchor VideoPlayer_Episode
 ///                  _string_,
@@ -2748,10 +2835,42 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     also supports EPG.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Episode`</b>,
+///                  \anchor VideoPlayer_Offset_Episode
+///                  _string_,
+///     @return The episode number of the episode which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Episode `VideoPlayer.offset(number).Episode`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Episode`</b>,
+///                  \anchor VideoPlayer_Position_Episode
+///                  _string_,
+///     @return The episode number of the episode which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Episode `VideoPlayer.position(number).Episode`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.Genre`</b>,
 ///                  \anchor VideoPlayer_Genre
 ///                  _string_,
 ///     @return The genre(s) of current movie\, if it's in the database.
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Genre`</b>,
+///                  \anchor VideoPlayer_Offset_Genre
+///                  _string_,
+///     @return The genre(s) of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Genre `VideoPlayer.offset(number).Genre`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Genre`</b>,
+///                  \anchor VideoPlayer_Position_Genre
+///                  _string_,
+///     @return The genre(s) of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Genre `VideoPlayer.position(number).Genre`\endlink
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`VideoPlayer.Director`</b>,
@@ -2763,10 +2882,42 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     also supports EPG.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Director`</b>,
+///                  \anchor VideoPlayer_Offset_Director
+///                  _string_,
+///     @return The director of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Director `VideoPlayer.offset(number).VideoPlayer_Offset_Director`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Director`</b>,
+///                  \anchor VideoPlayer_Position_Director
+///                  _string_,
+///     @return The director of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Director `VideoPlayer.position(number).Director`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.Country`</b>,
 ///                  \anchor VideoPlayer_Country
 ///                  _string_,
 ///     @return The production country of current movie\, if it's in the database.
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Country`</b>,
+///                  \anchor VideoPlayer_Offset_Country
+///                  _string_,
+///     @return The production country of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Country `VideoPlayer.offset(number).Country`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Country`</b>,
+///                  \anchor VideoPlayer_Position_Country
+///                  _string_,
+///     @return The production country of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Country `VideoPlayer.position(number).Country`\endlink
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`VideoPlayer.Year`</b>,
@@ -2775,16 +2926,64 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     @return The year of release of current movie\, if it's in the database.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Year`</b>,
+///                  \anchor VideoPlayer_Offset_Year
+///                  _string_,
+///     @return The year of release of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Year `VideoPlayer.offset(number).Year`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Year`</b>,
+///                  \anchor VideoPlayer_Position_Year
+///                  _string_,
+///     @return The year of release of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Year `VideoPlayer.position(number).Year`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.Cover`</b>,
 ///                  \anchor VideoPlayer_Cover
 ///                  _string_,
 ///     @return The cover of currently playing movie.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Cover`</b>,
+///                  \anchor VideoPlayer_Offset_Cover
+///                  _string_,
+///     @return The cover of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Cover `VideoPlayer.offset(number).Cover`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Cover`</b>,
+///                  \anchor VideoPlayer_Position_Cover
+///                  _string_,
+///     @return The cover of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Cover `VideoPlayer.position(number).Cover`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.Rating`</b>,
 ///                  \anchor VideoPlayer_Rating
 ///                  _string_,
 ///     @return The scraped rating of current movie\, if it's in the database.
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Rating`</b>,
+///                  \anchor VideoPlayer_Offset_Rating
+///                  _string_,
+///     @return The scraped rating of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Rating `VideoPlayer.offset(number).Rating`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Rating`</b>,
+///                  \anchor VideoPlayer_Position_Rating
+///                  _string_,
+///     @return The scraped rating of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Rating `VideoPlayer.position(number).Rating`\endlink
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`VideoPlayer.UserRating`</b>,
@@ -2795,6 +2994,22 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     @skinning_v16 **[New Infolabel]** \link VideoPlayer_UserRating `VideoPlayer.UserRating`\endlink
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).UserRating`</b>,
+///                  \anchor VideoPlayer_Offset_UserRating
+///                  _string_,
+///     @return The user rating of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_UserRating `VideoPlayer.offset(number).UserRating`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).UserRating`</b>,
+///                  \anchor VideoPlayer_Position_UserRating
+///                  _string_,
+///     @return The user rating of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_UserRating `VideoPlayer.position(number).UserRating`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.Votes`</b>,
 ///                  \anchor VideoPlayer_Votes
 ///                  _string_,
@@ -2803,16 +3018,64 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     @skinning_v13 **[New Infolabel]** \link VideoPlayer_Votes `VideoPlayer.Votes`\endlink
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Votes`</b>,
+///                  \anchor VideoPlayer_Offset_Votes
+///                  _string_,
+///     @return The scraped votes of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Votes `VideoPlayer.offset(number).Votes`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Votes`</b>,
+///                  \anchor VideoPlayer_Position_Votes
+///                  _string_,
+///     @return The scraped votes of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Votes `VideoPlayer.position(number).Votes`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.RatingAndVotes`</b>,
 ///                  \anchor VideoPlayer_RatingAndVotes
 ///                  _string_,
 ///     @return The scraped rating and votes of current movie\, if it's in the database
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).RatingAndVotes`</b>,
+///                  \anchor VideoPlayer_Offset_RatingAndVotes
+///                  _string_,
+///     @return The scraped rating and votes of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_RatingAndVotes `VideoPlayer.offset(number).RatingAndVotes`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).RatingAndVotes`</b>,
+///                  \anchor VideoPlayer_Position_RatingAndVotes
+///                  _string_,
+///     @return The scraped rating and votes of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_RatingAndVotes `VideoPlayer.position(number).RatingAndVotes`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.mpaa`</b>,
 ///                  \anchor VideoPlayer_mpaa
 ///                  _string_,
 ///     @return The MPAA rating of current movie\, if it's in the database.
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).mpaa`</b>,
+///                  \anchor VideoPlayer_Offset_mpaa
+///                  _string_,
+///     @return The MPAA rating of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_mpaa `VideoPlayer.offset(number).mpaa`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).mpaa`</b>,
+///                  \anchor VideoPlayer_Position_mpaa
+///                  _string_,
+///     @return The MPAA rating of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_mpaa `VideoPlayer.position(number).mpaa`\endlink
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`VideoPlayer.IMDBNumber`</b>,
@@ -2823,10 +3086,42 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     @skinning_v15 **[New Infolabel]** \link VideoPlayer_IMDBNumber `VideoPlayer.IMDBNumber`\endlink
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).IMDBNumber`</b>,
+///                  \anchor VideoPlayer_Offset_IMDBNumber
+///                  _string_,
+///     @return The IMDb ID of the the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_IMDBNumber `VideoPlayer.offset(number).IMDBNumber`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).IMDBNumber`</b>,
+///                  \anchor VideoPlayer_Position_IMDBNumber
+///                  _string_,
+///     @return The IMDb ID of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_IMDBNumber `VideoPlayer.position(number).IMDBNumber`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.Top250`</b>,
 ///                  \anchor VideoPlayer_Top250
 ///                  _string_,
 ///     @return The IMDb Top250 position of the currently playing movie\, if it's in the database.
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Top250`</b>,
+///                  \anchor VideoPlayer_Offset_Top250
+///                  _string_,
+///     @return The IMDb Top250 position of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Top250 `VideoPlayer.offset(number).Top250`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Top250`</b>,
+///                  \anchor VideoPlayer_Position_Top250
+///                  _string_,
+///     @return The IMDb Top250 position of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Top250 `VideoPlayer.position(number).Top250`\endlink
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`VideoPlayer.EpisodeName`</b>,
@@ -2873,16 +3168,64 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     @return The album from which the current Music Video is from\, if it's in the database.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Album`</b>,
+///                  \anchor VideoPlayer_Offset_Album
+///                  _string_,
+///     @return The album from which the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Album `VideoPlayer.offset(number).Album`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Album`</b>,
+///                  \anchor VideoPlayer_Position_Album
+///                  _string_,
+///     @return The album from which the music video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Album `VideoPlayer.position(number).Album`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.Artist`</b>,
 ///                  \anchor VideoPlayer_Artist
 ///                  _string_,
 ///     @return The artist(s) of current Music Video\, if it's in the database.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Artist`</b>,
+///                  \anchor VideoPlayer_Offset_Artist
+///                  _string_,
+///     @return The artist(s) of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Artist `VideoPlayer.offset(number).Artist`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Artist`</b>,
+///                  \anchor VideoPlayer_Position_Artist
+///                  _string_,
+///     @return The artist(s) of the music video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Artist `VideoPlayer.position(number).Artist`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.Studio`</b>,
 ///                  \anchor VideoPlayer_Studio
 ///                  _string_,
 ///     @return The studio of current Music Video\, if it's in the database.
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Studio`</b>,
+///                  \anchor VideoPlayer_Offset_Studio
+///                  _string_,
+///     @return The studio of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Studio `VideoPlayer.offset(number).Studio`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Studio`</b>,
+///                  \anchor VideoPlayer_Position_Studio
+///                  _string_,
+///     @return The studio of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Studio `VideoPlayer.position(number).Studio`\endlink
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`VideoPlayer.Writer`</b>,
@@ -2894,10 +3237,42 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     also supports EPG.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Writer`</b>,
+///                  \anchor VideoPlayer_Offset_Writer
+///                  _string_,
+///     @return The name of Writer of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Writer `VideoPlayer.offset(number).Writer`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Writer`</b>,
+///                  \anchor VideoPlayer_Position_Writer
+///                  _string_,
+///     @return The name of Writer of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Writer `VideoPlayer.position(number).Writer`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.Tagline`</b>,
 ///                  \anchor VideoPlayer_Tagline
 ///                  _string_,
 ///     @return The small Summary of current playing Video\, if it's in the database.
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Tagline`</b>,
+///                  \anchor VideoPlayer_Offset_Tagline
+///                  _string_,
+///     @return The small Summary of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Tagline `VideoPlayer.offset(number).Tagline`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Tagline`</b>,
+///                  \anchor VideoPlayer_Position_Tagline
+///                  _string_,
+///     @return The small Summary of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Tagline `VideoPlayer.position(number).Tagline`\endlink
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`VideoPlayer.PlotOutline`</b>,
@@ -2906,10 +3281,42 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     @return The small Summary of current playing Video\, if it's in the database.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).PlotOutline`</b>,
+///                  \anchor VideoPlayer_Offset_PlotOutline
+///                  _string_,
+///     @return The small Summary of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_PlotOutline `VideoPlayer.offset(number).PlotOutline`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).PlotOutline`</b>,
+///                  \anchor VideoPlayer_Position_PlotOutline
+///                  _string_,
+///     @return The small Summary of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_PlotOutline `VideoPlayer.position(number).PlotOutline`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.Plot`</b>,
 ///                  \anchor VideoPlayer_Plot
 ///                  _string_,
 ///     @return The complete Text Summary of current playing Video\, if it's in the database.
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Plot`</b>,
+///                  \anchor VideoPlayer_Offset_Plot
+///                  _string_,
+///     @return The complete Text Summary of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Plot `VideoPlayer.offset(number).Plot`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Plot`</b>,
+///                  \anchor VideoPlayer_Position_Plot
+///                  _string_,
+///     @return The complete Text Summary of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Plot `VideoPlayer.position(number).Plot`\endlink
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`VideoPlayer.Premiered`</b>,
@@ -2919,10 +3326,43 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     if it's in the database.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Premiered`</b>,
+///                  \anchor VideoPlayer_Offset_Premiered
+///                  _string_,
+///     @return The release or aired date of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Premiered `VideoPlayer.offset(number).Premiered`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Premiered`</b>,
+///                  \anchor VideoPlayer_Position_Premiered
+///                  _string_,
+///     @return The release or aired date of the video which has an offset `number` with respect to the start of the playlist.
+///     if it's in the database.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Premiered `VideoPlayer.position(number).Premiered`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.Trailer`</b>,
 ///                  \anchor VideoPlayer_Trailer
 ///                  _string_,
 ///     @return The path to the trailer of the currently playing movie\, if it's in the database.
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).Trailer`</b>,
+///                  \anchor VideoPlayer_Offset_Trailer
+///                  _string_,
+///     @return The path to the trailer of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_Trailer `VideoPlayer.offset(number).Title`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).Trailer`</b>,
+///                  \anchor VideoPlayer_Position_Trailer
+///                  _string_,
+///     @return The path to the trailer of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_Trailer `VideoPlayer.position(number).Trailer`\endlink
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`VideoPlayer.LastPlayed`</b>,
@@ -2931,10 +3371,42 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     @return The last play date of current playing Video\, if it's in the database.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).LastPlayed`</b>,
+///                  \anchor VideoPlayer_Offset_LastPlayed
+///                  _string_,
+///     @return The last play date of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_LastPlayed `VideoPlayer.offset(number).LastPlayed`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).LastPlayed`</b>,
+///                  \anchor VideoPlayer_Position_LastPlayed
+///                  _string_,
+///     @return The last play date of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_LastPlayed `VideoPlayer.position(number).LastPlayed`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.PlayCount`</b>,
 ///                  \anchor VideoPlayer_PlayCount
 ///                  _string_,
 ///     @return The playcount of current playing Video\, if it's in the database.
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).PlayCount`</b>,
+///                  \anchor VideoPlayer_Offset_PlayCount
+///                  _string_,
+///     @return The playcount of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_PlayCount `VideoPlayer.offset(number).PlayCount`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).PlayCount`</b>,
+///                  \anchor VideoPlayer_Position_PlayCount
+///                  _string_,
+///     @return The playcount of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_PlayCount `VideoPlayer.position(number).PlayCount`\endlink
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`VideoPlayer.VideoCodec`</b>,
@@ -3092,6 +3564,22 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     @skinning_v17 **[New Infolabel]** \link VideoPlayer_DBID `VideoPlayer.DBID`\endlink
 ///     <p>
 ///   }
+///   \table_row3{   <b>`VideoPlayer.offset(number).DBID`</b>,
+///                  \anchor VideoPlayer_Offset_DBID
+///                  _string_,
+///     @return The database id of the video which has an offset `number` with respect to the currently playing video.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Offset_DBID `VideoPlayer.offset(number).DBID`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.position(number).DBID`</b>,
+///                  \anchor VideoPlayer_Position_DBID
+///                  _string_,
+///     @return The database id of the video which has an offset `number` with respect to the start of the playlist.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_Position_DBID `VideoPlayer.position(number).DBID`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`VideoPlayer.UniqueID(name)`</b>,
 ///                  \anchor VideoPlayer_UniqueID
 ///                  _string_,
@@ -3099,6 +3587,14 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
 ///     @param name - the name of the metadata provider.
 ///     <p><hr>
 ///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_UniqueID `VideoPlayer.UniqueID(name)`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`VideoPlayer.TvShowDBID`</b>,
+///                  \anchor VideoPlayer_TvShowDBID
+///                  _string_,
+///     @return The database id of the TvShow for the currently playing Episode
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link VideoPlayer_TvShowDBID `VideoPlayer.TvShowDBID`\endlink
 ///     <p>
 ///   }
 /// \table_end
@@ -3172,6 +3668,7 @@ const infomap videoplayer[] =    {{ "title",            VIDEOPLAYER_TITLE },
                                   { "episodename",      VIDEOPLAYER_EPISODENAME },
                                   { "dbid",             VIDEOPLAYER_DBID },
                                   { "uniqueid",         VIDEOPLAYER_UNIQUEID },
+                                  { "tvshowdbid",       VIDEOPLAYER_TVSHOWDBID },
 };
 
 /// \page modules__infolabels_boolean_conditions
@@ -3230,25 +3727,22 @@ const infomap retroplayer[] =
 /// \subsection modules__infolabels_boolean_conditions_Container Container
 /// \table_start
 ///   \table_h3{ Labels, Type, Description }
-///   \table_row3{   <b>`Container(id).HasFiles`</b>,
+///   \table_row3{   <b>`Container.HasFiles`</b>,
 ///                  \anchor Container_HasFiles
 ///                  _boolean_,
-///     @return **True** if the container contains files (or current container if
-///     id is omitted).
+///     @return **True** if the container contains files.
 ///     <p>
 ///   }
-///   \table_row3{   <b>`Container(id).HasFolders`</b>,
+///   \table_row3{   <b>`Container.HasFolders`</b>,
 ///                  \anchor Container_HasFolders
 ///                  _boolean_,
-///     @return **True** if the container contains folders (or current container if
-///     id is omitted).
+///     @return **True** if the container contains folders.
 ///     <p>
 ///   }
-///   \table_row3{   <b>`Container(id).IsStacked`</b>,
+///   \table_row3{   <b>`Container.IsStacked`</b>,
 ///                  \anchor Container_IsStacked
 ///                  _boolean_,
-///     @return **True** if the container is currently in stacked mode (or current
-///     container if id is omitted).
+///     @return **True** if the container is currently in stacked mode.
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`Container.FolderPath`</b>,
@@ -3291,13 +3785,13 @@ const infomap retroplayer[] =
 ///     @skinning_v17 **[New Infolabel]** \link Container_ViewCount `Container.ViewCount`\endlink
 ///     <p>
 ///   }
-///   \table_row3{   <b>`Container(id).Totaltime`</b>,
+///   \table_row3{   <b>`Container.Totaltime`</b>,
 ///                  \anchor Container_Totaltime
 ///                  _string_,
 ///     @return The total time of all items in the current container.
 ///     <p>
 ///   }
-///   \table_row3{   <b>`Container(id).TotalWatched`</b>,
+///   \table_row3{   <b>`Container.TotalWatched`</b>,
 ///                  \anchor Container_TotalWatched
 ///                  _string_,
 ///     @return The number of watched items in the container.
@@ -3306,7 +3800,7 @@ const infomap retroplayer[] =
 ///     @skinning_v16 **[New Infolabel]** \link Container_TotalWatched `Container(id).TotalWatched`\endlink
 ///     <p>
 ///   }
-///   \table_row3{   <b>`Container(id).TotalUnWatched`</b>,
+///   \table_row3{   <b>`Container.TotalUnWatched`</b>,
 ///                  \anchor Container_TotalUnWatched
 ///                  _string_,
 ///     @return The number of unwatched items in the container.
@@ -3322,18 +3816,30 @@ const infomap retroplayer[] =
 ///     to it.
 ///     <p>
 ///   }
-///   \table_row3{   <b>`Container.SortMethod`</b>,
-///                  \anchor Container_SortMethod
-///                  _boolean_,
-///     @return **True** the current sort method (name\, year\, rating\, etc).
-///     <p>
-///   }
 ///   \table_row3{   <b>`Container.SortOrder`</b>,
 ///                  \anchor Container_SortOrder
 ///                  _string_,
 ///     @return The current sort order (Ascending/Descending).
 ///     <p><hr>
 ///     @skinning_v16 **[New Infolabel]** \link Container_SortOrder `Container.SortOrder`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`Container.CanFilter`</b>,
+///                  \anchor Container_CanFilter
+///                  _boolean_,
+///     @return **True** when the current container can be filtered.
+///     <p>
+///   }
+///   \table_row3{   <b>`Container.CanFilterAdvanced`</b>,
+///                  \anchor Container_CanFilterAdvanced
+///                  _boolean_,
+///     @return **True** when advanced filtering can be applied to the current container.
+///     <p>
+///   }
+///   \table_row3{   <b>`Container.Filtered`</b>,
+///                  \anchor Container_Filtered
+///                  _boolean_,
+///     @return **True** when a mediafilter is applied to the current container.
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`Container.ShowPlot`</b>,
@@ -3365,8 +3871,10 @@ const infomap mediacontainer[] = {{ "hasfiles",         CONTAINER_HASFILES },
                                   { "totalwatched",     CONTAINER_TOTALWATCHED },
                                   { "totalunwatched",   CONTAINER_TOTALUNWATCHED },
                                   { "hasthumb",         CONTAINER_HAS_THUMB },
-                                  { "sortmethod",       CONTAINER_SORT_METHOD },
                                   { "sortorder",        CONTAINER_SORT_ORDER },
+                                  { "canfilter",        CONTAINER_CAN_FILTER },
+                                  { "canfilteradvanced",CONTAINER_CAN_FILTERADVANCED },
+                                  { "filtered",         CONTAINER_FILTERED },
                                   { "showplot",         CONTAINER_SHOWPLOT },
                                   { "showtitle",        CONTAINER_SHOWTITLE }};
 
@@ -3443,6 +3951,15 @@ const infomap mediacontainer[] = {{ "hasfiles",         CONTAINER_HASFILES },
 ///     @note If no id is specified it grabs the current container.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`Container(id).CurrentItem`</b>,
+///                  \anchor Container_CurrentItem
+///                  _integer_,
+///     @return The current item in the container or grouplist with given id.
+///     @note If no id is specified it grabs the current container.
+///     <p><hr>
+///     @skinning_v15 **[New Infolabel]** \link Container_CurrentItem `Container(id).CurrentItem`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`Container(id).Scrolling`</b>,
 ///                  \anchor Container_Scrolling
 ///                  _boolean_,
@@ -3460,10 +3977,11 @@ const infomap mediacontainer[] = {{ "hasfiles",         CONTAINER_HASFILES },
 ///     @return **True** if the container or textbox with id (id) has a next page.
 ///     <p>
 ///   }
-///   \table_row3{   <b>`Container.HasParent`</b>,
+///   \table_row3{   <b>`Container(id).HasParent`</b>,
 ///                  \anchor Container_HasParent
 ///                  _boolean_,
-///     @return **True** when the container contains a parent ('..') item.
+///     @return **True** when the container with given id contains a parent ('..') item.
+///     @note If no id is specified it grabs the current container.
 ///     <p><hr>
 ///     @skinning_v16 **[New Boolean Condition]** \link Container_HasParent `Container.HasParent`\endlink
 ///     <p>
@@ -3472,24 +3990,6 @@ const infomap mediacontainer[] = {{ "hasfiles",         CONTAINER_HASFILES },
 ///                  \anchor Container_HasPrevious
 ///                  _boolean_,
 ///     @return **True** if the container or textbox with id (id) has a previous page.
-///     <p>
-///   }
-///   \table_row3{   <b>`Container.CanFilter`</b>,
-///                  \anchor Container_CanFilter
-///                  _boolean_,
-///     @return **True** when the current container can be filtered.
-///     <p>
-///   }
-///   \table_row3{   <b>`Container.CanFilterAdvanced`</b>,
-///                  \anchor Container_CanFilterAdvanced
-///                  _boolean_,
-///     @return **True** when advanced filtering can be applied to the current container.
-///     <p>
-///   }
-///   \table_row3{   <b>`Container.Filtered`</b>,
-///                  \anchor Container_Filtered
-///                  _boolean_,
-///     @return **True** when a mediafilter is applied to the current container.
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`Container(id).IsUpdating`</b>,
@@ -3506,13 +4006,11 @@ const infomap container_bools[] ={{ "onnext",           CONTAINER_MOVE_NEXT },
                                   { "numnonfolderitems", CONTAINER_NUM_NONFOLDER_ITEMS },
                                   { "numallitems",      CONTAINER_NUM_ALL_ITEMS },
                                   { "currentpage",      CONTAINER_CURRENT_PAGE },
+                                  { "currentitem",      CONTAINER_CURRENT_ITEM },
                                   { "scrolling",        CONTAINER_SCROLLING },
                                   { "hasnext",          CONTAINER_HAS_NEXT },
                                   { "hasparent",        CONTAINER_HAS_PARENT_ITEM },
                                   { "hasprevious",      CONTAINER_HAS_PREVIOUS },
-                                  { "canfilter",        CONTAINER_CAN_FILTER },
-                                  { "canfilteradvanced",CONTAINER_CAN_FILTERADVANCED },
-                                  { "filtered",         CONTAINER_FILTERED },
                                   { "isupdating",       CONTAINER_ISUPDATING }};
 
 /// \page modules__infolabels_boolean_conditions
@@ -3524,12 +4022,24 @@ const infomap container_bools[] ={{ "onnext",           CONTAINER_MOVE_NEXT },
 ///     @skinning_v16 **[New Infolabel]** \link Container_Row `Container(id).Row`\endlink
 ///     <p>
 ///   }
+///   \table_row3{   <b>`Container(id).Row(parameter)`</b>,
+///                  \anchor Container_Row_parameter
+///                  _boolean_,
+///     @return **True** if the row number of the focused position matches the specified parameter.
+///     <p>
+///   }
 ///   \table_row3{   <b>`Container(id).Column`</b>,
 ///                  \anchor Container_Column
 ///                  _integer_,
 ///     @return The column number of the focused position in a panel container.
 ///     <p><hr>
 ///     @skinning_v16 **[New Infolabel]** \link Container_Column `Container(id).Column`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`Container(id).Column(parameter)`</b>,
+///                  \anchor Container_Column_parameter
+///                  _boolean_,
+///     @return **True** if the column number of the focused position matches the specified parameter.
 ///     <p>
 ///   }
 ///   \table_row3{   <b>`Container(id).Position`</b>,
@@ -3542,19 +4052,16 @@ const infomap container_bools[] ={{ "onnext",           CONTAINER_MOVE_NEXT },
 ///     now also returns the position for items inside a grouplist.
 ///     <p>
 ///   }
-///   \table_row3{   <b>`Container(id).CurrentItem`</b>,
-///                  \anchor Container_CurrentItem
-///                  _integer_,
-///     @return The current item in the container or grouplist with given id. 
-///     @note If no id is specified it grabs the current container.
-///     <p><hr>
-///     @skinning_v15 **[New Infolabel]** \link Container_CurrentItem `Container(id).CurrentItem`\endlink
+///   \table_row3{   <b>`Container(id).Position(parameter)`</b>,
+///                  \anchor Container_Position_parameter
+///                  _boolean_,
+///     @return **True** if the container with id (or current container if id is omitted) is focused on the specified position.
 ///     <p>
 ///   }
-///   \table_row3{   <b>`Container(id).SubItem`</b>,
+///   \table_row3{   <b>`Container(id).SubItem(item_number)`</b>,
 ///                  \anchor Container_SubItem
-///                  _integer_,
-///     @return Sub-item in the container or grouplist with given id.
+///                  _boolean_,
+///     @return **True** if the container with id (or current container if id is omitted) is focused on the specified subitem.
 ///     @note If no id is specified it grabs the current container.
 ///     <p>
 ///   }
@@ -3566,12 +4073,25 @@ const infomap container_bools[] ={{ "onnext",           CONTAINER_MOVE_NEXT },
 ///     item_number.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`Container.SortMethod`</b>,
+///                  \anchor Container_SortMethod
+///                  _string_,
+///     @return The current sort method (returns a localized value).
+///     <p>
+///   }
+///   \table_row3{   <b>`Container.SortMethod(sortid)`</b>,
+///                  \anchor Container_SortMethod_sortid
+///                  _boolean_,
+///     @return **True** if the current sort method matches the specified SortID (see \ref List_of_sort_methods "SortUtils").
+///     <p>
+///   }
 const infomap container_ints[] = {{ "row",              CONTAINER_ROW },
                                   { "column",           CONTAINER_COLUMN },
                                   { "position",         CONTAINER_POSITION },
-                                  { "currentitem",      CONTAINER_CURRENT_ITEM },
                                   { "subitem",          CONTAINER_SUBITEM },
-                                  { "hasfocus",         CONTAINER_HAS_FOCUS }};
+                                  { "hasfocus",         CONTAINER_HAS_FOCUS },
+                                  { "sortmethod",       CONTAINER_SORT_METHOD },
+};
 
 /// \page modules__infolabels_boolean_conditions
 ///   \table_row3{   <b>`Container.Property(addoncategory)`</b>,
@@ -5046,6 +5566,7 @@ const infomap container_str[]  = {{ "property",         CONTAINER_PROPERTY },
 ///                  _string_,
 ///     @return The video codec of the currently selected video. Common values:
 ///      - <b>3iv2</b>
+///      - <b>av1</b>
 ///      - <b>avc1</b>
 ///      - <b>div2</b>
 ///      - <b>div3</b>
@@ -5885,6 +6406,8 @@ const infomap container_str[]  = {{ "property",         CONTAINER_PROPERTY },
 ///     @return The BPM of a song.
 ///     <p><hr>
 ///     @skinning_v19 **[New Infolabel]** \link ListItem_BPM `ListItem.BPM`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`ListItem.UniqueID(name)`</b>,
 ///                  \anchor ListItem_UniqueID
 ///                  _string_,
@@ -5898,23 +6421,41 @@ const infomap container_str[]  = {{ "property",         CONTAINER_PROPERTY },
 ///   \table_row3{   <b>`ListItem.BitRate`</b>,
 ///                  \anchor ListItem_BitRate
 ///                  _string_,
-///     @return The bitrate of a song. Actual rate for CBR, average rate for VBR.
+///     @return The bitrate of a song. Actual rate for CBR\, average rate for VBR.
 ///     <p><hr>
 ///     @skinning_v19 **[New Infolabel]** \link ListItem_BitRate `ListItem.BitRate`\endlink
 ///     <p>
-///   }///   \table_row3{   <b>`ListItem.SampleRate`</b>,
+///   }
+///   \table_row3{   <b>`ListItem.SampleRate`</b>,
 ///                  \anchor ListItem_SampleRate
 ///                  _string_,
-///     @return The sample rate of a song / 1000.0 eg 44.1, 48, 96 etc.
+///     @return The sample rate of a song / 1000.0 eg 44.1\, 48\, 96 etc.
 ///     <p><hr>
 ///     @skinning_v19 **[New Infolabel]** \link ListItem_SampleRate `ListItem.SampleRate`\endlink
 ///     <p>
-///   }///   \table_row3{   <b>`ListItem.MusicChannels`</b>,
+///   }
+///   \table_row3{   <b>`ListItem.MusicChannels`</b>,
 ///                  \anchor ListItem_MusicChannels
 ///                  _string_,
 ///     @return The number of audio channels of a song.
 ///     <p><hr>
 ///     @skinning_v19 **[New Infolabel]** \link ListItem_No_Of_Channels `ListItem.NoOfChannels`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`ListItem.TvShowDBID`</b>,
+///                  \anchor ListItem_TvShowDBID
+///                  _string_,
+///     @return The database id of the TvShow for the currently selected Season or Episode.
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link ListItem_TvShowDBID `ListItem.TvShowDBID`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`ListItem.AlbumStatus`</b>,
+///                  \anchor ListItem_AlbumStatus
+///                  _string_,
+///     @return The Musicbrainz release status of the album (offical, bootleg, promotion etc)
+///     <p><hr>
+///     @skinning_v19 **[New Infolabel]** \link ListItem_AlbumStatus `ListItem.AlbumStatus`\endlink
 ///     <p>
 ///   }
 /// \table_end
@@ -6123,6 +6664,8 @@ const infomap listitem_labels[]= {{ "thumb",            LISTITEM_THUMB },
                                   { "ispremiere",       LISTITEM_IS_PREMIERE },
                                   { "isfinale",         LISTITEM_IS_FINALE },
                                   { "islive",           LISTITEM_IS_LIVE },
+                                  { "tvshowdbid",       LISTITEM_TVSHOWDBID },
+                                  { "albumstatus",      LISTITEM_ALBUMSTATUS },
 };
 
 /// \page modules__infolabels_boolean_conditions
@@ -9143,11 +9686,11 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       {
         return AddMultiInfo(CGUIInfo(VIDEOPLAYER_CONTENT, prop.param(), 0));
       }
-      for (const infomap& i : videoplayer)
+      if (prop.name == "uniqueid" && prop.num_params())
       {
-        if (prop.name == i.str)
-          return i.val;
+        return AddMultiInfo(CGUIInfo(VIDEOPLAYER_UNIQUEID, prop.param(), 0));
       }
+      return TranslateVideoPlayerString(prop.name);
     }
     else if (cat.name == "retroplayer")
     {
@@ -9382,6 +9925,21 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
         return AddMultiInfo(CGUIInfo(value, 1, position)); // 1 => relative
       }
     }
+    else if (info[0].name == "videoplayer")
+    { //! @todo these two don't allow duration(foo) and also don't allow more than this number of levels...
+      if (info[1].name == "position")
+      {
+        int position = atoi(info[1].param().c_str());
+        int value = TranslateVideoPlayerString(info[2].name); // videoplayer.position(foo).bar
+        return AddMultiInfo(CGUIInfo(value, 2, position)); // 2 => absolute (0 used for not set)
+      }
+      else if (info[1].name == "offset")
+      {
+        int position = atoi(info[1].param().c_str());
+        int value = TranslateVideoPlayerString(info[2].name); // videoplayer.offset(foo).bar
+        return AddMultiInfo(CGUIInfo(value, 1, position)); // 1 => relative
+      }
+    }
     else if (info[0].name == "container")
     {
       if (info[1].name == "listitem" ||
@@ -9481,6 +10039,16 @@ int CGUIInfoManager::TranslateListItem(const Property& cat, const Property& prop
 int CGUIInfoManager::TranslateMusicPlayerString(const std::string &info) const
 {
   for (const infomap& i : musicplayer)
+  {
+    if (info == i.str)
+      return i.val;
+  }
+  return 0;
+}
+
+int CGUIInfoManager::TranslateVideoPlayerString(const std::string& info) const
+{
+  for (const infomap& i : videoplayer)
   {
     if (info == i.str)
       return i.val;

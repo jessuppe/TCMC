@@ -13,6 +13,7 @@
 #include "TextureDatabase.h"
 #include "Util.h"
 #include "VideoLibrary.h"
+#include "addons/kodi-addon-dev-kit/include/kodi/c-api/addon-instance/pvr/pvr_epg.h" // EPG_TAG_INVALID_UID
 #include "filesystem/Directory.h"
 #include "filesystem/File.h"
 #include "music/MusicThumbLoader.h"
@@ -232,6 +233,7 @@ void CFileItemHandler::HandleFileItemList(const char *ID, bool allowFile, const 
       fields.insert(field->asString());
   }
 
+  result[resultname].reserve(static_cast<size_t>(end - start));
   for (int i = start; i < end; i++)
   {
     CFileItemPtr item = items.Get(i);
