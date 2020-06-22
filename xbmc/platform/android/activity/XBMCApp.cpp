@@ -219,7 +219,6 @@ void CXBMCApp::onStart()
     intentFilter.addAction("android.intent.action.BATTERY_CHANGED");
     intentFilter.addAction("android.intent.action.SCREEN_ON");
     intentFilter.addAction("android.intent.action.HEADSET_PLUG");
-    intentFilter.addAction("android.media.AUDIO_BECOMING_NOISY");
     // We currently use HDMI_AUDIO_PLUG for mode switch, don't use it on TV's (device_type = "0"
     if (m_hdmiSource)
       intentFilter.addAction("android.media.action.HDMI_AUDIO_PLUG");
@@ -228,6 +227,12 @@ void CXBMCApp::onStart()
     intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
     registerReceiver(*this, intentFilter);
     m_mediaSession.reset(new CJNIXBMCMediaSession());
+  }
+  if (g_application.IsInitialized())
+  {
+    IPowerSyscall* syscall = CServiceBroker::GetPowerManager().GetPowerSyscall();
+    if (syscall)
+      static_cast<CAndroidPowerSyscall*>(syscall)->SetOnResume();
   }
 }
 
@@ -247,28 +252,36 @@ void CXBMCApp::onResume()
     m_applications.clear();
   }
 
+  if (m_bResumePlayback && g_application.GetAppPlayer().IsPlaying())
+  {
+    if (g_application.GetAppPlayer().HasVideo())
+    {
+      if (g_application.GetAppPlayer().IsPaused())
+        CApplicationMessenger::GetInstance().SendMsg(
+            TMSG_GUI_ACTION, WINDOW_INVALID, -1,
+            static_cast<void*>(new CAction(ACTION_PLAYER_PLAY)));
+    }
+  }
+
   // Re-request Visible Behind
   if ((m_playback_state & PLAYBACK_STATE_PLAYING) && (m_playback_state & PLAYBACK_STATE_VIDEO))
     RequestVisibleBehind(true);
-
-  if (g_application.IsInitialized())
-  {
-    IPowerSyscall* syscall = CServiceBroker::GetPowerManager().GetPowerSyscall();
-    if (syscall)
-      static_cast<CAndroidPowerSyscall*>(syscall)->SetOnResume();
-  }
 }
 
 void CXBMCApp::onPause()
 {
   android_printf("%s: ", __PRETTY_FUNCTION__);
+  m_bResumePlayback = false;
 
   if (g_application.GetAppPlayer().IsPlaying())
   {
     if (g_application.GetAppPlayer().HasVideo())
     {
       if (!g_application.GetAppPlayer().IsPaused() && !m_hasReqVisible)
+      {
         CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(ACTION_PAUSE)));
+        m_bResumePlayback = true;
+      }
     }
   }
 
@@ -277,13 +290,6 @@ void CXBMCApp::onPause()
 
   EnableWakeLock(false);
   m_hasReqVisible = false;
-
-  if (!g_application.IsStopping())
-  {
-    IPowerSyscall* syscall = CServiceBroker::GetPowerManager().GetPowerSyscall();
-    if (syscall)
-      static_cast<CAndroidPowerSyscall*>(syscall)->SetOnPause();
-  }
 }
 
 void CXBMCApp::onStop()
@@ -296,6 +302,13 @@ void CXBMCApp::onStop()
       CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(ACTION_STOP)));
     else if (m_playback_state & PLAYBACK_STATE_VIDEO)
       CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(ACTION_PAUSE)));
+  }
+
+  if (!g_application.IsStopping())
+  {
+    IPowerSyscall* syscall = CServiceBroker::GetPowerManager().GetPowerSyscall();
+    if (syscall)
+      static_cast<CAndroidPowerSyscall*>(syscall)->SetOnPause();
   }
 }
 
@@ -1025,7 +1038,24 @@ void CXBMCApp::onReceive(CJNIIntent intent)
   {
     bool newstate = m_headsetPlugged;
     if (action == "android.intent.action.HEADSET_PLUG")
+    {
       newstate = (intent.getIntExtra("state", 0) != 0);
+
+      // If unplugged headset and playing content then pause or stop playback
+      if (!newstate && (m_playback_state & PLAYBACK_STATE_PLAYING))
+      {
+        if (g_application.GetAppPlayer().CanPause())
+        {
+          CApplicationMessenger::GetInstance().PostMsg(
+              TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(ACTION_PAUSE)));
+        }
+        else
+        {
+          CApplicationMessenger::GetInstance().PostMsg(
+              TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(ACTION_STOP)));
+        }
+      }
+    }
     else if (action == "android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED")
       newstate = (intent.getIntExtra("android.bluetooth.profile.extra.STATE", 0) == 2 /* STATE_CONNECTED */);
 
@@ -1052,12 +1082,6 @@ void CXBMCApp::onReceive(CJNIIntent intent)
   {
     if (m_playback_state & PLAYBACK_STATE_VIDEO)
       CApplicationMessenger::GetInstance().PostMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(ACTION_STOP)));
-  }
-  else if (action == "android.media.AUDIO_BECOMING_NOISY")
-  {
-    if ((m_playback_state & PLAYBACK_STATE_PLAYING) && (m_playback_state & PLAYBACK_STATE_AUDIO))
-      CApplicationMessenger::GetInstance().PostMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1,
-                                                   static_cast<void*>(new CAction(ACTION_PAUSE)));
   }
   else if (action == "android.intent.action.MEDIA_BUTTON")
   {

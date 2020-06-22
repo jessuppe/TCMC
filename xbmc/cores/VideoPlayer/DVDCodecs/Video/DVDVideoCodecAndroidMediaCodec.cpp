@@ -487,6 +487,11 @@ bool CDVDVideoCodecAndroidMediaCodec::Open(CDVDStreamInfo &hints, CDVDCodecOptio
         m_mime = "video/dolby-vision";
         m_formatname = "amc-dvhe";
       }
+      else if (m_hints.codec_tag == MKTAG('d', 'v', 'h', '1'))
+      {
+        m_mime = "video/dolby-vision";
+        m_formatname = "amc-dvh1";
+      }
       else
       {
         m_mime = "video/hevc";
@@ -994,11 +999,6 @@ void CDVDVideoCodecAndroidMediaCodec::Reset()
 
   if (m_codec)
   {
-    // flush all outputbuffers inflight, they will
-    // become invalid on m_codec->flush and generate
-    // a spew of java exceptions if used
-    FlushInternal();
-
     // now we can flush the actual MediaCodec object
     CLog::Log(LOGDEBUG, "CDVDVideoCodecAndroidMediaCodec::Reset Current state (%d)", m_state);
     m_codec->flush();
@@ -1122,6 +1122,9 @@ CDVDVideoCodec::VCReturn CDVDVideoCodecAndroidMediaCodec::GetPicture(VideoPictur
     SignalEndOfStream();
     m_state = MEDIACODEC_STATE_WAIT_ENDOFSTREAM;
   }
+  else if (m_state == MEDIACODEC_STATE_FLUSHED)
+    return VC_EOF;
+
   return VC_NONE;
 }
 
