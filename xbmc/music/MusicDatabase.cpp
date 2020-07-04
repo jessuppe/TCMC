@@ -212,7 +212,8 @@ void CMusicDatabase::CreateTables()
   m_pDS->exec("CREATE TABLE infosetting (idSetting INTEGER PRIMARY KEY, strScraperPath TEXT, strSettings TEXT)");
 
   CLog::Log(LOGINFO, "create discography table");
-  m_pDS->exec("CREATE TABLE discography (idArtist integer, strAlbum text, strYear text)");
+  m_pDS->exec("CREATE TABLE discography (idArtist integer, strAlbum text, strYear text, "
+              "strReleaseGroupMBID TEXT)");
 
   CLog::Log(LOGINFO, "create art table");
   m_pDS->exec("CREATE TABLE art(art_id INTEGER PRIMARY KEY, media_id INTEGER, media_type TEXT, type TEXT, url TEXT)");
@@ -1555,7 +1556,7 @@ int CMusicDatabase::AddGenre(std::string& strGenre)
     if (m_pDS->num_rows() == 0)
     {
       m_pDS->close();
-      // doesnt exists, add it
+      // doesn't exists, add it
       strSQL=PrepareSQL("INSERT INTO genre (idGenre, strGenre) values( NULL, '%s' )", strGenre.c_str());
       m_pDS->exec(strSQL);
 
@@ -1604,7 +1605,7 @@ bool CMusicDatabase::UpdateArtist(const CArtist& artist)
   DeleteArtistDiscography(artist.idArtist);
   for (const auto &disc : artist.discography)
   {
-    AddArtistDiscography(artist.idArtist, disc.first, disc.second);
+    AddArtistDiscography(artist.idArtist, disc);
   }
 
   // Set current artwork (held in art table)
@@ -1781,6 +1782,20 @@ int  CMusicDatabase::UpdateArtist(int idArtist,
   if (idArtist < 0)
     return -1;
 
+  // Check another artist with this mbid not already exist (an alias for example)
+  bool useMBIDNull = strMusicBrainzArtistID.empty();
+  bool isScrapedMBID = bScrapedMBID;
+  std::string artistname;
+  int idArtistMbid = GetArtistFromMBID(strMusicBrainzArtistID, artistname);
+  if (idArtistMbid > 0)
+  {
+    CLog::Log(LOGDEBUG, "{0}: Updating {4} (Id: {5}) mbid {1} already assigned to {2} (Id: {3})",
+      __FUNCTION__, strMusicBrainzArtistID.c_str(), artistname.c_str(), idArtistMbid,
+      strArtist.c_str(), idArtist);
+    useMBIDNull = true;
+    isScrapedMBID = false;
+  }
+
   std::string strSQL;
   strSQL = PrepareSQL("UPDATE artist SET "
                       " strArtist = '%s', "
@@ -1799,7 +1814,7 @@ int  CMusicDatabase::UpdateArtist(int idArtist,
                       strBiography.c_str(), strDied.c_str(), strDisbanded.c_str(),
                       strYearsActive.c_str(), strImage.c_str(), strFanart.c_str(),
                       CDateTime::GetUTCDateTime().GetAsDBDateTime().c_str(), bScrapedMBID);
-  if (strMusicBrainzArtistID.empty())
+  if (useMBIDNull)
     strSQL += PrepareSQL(", strMusicBrainzArtistID = NULL");
   else
     strSQL += PrepareSQL(", strMusicBrainzArtistID = '%s'", strMusicBrainzArtistID.c_str());
@@ -1820,6 +1835,16 @@ bool CMusicDatabase::UpdateArtistScrapedMBID(int idArtist, const std::string& st
 {
   if (strMusicBrainzArtistID.empty() || idArtist < 0)
     return false;
+
+  // Check artist with this mbid not already exist (an alias for example)
+  std::string artistname;
+  int idArtistMbid = GetArtistFromMBID(strMusicBrainzArtistID, artistname);
+  if (idArtistMbid > 0)
+  {
+    CLog::Log(LOGDEBUG, "{0}: Artist mbid {1} already assigned to {2} (Id: {3})", __FUNCTION__,
+              strMusicBrainzArtistID.c_str(), artistname.c_str(), idArtistMbid);
+    return false;
+  }
 
   // Set scraped artist Musicbrainz ID for a previously added artist with no MusicBrainz ID
   std::string strSQL;
@@ -1871,8 +1896,10 @@ bool CMusicDatabase::GetArtist(int idArtist, CArtist &artist, bool fetchAll /* =
       while (!m_pDS->eof())
       {
         const dbiplus::sql_record* const record = m_pDS->get_sql_record();
-
-        artist.discography.emplace_back(record->at(discographyOffset + 1).get_asString(), record->at(discographyOffset + 2).get_asString());
+        CDiscoAlbum discoAlbum;
+        discoAlbum.strAlbum = record->at(discographyOffset + 1).get_asString();
+        discoAlbum.strYear = record->at(discographyOffset + 2).get_asString();
+        discoAlbum.strReleaseGroupMBID = record->at(discographyOffset + 3).get_asString();
         m_pDS->next();
       }
     }
@@ -1926,6 +1953,40 @@ int CMusicDatabase::GetLastArtist()
   return static_cast<int>(strtol(lastArtist.c_str(), NULL, 10));
 }
 
+int CMusicDatabase::GetArtistFromMBID(const std::string& strMusicBrainzArtistID,
+                                      std::string& artistname)
+{
+  if (strMusicBrainzArtistID.empty())
+    return -1;
+
+  std::string strSQL;
+  try
+  {
+    if (nullptr == m_pDB || nullptr == m_pDS2)
+      return -1;
+    // Match on MusicBrainz ID, definitively unique
+    strSQL =
+        PrepareSQL("SELECT idArtist, strArtist FROM artist WHERE strMusicBrainzArtistID = '%s'",
+                   strMusicBrainzArtistID.c_str());
+    if (!m_pDS2->query(strSQL))
+      return -1;
+    int idArtist = -1;
+    if (m_pDS2->num_rows() > 0)
+    {
+      idArtist = m_pDS2->fv("idArtist").get_asInt();
+      artistname = m_pDS2->fv("strArtist").get_asString();
+    }
+    m_pDS2->close();
+    return idArtist;
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "CMusicDatabase::{0} - failed to execute {1}", __FUNCTION__,
+              strSQL.c_str());
+  }
+  return -1;
+}
+
 bool CMusicDatabase::HasArtistBeenScraped(int idArtist)
 {
   std::string strSQL = PrepareSQL("SELECT idArtist FROM artist WHERE idArtist = %i AND lastScraped IS NULL", idArtist);
@@ -1938,12 +1999,13 @@ bool CMusicDatabase::ClearArtistLastScrapedTime(int idArtist)
   return ExecuteQuery(strSQL);
 }
 
-int CMusicDatabase::AddArtistDiscography(int idArtist, const std::string& strAlbum, const std::string& strYear)
+int CMusicDatabase::AddArtistDiscography(int idArtist, const CDiscoAlbum& discoAlbum)
 {
-  std::string strSQL=PrepareSQL("INSERT INTO discography (idArtist, strAlbum, strYear) values(%i, '%s', '%s')",
-                               idArtist,
-                               strAlbum.c_str(),
-                               strYear.c_str());
+  std::string strSQL = PrepareSQL("INSERT INTO discography "
+                                  "(idArtist, strAlbum, strYear, strReleaseGroupMBID) "
+                                  "VALUES(%i, '%s', '%s', '%s')",
+                                  idArtist, discoAlbum.strAlbum.c_str(), discoAlbum.strYear.c_str(),
+                                  discoAlbum.strReleaseGroupMBID.c_str());
   return ExecuteQuery(strSQL);
 }
 
@@ -1962,19 +2024,64 @@ bool CMusicDatabase::GetArtistDiscography(int idArtist, CFileItemList& items)
     if (nullptr == m_pDS)
       return false;
 
-    // Combine entries from discography and album tables
-    // When title in both, album entry will be before disco entry
+    /* Combine entries from discography and album tables
+       Can not use CREATE TEMPORARY TABLE as MySQL does not support updates of table using
+       correlated subqueries to a temp table. An updatable join to temp table would work in MySQL
+       but SQLite not support updatable joins.
+    */
+    m_pDS->exec("CREATE TABLE tempDisco "
+                "(strAlbum TEXT, iYear INTEGER, mbid TEXT, idAlbum INTEGER)");
+
     std::string strSQL;
-    strSQL = PrepareSQL("SELECT strAlbum, "
-      "CAST(discography.strYear AS INTEGER) AS iYear, -1 AS idAlbum "
-      "FROM discography "
-      "WHERE discography.idArtist = %i "
-      "UNION "
-      "SELECT strAlbum, CAST(strReleaseDate AS INTEGER) AS iYear, album.idAlbum "
-      "FROM album JOIN album_artist ON album_artist.idAlbum = album.idAlbum "
-      "WHERE album_artist.idArtist = %i "
-      "ORDER BY iYear, strAlbum, idAlbum DESC",
-      idArtist, idArtist);
+    strSQL = PrepareSQL("INSERT INTO tempDisco(strAlbum, iYear, mbid, idAlbum) "
+                        "SELECT strAlbum, CAST(discography.strYear AS INTEGER) AS iYear, "
+                        "strReleaseGroupMBID, NULL "
+                        "FROM discography WHERE idArtist = %i",
+                        idArtist);
+    m_pDS->exec(strSQL);
+
+    // Match albums on release group mbid, if multi-releases then first used
+    strSQL = "UPDATE tempDisco SET idAlbum = (SELECT album.idAlbum FROM album "
+             "WHERE album.strReleaseGroupMBID = tempDisco.mbid "
+             "AND album.strReleaseGroupMBID IS NOT NULL)";
+    m_pDS->exec(strSQL);
+    // Match remaining to albums by artist on title and year
+    strSQL = PrepareSQL("UPDATE tempDisco SET idAlbum = (SELECT album.idAlbum FROM album "
+                        "JOIN album_artist ON album_artist.idAlbum = album.idAlbum "
+                        "WHERE album_artist.idArtist = %i "
+                        "AND NOT EXISTS(SELECT 1 FROM tempDisco AS td "
+                        "WHERE td.idAlbum = album.idAlbum) "
+                        "AND CAST(strOrigReleaseDate AS INTEGER) = tempDisco.iYear "
+                        "AND album.strAlbum = tempDisco.strAlbum) "
+                        "WHERE tempDisco.idAlbum is NULL",
+                        idArtist);
+    m_pDS->exec(strSQL);
+    // Match remaining to albums by artist on title only
+    strSQL = PrepareSQL("UPDATE tempDisco SET idAlbum = (SELECT album.idAlbum FROM album "
+                        "JOIN album_artist ON album_artist.idAlbum = album.idAlbum "
+                        "WHERE album_artist.idArtist = %i "
+                        "AND NOT EXISTS(SELECT 1 FROM tempDisco AS td "
+                        "WHERE td.idAlbum = album.idAlbum) "
+                        "AND album.strAlbum = tempDisco.strAlbum) "
+                        "WHERE tempDisco.idAlbum is NULL",
+                        idArtist);
+    m_pDS->exec(strSQL);
+    // Use year from album table, when matched by name only it could be different
+    strSQL = PrepareSQL("UPDATE tempDisco "
+                        "SET iYear = (SELECT CAST(album.strOrigReleaseDate AS INTEGER) FROM album "
+                        "WHERE album.idAlbum = tempDisco.idAlbum) "
+                        "WHERE tempDisco.idAlbum > 0");
+    m_pDS->exec(strSQL);
+
+    // Combine distinctly with albums by artist that are not in discography
+    strSQL =
+        PrepareSQL("SELECT strAlbum, iYear, idAlbum FROM tempDisco "
+                   "UNION "
+                   "SELECT strAlbum, CAST(strOrigReleaseDate AS INTEGER) AS iYear, album.idAlbum "
+                   "FROM album JOIN album_artist ON album_artist.idAlbum = album.idAlbum "
+                   "WHERE album_artist.idArtist = %i "
+                   "ORDER BY iYear, strAlbum, idAlbum",
+                   idArtist);
 
     if (!m_pDS->query(strSQL))
       return false;
@@ -1985,40 +2092,31 @@ bool CMusicDatabase::GetArtistDiscography(int idArtist, CFileItemList& items)
       return true;
     }
 
-    std::string strAlbum;
-    std::string strLastAlbum;
-    int iLastID = -1;
     while (!m_pDS->eof())
     {
       int idAlbum = m_pDS->fv("idAlbum").get_asInt();
-      strAlbum = m_pDS->fv("strAlbum").get_asString();
+      if (idAlbum == 0)
+        idAlbum = -1;
+      std::string strAlbum = m_pDS->fv("strAlbum").get_asString();
       if (!strAlbum.empty())
       {
-        if (strAlbum.compare(strLastAlbum) != 0)
-        { // Save new title (from album or discography)
           CFileItemPtr pItem(new CFileItem(strAlbum));
           pItem->SetLabel2(m_pDS->fv("iYear").get_asString());
           pItem->GetMusicInfoTag()->SetDatabaseId(idAlbum, MediaTypeAlbum);
-
           items.Add(pItem);
-          strLastAlbum = strAlbum;
-          iLastID = idAlbum;
-        }
-        else if (idAlbum > 0 && iLastID < 0)
-        { // Amend previously saved discography item to set album ID
-          items[items.Size() - 1]->GetMusicInfoTag()->SetDatabaseId(idAlbum, MediaTypeAlbum);
-        }
       }
       m_pDS->next();
     }
 
     // cleanup
     m_pDS->close();
+    m_pDS->exec("DROP TABLE tempDisco");
 
     return true;
   }
   catch (...)
   {
+    m_pDS->exec("DROP TABLE tempDisco");
     CLog::Log(LOGERROR, "%s failed", __FUNCTION__);
   }
   return false;
@@ -2594,7 +2692,7 @@ int CMusicDatabase::AddPath(const std::string& strPath1)
     if (m_pDS->num_rows() == 0)
     {
       m_pDS->close();
-      // doesnt exists, add it
+      // doesn't exists, add it
       strSQL=PrepareSQL("insert into path (idPath, strPath) values( NULL, '%s' )", strPath.c_str());
       m_pDS->exec(strSQL);
 
@@ -4211,7 +4309,7 @@ bool CMusicDatabase::LookupCDDBInfo(bool bRequery/*=false*/)
       else
       {
         pCdInfo->SetNoCDDBInfo();
-        // ..no, an error occured, display it to the user
+        // ..no, an error occurred, display it to the user
         std::string strErrorText = StringUtils::Format("[%d] %s", cddb.getLastError(), cddb.getLastErrorText());
         HELPERS::ShowOKDialogLines(CVariant{255}, CVariant{257}, CVariant{std::move(strErrorText)}, CVariant{0});
       }
@@ -8208,7 +8306,7 @@ void CMusicDatabase::UpdateTables(int version)
     }
     catch (...)
     {
-      CLog::Log(LOGERROR, "Migrating specific artist scraper settings has failed, settings not transfered");
+      CLog::Log(LOGERROR, "Migrating specific artist scraper settings has failed, settings not transferred");
     }
     try
     {
@@ -8219,7 +8317,7 @@ void CMusicDatabase::UpdateTables(int version)
     }
     catch (...)
     {
-      CLog::Log(LOGERROR, "Migrating specific album scraper settings has failed, settings not transfered");
+      CLog::Log(LOGERROR, "Migrating specific album scraper settings has failed, settings not transferred");
     }
     try
     {
@@ -8234,7 +8332,7 @@ void CMusicDatabase::UpdateTables(int version)
     }
     catch (...)
     {
-      CLog::Log(LOGERROR, "Migrating album and artist scraper settings has failed, settings not transfered");
+      CLog::Log(LOGERROR, "Migrating album and artist scraper settings has failed, settings not transferred");
     }
     m_pDS->exec("DROP TABLE content_temp");
 
@@ -8452,6 +8550,10 @@ void CMusicDatabase::UpdateTables(int version)
     m_pDS->exec(PrepareSQL("UPDATE artist SET dateNew = '%s'", strUTCNow.c_str()));
     m_pDS->exec("UPDATE artist SET dateModified = dateNew");
   }
+  if (version < 79)
+  {
+    m_pDS->exec("ALTER TABLE discography ADD strReleaseGroupMBID TEXT");
+  }
 
   // Set the verion of tag scanning required.
   // Not every schema change requires the tags to be rescanned, set to the highest schema version
@@ -8473,7 +8575,7 @@ void CMusicDatabase::UpdateTables(int version)
 
 int CMusicDatabase::GetSchemaVersion() const
 {
-  return 78;
+  return 79;
 }
 
 int CMusicDatabase::GetMusicNeedsTagScan()

@@ -38,6 +38,8 @@ namespace addon
 ///@{
 class PVREPGTag : public CStructHdl<PVREPGTag, EPG_TAG>
 {
+  friend class CInstancePVRClient;
+
 public:
   /*! \cond PRIVATE */
   PVREPGTag()
@@ -63,8 +65,6 @@ public:
     m_seriesLink = epg.m_seriesLink;
     m_firstAired = epg.m_firstAired;
   }
-  PVREPGTag(const EPG_TAG* epg) : CStructHdl(epg) { SetData(epg); }
-  PVREPGTag(EPG_TAG* epg) : CStructHdl(epg) { SetData(epg); }
   /*! \endcond */
 
 
@@ -413,7 +413,9 @@ public:
   }
 
 private:
-  // prevent the use of them
+  PVREPGTag(const EPG_TAG* epg) : CStructHdl(epg) { SetData(epg); }
+  PVREPGTag(EPG_TAG* epg) : CStructHdl(epg) { SetData(epg); }
+
   const PVREPGTag& operator=(const PVREPGTag& right);
   const PVREPGTag& operator=(const EPG_TAG& right);
   operator EPG_TAG*();
@@ -434,19 +436,19 @@ private:
 
   void SetData(const EPG_TAG* tag)
   {
-    m_title = tag->strTitle;
-    m_plotOutline = tag->strPlotOutline;
-    m_plot = tag->strPlot;
-    m_originalTitle = tag->strOriginalTitle;
-    m_cast = tag->strCast;
-    m_director = tag->strDirector;
-    m_writer = tag->strWriter;
-    m_IMDBNumber = tag->strIMDBNumber;
-    m_iconPath = tag->strIconPath;
-    m_genreDescription = tag->strGenreDescription;
-    m_episodeName = tag->strEpisodeName;
-    m_seriesLink = tag->strSeriesLink;
-    m_firstAired = tag->strFirstAired;
+    m_title = tag->strTitle == nullptr ? "" : tag->strTitle;
+    m_plotOutline = tag->strPlotOutline == nullptr ? "" : tag->strPlotOutline;
+    m_plot = tag->strPlot == nullptr ? "" : tag->strPlot;
+    m_originalTitle = tag->strOriginalTitle == nullptr ? "" : tag->strOriginalTitle;
+    m_cast = tag->strCast == nullptr ? "" : tag->strCast;
+    m_director = tag->strDirector == nullptr ? "" : tag->strDirector;
+    m_writer = tag->strWriter == nullptr ? "" : tag->strWriter;
+    m_IMDBNumber = tag->strIMDBNumber == nullptr ? "" : tag->strIMDBNumber;
+    m_iconPath = tag->strIconPath == nullptr ? "" : tag->strIconPath;
+    m_genreDescription = tag->strGenreDescription == nullptr ? "" : tag->strGenreDescription;
+    m_episodeName = tag->strEpisodeName == nullptr ? "" : tag->strEpisodeName;
+    m_seriesLink = tag->strSeriesLink == nullptr ? "" : tag->strSeriesLink;
+    m_firstAired = tag->strFirstAired == nullptr ? "" : tag->strFirstAired;
   }
 };
 ///@}
@@ -477,7 +479,7 @@ public:
 
   /// @brief To add and give content from addon to Kodi on related call.
   ///
-  /// @param[in] tag The to transfered data.
+  /// @param[in] tag The to transferred data.
   void Add(const kodi::addon::PVREPGTag& tag)
   {
     m_instance->toKodi->TransferEpgEntry(m_instance->toKodi->kodiInstance, m_handle, tag.GetTag());

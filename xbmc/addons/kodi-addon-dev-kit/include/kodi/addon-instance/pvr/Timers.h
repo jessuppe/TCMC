@@ -37,6 +37,8 @@ namespace addon
 ///@{
 class PVRTimer : public CStructHdl<PVRTimer, PVR_TIMER>
 {
+  friend class CInstancePVRClient;
+
 public:
   /*! \cond PRIVATE */
   PVRTimer()
@@ -65,8 +67,6 @@ public:
     m_cStructure->iGenreSubType = PVR_TIMER_VALUE_NOT_AVAILABLE;
   }
   PVRTimer(const PVRTimer& data) : CStructHdl(data) {}
-  PVRTimer(const PVR_TIMER* data) : CStructHdl(data) {}
-  PVRTimer(PVR_TIMER* data) : CStructHdl(data) {}
   /*! \endcond */
 
   /// @defgroup cpp_kodi_addon_pvr_Defs_Timer_PVRTimer_Help Value Help
@@ -465,6 +465,10 @@ public:
   /// @brief To get with @ref SetSeriesLink changed values.
   std::string GetSeriesLink() const { return m_cStructure->strSeriesLink; }
   ///@}
+
+private:
+  PVRTimer(const PVR_TIMER* data) : CStructHdl(data) {}
+  PVRTimer(PVR_TIMER* data) : CStructHdl(data) {}
 };
 
 ///@}
@@ -495,7 +499,7 @@ public:
 
   /// @brief To add and give content from addon to Kodi on related call.
   ///
-  /// @param[in] tag The to transfered data.
+  /// @param[in] tag The to transferred data.
   void Add(const kodi::addon::PVRTimer& tag)
   {
     m_instance->toKodi->TransferTimerEntry(m_instance->toKodi->kodiInstance, m_handle, tag);
@@ -524,6 +528,8 @@ private:
 ///@{
 class PVRTimerType : public CStructHdl<PVRTimerType, PVR_TIMER_TYPE>
 {
+  friend class CInstancePVRClient;
+
 public:
   /*! \cond PRIVATE */
   PVRTimerType()
@@ -536,8 +542,6 @@ public:
     m_cStructure->iMaxRecordingsDefault = -1;
   }
   PVRTimerType(const PVRTimerType& type) : CStructHdl(type) {}
-  PVRTimerType(const PVR_TIMER_TYPE* type) : CStructHdl(type) {}
-  PVRTimerType(PVR_TIMER_TYPE* type) : CStructHdl(type) {}
   /*! \endcond */
 
   /// @defgroup cpp_kodi_addon_pvr_Defs_Timer_PVRTimerType_Help Value Help
@@ -627,7 +631,7 @@ public:
   /// @copydetails cpp_kodi_addon_pvr_Defs_PVRTypeIntValue_Help
   void SetPriorities(const std::vector<PVRTypeIntValue>& priorities, int prioritiesDefault = -1)
   {
-    m_cStructure->iPrioritiesSize = priorities.size();
+    m_cStructure->iPrioritiesSize = static_cast<unsigned int>(priorities.size());
     for (unsigned int i = 0;
          i < m_cStructure->iPrioritiesSize && i < sizeof(m_cStructure->priorities); ++i)
     {
@@ -679,7 +683,7 @@ public:
   /// @copydetails cpp_kodi_addon_pvr_Defs_PVRTypeIntValue_Help
   void SetLifetimes(const std::vector<PVRTypeIntValue>& lifetimes, int lifetimesDefault = -1)
   {
-    m_cStructure->iLifetimesSize = lifetimes.size();
+    m_cStructure->iLifetimesSize = static_cast<unsigned int>(lifetimes.size());
     for (unsigned int i = 0;
          i < m_cStructure->iLifetimesSize && i < sizeof(m_cStructure->lifetimes); ++i)
     {
@@ -735,7 +739,8 @@ public:
       const std::vector<PVRTypeIntValue>& preventDuplicateEpisodes,
       int preventDuplicateEpisodesDefault = -1)
   {
-    m_cStructure->iPreventDuplicateEpisodesSize = preventDuplicateEpisodes.size();
+    m_cStructure->iPreventDuplicateEpisodesSize =
+        static_cast<unsigned int>(preventDuplicateEpisodes.size());
     for (unsigned int i = 0; i < m_cStructure->iPreventDuplicateEpisodesSize &&
                              i < sizeof(m_cStructure->preventDuplicateEpisodes);
          ++i)
@@ -791,7 +796,7 @@ public:
   void SetRecordingGroups(const std::vector<PVRTypeIntValue>& recordingGroup,
                           int recordingGroupDefault = -1)
   {
-    m_cStructure->iRecordingGroupSize = recordingGroup.size();
+    m_cStructure->iRecordingGroupSize = static_cast<unsigned int>(recordingGroup.size());
     for (unsigned int i = 0;
          i < m_cStructure->iRecordingGroupSize && i < sizeof(m_cStructure->recordingGroup); ++i)
     {
@@ -842,7 +847,7 @@ public:
   void SetMaxRecordings(const std::vector<PVRTypeIntValue>& maxRecordings,
                         int maxRecordingsDefault = -1)
   {
-    m_cStructure->iMaxRecordingsSize = maxRecordings.size();
+    m_cStructure->iMaxRecordingsSize = static_cast<unsigned int>(maxRecordings.size());
     for (unsigned int i = 0;
          i < m_cStructure->iMaxRecordingsSize && i < sizeof(m_cStructure->maxRecordings); ++i)
     {
@@ -877,6 +882,10 @@ public:
   /// @brief To get with @ref SetMaxRecordingsDefault changed values
   int GetMaxRecordingsDefault() const { return m_cStructure->iMaxRecordingsDefault; }
   ///@}
+
+private:
+  PVRTimerType(const PVR_TIMER_TYPE* type) : CStructHdl(type) {}
+  PVRTimerType(PVR_TIMER_TYPE* type) : CStructHdl(type) {}
 };
 ///@}
 //------------------------------------------------------------------------------

@@ -327,6 +327,7 @@ public:
   bool GetArtist(int idArtist, CArtist& artist, bool fetchAll = false);
   bool GetArtistExists(int idArtist);
   int GetLastArtist();
+  int GetArtistFromMBID(const std::string& strMusicBrainzArtistID, std::string& artistname);
   int  UpdateArtist(int idArtist,
                     const std::string& strArtist, const std::string& strSortName,
                     const std::string& strMusicBrainzArtistID, bool bScrapedMBID,
@@ -343,7 +344,7 @@ public:
   void SetTranslateBlankArtist(bool translate) { m_translateBlankArtist = translate; }
   bool HasArtistBeenScraped(int idArtist);
   bool ClearArtistLastScrapedTime(int idArtist);
-  int  AddArtistDiscography(int idArtist, const std::string& strAlbum, const std::string& strYear);
+  int AddArtistDiscography(int idArtist, const CDiscoAlbum& discoAlbum);
   bool DeleteArtistDiscography(int idArtist);
   bool GetArtistDiscography(int idArtist, CFileItemList& items);
 
@@ -669,7 +670,7 @@ public:
   /*! \brief Check if music files need all tags rescanning regardless of file being unchanged
   because the tag processing has changed (which may happen without db version changes) since they
   where last scanned.
-  \return -1 if an error occured, 0 if no scan is needed, or the version number of tags if not the same as current.
+  \return -1 if an error occurred, 0 if no scan is needed, or the version number of tags if not the same as current.
   */
   virtual int GetMusicNeedsTagScan();
 

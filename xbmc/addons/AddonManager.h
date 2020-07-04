@@ -14,6 +14,7 @@
 #include "threads/CriticalSection.h"
 #include "utils/EventStream.h"
 
+#include <map>
 #include <mutex>
 
 namespace ADDON
@@ -79,6 +80,9 @@ namespace ADDON
 
     bool HasInstalledAddons(const TYPE &type);
 
+    /*! Returns all installed, enabled and incompatible (and disabled) add-ons. */
+    bool GetAddonsForUpdate(VECADDONS& addons) const;
+
     /*! Returns all installed, enabled add-ons. */
     bool GetAddons(VECADDONS& addons) const;
 
@@ -122,17 +126,17 @@ namespace ADDON
 
     /*!
      * @brief Fills the the provided vector with the list of incompatible
-     * addons and returns if there's any.
+     * enabled addons and returns if there's any.
      *
      * @param[out] incompatible List of incompatible addons
      * @return true if there are incompatible addons
      */
-    bool GetIncompatibleAddons(std::vector<AddonInfoPtr>& incompatible) const;
+    bool GetIncompatibleEnabledAddonInfos(std::vector<AddonInfoPtr>& incompatible) const;
 
     /*!
      * @brief Disable addons in given list.
      *
-     * @param[in] incompatible List of incompatible addons
+     * @param[in] incompatible List of incompatible addon infos
      * @return list of all addon **names** that were disabled
      */
     std::vector<std::string> DisableIncompatibleAddons(
@@ -173,7 +177,7 @@ namespace ADDON
     void OnPostUnInstall(const std::string& id);
 
     /*! \brief Disable an addon. Returns true on success, false on failure. */
-    bool DisableAddon(const std::string& ID);
+    bool DisableAddon(const std::string& ID, AddonDisabledReason disabledReason);
 
     /*! \brief Enable an addon. Returns true on success, false on failure. */
     bool EnableAddon(const std::string& ID);
@@ -184,6 +188,17 @@ namespace ADDON
      \sa DisableAddon
      */
     bool IsAddonDisabled(const std::string& ID) const;
+
+    /*!
+     * @brief Check whether an addon has been disabled via DisableAddon except for a particular
+     * reason In case the disabled cache does not know about the current state the database routine
+     * will be used.
+     * @param[in] ID id of the addon
+     * @param[in] disabledReason the reason that will be an exception to being disabled
+     * @return true if the addon was disabled except for the specified reason
+     * @sa DisableAddon
+     */
+    bool IsAddonDisabledExcept(const std::string& ID, AddonDisabledReason disabledReason) const;
 
     /* \brief Checks whether an addon can be disabled via DisableAddon.
      \param ID id of the addon
@@ -266,8 +281,7 @@ namespace ADDON
     bool GetAddonInfos(AddonInfos& addonInfos, bool enabledOnly, TYPE type) const;
 
     /*!
-     * @brief Get a list of disabled add-on's with info's for the on system
-     * available ones.
+     * @brief Get a list of disabled add-on's with info's
      *
      * @param[out] addonInfos list where finded addon information becomes stored
      * @param[in] type        The requested type, with "ADDON_UNKNOWN"
@@ -277,7 +291,27 @@ namespace ADDON
      *                        returned who match them. Default is for all types.
      * @return true if the list contains entries
      */
-    bool GetDisabledAddonInfos(std::vector<AddonInfoPtr>& addonInfos, TYPE type);
+    bool GetDisabledAddonInfos(std::vector<AddonInfoPtr>& addonInfos, TYPE type) const;
+
+    /*!
+     * @brief Get a list of disabled add-on's with info's for the on system
+     * available ones with a specific disabled reason.
+     *
+     * @param[out] addonInfos list where finded addon information becomes stored
+     * @param[in] type        The requested type, with "ADDON_UNKNOWN"
+     *                        are all add-on types given back who match the case
+     *                        with value before.
+     *                        If a type id becomes added are only add-ons
+     *                        returned who match them. Default is for all types.
+     * @param[in] disabledReason To get all disabled addons use the value
+     *                           "AddonDiasbledReason::NONE". If any other value
+     *                           is supplied only addons with that reason will be
+     *                           returned.
+     * @return true if the list contains entries
+     */
+    bool GetDisabledAddonInfos(std::vector<AddonInfoPtr>& addonInfos,
+                               TYPE type,
+                               AddonDisabledReason disabledReason) const;
 
     const AddonInfoPtr GetAddonInfo(const std::string& id, TYPE type = ADDON_UNKNOWN) const;
 
@@ -295,10 +329,24 @@ namespace ADDON
 
     VECADDONS m_updateableAddons;
 
-    bool GetAddonsInternal(const TYPE& type, VECADDONS& addons, bool enabledOnly) const;
+    bool GetAddonsInternal(const TYPE& type,
+                           VECADDONS& addons,
+                           bool enabledOnly,
+                           bool checkIncompatible = false) const;
     bool EnableSingle(const std::string& id);
 
     void FindAddons(ADDON_INFO_LIST& addonmap, const std::string& path);
+
+    /*!
+     * @brief Fills the the provided vector with the list of incompatible
+     * addons and returns if there's any.
+     *
+     * @param[out] incompatible List of incompatible addons
+     * @param[in] whether or not to include incompatible addons that are disabled
+     * @return true if there are incompatible addons
+     */
+    bool GetIncompatibleAddonInfos(std::vector<AddonInfoPtr>& incompatible,
+                                   bool includeDisabled) const;
 
     /*!
      * Get the list of of available updates
@@ -327,7 +375,7 @@ namespace ADDON
     // (migration will install any available update anyway)
     mutable std::mutex m_installAddonsMutex;
 
-    std::set<std::string> m_disabled;
+    std::map<std::string, AddonDisabledReason> m_disabled;
     std::set<std::string> m_updateBlacklist;
     static std::map<TYPE, IAddonMgrCallback*> m_managers;
     mutable CCriticalSection m_critSection;

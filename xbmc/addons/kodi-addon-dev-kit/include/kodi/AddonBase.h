@@ -689,6 +689,22 @@ inline void ATTRIBUTE_HIDDEN Log(const AddonLog loglevel, const char* format, ..
 /*!@{*/
 
 //==============================================================================
+/// @brief Check the given setting name is set to default value.
+///
+/// The setting name relate to names used in his <b>settings.xml</b> file.
+///
+/// @param[in] settingName The name of asked setting
+/// @return true if setting is the default
+///
+inline bool ATTRIBUTE_HIDDEN IsSettingUsingDefault(const std::string& settingName)
+{
+  using namespace kodi::addon;
+  return CAddonBase::m_interface->toKodi->is_setting_using_default(
+      CAddonBase::m_interface->toKodi->kodiBase, settingName.c_str());
+}
+//------------------------------------------------------------------------------
+
+//==============================================================================
 /// @brief Check and get a string setting value.
 ///
 /// The setting name relate to names used in his <b>settings.xml</b> file.
@@ -1241,7 +1257,7 @@ inline void* GetInterface(const std::string& name, const std::string& version)
  */
 #define ADDONCREATOR(AddonClass) \
   extern "C" __declspec(dllexport) ADDON_STATUS ADDON_Create( \
-      KODI_HANDLE addonInterface, const char* globalApiVersion, void* unused) \
+      KODI_HANDLE addonInterface, const char* /*globalApiVersion*/, void* /*unused*/) \
   { \
     kodi::addon::CAddonBase::m_interface = static_cast<AddonGlobalInterface*>(addonInterface); \
     kodi::addon::CAddonBase::m_interface->addonBase = new AddonClass; \
