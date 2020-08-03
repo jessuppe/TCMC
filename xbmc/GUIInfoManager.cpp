@@ -4373,6 +4373,30 @@ const infomap container_str[]  = {{ "property",         CONTAINER_PROPERTY },
 ///     replaces `ListItem.Property(Addon.UpdateAvail)`.
 ///     <p>
 ///   }
+///   \table_row3{   <b>`ListItem.Property(Addon.IsFromOfficialRepo)`</b>,
+///                  \anchor ListItem_Property_AddonIsFromOfficialRepo
+///                  _boolean_,
+///     @return **True** if this add-on is from an official repository.
+///     <p><hr>
+///     @skinning_v19 **[New Boolean Condition]** \link ListItem_Property_AddonIsFromOfficialRepo `ListItem.Property(Addon.IsFromOfficialRepo)`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`ListItem.Property(Addon.IsBinary)`</b>,
+///                  \anchor ListItem_Property_AddonIsBinary
+///                  _boolean_,
+///     @return **True** if this add-on is a binary addon.
+///     <p><hr>
+///     @skinning_v19 **[New Boolean Condition]** \link ListItem_Property_AddonIsBinary `ListItem.Property(Addon.IsBinary)`\endlink
+///     <p>
+///   }
+///   \table_row3{   <b>`ListItem.Property(Addon.OriginType)`</b>,
+///                  \anchor ListItem_Property_AddonOriginType
+///                  _string_,
+///     @return A string representing the origin type. One of system\, repository or manual.
+///     <p><hr>
+///     @skinning_v19 **[New String Value]** \link ListItem_Property_AddonOriginType `ListItem.Property(Addon.OriginType)`\endlink
+///     <p>
+///   }
 ///   \table_row3{   <b>`ListItem.Label`</b>,
 ///                  \anchor ListItem_Label
 ///                  _string_,
@@ -10234,6 +10258,9 @@ bool CGUIInfoManager::GetMultiInfoBool(const CGUIInfo &info, int contextWindow, 
         else
           bReturn = GetImage(info.GetData1(), contextWindow).empty();
         break;
+      case STRING_STARTS_WITH:
+      case STRING_ENDS_WITH:
+      case STRING_CONTAINS:
       case STRING_IS_EQUAL:
         {
           std::string compare;
@@ -10264,10 +10291,23 @@ bool CGUIInfoManager::GetMultiInfoBool(const CGUIInfo &info, int contextWindow, 
           { // conditional string
             compare = info.GetData3();
           }
+          StringUtils::ToLower(compare);
+
+          std::string label;
           if (item && item->IsFileItem() && IsListItemInfo(info.GetData1()))
-            bReturn = StringUtils::EqualsNoCase(GetItemImage(item, contextWindow, info.GetData1()), compare);
+            label = GetItemImage(item, contextWindow, info.GetData1());
           else
-            bReturn = StringUtils::EqualsNoCase(GetImage(info.GetData1(), contextWindow), compare);
+            label = GetImage(info.GetData1(), contextWindow);
+          StringUtils::ToLower(label);
+
+          if (condition == STRING_STARTS_WITH)
+            bReturn = StringUtils::StartsWith(label, compare);
+          else if (condition == STRING_ENDS_WITH)
+            bReturn = StringUtils::EndsWith(label, compare);
+          else if (condition == STRING_CONTAINS)
+            bReturn = label.find(compare) != std::string::npos;
+          else
+            bReturn = StringUtils::EqualsNoCase(label, compare);
         }
         break;
       case INTEGER_IS_EQUAL:
@@ -10310,27 +10350,6 @@ bool CGUIInfoManager::GetMultiInfoBool(const CGUIInfo &info, int contextWindow, 
             bReturn = integer % 2 == 0;
           else if (condition == INTEGER_ODD)
             bReturn = integer % 2 != 0;
-        }
-        break;
-      case STRING_STARTS_WITH:
-      case STRING_ENDS_WITH:
-      case STRING_CONTAINS:
-        {
-          std::string compare = info.GetData3();
-          // our compare string is already in lowercase, so lower case our label as well
-          // as std::string::Find() is case sensitive
-          std::string label;
-          if (item && item->IsFileItem() && IsListItemInfo(info.GetData1()))
-            label = GetItemImage(item, contextWindow, info.GetData1());
-          else
-            label = GetImage(info.GetData1(), contextWindow);
-          StringUtils::ToLower(label);
-          if (condition == STRING_STARTS_WITH)
-            bReturn = StringUtils::StartsWith(label, compare);
-          else if (condition == STRING_ENDS_WITH)
-            bReturn = StringUtils::EndsWith(label, compare);
-          else
-            bReturn = label.find(compare) != std::string::npos;
         }
         break;
     }

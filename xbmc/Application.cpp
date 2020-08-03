@@ -789,12 +789,11 @@ bool CApplication::Initialize()
 
     m_confirmSkinChange = false;
 
-    std::vector<std::string> incompatibleAddons;
+    std::vector<AddonInfoPtr> incompatibleAddons;
     event.Reset();
 
     // Addon migration
-    std::vector<AddonInfoPtr> incompatible;
-    if (CServiceBroker::GetAddonMgr().GetIncompatibleEnabledAddonInfos(incompatible))
+    if (CServiceBroker::GetAddonMgr().GetIncompatibleEnabledAddonInfos(incompatibleAddons))
     {
       if (CAddonSystemSettings::GetInstance().GetAddonAutoUpdateMode() == AUTO_UPDATES_ON)
       {
@@ -824,7 +823,7 @@ bool CApplication::Initialize()
       {
         // If no update is active disable all incompatible addons during start
         m_incompatibleAddons =
-            CServiceBroker::GetAddonMgr().DisableIncompatibleAddons(incompatible);
+            CServiceBroker::GetAddonMgr().DisableIncompatibleAddons(incompatibleAddons);
       }
     }
 
@@ -2976,31 +2975,36 @@ bool CApplication::PlayFile(CFileItem item, const std::string& player, bool bRes
     // don't switch to fullscreen if we are not playing the first item...
     options.fullscreen = !CServiceBroker::GetPlaylistPlayer().HasPlayedFirstFile() &&
         CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
-        CSettings::SETTING_MUSICFILES_SELECTACTION);
+        CSettings::SETTING_MUSICFILES_SELECTACTION) &&
+        !CMediaSettings::GetInstance().DoesMediaStartWindowed();
   }
   else if (item.IsVideo() && playlist == PLAYLIST_VIDEO &&
       CServiceBroker::GetPlaylistPlayer().GetPlaylist(playlist).size() > 1)
   { // playing from a playlist by the looks
     // don't switch to fullscreen if we are not playing the first item...
-    options.fullscreen = !CServiceBroker::GetPlaylistPlayer().HasPlayedFirstFile() && CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_fullScreenOnMovieStart && !CMediaSettings::GetInstance().DoesVideoStartWindowed();
+    options.fullscreen = !CServiceBroker::GetPlaylistPlayer().HasPlayedFirstFile() &&
+        CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_fullScreenOnMovieStart &&
+        !CMediaSettings::GetInstance().DoesMediaStartWindowed();
   }
   else if(m_stackHelper.IsPlayingRegularStack())
   {
     //! @todo - this will fail if user seeks back to first file in stack
     if(m_stackHelper.GetCurrentPartNumber() == 0 || m_stackHelper.GetRegisteredStack(item)->m_lStartOffset != 0)
-      options.fullscreen = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_fullScreenOnMovieStart && !CMediaSettings::GetInstance().DoesVideoStartWindowed();
+      options.fullscreen = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->
+          m_fullScreenOnMovieStart && !CMediaSettings::GetInstance().DoesMediaStartWindowed();
     else
       options.fullscreen = false;
   }
   else
-    options.fullscreen = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_fullScreenOnMovieStart && !CMediaSettings::GetInstance().DoesVideoStartWindowed();
+    options.fullscreen = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->
+        m_fullScreenOnMovieStart && !CMediaSettings::GetInstance().DoesMediaStartWindowed();
 
   // stereo streams may have lower quality, i.e. 32bit vs 16 bit
   options.preferStereo = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_videoPreferStereoStream &&
                          CServiceBroker::GetActiveAE()->HasStereoAudioChannelCount();
 
   // reset VideoStartWindowed as it's a temp setting
-  CMediaSettings::GetInstance().SetVideoStartWindowed(false);
+  CMediaSettings::GetInstance().SetMediaStartWindowed(false);
 
   {
     // for playing a new item, previous playing item's callback may already
@@ -3822,7 +3826,16 @@ bool CApplication::OnMessage(CGUIMessage& message)
 
         if (!m_incompatibleAddons.empty())
         {
-          auto addonList = StringUtils::Join(m_incompatibleAddons, ", ");
+          // filter addons that are not dependencies
+          std::vector<std::string> disabledAddonNames;
+          for (const auto& addoninfo : m_incompatibleAddons)
+          {
+            if (!CAddonType::IsDependencyType(addoninfo->MainType()))
+              disabledAddonNames.emplace_back(addoninfo->Name());
+          }
+
+          // migration (incompatible addons) dialog
+          auto addonList = StringUtils::Join(disabledAddonNames, ", ");
           auto msg = StringUtils::Format(g_localizeStrings.Get(24149).c_str(), addonList.c_str());
           HELPERS::ShowOKDialogText(CVariant{24148}, CVariant{std::move(msg)});
           m_incompatibleAddons.clear();
